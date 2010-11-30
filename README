@@ -5,8 +5,7 @@ from the Regional Ocean Modeling System (ROMS). It was originally
 started by Rob Hetland as a googlecode project, then he morphed it
 into octant, also at googlecode. Frederic Castruccio then created a
 fork and renamed it back to pyroms. This version is now in private
-development at Rutgers University, but we will release it here when
-it's ready.
+development, but we will release it here when it's ready.
 
 Meanwhile, you can prepare by installing this collection of
 packages:
