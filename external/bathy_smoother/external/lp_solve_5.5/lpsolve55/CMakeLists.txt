@@ -1,0 +1,10 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.4.6)
+MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY)
+
+set(LIB_LOCATION "/u1/uaf/torgerso/igloo/lib")
+
+add_custom_command(OUTPUT lpsolve55
+COMMAND sh ${CMAKE_SOURCE_DIR}/ccc
+COMMAND cp ${CMAKE_SOURCE_DIR}/bin/ux64/liblpsolve55* ${LIB_LOCATION}
+)
+

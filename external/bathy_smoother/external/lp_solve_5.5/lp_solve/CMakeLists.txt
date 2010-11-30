@@ -1,0 +1,9 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.4.6)
+MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY)
+
+set(BIN_LOCATION "/u1/uaf/torgerso/igloo/bin")
+
+add_custom_command(OUTPUT lpsolve
+COMMAND sh ${CMAKE_SOURCE_DIR}/ccc
+COMMAND cp bin/ux64/lp_solve ${BIN_LOCATION}
+)

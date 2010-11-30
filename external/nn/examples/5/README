@@ -1,0 +1,12 @@
+This example is run on elevation data obtained from digitised contours. 
+(Thanks to Maciej Sieczka, Institute of Plant Biology, Wroclaw University.)
+It is characterised by strong clustering of data points and big gaps between 
+clusters.
+
+To reproduce the example, run "./test.sh" or "make".
+To visualize, in Matlab run "viewexample" (which takes time to plot) or 
+"viewinterp('data.txt', 'nn.txt');".
+To clean up, run "make clean".
+
+Good luck!
+Pavel Sakov

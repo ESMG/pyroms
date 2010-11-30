@@ -1,0 +1,19 @@
+v. 1.66, 26 June 2006
+	-- Introduced this file
+	-- Fixed error in reading the command-line input after "-L"
+        -- Made a few cosmetic changes
+v. 1.67, 30 August 2006
+        -- Introduced -% option (available only when built with -DNN_SERIAL)
+v. 1.68, 28 September 2006
+        -- Edited README
+v. 1.69, 22 November 2006
+	-- Substantial changes in processing of the degenerate case for Sibson
+           interpolation. This is the case when an interpolation point is close
+           to being in between data points. It is no longer handled by a pair
+           of symmetric displacements of this point; instead, the center of the
+           corresponding circumcircle is moved elsewhere in a specific way.
+v. 1.70, 24 November 2006
+        -- Added example 6.
+v. 1.71, 17 January 2006
+	-- Made the test on whether an output point exactly coincides with
+           an input point in nnpi_triangle_process() approximate.

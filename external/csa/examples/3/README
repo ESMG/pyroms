@@ -1,0 +1,16 @@
+This example tests approximation of data with known error (standard deviation).
+It reconstructs superposition of two known functions in square [0,1]^2.
+
+In the first case, the data consists of 100, 300 or 1000 random points of
+Franke test function with standard deviation of 0.2 and equal number of random
+points of linear function z = x + y with standard deviation of 5.
+
+In the second case, the data consists of 100, 300 or 1000 random points of
+linear function z = x + y with standard deviation of 0.2 and equal number of random points of Franke test function with standard deviation of 5.
+
+To generate and approximate the data, run "./test.sh" or "make".
+To visualize, in Matlab run "viewexample".
+To clean up the directory, run "make clean".
+
+Good luck!
+Pavel Sakov

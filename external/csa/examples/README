@@ -1,0 +1,7 @@
+This directory contains three examples of using `csabathy' for approximation
+of scattered data:
+-- example 1: reconstruction the Franke test function
+-- example 2: approximation of some real-life bathymetry data from echosounder
+-- example 3: approximation of data with known error
+
+You can find more information in README files in the corresponding directories.

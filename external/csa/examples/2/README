@@ -1,0 +1,8 @@
+This example approximates some real-life bathymetry data from echosounder.
+
+To approximate the data, run ./test.sh.
+To visualize, in Matlab run "viewexample".
+To clean up the directory, run "make clean".
+
+Good luck!
+Pavel Sakov

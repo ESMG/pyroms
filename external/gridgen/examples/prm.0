@@ -1,0 +1,9 @@
+input xy.0
+output grid.0
+nx 120
+ny 90
+nnodes 10
+precision 1.0e-12
+newton 1
+rectangle rect.0
+sigmas sigmas.0

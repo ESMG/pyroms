@@ -1,0 +1,19 @@
+tar xvzf lp_solve_5.5.0.15_source.tar.gz
+tar xvzf lp_solve_5.5.0.9_Python_source.tar.gz
+
+cd lp_solve_5.5/
+
+mkdir bin
+mkdir lib
+
+sh lp_solve/ccc
+cp lp_solve/bin/ux64/lp_solve bin
+
+sh lpsolve55/ccc
+cp lpsolve55/bin/ux64/liblpsolve55* lib
+
+edit ~/.bashrc:
+export LD_LIBRARY_PATH=/home/frederic/apps/lp_solve_5.5/lib
+
+cd extra/Python/
+sudo python setup.py install
