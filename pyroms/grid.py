@@ -401,6 +401,11 @@ def get_ROMS_vgrid(gridid, zeta=None):
     except:
         raise ValueError, 'NetCDF file must contain the bathymetry h'
 
+    try:
+        hraw = nc.variables['hraw'][:]
+    except:
+        hraw = None
+
     if gridinfo.grdtype == 'roms':
         Vtrans = gridinfo.Vtrans
         theta_b = gridinfo.theta_b
@@ -470,17 +475,14 @@ def get_ROMS_grid(gridid, zeta=None, hist_file=None,grid_file=None):
     return ROMS_Grid(name, hgrd, vgrid)
 
 
-def write_ROMS_grid(grd, filename='ocean_grd.nc'):
+def write_ROMS_grid(grd, filename='roms_grd.nc'):
     """
     write_ROMS_grid(grd, filename)
 
     Write ROMS_CGrid class on a NetCDF file.
     """
 
-    if grd.hgrid.lon_rho is not None:
-        Mm, Lm = grd.hgrid.lon_rho.shape
-    else:
-        Mm, Lm = grd.hgrid.x_rho.shape
+    Mm, Lm = grd.hgrid.x_rho.shape
 
     
     # Write ROMS grid to file
@@ -500,15 +502,13 @@ def write_ROMS_grid(grd, filename='ocean_grd.nc'):
     nc.createDimension('eta_v', Mm-1)
     nc.createDimension('eta_psi', Mm-1)
 
-    if grd.hgrid.x_vert is not None:
-        nc.createDimension('xi_vert', Lm+1)
-        nc.createDimension('eta_vert', Mm+1)
+    nc.createDimension('xi_vert', Lm+1)
+    nc.createDimension('eta_vert', Mm+1)
 
     if hasattr(grd.vgrid, 's_rho') is True and grd.vgrid.s_rho is not None:
         N, = grd.vgrid.s_rho.shape
         nc.createDimension('s_rho', N)
         nc.createDimension('s_w', N+1)
-
 
     def write_nc_var(var, name, dimensions, long_name=None, units=None):
         nc.createVariable(name, 'f8', dimensions)
@@ -530,6 +530,7 @@ def write_ROMS_grid(grd, filename='ocean_grd.nc'):
         write_nc_var(grd.vgrid.Cs_w, 'Cs_w', ('s_w'), 'S-coordinate stretching curves at W-points')
 
     write_nc_var(grd.vgrid.h, 'h', ('eta_rho', 'xi_rho'), 'bathymetry at RHO-points', 'meter')
+    write_nc_var(grd.vgrid.h, 'hraw', ('eta_rho', 'xi_rho'), 'bathymetry at RHO-points', 'meter')
     write_nc_var(grd.hgrid.f, 'f', ('eta_rho', 'xi_rho'), 'Coriolis parameter at RHO-points', 'second-1')
     write_nc_var(1./grd.hgrid.dx, 'pm', ('eta_rho', 'xi_rho'), 'curvilinear coordinate metric in XI', 'meter-1')
     write_nc_var(1./grd.hgrid.dy, 'pn', ('eta_rho', 'xi_rho'), 'curvilinear coordinate metric in ETA', 'meter-1')
@@ -538,17 +539,16 @@ def write_ROMS_grid(grd, filename='ocean_grd.nc'):
     write_nc_var(grd.hgrid.xl, 'xl', (), 'domain length in the XI-direction', 'meter')
     write_nc_var(grd.hgrid.el, 'el', (), 'domain length in the ETA-direction', 'meter')
 
-    if grd.hgrid.x_rho is not None:
-        write_nc_var(grd.hgrid.x_rho, 'x_rho', ('eta_rho', 'xi_rho'), 'x location of RHO-points', 'meter')
-        write_nc_var(grd.hgrid.x_rho, 'y_rho', ('eta_rho', 'xi_rho'), 'y location of RHO-points', 'meter')
-        write_nc_var(grd.hgrid.x_u, 'x_u', ('eta_u', 'xi_u'), 'x location of U-points', 'meter')
-        write_nc_var(grd.hgrid.x_u, 'y_u', ('eta_u', 'xi_u'), 'y location of U-points', 'meter')
-        write_nc_var(grd.hgrid.x_v, 'x_v', ('eta_v', 'xi_v'), 'x location of V-points', 'meter')
-        write_nc_var(grd.hgrid.x_v, 'y_v', ('eta_v', 'xi_v'), 'y location of V-points', 'meter')
-        write_nc_var(grd.hgrid.x_psi, 'x_psi', ('eta_psi', 'xi_psi'), 'x location of PSI-points', 'meter')
-        write_nc_var(grd.hgrid.x_psi, 'y_psi', ('eta_psi', 'xi_psi'), 'y location of PSI-points', 'meter')
+    write_nc_var(grd.hgrid.x_rho, 'x_rho', ('eta_rho', 'xi_rho'), 'x location of RHO-points', 'meter')
+    write_nc_var(grd.hgrid.y_rho, 'y_rho', ('eta_rho', 'xi_rho'), 'y location of RHO-points', 'meter')
+    write_nc_var(grd.hgrid.x_u, 'x_u', ('eta_u', 'xi_u'), 'x location of U-points', 'meter')
+    write_nc_var(grd.hgrid.y_u, 'y_u', ('eta_u', 'xi_u'), 'y location of U-points', 'meter')
+    write_nc_var(grd.hgrid.x_v, 'x_v', ('eta_v', 'xi_v'), 'x location of V-points', 'meter')
+    write_nc_var(grd.hgrid.y_v, 'y_v', ('eta_v', 'xi_v'), 'y location of V-points', 'meter')
+    write_nc_var(grd.hgrid.x_psi, 'x_psi', ('eta_psi', 'xi_psi'), 'x location of PSI-points', 'meter')
+    write_nc_var(grd.hgrid.y_psi, 'y_psi', ('eta_psi', 'xi_psi'), 'y location of PSI-points', 'meter')
 
-    if grd.hgrid.lon_rho is not None:
+    if hasattr(grd.hgrid, 'lon_rho'):
         write_nc_var(grd.hgrid.lon_rho, 'lon_rho', ('eta_rho', 'xi_rho'), 'longitude of RHO-points', 'degree_east')
         write_nc_var(grd.hgrid.lat_rho, 'lat_rho', ('eta_rho', 'xi_rho'), 'latitude of RHO-points', 'degree_north')
         write_nc_var(grd.hgrid.lon_u, 'lon_u', ('eta_u', 'xi_u'), 'longitude of U-points', 'degree_east')
@@ -557,12 +557,6 @@ def write_ROMS_grid(grd, filename='ocean_grd.nc'):
         write_nc_var(grd.hgrid.lat_v, 'lat_v', ('eta_v', 'xi_v'), 'latitude of V-points', 'degree_north')
         write_nc_var(grd.hgrid.lon_psi, 'lon_psi', ('eta_psi', 'xi_psi'), 'longitude of PSI-points', 'degree_east')
         write_nc_var(grd.hgrid.lat_psi, 'lat_psi', ('eta_psi', 'xi_psi'), 'latitude of PSI-points', 'degree_north')
-
-    if grd.hgrid.x_vert is not None:
-        write_nc_var(grd.hgrid.x_vert, 'x_vert', ('eta_vert', 'xi_vert'), 'x location of cell verticies', 'meter')
-        write_nc_var(grd.hgrid.y_vert, 'y_vert', ('eta_vert', 'xi_vert'), 'y location of cell verticies', 'meter')
-
-    if grd.hgrid.lon_vert is not None:
         write_nc_var(grd.hgrid.lon_vert, 'lon_vert', ('eta_vert', 'xi_vert'), 'longitude of cell verticies', 'degree_east')
         write_nc_var(grd.hgrid.lat_vert, 'lat_vert', ('eta_vert', 'xi_vert'), 'latitude of cell verticies', 'degree_north')
 
