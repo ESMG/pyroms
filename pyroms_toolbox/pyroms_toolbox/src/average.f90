@@ -43,16 +43,16 @@ C File avgerage.f90
       IMPLICIT NONE
 
       !input variables
-      REAL,DIMENSION(dim1,dim2),intent(in)::dataset
-      REAL,DIMENSION(dim1,dim2),intent(in)::incavg
+      REAL*8,DIMENSION(dim1,dim2),intent(in)::dataset
+      REAL*8,DIMENSION(dim1,dim2),intent(in)::incavg
    
       !output variables
-      REAL,DIMENSION(dim1,dim2),intent(out)::avg
+      REAL*8,DIMENSION(dim1,dim2),intent(out)::avg
 
       !local variables
       INTEGER::dim1,dim2
-      INTEGER::counter
-      REAL::part1,part2,spval
+      REAL*8::counter
+      REAL*8::part1,part2,spval
       INTEGER::i,j
 
       do i=1,dim1

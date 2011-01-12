@@ -413,9 +413,9 @@ def get_ROMS_vgrid(gridid, zeta=None):
         Tcline = gridinfo.Tcline
         N = gridinfo.N
         if Vtrans == 1:
-            vgrid = s_coordinate(h, theta_b, theta_s, Tcline, N, zeta=zeta)
+            vgrid = s_coordinate(h, theta_b, theta_s, Tcline, N, hraw=hraw, zeta=zeta)
         elif Vtrans == 2:
-            vgrid = s_coordinate_2(h, theta_b, theta_s, Tcline, N, zeta=zeta)
+            vgrid = s_coordinate_2(h, theta_b, theta_s, Tcline, N, hraw=hraw, zeta=zeta)
         else:
             raise Warning, 'Unknow vertical transformation Vtrans'
 
@@ -530,7 +530,7 @@ def write_ROMS_grid(grd, filename='roms_grd.nc'):
         write_nc_var(grd.vgrid.Cs_w, 'Cs_w', ('s_w'), 'S-coordinate stretching curves at W-points')
 
     write_nc_var(grd.vgrid.h, 'h', ('eta_rho', 'xi_rho'), 'bathymetry at RHO-points', 'meter')
-    write_nc_var(grd.vgrid.h, 'hraw', ('eta_rho', 'xi_rho'), 'bathymetry at RHO-points', 'meter')
+    write_nc_var(grd.vgrid.hraw, 'hraw', ('eta_rho', 'xi_rho'), 'raw bathymetry at RHO-points', 'meter')
     write_nc_var(grd.hgrid.f, 'f', ('eta_rho', 'xi_rho'), 'Coriolis parameter at RHO-points', 'second-1')
     write_nc_var(1./grd.hgrid.dx, 'pm', ('eta_rho', 'xi_rho'), 'curvilinear coordinate metric in XI', 'meter-1')
     write_nc_var(1./grd.hgrid.dy, 'pn', ('eta_rho', 'xi_rho'), 'curvilinear coordinate metric in ETA', 'meter-1')
@@ -547,6 +547,8 @@ def write_ROMS_grid(grd, filename='roms_grd.nc'):
     write_nc_var(grd.hgrid.y_v, 'y_v', ('eta_v', 'xi_v'), 'y location of V-points', 'meter')
     write_nc_var(grd.hgrid.x_psi, 'x_psi', ('eta_psi', 'xi_psi'), 'x location of PSI-points', 'meter')
     write_nc_var(grd.hgrid.y_psi, 'y_psi', ('eta_psi', 'xi_psi'), 'y location of PSI-points', 'meter')
+    write_nc_var(grd.hgrid.x_vert, 'x_vert', ('eta_vert', 'xi_vert'), 'x location of cell verticies', 'meter')
+    write_nc_var(grd.hgrid.y_vert, 'y_vert', ('eta_vert', 'xi_vert'), 'y location of cell verticies', 'meter')
 
     if hasattr(grd.hgrid, 'lon_rho'):
         write_nc_var(grd.hgrid.lon_rho, 'lon_rho', ('eta_rho', 'xi_rho'), 'longitude of RHO-points', 'degree_east')

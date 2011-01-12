@@ -1,3 +1,5 @@
+import numpy as np
+
 def shapiro1(Finp,order,scheme=1):
     '''
     This function applies a 1D shapiro filter to input 1D field.

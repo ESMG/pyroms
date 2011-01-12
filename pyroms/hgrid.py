@@ -1021,7 +1021,7 @@ class Gridgen(CGrid):
                  newton=True, thin=True, checksimplepoly=True, verbose=False):
 
         #self._libgridgen = np.ctypeslib.load_library('libgridgen',__file__)
-        self._libgridgen = np.ctypeslib.load_library('libgridgen', '/usr/local/lib')
+        self._libgridgen = np.ctypeslib.load_library('libgridgen', pyroms.__path__[0])
 
         # In MacOSX, use of c_void_p does not return proper structure.
         # (An integer address is returned and subsequent use results in a 
@@ -1327,6 +1327,113 @@ class edit_mask_mesh(object):
         self._clicking = False
         plt.title('Editing %s -- click "e" to toggle' % self._clicking)
         plt.draw()
+
+
+
+class edit_mask_mesh_ij(object):
+    """
+    Interactive mask editor
+
+    edit_mask_mesh_ij(grd)
+
+    Edit grd mask. Mask/Unsmask cell by a simple click on the cell.
+    Mask modification are store in mask_change.txt for further use.
+
+    Key commands:
+        e : toggle between Editing/Viewing mode
+    """
+    
+    def _on_key(self, event):
+        if event.key == 'e':
+            self._clicking = not self._clicking
+            plt.title('Editing %s -- click "e" to toggle' % self._clicking)
+            plt.draw()
+    
+    def _on_click(self, event):
+        x, y = event.xdata, event.ydata
+        if event.button==1 and event.inaxes is not None and self._clicking == True:
+            d = (x-self._xc)**2 + (y-self._yc)**2
+            i, j = np.argwhere(d == d.min())[0]
+            self.mask[i, j] = float(not self.mask[i, j])
+            #open output file
+            f = open('mask_change.txt','a')
+            value = (i, j, self.mask[i, j])
+            s = str(value)
+            f.write(s + '\n')
+            #close file
+            f.close()
+            self._pc.set_array(self.mask)
+            self._pc.changed()
+            plt.draw()
+    
+    def __init__(self, grd, coast=None, **kwargs):
+
+        if type(grd).__name__ == 'ROMS_Grid':
+            try:
+                x = range(grd.hgrid.lon_vert.shape[1])
+                y = range(grd.hgrid.lat_vert.shape[0])
+                xv, yv = np.meshgrid(x,y)
+                mask = grd.hgrid.mask_rho
+            except:
+                x = range(grd.hgrid.x_vert.shape[1])
+                y = range(grd.hgrid.y_vert.shape[0])
+                xv, yv = np.meshgrid(x,y)
+                mask = grd.hgrid.mask_rho
+
+        if type(grd).__name__ == 'CGrid_geo':
+            try:
+                x = range(grd.lon_vert.shape[1])
+                y = range(grd.lat_vert.shape[0])
+                xv, yv = np.meshgrid(x,y)
+                mask = grd.mask_rho
+            except:
+                x = range(grd.x_vert.shape[1])
+                y = range(grd.y_vert.shape[0])
+                xv, yv = np.meshgrid(x,y)
+                mask = grd.mask_rho
+
+        assert xv.shape == yv.shape, 'xv and yv must have the same shape'
+        for dx, dq in zip(xv.shape, mask.shape):
+             assert dx==dq+1, \
+             '''xv and yv must be cell verticies
+             (i.e., one cell bigger in each dimension)'''
+        
+        self.xv = xv
+        self.yv = yv
+        
+        self.mask = mask
+
+        if coast is None:
+            #get the coast from Basemap (GEOS Library)
+            map = pyroms.utility.get_grid_proj(grd, resolution='h', area_thresh=5)
+            coast = pyroms.utility.get_coast_from_map(map)
+
+        self.coast = coast
+
+        self.ijcoast = pyroms.utility.ijcoast(self.coast, grd)
+
+        land_color = kwargs.pop('land_color', (0.6, 1.0, 0.6))
+        sea_color = kwargs.pop('sea_color', (0.6, 0.6, 1.0))
+
+        cm = plt.matplotlib.colors.ListedColormap([land_color, sea_color], 
+                                                 name='land/sea')
+
+        self._pc = plt.imshow(mask, cmap=cm, origin='lower', \
+          interpolation='nearest', extent=(0,xv.shape[1]-1,0,xv.shape[0]-1), \
+          **kwargs)
+        plt.plot(xv, yv, color='k', ls='-', lw=.5)
+        plt.plot(xv.T, yv.T, color='k', ls='-', lw=.5)
+        plt.plot(self.ijcoast[:,0], self.ijcoast[:,1], color='k', ls='-', lw=1.25)
+
+        self._xc = 0.25*(xv[1:,1:]+xv[1:,:-1]+xv[:-1,1:]+xv[:-1,:-1])
+        self._yc = 0.25*(yv[1:,1:]+yv[1:,:-1]+yv[:-1,1:]+yv[:-1,:-1])
+        
+        plt.connect('button_press_event', self._on_click)
+        plt.connect('key_press_event', self._on_key)
+        self._clicking = False
+        plt.title('Editing %s -- click "e" to toggle' % self._clicking)
+        plt.draw()
+
 
 
 def uvp_masks(rmask):

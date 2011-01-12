@@ -6,6 +6,7 @@ from mpl_toolkits.basemap import Basemap
 import time
 from datetime import datetime
 from matplotlib.nxutils import pnpoly
+from scipy import interpolate
 
 from pyroms import io
 import _interp
@@ -67,17 +68,42 @@ def get_ij(longitude, latitude, grd, Cpos='rho'):
 
 def find_nearestgridpoints(longitude, latitude, grd, Cpos='rho'):
 
-    if Cpos is 'u':
-        lon = grd.hgrid.lon_u[:,:]
-        lat = grd.hgrid.lat_u[:,:]
-    elif Cpos is 'v':
-        lon = grd.hgrid.lon_v[:,:]
-        lat = grd.hgrid.lat_v[:,:]
-    elif Cpos is 'rho':
-        lon = grd.hgrid.lon_rho[:,:]
-        lat = grd.hgrid.lat_rho[:,:]
-    else:
-        raise Warning, '%s bad position. Cpos must be rho, u or v.' % Cpos
+
+    if type(grd).__name__ == 'ROMS_Grid':
+
+        if Cpos is 'u':
+            lon = grd.hgrid.lon_u[:,:]
+            lat = grd.hgrid.lat_u[:,:]
+        elif Cpos is 'v':
+            lon = grd.hgrid.lon_v[:,:]
+            lat = grd.hgrid.lat_v[:,:]
+        elif Cpos is 'rho':
+            lon = grd.hgrid.lon_rho[:,:]
+            lat = grd.hgrid.lat_rho[:,:]
+        elif Cpos is 'vert':
+            lon = grd.hgrid.lon_vert[:,:]
+            lat = grd.hgrid.lat_vert[:,:]
+        else:
+            raise Warning, '%s bad position. Cpos must be rho, u or v.' % Cpos
+
+
+    if type(grd).__name__ == 'CGrid_geo':
+
+        if Cpos is 'u':
+            lon = grd.lon_u[:,:]
+            lat = grd.lat_u[:,:]
+        elif Cpos is 'v':
+            lon = grd.lon_v[:,:]
+            lat = grd.lat_v[:,:]
+        elif Cpos is 'rho':
+            lon = grd.lon_rho[:,:]
+            lat = grd.lat_rho[:,:]
+        elif Cpos is 'vert':
+            lon = grd.lon_vert[:,:]
+            lat = grd.lat_vert[:,:]
+        else:
+            raise Warning, '%s bad position. Cpos must be rho, u or v.' % Cpos
+
 
     dlon = lon[:,:] - longitude
     dlat = lat[:,:] - latitude
@@ -137,14 +163,63 @@ def find_nearestgridpoints(longitude, latitude, grd, Cpos='rho'):
         jindex = jindex[1:3]
 
     except:
-        print 'point (%f, %f) is not in the grid' %(longitude, latitude)
+        #print 'point (%f, %f) is not in the grid' %(longitude, latitude)
         iindex = []
         jindex = []
         
     return iindex, jindex
-    
 
-def get_grid_proj(grd, type='merc', resolution='h'):
+
+
+def get_coast_from_map(map):
+
+    coast = []
+
+    kk=len(map.coastsegs)
+    for k in range(kk):
+        ll = len(map.coastsegs[k])
+        for l in range(ll):
+            c = map(map.coastsegs[k][l][0], map.coastsegs[k][l][1], inverse=True)
+            coast.append(c)
+        coast.append((np.nan, np.nan))
+
+    return np.array(coast)
+
+
+    
+def ijcoast(coast, grd):
+
+
+    if type(grd).__name__ == 'ROMS_Grid':
+        lon = grd.hgrid.lon_vert
+        lat = grd.hgrid.lat_vert
+    if type(grd).__name__ == 'CGrid_geo':
+        lon = grd.lon_vert
+        lat = grd.lat_vert
+
+    ijcoast = []
+
+    for k in range(coast.shape[0]):
+        if np.isnan(coast[k,0]):
+            ijcoast.append([np.nan, np.nan])
+        else:
+            iindex, jindex = find_nearestgridpoints( \
+                            coast[k,0], coast[k,1], grd, Cpos='vert')
+            if iindex:
+                i, j = np.meshgrid(iindex, jindex)
+                x = lon[j,i]
+                y = lat[j,i]
+                funct_i = interpolate.interp2d(x.flatten(), y.flatten(), i.flatten())
+                funct_j = interpolate.interp2d(x.flatten(), y.flatten(), j.flatten())
+                i_coast = funct_i(coast[k,0], coast[k,1])[0]
+                j_coast = funct_j(coast[k,0], coast[k,1])[0]
+                ijcoast.append([i_coast, j_coast])
+
+    return np.array(ijcoast)
+
+
+
+def get_grid_proj(grd, type='merc', resolution='h', **kwargs):
     """
     map = get_grid_proj(grd)
 
@@ -163,9 +238,25 @@ def get_grid_proj(grd, type='merc', resolution='h'):
     lat_max = grd.hgrid.lat_vert.max()
     lat_0 = (lat_min + lat_max) / 2.
 
-    map = Basemap(projection=type, llcrnrlon=lon_min, llcrnrlat=lat_min, \
-         urcrnrlon=lon_max, urcrnrlat=lat_max, lat_0=lat_0, lon_0=lon_0, \
-         resolution=resolution)
+    x_min = grd.hgrid.x_vert.min()
+    x_max = grd.hgrid.x_vert.max()
+    width = x_max - x_min
+
+    y_max = grd.hgrid.y_vert.max()
+    y_min = grd.hgrid.y_vert.min()
+    height = y_max - y_min
+
+    lat_1 = lat_min
+
+    if type == 'lcc' or type == 'stere':
+        map = Basemap(projection=type, width=width,height=height, \
+                      lat_1=lat_1,lat_0=lat_0,lon_0=lon_0, \
+                      resolution=resolution, **kwargs)
+    else:
+        map = Basemap(projection=type, llcrnrlon=lon_min, llcrnrlat=lat_min, \
+                      urcrnrlon=lon_max, urcrnrlat=lat_max, \
+                      lat_0=lat_0, lon_0=lon_0, \
+                      resolution=resolution, **kwargs)
 
     return map
 

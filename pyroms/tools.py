@@ -996,7 +996,7 @@ def section_transport(u, v, istart, iend, jstart, jend, grd):
     # Look for intermediate points to be added
     # -------------------------------------------------------------
 
-    inear = copy(near)
+    inear = np.copy(near)
 
     n = len(near)
     nn=1
@@ -1020,11 +1020,12 @@ def section_transport(u, v, istart, iend, jstart, jend, grd):
     #get metrics
     dx = grd.hgrid.dx
     dy = grd.hgrid.dy
-    # average z_w at Arakawa-C u points  				           
-    zu = 0.5 * (grd.vgrid.z_w[:,:,:-1] + grd.vgrid.z_w[:,:,1:])    			           
+    z_w = grd.vgrid.z_w[0,:]
+    # average z_w at Arakawa-C u points			           
+    zu = 0.5 * (z_w[:,:,:-1] + z_w[:,:,1:])
     dzu = zu[1:,:,:] - zu[:-1,:,:]
     # average z_w at Arakawa-C v points
-    zv = 0.5 * (grd.vgrid.z_w[:,:-1,:] + grd.vgrid.z_w[:,1:,:])
+    zv = 0.5 * (z_w[:,:-1,:] + z_w[:,1:,:])
     dzv = zv[1:,:,:] - zv[:-1,:,:]
 
     #set u and v to zero where u and v are masked for the sum
@@ -1037,14 +1038,14 @@ def section_transport(u, v, istart, iend, jstart, jend, grd):
     transpv = 0
 
     for l in range(0,n-1):
-        ii = int(real(near[l])); jj = int(imag(near[l]))
+        ii = int(np.real(near[l])); jj = int(np.imag(near[l]))
         for k in range(0, dzu.shape[0]):
-            if real(near[l]) == real(near[l+1]):
+            if np.real(near[l]) == np.real(near[l+1]):
                 trans = u[k, jj+jst, ii] * dy[jj+jst, ii] * \
                         dzu[k, jj+jst, ii] * norm_u * norm
                 transpu = transpu + trans
 
-            elif imag(near[l]) == imag(near[l+1]):
+            elif np.imag(near[l]) == np.imag(near[l+1]):
                 trans = v[k, jj, ii+ist] * dx[jj, ii+ist] * \
                         dzv[k, jj, ii+ist] * norm_v * norm
                 transpv = transpv + trans

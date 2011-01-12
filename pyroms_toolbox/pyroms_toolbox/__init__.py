@@ -24,10 +24,13 @@ from N2 import N2
 from O2_saturation import O2_saturation
 from shapiro_filter import *
 from change import change
-from rfactor import rfactor
+from rx0 import rx0
+from rx1 import rx1
 from rvalue import rvalue
 from get_coast_line import get_coast_line
+from get_ijcoast_line import get_ijcoast_line
 from plot_coast_line import plot_coast_line
+from plot_ijcoast_line import plot_ijcoast_line
 from lsq_phase_amplitude import lsq_phase_amplitude
 from remapping import remapping
 from nc_create_roms_file import nc_create_roms_file
@@ -35,6 +38,14 @@ from nc_create_roms_bdry_file import nc_create_roms_bdry_file
 from average import average
 from plot_mask import plot_mask
 import BGrid_GFDL
+from smooth_1D import smooth_1D
+import BGrid_SODA
+from get_littoral import get_littoral
+from _move_runoff import move_runoff
+from TS_diagram import TS_diagram
+from date2jday import date2jday
+from jday2date import jday2date
+
 
 __authors__ = ['Frederic Castruccio (frederic@marine.rutgers.edu)']
 

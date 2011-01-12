@@ -1,3 +1,5 @@
+import numpy as np
+
 def rvalue(h):
     """
     function rv = rvalue(h)

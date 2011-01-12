@@ -1,8 +1,19 @@
 # gridid definition file
 #
+id      = CORAL
+name    = Coral Triangle
+grdfile = /storage/ROMS/Coral/Grid/coral_grd.nc
+N       = 46
+grdtype = roms
+Vtrans  = 2
+theta_s = 5
+theta_b = 0.4
+Tcline  = 100
+#
+#
 id      = ESPRESSO
 name    = ESPRESSO
-grdfile = /home/frederic/ROMS_projects/espresso/Data/espresso_c05_grid.nc
+grdfile = /storage/ROMS/espresso/Data/espresso_c05_grid.nc
 N       = 36
 grdtype = roms
 Vtrans  = 1
@@ -13,7 +24,7 @@ Tcline  = 5
 #
 id      = ESPRESSO2
 name    = ESPRESSO2
-grdfile = /home/frederic/ROMS_projects/espresso/Data/espresso_c05_grid.nc
+grdfile = /storage/ROMS/espresso/Data/espresso_c05_grid.nc
 N       = 36
 grdtype = roms
 Vtrans  = 2
@@ -24,7 +35,7 @@ Tcline  = 5
 #
 id      = ESPRESSO_Z
 name    = ESPRESSO_Z
-grdfile = /home/frederic/ROMS_projects/espresso/Data/espresso_c05_grid.nc
+grdfile = /storage/ROMS/espresso/Data/espresso_c05_grid.nc
 N       = 48
 grdtype = z
 depth   = [  -4500.  -4000.  -3500.  -3000.  -2500.  -2000.  -1750.  -1500.  -1250.  -1000. \
@@ -35,7 +46,7 @@ depth   = [  -4500.  -4000.  -3500.  -3000.  -2500.  -2000.  -1750.  -1500.  -12
 #
 id      = ESPRESSO_HIRES
 name    = ESPRESSO_HIRES
-grdfile = /home/frederic/ROMS_projects/espresso_hires/Data/espresso_h04_grid.nc
+grdfile = /storage/ROMS/espresso_hires/Data/espresso_h04_grid.nc
 N       = 36
 grdtype = roms
 Vtrans  = 1
@@ -46,7 +57,7 @@ Tcline  = 5
 #
 id      = ESPRESSO_HIRES_Z
 name    = ESPRESSO_HIRES_Z
-grdfile = /home/frederic/ROMS_projects/espresso_hires/Data/espresso_h04_grid.nc
+grdfile = /storage/ROMS/espresso_hires/Data/espresso_h04_grid.nc
 N       = 48
 grdtype = z
 depth   = [  -4500.  -4000.  -3500.  -3000.  -2500.  -2000.  -1750.  -1500.  -1250.  -1000. \
@@ -57,7 +68,7 @@ depth   = [  -4500.  -4000.  -3500.  -3000.  -2500.  -2000.  -1750.  -1500.  -12
 #
 id      = ESPRESSO_HIRES_HCOARSE
 name    = ESPRESSO_HIRES_HCOARSE
-grdfile = /home/frederic/ROMS_projects/espresso_hires/Data/espresso_h04_grid_hcoarse.nc
+grdfile = /storage/ROMS/espresso_hires/Data/espresso_h04_grid_hcoarse.nc
 N       = 36
 grdtype = roms
 Vtrans  = 1
@@ -68,7 +79,7 @@ Tcline  = 5
 #
 id      = MABGOM
 name    = MABGOM
-grdfile = /home/frederic/ROMS_projects/MABGOM/grid/grd_mabgom_h_MB+_bathy.nc
+grdfile = /storage/ROMS/MABGOM/grid/grd_mabgom_h_MB+_bathy.nc
 N       = 36
 grdtype = roms
 Vtrans  = 1
@@ -79,7 +90,7 @@ Tcline  = 50
 #
 id      = MABGOM_Z
 name    = MABGOM_Z
-grdfile = /home/frederic/ROMS_projects/MABGOM/grid/grd_mabgom_h_MB+_bathy.nc
+grdfile = /storage/ROMS/MABGOM/grid/grd_mabgom_h_MB+_bathy.nc
 N       = 42
 grdtype = z
 depth   = [  -4500.  -4000.  -3500.  -3000.  -2500.  -2000.  -1750.  -1500.  -1250.  -1000. \
@@ -90,7 +101,7 @@ depth   = [  -4500.  -4000.  -3500.  -3000.  -2500.  -2000.  -1750.  -1500.  -12
 #
 id      = MABGOM_COARSE
 name    = MABGOM_COARSE
-grdfile = /home/frederic/ROMS_projects/MAB/grid/mabgom_avg_0001.nc
+grdfile = /storage/ROMS/MAB/grid/mabgom_avg_0001.nc
 N       = 36
 grdtype = roms
 Vtrans  = 1
@@ -101,7 +112,7 @@ Tcline  = 50
 #
 id      = RCCS
 name    = RCCS
-grdfile = /home/frederic/ROMS_projects/RCCS/grid/grd_rccs.nc
+grdfile = /storage/ROMS/RCCS/grid/grd_rccs.nc
 N       = 60
 grdtype = roms
 Vtrans  = 1
@@ -112,7 +123,7 @@ Tcline  = 10
 #
 id      = NEP5
 name    = NEP5
-grdfile = /home/frederic/ROMS_projects/NEP/grid/NEP_grid_5a.nc
+grdfile = /storage/ROMS/NEP/grid/NEP_grid_5a.nc
 N       = 60
 grdtype = roms
 Vtrans  = 1
@@ -123,7 +134,7 @@ Tcline  = 10
 #
 id      = BERING
 name    = BERING
-grdfile = /home/frederic/ROMS_projects/BERING/grid/Bering_grid_4.nc
+grdfile = /storage/ROMS/BERING/grid/Bering_grid_4.nc
 N       = 60
 grdtype = roms
 Vtrans  = 1

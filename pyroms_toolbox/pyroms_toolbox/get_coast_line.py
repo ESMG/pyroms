@@ -45,4 +45,4 @@ def get_coast_line(grd):
                 seg = zip(lonc,latc)
                 coast.append(seg)
 
-    return coast
+    return np.array(coast)

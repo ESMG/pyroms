@@ -21,7 +21,8 @@ class s_coordinate(object):
     s = s_coordinate(h, theta_b, theta_s, Tcline, N)
     """
 
-    def __init__(self, h, theta_b, theta_s, Tcline, N, zeta=None):
+    def __init__(self, h, theta_b, theta_s, Tcline, N, hraw=None, zeta=None):
+        self.hraw = hraw
         self.h = np.asarray(h)
         self.hmin = h.min()
         self.theta_b = theta_b
@@ -34,10 +35,8 @@ class s_coordinate(object):
 
         self.Vtrans = 1
 
-        #assert self.Tcline <= self.hmin, 'Vertical transformation parameters definition error: \n Tcline = %d and hmin = %d. \n You need to make sure that Tcline <= hmin when using the transformation (1).' %(self.Tcline,self.hmin)
         if (self.Tcline > self.hmin):
             warnings.warn('Vertical transformation parameters are not defined correctly in either gridid.txt or in the history files: \n Tcline = %d and hmin = %d. \n You need to make sure that Tcline <= hmin when using transformation 1.' %(self.Tcline,self.hmin))
-
 
         self.c1 = 1.0
         self.c2 = 2.0
@@ -96,14 +95,40 @@ class s_coordinate_2(s_coordinate):
     s = s_coordinate_2(h, theta_b, theta_s, Tcline, N)
     """
 
-    def __init__(self, h, theta_b, theta_s, Tcline, N, zeta=None):
+    def __init__(self, h, theta_b, theta_s, Tcline, N, hraw=None, zeta=None):
+        self.hraw = hraw
+        self.h = np.asarray(h)
+        self.hmin = h.min()
+        self.theta_b = theta_b
+        self.theta_s = theta_s
+        self.Tcline = Tcline
+        self.N = int(N)
+        self.Np = self.N+1
+
+        self.hc = self.Tcline
+
+        self.Vtrans = 2
 
         self.Aweight = 1.0
         self.Bweight = 1.0
 
-        super(s_coordinate_2, self).__init__( h, theta_b, theta_s, Tcline, N, zeta)
+        self.c1 = 1.0
+        self.c2 = 2.0
+        self.p5 = 0.5
 
-        self.Vtrans = 2
+        if zeta is None:
+            self.zeta = np.zeros(h.shape)
+        else:
+            self.zeta = zeta
+
+        self._get_s_rho()
+        self._get_s_w()
+        self._get_Cs_r()
+        self._get_Cs_w()
+
+        self.z_r = z_r(self.h, self.hc, self.N, self.s_rho, self.Cs_r, self.zeta, self.Vtrans)
+        self.z_w = z_w(self.h, self.hc, self.Np, self.s_w, self.Cs_w, self.zeta, self.Vtrans)
+
 
     def _get_s_rho(self):
         super(s_coordinate_2, self)._get_s_rho()
