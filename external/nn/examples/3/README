@@ -1,0 +1,34 @@
+This example tests interpolation of degenerate data, when both input and
+output points belong to nodes of 101 x 101 regular grid. As a consequence,
+a lot of output points turn out to be exactly on edges of Delaunay
+triangulation. In this case, Watson's algorithm used for Sibson interpolation
+in this package does not work, and the output vertices have to be perturbed.
+(The same applies to Belikov and Semenov's formulas for non-Sibsonian 
+interpolation.)
+
+A linear function z = 5x - 3y has been chosen for interpolation because
+both Sibsonian and non-Sibsonian interpolation should (in theory) reproduce
+it exactly, and for both Sibsonian and non-Sibsonian interpolation sum of
+absolute discrepancy is calculated.
+
+I think that this example is a good test of numerical robustness of the
+NN interpolation. 
+
+To conduct the test, run "./test.sh" or "make".
+To clean up, run "make clean".
+
+On pc-linux platform v. 1.55 yields:
+  sum(|z_sibson_i - z_i|) = 4.91393e-10
+  sum(|z_nonsibson_i - z_i|) = 3.28898e-14
+
+For comparison, libnn version 1.52 gives:
+  sum(|z_sibson_i - z_i|) = 312.976
+  sum(|z_nonsibson_i - z_i|) = 489.882
+
+Update 24 November 2006: version 1.69 gives now
+  sum(|z_sibson_i - z_i|) = 2.07804e-12
+  sum(|z_nonsibson_i - z_i|) = 3.53031e-14
+on my Linux box.
+
+Good luck!
+Pavel Sakov

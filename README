@@ -1,0 +1,38 @@
+Welcome to Pyroms!
+
+Pyroms is a collection of tools to help with input and output files
+from the Regional Ocean Modeling System (ROMS). It was originally
+started by Rob Hetland as a googlecode project, then he morphed it
+into octant, also at googlecode. Frederic Castruccio then created a
+fork and renamed it back to pyroms. This version is now in private
+development, but we will release it here when it's ready.
+
+Meanwhile, you can prepare by installing this collection of
+packages:
+
+   * Python itself. You will need a version between 2.4 and 2.6, inclusive.
+
+   * numpy. Get a version that's reasonably new, don't count on the
+     version 1.0.1 that you found already on the system. How do you
+     tell the version? At the interactive prompt from python, type
+     "import numpy" then "numpy.__version__".
+
+   * scipy.
+
+   * matplotlib. This is a plotting package to reproduce the Matlab
+     plotting, complete with everything you might not like about
+     Matlab plotting. This also contains the gui tools, but it
+     depends on an underlying gui package, be that tk, wx, X11, or
+     qt. If it can't find any of them, it's time to install one.
+
+   * basemap from matplotlib. These are the map tools for Python,
+     complete with etopo2 in the examples directory (user beware).
+
+   * netCDF4 from Jeff Whitaker. This sits on top of the hdf5 and
+     netcdf4 libraries.
+
+   * ipython. Fred Castruccio recommends using "ipython -pylab" for
+     interactive fun. It preloads both numpy and the matplotlib
+     pylab package.
+
+We may also add pyngl and pynio from NCAR to this list.

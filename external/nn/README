@@ -1,0 +1,68 @@
+nn
+Natural Neighbours interpolation library
+Version 1.71
+
+Provides Natural Neighbours interpolation library "libnn.a" and a command line
+Natural Neighbours interpolation utility "nnbathy".
+
+Copyright 2000-2005 CSIRO Marine Research
+GPO 1538 Hobart
+TAS 7001
+Australia
+Please send comments and bugs to Pavel.Sakov@csiro.au
+
+There is no warranty whatsoever.  Use at your own risk. 
+
+This code may be freely redistributed under the condition that the copyright 
+notices are not removed. You may distribute modified versions of this code 
+UNDER THE CONDITION THAT THIS CODE AND ANY MODIFICATIONS MADE TO IT IN THE 
+SAME FILE REMAIN UNDER COPYRIGHT OF CSIRO, BOTH SOURCE AND OBJECT CODE ARE 
+MADE FREELY AVAILABLE WITHOUT CHARGE, AND CLEAR NOTICE IS GIVEN OF THE 
+MODIFICATIONS.
+
+This code has been developed and used mainly on pc-linux platform, however,
+it should compile on other platforms. Beware that the configure script 
+currently does not do much more than a couple of checks. It should be viewed 
+rather as a prototype for the future than a multi-platform configuration tool.
+
+To compile, run:
+
+configure
+make
+(make install)
+
+For a few quick tests, run:
+
+make tests
+./nnphi_test
+./nnai_test
+./ht_test
+
+Apart from the `nn' library, this code contains `nnbathy' -- a simple 
+interpolation utility/example based on `nn'.
+
+There are a number of examples of using `nnbathy' in "examples" directory:
+
+examples/1 -- reconstruction of Franke test function
+examples/2 -- reconstruction of bathymetry from sonar data
+examples/3 -- performance on degenerate data
+examples/4 -- reconstruction of topography from satellite altimeter data
+examples/5 -- reconstruction of topography from digitised contours
+
+For a basic description of structures and functions available from `nn', have
+a look at "nn.h".
+
+Acknowledgments:
+
+This library uses the following public code/algorithms:
+  1. `triangle' by Jonathan Richard Shewchuk -- for Delaunay triangulation;
+  2. Dave Watson's algorithm for Sibson interpolation;
+  3. Belikov and Semenov's formulas for non-Sibsonian interpolation.
+
+Please acknowledge the use of this software in any publications:
+"Natural Neighbours interpolation software was provided by Pavel Sakov and
+is available at URL: http://www.marine.csiro.au/~sakov/nn.tar.gz".
+
+Good luck!
+Pavel Sakov
+

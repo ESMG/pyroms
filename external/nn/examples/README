@@ -1,0 +1,10 @@
+Example 1: uniformly distributed random measurements of Franke test fuction.
+
+Example 2: topographic data from sonar.
+
+Example 3: both interpolation points and data points lie in nodes of a 
+           rectangular grid.
+
+Example 4: topographic data from satellite altimeter.
+
+Example 5: topographic data obtained from digitised contours.
