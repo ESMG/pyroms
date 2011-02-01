@@ -1,0 +1,20 @@
+#if defined(__APPLE__)
+#   if defined(__i386__)
+#      undef HAVE_64_BIT
+#      undef HAVE_BIG_ENDIAN
+#   elif defined(__ppc__)
+#      undef HAVE_64_BIT
+#      define HAVE_BIG_ENDIAN
+#   elif defined(__x86_64__)
+#      define HAVE_64_BIT
+#      undef HAVE_BIG_ENDIAN
+#   elif defined(__ppc64__)
+#      define HAVE_64_BIT
+#      define HAVE_BIG_ENDIAN
+#   else
+#      error "Unknown architecture!"
+#   endif
+#else
+#   cmakedefine HAVE_64_BIT
+#   cmakedefine HAVE_BIG_ENDIAN
+#endif

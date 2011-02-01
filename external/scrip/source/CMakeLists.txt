@@ -111,13 +111,6 @@ else()
    target_link_libraries(scrip_test ${Netcdf_LIBRARY})
 endif("${Netcdff_FOUND}" MATCHES "TRUE")
 
-#add_custom_command(TARGET scrip_test 
-#POST_BUILD	
-#COMMAND cp ${CMAKE_SOURCE_DIR}/external/scrip/source/CMakeFiles/scrip.dir/*.o ${CMAKE_SOURCE_DIR}/external/scrip/source/
-#COMMAND cp
-#${CMAKE_SOURCE_DIR}/external/scrip/source/CMakeFiles/scrip_test.dir/*.o ${CMAKE_SOURCE_DIR}/external/scrip/source/
-#)
-
 set(pyscrip "${Project_SOURCE_DIR}/external/scrip/source/pyscrip.f90")
 
 string(REPLACE "${CMAKE_SHARED_LIBRARY_PREFIX}netcdf${CMAKE_SHARED_LIBRARY_SUFFIX}" "" Netcdf_DIR ${Netcdf_LIBRARY})
@@ -129,21 +122,25 @@ if ("${Netcdff_FOUND}" MATCHES "TRUE")
 
        string(REPLACE "${CMAKE_SHARED_LIBRARY_PREFIX}hdf5_hl${CMAKE_SHARED_LIBRARY_SUFFIX}" "" Hdf5hl_DIR ${Hdf5hl_LIBRARY})
 
-       add_custom_target(scrip${CMAKE_SHARED_LIBRARY_SUFFIX}
-       COMMAND f2py --fcompiler=${F2PY_COMPILER} --f90flags=${CMAKE_FORTRAN_FLAGS} -L${Netcdf_DIR} -lnetcdf -L${Netcdff_DIR} -lnetcdff -L${Hdf5_DIR} -lhdf5 -L${Hdf5hl_DIR} -lhdf5_hl -m scrip -c ${OBJF2PY} ${pyscrip} 
+       add_custom_target(scrip.so
+       COMMAND f2py --fcompiler=${F2PY_COMPILER}
+--f90flags=${CMAKE_FORTRAN_FLAGS} -L${Netcdf_DIR} -lnetcdf -L${Netcdff_DIR}
+-lnetcdff -L${Hdf5_DIR} -lhdf5 -L${Hdf5hl_DIR} -lhdf5_hl -I${Netcdf_INC} -m scrip -c ${OBJF2PY} ${pyscrip}
        )
    else()
        add_custom_target(scrip${CMAKE_SHARED_LIBRARY_SUFFIX}
-       COMMAND f2py --fcompiler=${F2PY_COMPILER} --f90flags=${CMAKE_FORTRAN_FLAGS} -L${Netcdf_DIR} -lnetcdf -L${Netcdff_DIR} -lnetcdff -m scrip -c ${OBJF2PY} ${pyscrip} 
+       COMMAND f2py --fcompiler=${F2PY_COMPILER}
+--f90flags=${CMAKE_FORTRAN_FLAGS} -L${Netcdf_DIR} -lnetcdf -L${Netcdff_DIR} -lnetcdff -I${Netcdf_INC} -m scrip -c ${OBJF2PY} ${pyscrip} 
        )
    endif("${Hdf5_FOUND}" MATCHES "TRUE" AND "${Hdf5hl_FOUND}" MATCHES "TRUE")
 else()
    if ("${Hdf5_FOUND}" MATCHES "TRUE" AND "${Hdf5hl_FOUND}" MATCHES "TRUE")
       add_custom_target(scrip${CMAKE_SHARED_LIBRARY_SUFFIX}
-      COMMAND f2py --fcompiler=${F2PY_COMPILER} --f90flags=${CMAKE_FORTRAN_FLAGS} -L${Netcdf_DIR} -lnetcdf -L${Hdf5_DIR} -hdf5 -L${Hdf5hl_DIR} -lhdf5_hl -m scrip -c ${OBJF2PY} ${pyscrip})
+      COMMAND f2py --fcompiler=${F2PY_COMPILER}
+--f90flags=${CMAKE_FORTRAN_FLAGS} -L${Netcdf_DIR} -lnetcdf -L${Hdf5_DIR} -hdf5 -L${Hdf5hl_DIR} -lhdf5_hl -I${Netcdf_INC} -m scrip -c ${OBJF2PY} ${pyscrip})
    else()
       add_custom_target(scrip${CMAKE_SHARED_LIBRARY_SUFFIX}
-      COMMAND f2py --fcompiler=${F2PY_COMPILER} --f90flags=${CMAKE_FORTRAN_FLAGS} -L${Netcdf_DIR} -lnetcdf -m scrip -c ${OBJF2PY} ${pyscrip}
+      COMMAND f2py --fcompiler=${F2PY_COMPILER} --f90flags=${CMAKE_FORTRAN_FLAGS} -L${Netcdf_DIR} -lnetcdf -I${Netcdf_INC} -m scrip -c ${OBJF2PY} ${pyscrip}
       )
    endif("${Hdf5_FOUND}" MATCHES "TRUE" AND "${Hdf5hl_FOUND}" MATCHES "TRUE")
 endif("${Netcdff_FOUND}" MATCHES "TRUE") 
@@ -155,13 +152,13 @@ scrip_test
 if("scrip.so" MATCHES "scrip${CMAKE_SHARED_LIBRARY_SUFFIX}")
 add_custom_command(TARGET scrip${CMAKE_SHARED_LIBRARY_SUFFIX}
 POST_BUILD
-COMMAND cp ${Project_SOURCE_DIR}/external/scrip/source/scrip${CMAKE_SHARED_LIBRARY_SUFFIX} ${LIBRARY_OUTPUT_PATH}
+COMMAND cp ${Project_BINARY_DIR}/external/scrip/source/scrip${CMAKE_SHARED_LIBRARY_SUFFIX} ${LIBRARY_OUTPUT_PATH}
 )
 ELSE("scrip.so" MATCHES "scrip${CMAKE_SHARED_LIBRARY_SUFFIX}")
 add_custom_command(TARGET scrip${CMAKE_SHARED_LIBRARY_SUFFIX}
 POST_BUILD
-COMMAND mv ${Project_SOURCE_DIR}/external/scrip/source/scrip.so ${Project_SOURCE_DIR}/external/scrip/source/scrip${CMAKE_SHARED_LIBRARY_SUFFIX}
-COMMAND cp ${Project_SOURCE_DIR}/external/scrip/source/scrip${CMAKE_SHARED_LIBRARY_SUFFIX} ${LIBRARY_OUTPUT_PATH}
+COMMAND mv ${Project_BINARY_DIR}/external/scrip/source/scrip.so ${Project_SOURCE_DIR}/external/scrip/source/scrip${CMAKE_SHARED_LIBRARY_SUFFIX}
+COMMAND cp ${Project_BINARY_DIR}/external/scrip/source/scrip${CMAKE_SHARED_LIBRARY_SUFFIX} ${LIBRARY_OUTPUT_PATH}
 )
 ENDIF("scrip.so" MATCHES "scrip${CMAKE_SHARED_LIBRARY_SUFFIX}")
 

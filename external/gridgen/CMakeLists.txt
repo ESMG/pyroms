@@ -36,7 +36,11 @@ c99-min/cmplx.c
 c99-min/stubs.c
 )
 
-set(CFLAGS "-g -O2 -Wall -m64 -fPIC")
+if (HAVE_64_BIT)
+   set(CFLAGS "-g -O2 -Wall -m64 -fPIC")
+else (HAVE_64_BIT)
+   set(CFLAGS "-g -O2 -Wall -fPIC")
+endif (HAVE_64_BIT)
 set(CFLAGS_TRIANGLE "-c -DTRILIBRARY -g -O2 -Wall -w -ffloat-store")
 set(CFLAGS_GRIDGEN "-DGRIDGEN_STANDALONE ${CFLAGS}")
 

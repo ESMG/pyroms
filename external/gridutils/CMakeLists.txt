@@ -39,8 +39,12 @@ subgrid
 xy2ij
 )
 
-set(CFLAGS "-g -O2 -Wall -pedantic -m64 -fPIC")
-#set(CPPFLAGS "-I${CMAKE_SOURCE_DIRECTORY}/external/nn -I${CMAKE_SOURCE_DIRECTORY}/csa")
+if(HAVE_64_BIT)
+   set(CFLAGS "-g -O2 -Wall -pedantic -m64 -fPIC")
+else(HAVE_64_BIT)
+   set(CFLAGS "-g -O2 -Wall -pedantic -fPIC")
+endif(HAVE_64_BIT)
+
 set_source_files_properties(${SRC} PROPERTIES COMPILE_FLAGS "${CFLAGS}")
 
 add_executable(getbound

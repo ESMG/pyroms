@@ -11,11 +11,11 @@
 
 COMPILE = gfortran
 FLAGS = -g -fdefault-real-8 -ffixed-form -O2 -fPIC
-LIB  = -L/home/frederic/lib -lnetcdff
-INCLUDE = -I/home/frederic/include/
+LIB  = -L/usr/local/lib/ -lnetcdff
+INCLUDE = -I/usr/local/include/
 F2PY = f2py
-F2PY_LIB = -L/home/frederic/lib -lnetcdf -lnetcdff -lhdf5 -lhdf5_hl
-F2PY_INCLUDE = -I/home/frederic/include/
+F2PY_LIB = -L/usr/local/lib/ -lnetcdf -lnetcdff -lhdf5 -lhdf5_hl
+F2PY_INCLUDE = -I/usr/local/include/
 F2PY_F90_FLAG= '-g -fdefault-real-8 -ffixed-form -O2 -fPIC'
 SRCDIR  = .
 EXEDIR  = ..

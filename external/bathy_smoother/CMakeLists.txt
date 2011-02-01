@@ -27,9 +27,16 @@ COMMAND cp
 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/external/lp_solve_5.5/lpsolve55/
 )
 
-add_custom_target(bathy_smoother
-COMMAND python
-${CMAKE_CURRENT_SOURCE_DIR}/external/lp_solve_5.5/extra/Python/setup.py install --prefix="${LIBRARY_OUTPUT_PATH}/../"
+add_custom_target(pylibs
+COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/external/lp_solve_5.5/extra/Python/pyhelp.py ${LIBRARY_OUTPUT_PATH}/
+COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/external/lp_solve_5.5/extra/Python/setup.py install --prefix="${LIBRARY_OUTPUT_PATH}/"
 DEPENDS lpsolve lpsolve55
 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/external/lp_solve_5.5/extra/Python/
 )
+
+add_custom_target(bathy_smoother
+COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/setup.py install
+--prefix="${LIBRARY_OUTPUT_PATH}/"
+WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
+add_dependencies(bathy_smoother pylibs)
