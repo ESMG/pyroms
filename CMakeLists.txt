@@ -21,8 +21,17 @@ endif( NOT APPLE )
 add_subdirectory(external)
 add_subdirectory(pyroms_toolbox)
 
+set(OUTPUT ${LIBRARY_OUTPUT_PATH}/../)
+string(REGEX MATCH "/lib/../$" IS_LIB ${OUTPUT})
+if(${IS_LIB} MATCHES "/lib/../")
+add_custom_target(pyroms
+COMMAND python ${Project_SOURCE_DIR}/pyinstall.py ${LIBRARY_OUTPUT_PATH}/../ 
+WORKING_DIRECTORY ${Project_SOURCE_DIR}
+)
+else(${IS_LIB} MATCHES "/lib/../")
 add_custom_target(pyroms
 COMMAND python ${Project_SOURCE_DIR}/pyinstall.py ${LIBRARY_OUTPUT_PATH}/
 WORKING_DIRECTORY ${Project_SOURCE_DIR}
 )
+endif(${IS_LIB} MATCHES "/lib/../")
 
