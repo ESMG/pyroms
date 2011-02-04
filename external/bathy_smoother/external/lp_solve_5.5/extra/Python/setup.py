@@ -10,11 +10,7 @@ lpsolve55 = Extension(name = 'lpsolve55',
                 sources = ['lpsolve.c', 'hash.c', 'pythonmod.c'],
                 define_macros=[('PYTHON', '1'), (WIN32, '1'), ('NODEBUG', '1')],
                 include_dirs=['../..'],
-<<<<<<< HEAD
-                library_dirs=['../../lib'],
-=======
-                library_dirs=['/wrkdir/torgerso/pyroms_1_13_2011/whoa/lib/'],
->>>>>>> bob
+                library_dirs=['/u1/uaf/kate/lib/'],
                 libraries=['lpsolve55'])
 
 setup (name = "lpsolve55",
