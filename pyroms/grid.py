@@ -505,6 +505,8 @@ def write_ROMS_grid(grd, filename='roms_grd.nc'):
     nc.createDimension('xi_vert', Lm+1)
     nc.createDimension('eta_vert', Mm+1)
 
+    nc.createDimension('bath', None)
+
     if hasattr(grd.vgrid, 's_rho') is True and grd.vgrid.s_rho is not None:
         N, = grd.vgrid.s_rho.shape
         nc.createDimension('s_rho', N)
@@ -530,7 +532,13 @@ def write_ROMS_grid(grd, filename='roms_grd.nc'):
         write_nc_var(grd.vgrid.Cs_w, 'Cs_w', ('s_w'), 'S-coordinate stretching curves at W-points')
 
     write_nc_var(grd.vgrid.h, 'h', ('eta_rho', 'xi_rho'), 'bathymetry at RHO-points', 'meter')
-    write_nc_var(grd.vgrid.hraw, 'hraw', ('eta_rho', 'xi_rho'), 'raw bathymetry at RHO-points', 'meter')
+    #ensure that we have a bath dependancy for hraw
+    if len(grd.vgrid.hraw.shape) == 2:
+        hraw = np.zeros((1, grd.vgrid.hraw.shape[0], grd.vgrid.hraw.shape[1]))
+        hraw[0,:] = grd.vgrid.hraw
+    else:
+        hraw = grd.vgrid.hraw
+    write_nc_var(hraw, 'hraw', ('bath', 'eta_rho', 'xi_rho'), 'raw bathymetry at RHO-points', 'meter')
     write_nc_var(grd.hgrid.f, 'f', ('eta_rho', 'xi_rho'), 'Coriolis parameter at RHO-points', 'second-1')
     write_nc_var(1./grd.hgrid.dx, 'pm', ('eta_rho', 'xi_rho'), 'curvilinear coordinate metric in XI', 'meter-1')
     write_nc_var(1./grd.hgrid.dy, 'pn', ('eta_rho', 'xi_rho'), 'curvilinear coordinate metric in ETA', 'meter-1')
