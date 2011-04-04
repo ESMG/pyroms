@@ -416,6 +416,8 @@ def get_ROMS_vgrid(gridid, zeta=None):
             vgrid = s_coordinate(h, theta_b, theta_s, Tcline, N, hraw=hraw, zeta=zeta)
         elif Vtrans == 2:
             vgrid = s_coordinate_2(h, theta_b, theta_s, Tcline, N, hraw=hraw, zeta=zeta)
+        elif Vtrans == 4:
+            vgrid = s_coordinate_4(h, theta_b, theta_s, Tcline, N, hraw=hraw, zeta=zeta)
         else:
             raise Warning, 'Unknow vertical transformation Vtrans'
 
