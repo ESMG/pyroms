@@ -1,0 +1,13 @@
+This is yet another example based on digitised elevation contours. It provides
+a particularly good torture test for the numerics involved in Sibson 
+interpolation using Watson's method. In fact, it forced me to make changes to 
+the code that handles degenerate cases during Sibson interpolation in v. 1.69.
+Many thanks to Nick Cahill for identifying the problem and providing the data 
+and to Maciej Sieczka for putting up the bug report.
+
+To reproduce the example, run "./test.sh" or "make".
+To visualize, in Matlab run "viewinterp('data.txt', 'nn.txt');".
+To clean up, run "make clean".
+
+Good luck!
+Pavel Sakov

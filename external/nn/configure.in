@@ -1,0 +1,114 @@
+dnl Configure.in for nn
+
+AC_INIT(CUSTOMISE)
+AC_CONFIG_HEADER(config.h)
+
+AC_DEFUN(AC_FIND_HEADER,
+[AC_MSG_CHECKING(for $1)
+header_path=
+found_header=no
+# Look for the header file in a standard set of common directories.
+   for ac_dir in                \
+      $includedir               \
+      $prefix/include           \
+      $secondary_prefix/include \
+      /usr/include              \
+      /usr/include/sys          \
+      /opt/gnu/include          \
+      /opt/misc/include         \
+      /usr/local/include        \
+      ; \
+   do
+     if test -r "$ac_dir/$1"; then
+        header_path=$ac_dir
+	found_header=yes
+	break
+     fi
+   done
+AC_MSG_RESULT($found_header)
+
+test "$found_header" = yes && $2
+test "$found_header" = no && $3
+])
+
+AC_DEFUN(AC_FIND_LIB,
+[AC_MSG_CHECKING(for -l$1)
+rqst_lib=$1
+lib_path=
+found_lib=no
+# Look for the library file in a standard set of common directories.
+   for ac_dir in                \
+      $libdir               \
+      $prefix/lib${LIBEXT}           \
+      $secondary_prefix/lib${LIBEXT}           \
+      /usr/lib${LIBEXT}              \
+      /usr/unsupported/lib${LIBEXT}  \
+      /opt/gnu/lib${LIBEXT}          \
+      /opt/misc/lib${LIBEXT}         \
+      /usr/local/lib${LIBEXT}        \
+      ; \
+do
+  for ac_extension in a so sl; do
+    if test -r $ac_dir/lib${rqst_lib}.$ac_extension; then
+      lib_path=$ac_dir
+      found_lib=yes
+      break 2
+    fi
+  done
+done
+AC_MSG_RESULT($found_lib)
+
+test "$found_lib" = yes && $2
+test "$found_lib" = no && $3
+])
+
+dnl Get the shell variable to override local customisations.
+AC_DEFUN([AC_CUSTOMISE],
+[dnl
+    AC_BEFORE([$0], [AC_DEFAULT])dnl
+    if test -r CUSTOMISE; then
+        . ./CUSTOMISE
+    fi
+])
+
+AC_CUSTOMISE
+
+dnl Checks for programs.
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_CHECK_PROG(AR, ar, ar, :)
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS(math.h,,AC_MSG_ERROR([unable to find header]))
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+
+dnl Check for libraries.
+AC_HAVE_LIBRARY(m,,AC_MSG_ERROR([unable to find library]))
+
+dnl Checks for library functions.
+AC_CHECK_FUNCS(realloc strtod strtok hypot,,AC_MSG_ERROR([unable to find function]))
+
+dnl check compiler option "-fno-force-mem"
+OLD_CFLAGS=$CFLAGS
+CFLAGS="$CFLAGS -fno-force-mem"
+AC_MSG_CHECKING(for -fno-force-mem option)
+AC_CACHE_VAL(ac_cv_fnoforcemem,
+  AC_TRY_COMPILE([], [char a;], ac_cv_fnoforcemem=yes, ac_cv_fnoforcemem=no))
+echo $ac_cv_fnoforcemem
+if test $ac_cv_fnoforcemem = no; then
+   CFLAGS=$OLD_CFLAGS
+fi
+
+if test "$ac_cv_fnoforcemem" = yes; then
+   CFLAGS_VULNERABLE="$CFLAGS_VULNERABLE -fno-force-mem"
+fi
+
+AC_SUBST(CC)
+AC_SUBST(CFLAGS)
+AC_SUBST(LDFLAGS)
+AC_SUBST(CFLAGS_TRIANGLE)
+AC_SUBST(CFLAGS_VULNERABLE)
+
+AC_OUTPUT(makefile)

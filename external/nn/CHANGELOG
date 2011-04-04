@@ -1,0 +1,62 @@
+v. 1.82, 12 May 2010
+        -- Modified "configure" to check whether compiler option 
+           "-fno-force-mem" is supported.
+v. 1.81, 29 May 2009
+        -- Added flag NN_SERIAL to the default compiler options for building 
+           nnbathy.
+v. 1.80, 12 December 2008
+        -- Changed the license for compatibility with GPL. Added the file
+           LICENSE.
+v. 1.79, 24 September 2008
+        -- Fixed some minor deficiencies in `minell' - thanks to Glen Low for
+           the bug report and extensive testing. This fix does not affect
+           performance of `nn'.
+v. 1.78, 18 January 2008
+	-- Modified Matlab code in the examples to take care of what seems to
+           be a new behaviour of RANGE function.
+v. 1.77, 19 November 2007
+        -- Reduced writing the % of the job completed to stderr to the instances
+           when the reported value has actually changed (with the precision of
+           0.1%).
+v. 1.76, 16 November 2007
+        -- Fixed a defect in nnpi_calculate_weights() that caused double 
+           deallocation in some rare cases (a degenerate point on the convex 
+           hall). Thanks for Maciek Sieczka for reporting this bug.
+v. 1.75, 30 October 2007
+        -- Modified delaunay_circles_find() and nnpi_reset(). Got rid of the
+           non-scalable stuff that slowed down processing of big datasets.
+           Many thanks to John Gerschwitz, Petroleum Geo-Services, for finding 
+           this defect.
+v. 1.74, 30 October 2007
+        -- Modified treatment of degenerate cases in nnpi_triangle_process(),
+           many thanks to John Gerschwitz, Petroleum Geo-Services, for exposing
+           the defect introduced in v. 1.69. Changed EPS_SAME from 1.0e-15 to
+           1.0e-8. A number of cosmetic changes.
+v. 1.73, 5 July 2007
+        -- Removed functional code from within assert()s, which caused problems
+           for production builds on Visual Studio. Thanks to Alok Saldanha for 
+           reporting this defect.
+v. 1.72, 4 July 2007
+        -- Moved division by "denom" in circle_build2() and circle_build1() to
+           after the check on denom == 0; otherwise division on 0 raised 
+           exception on some systems. Thanks to Alok Saldanha for reporting this
+           bug.
+v. 1.71, 17 January 2007
+	-- Made the test on whether an output point exactly coincides with
+           an input point in nnpi_triangle_process() approximate.
+v. 1.70, 24 November 2006
+        -- Added example 6.
+v. 1.69, 22 November 2006
+	-- Substantial changes in processing of the degenerate case for Sibson
+           interpolation. This is the case when an interpolation point is close
+           to being in between data points. It is no longer handled by a pair
+           of symmetric displacements of this point; instead, the center of the
+           corresponding circumcircle is moved elsewhere in a specific way.
+v. 1.68, 28 September 2006
+        -- Edited README
+v. 1.67, 30 August 2006
+        -- Introduced -% option (available only when built with -DNN_SERIAL)
+v. 1.66, 26 June 2006
+	-- Introduced this file
+	-- Fixed error in reading the command-line input after "-L"
+        -- Made a few cosmetic changes

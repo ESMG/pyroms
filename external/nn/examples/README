@@ -1,0 +1,17 @@
+This directory contains some tough (or not so tough) tests based mainly on
+some real data (except Examples 1 and 3), on which `nn' has initially failed.
+Example 1 is added for a comparison with the `csa' package in the case of
+uniformly distributed data.
+
+Example 1: uniformly distributed random measurements of Franke test fuction.
+
+Example 2: bathymetry from sonar.
+
+Example 3: degenerate case: both interpolation points and data points lie in
+           the nodes of a rectangular grid.
+
+Example 4: topographic data from a satellite altimeter.
+
+Example 5: topographic data from digitised contours.
+
+Example 6: topographic data from digitised contours.

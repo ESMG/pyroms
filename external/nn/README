@@ -1,0 +1,87 @@
+nn
+Natural Neighbours interpolation library
+Version 1.82
+
+Provides Natural Neighbours interpolation library "libnn.a" and a command line
+Natural Neighbours interpolation utility "nnbathy".
+
+`nn' is a free software. See LICENSE for details.
+
+(Note that however that `triangle' is not a free softwre.)
+
+Please send comments and bugs to Pavel.Sakov<at>gmail.com .
+
+
+1. This code has been developed and used mainly on pc-linux platform, however,
+it should compile on other platforms. Beware that the configure script 
+currently does not do much more than a couple of checks. It should be viewed 
+rather as a prototype for the future than a multi-platform configuration tool.
+
+`nn' was initially based on the Dave Watson's `nngridr'. Over time, there were
+numerous improvements of this original version. You may see comparison of 
+performance of a rather old version `nn' with `nngridr' in
+
+  Quanfu Fan, Alon Efrat, Vladlen Koltun, Shankar Krishnan, and 
+  Suresh Venkatasubramanian. Hardware-assisted Natural Neighbor Interpolation. 
+  In Proc. 7th Workshop on Algorithm Engineering and Experiments (ALENEX), 2005.
+
+Note that the current version of `nn' outperforms the version tested in the
+above paper both in terms of scalability and robustness.
+
+
+2. To compile, run:
+
+configure
+make
+(make install)
+
+For a few quick tests, run:
+
+make tests
+./nnphi_test
+./nnai_test
+./ht_test
+
+
+3. Apart from the `nn' library, this code contains `nnbathy' -- a simple 
+interpolation utility/example based on `nn'.
+
+Initially, `nnbathy' has been introduced to provide an example of using library
+functions from `nn'. Later, evolving along with user requests, it became a quite
+functional command-line utility.
+
+
+4. There are a number of examples of using `nnbathy' in "examples" directory:
+
+examples/1 -- reconstruction of Franke test function
+examples/2 -- reconstruction of bathymetry from sonar data
+examples/3 -- performance on degenerate data
+examples/4 -- reconstruction of topography from satellite altimeter data
+examples/5 -- reconstruction of topography from digitised contours
+examples/6 -- reconstruction of topography from digitised contours
+
+These examples has been put up over a a number of years. Some of them used to
+cause failures for the older versions of the code. See examples/README for 
+descriptions.
+
+
+5. Calling `nn' code from a client code is supposed to be straightforward and 
+simple. Have a look at nnbathy.c for an example. For a basic description of 
+structures and functions available from `nn', have a look at "nn.h".
+
+
+6. Acknowledgments:
+
+This library uses the following public code/algorithms:
+  1. `triangle' by Jonathan Richard Shewchuk -- for Delaunay triangulation;
+  2. Dave Watson's algorithm for Sibson interpolation;
+  3. Belikov and Semenov's formulas for non-Sibsonian interpolation.
+
+Many thanks to David A. Paige, Maciek Sieczka, Nick Cahill and John Gerschwitz 
+for submitting bug reports and/or data for examples.
+
+
+7. Please acknowledge the use of this software in publications.
+
+Good luck!
+Pavel Sakov
