@@ -90,7 +90,7 @@ static void info()
     printf("  4. A grid cell is valid if all corner nodes are valid (not NaNs). Only\n");
     printf("     points in valid cells may be converted between physical and index\n");
     printf("     space.\n");
-    printf("  5. The grid (union of all valid grid cells) must be simpy connected both in\n");
+    printf("  5. The grid (union of all valid grid cells) must be simply connected both in\n");
     printf("     physical and index space.\n");
 
     exit(0);

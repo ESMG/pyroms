@@ -8,7 +8,7 @@ function hout=suptitle(str)
 % John Cristion 12/13/00 modified
 % Mark Histed 03/13/04 histed@mit.edu: fix disappearing legend on last plot
 % 
-% $Id: suptitle.m,v 1.1 2006/06/02 04:23:26 sakov Exp $
+% $Id: suptitle.m,v 1.1.1.1 2008/12/12 16:07:41 pavels Exp $
 
 % Warning: If the figure or axis units are non-default, this
 % will break.

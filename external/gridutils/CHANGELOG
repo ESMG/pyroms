@@ -1,0 +1,14 @@
+v. 0.47, April 2010
+        -- Added conversion from grid type CEN to types DD and CO (this involves
+           some extrapolation). Included kdtree.c and kdtree.h by John 
+           Tsiombikas in the process of adding this functionality.
+v. 0.46, 18 February 2009
+        -- Changed the license for compatibility with GPL. Added the file
+           LICENSE.
+v. 0.45, 12 Dec 2008
+        -- fixed a defect in gridbathy.c: checked one corner twice on l. 461
+           instead of the supposed corner
+v. 0.44, February 2007
+	-- Introduced this file
+	-- Introduce new make target "shared" to build shared labrary libgu.so
+	   necessary for calling from python

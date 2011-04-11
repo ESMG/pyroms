@@ -9,7 +9,7 @@ fi
 
 echo "  Franke test function reconstruction by 100, 300 and 1000 random points"
 
-for N in 5 10 15
+for N in 100 300 1000
 do 
     echo "  N = $N:"
     echo -n "    Generating..."

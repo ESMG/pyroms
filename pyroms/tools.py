@@ -2,6 +2,7 @@
 
 import numpy as np
 import _iso
+import _obs_interp
 
 import pyroms
 
@@ -1073,8 +1074,8 @@ def interm_pt(pnear, pk, pai, pbi, paj, pbj):
 	ylptmp1 = pnear[pk-1] + 1
 	ylptmp2 = pnear[pk-1] + (paj/abs(paj))*1j
 	# M is the candidate point:
-	zxm = real(ylptmp1)
-	zym = imag(ylptmp1)
+	zxm = np.real(ylptmp1)
+	zym = np.imag(ylptmp1)
 	za0 = paj
 	zb0 = pbj
 	#
@@ -1087,8 +1088,8 @@ def interm_pt(pnear, pk, pai, pbi, paj, pbj):
 	zd1 = (zxm-zxp) * (zxm-zxp) + (zym-zyp) * (zym-zyp)
         #
 	# M is the candidate point:
-	zxm = real(ylptmp2)
-	zym = imag(ylptmp2)
+	zxm = np.real(ylptmp2)
+	zym = np.imag(ylptmp2)
 	za1 = -1./za0
 	zb1 = zym-za1*zxm
 	# P is the projection of M in the strait line
@@ -1108,8 +1109,8 @@ def interm_pt(pnear, pk, pai, pbi, paj, pbj):
 	ylptmp1 = pnear[pk-1] + (pai/abs(pai))
 	ylptmp2 = pnear[pk-1] + 1*1j
 	# M is the candidate point:
-	zxm = real(ylptmp1)
-	zym = imag(ylptmp1)
+	zxm = np.real(ylptmp1)
+	zym = np.imag(ylptmp1)
 	za0 = pai
 	zb0 = pbi
 	#
@@ -1122,8 +1123,8 @@ def interm_pt(pnear, pk, pai, pbi, paj, pbj):
 	zd1 = (zxm-zxp) * (zxm-zxp) + (zym-zyp) * (zym-zyp)
         #
 	# M is the candidate point:
-	zxm = real(ylptmp2)
-	zym = imag(ylptmp2)
+	zxm = np.real(ylptmp2)
+	zym = np.imag(ylptmp2)
 	za1 = -1./za0
 	zb1 = zxm-za1*zym
 	# P is the projection of M in the strait line
@@ -1139,3 +1140,76 @@ def interm_pt(pnear, pk, pai, pbi, paj, pbj):
 	    pneari = ylptmp1
 	
     return pneari
+
+
+def hindices(lon, lat, grd, Cpos='rho', rectangular=0, spval=1e37):
+    """
+    """
+
+    if type(grd).__name__ == 'ROMS_Grid':
+        spherical = grd.hgrid.spherical
+        if Cpos == 'u':
+            long = grd.hgrid.lon_u
+            latg = grd.hgrid.lat_u
+            angle = 0.5 * (grd.hgrid.angle_rho[:,1:] + grd.hgrid.angle_rho[:,:-1])
+        elif Cpos == 'v':
+            long = grd.hgrid.lon_v
+            latg = grd.hgrid.lat_v
+            angle = 0.5 * (grd.hgrid.angle_rho[1:,:] + grd.hgrid.angle_rho[:-1,:])
+        elif Cpos == 'rho':
+            long = grd.hgrid.lon_rho
+            latg = grd.hgrid.lat_rho
+            angle = grd.hgrid.angle_rho
+        else:
+            raise Warning, '%s bad position. Valid Arakawa-C are \
+                               rho, u or v.' % Cpos
+
+    if type(grd).__name__ == 'CGrid_geo':
+        spherical = grd.spherical
+        if Cpos == 'u':
+            long = grd.lon_u
+            latg = grd.lat_u
+            angle = 0.5 * (grd.angle_rho[:,1:] + grd.angle_rho[:,:-1])
+        elif Cpos == 'v':
+            long = grd.lon_v
+            latg = grd.lat_v
+            angle = 0.5 * (grd.angle_rho[1:,:] + grd.angle_rho[:-1,:])
+        elif Cpos == 'rho':
+            long = grd.lon_rho
+            latg = grd.lat_rho
+            angle = grd.angle_rho
+        else:
+            raise Warning, '%s bad position. Valid Arakawa-C are \
+                               rho, u or v.' % Cpos
+
+
+    lon = np.matrix(lon)
+    lat = np.matrix(lat)
+
+    ipos, jpos = _obs_interp.hindices(spherical, angle.T, long.T, latg.T, \
+                                      lon, lat, spval, rectangular)
+
+    # python indexing start with zero...
+    ipos = np.squeeze(ipos) - 1
+    jpos = np.squeeze(jpos) - 1
+
+    ipos = np.ma.masked_where(ipos == spval, ipos)
+    jpos = np.ma.masked_where(jpos == spval, jpos)
+
+    return ipos, jpos
+
+
+def obs_interp2d(Finp, lon, lat, grd, Cpos='rho', rectangular=0, spval=1e37):
+    """
+    """
+
+    Iout, Jout = hindices(lon, lat, grd, Cpos=Cpos, rectangular=rectangular, spval=spval)
+    print Iout, Jout
+
+    # fortran indexing start with one...
+    Iout = Iout + 1
+    Jout = Jout + 1
+
+    Fout = _obs_interp.linterp2d(Finp.T,Iout,Jout)
+
+    return Fout

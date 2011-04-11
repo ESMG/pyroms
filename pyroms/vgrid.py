@@ -14,7 +14,8 @@ import warnings
 
 class s_coordinate(object):
     """
-    Original vertical coordinate transformation (Vtransform=1)
+    Song and Haidvogel (1994) vertical coordinate transformation (Vtransform=1) and
+    stretching functions (Vstretching=1).
     
     return an object that can be indexed to return depths
 
@@ -88,7 +89,8 @@ class s_coordinate(object):
 
 class s_coordinate_2(s_coordinate):
     """
-    New vertical coordinate transformation (Vtransform=2)
+    A. Shchepetkin (2005) UCLA-ROMS vertical coordinate transformation (Vtransform=2) and
+    stretching functions (Vstretching=2).
     
     return an object that can be indexed to return depths
 
@@ -169,6 +171,80 @@ class s_coordinate_2(s_coordinate):
             self.Cs_w = self.s_w
 
 
+class s_coordinate_4(s_coordinate):
+    """
+    A. Shchepetkin (2010) UCLA-ROMS vertical coordinate transformation (Vtransform=2) and
+    stretching functions (Vstretching=4).
+    
+    return an object that can be indexed to return depths
+
+    s = s_coordinate_4(h, theta_b, theta_s, Tcline, N)
+    """
+
+    def __init__(self, h, theta_b, theta_s, Tcline, N, hraw=None, zeta=None):
+        self.hraw = hraw
+        self.h = np.asarray(h)
+        self.hmin = h.min()
+        self.theta_b = theta_b
+        self.theta_s = theta_s
+        self.Tcline = Tcline
+        self.N = int(N)
+        self.Np = self.N+1
+
+        self.hc = self.Tcline
+
+        self.Vtrans = 4
+
+        self.c1 = 1.0
+        self.c2 = 2.0
+        self.p5 = 0.5
+
+        if zeta is None:
+            self.zeta = np.zeros(h.shape)
+        else:
+            self.zeta = zeta
+
+        self._get_s_rho()
+        self._get_s_w()
+        self._get_Cs_r()
+        self._get_Cs_w()
+
+        self.z_r = z_r(self.h, self.hc, self.N, self.s_rho, self.Cs_r, self.zeta, self.Vtrans)
+        self.z_w = z_w(self.h, self.hc, self.Np, self.s_w, self.Cs_w, self.zeta, self.Vtrans)
+
+
+    def _get_s_rho(self):
+        super(s_coordinate_4, self)._get_s_rho()
+
+    def _get_s_w(self):
+        super(s_coordinate_4, self)._get_s_w()
+
+    def _get_Cs_r(self):
+        if (self.theta_s >= 0):
+            Csur = (self.c1 - np.cosh(self.theta_s * self.s_rho)) / \
+                     (np.cosh(self.theta_s) - self.c1)
+        else:
+            Csur = -self.s_rho**2
+        if (self.theta_b >= 0):
+            Cbot = ( np.exp(self.theta_b * Csur) - self.c1 ) / \
+                   ( self.c1 - np.exp(-self.theta_b) )
+            self.Cs_r = Cbot
+        else:
+            self.Cs_r = Csur         
+
+    def _get_Cs_w(self):
+        if (self.theta_s >= 0):
+            Csur = (self.c1 - np.cosh(self.theta_s * self.s_w)) / \
+                     (np.cosh(self.theta_s) - self.c1)
+        else:
+            Csur = -self.s_w**2
+        if (self.theta_b >= 0):
+            Cbot = ( np.exp(self.theta_b * Csur) - self.c1 ) / \
+                   ( self.c1 - np.exp(-self.theta_b) )
+            self.Cs_w = Cbot
+        else:
+            self.Cs_w = Csur
+
 
 class z_r(object):
     """
@@ -208,7 +284,7 @@ class z_r(object):
                 for  k in range(self.N):
                     z0 = self.hc * self.s_rho[k] + (self.h - self.hc) * self.Cs_r[k]
                     z_r[n,k,:] = z0 + zeta[n,:] * (1.0 + z0 / self.h)
-        elif self.Vtrans == 2:
+        elif self.Vtrans == 2 or self.Vtrans == 4:
             for n in range(ti):
                 for  k in range(self.N):
                     z0 = (self.hc * self.s_rho[k] + self.h * self.Cs_r[k]) / \
@@ -256,7 +332,7 @@ class z_w(object):
                 for  k in range(self.Np):
                     z0 = self.hc * self.s_w[k] + (self.h - self.hc) * self.Cs_w[k]
                     z_w[n,k,:] = z0 + zeta[n,:] * (1.0 + z0 / self.h)
-        elif self.Vtrans == 2:
+        elif self.Vtrans == 2 or self.Vtrans == 4:
             for n in range(ti):
                 for  k in range(self.Np):
                     z0 = (self.hc * self.s_w[k] + self.h * self.Cs_w[k]) / \

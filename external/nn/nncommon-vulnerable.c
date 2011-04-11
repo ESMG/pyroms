@@ -38,7 +38,7 @@ int circle_build1(circle* c, point* p1, point* p2, point* p3)
     double y3 = p3->y - p1->y;
 
     double denom = x2 * y3 - y2 * x3;
-    double frac = (x2 * (x2 - x3) + y2 * (y2 - y3)) / denom;
+    double frac;
 
     if (denom == 0.0) {
         c->x = NaN;
@@ -47,6 +47,7 @@ int circle_build1(circle* c, point* p1, point* p2, point* p3)
         return 0;
     }
 
+    frac = (x2 * (x2 - x3) + y2 * (y2 - y3)) / denom;
     c->x = (x3 + frac * y3) / 2.0;
     c->y = (y3 - frac * x3) / 2.0;
     c->r = hypot(c->x, c->y);
@@ -64,24 +65,26 @@ int circle_build2(circle* c, point* p1, point* p2, point* p3)
     double y3 = p3->y - p1->y;
 
     double denom = x2 * y3 - y2 * x3;
-    double frac = (x2 * (x2 - x3) + y2 * (y2 - y3)) / denom;
+    double frac;
 
     if (denom == 0) {
         c->x = NaN;
         c->y = NaN;
         c->r = NaN;
         return 0;
-    } else {
-        c->x = (x3 + frac * y3) / 2.0;
-        c->y = (y3 - frac * x3) / 2.0;
-        c->r = hypot(c->x, c->y);
-        if (c->r > (fabs(x2) + fabs(x3) + fabs(y2) + fabs(y3)) * MULT) {
-            c->x = NaN;
-            c->y = NaN;
-        } else {
-            c->x += p1->x;
-            c->y += p1->y;
-        }
-        return 1;
     }
+
+    frac = (x2 * (x2 - x3) + y2 * (y2 - y3)) / denom;
+    c->x = (x3 + frac * y3) / 2.0;
+    c->y = (y3 - frac * x3) / 2.0;
+    c->r = hypot(c->x, c->y);
+    if (c->r > (fabs(x2) + fabs(x3) + fabs(y2) + fabs(y3)) * MULT) {
+        c->x = NaN;
+        c->y = NaN;
+    } else {
+        c->x += p1->x;
+        c->y += p1->y;
+    }
+
+    return 1;
 }

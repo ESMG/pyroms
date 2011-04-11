@@ -10,3 +10,5 @@ viewgrid('prm.4','v');
 vg('grid.4');
 viewgrid('prm.5','v');
 vg('grid.5');
+viewgrid('prm.6','v');
+vg('grid.6');

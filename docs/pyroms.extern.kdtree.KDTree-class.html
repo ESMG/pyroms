@@ -193,7 +193,7 @@ object --+
         <span class="summary-sig-arg">k</span>=<span class="summary-sig-default">1</span>,
         <span class="summary-sig-arg">eps</span>=<span class="summary-sig-default">0</span>,
         <span class="summary-sig-arg">p</span>=<span class="summary-sig-default">2</span>,
-        <span class="summary-sig-arg">distance_upper_bound</span>=<span class="summary-sig-default">inf</span>)</span></td>
+        <span class="summary-sig-arg">distance_upper_bound</span>=<span class="summary-sig-default">np.inf</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyroms.extern.kdtree-pysrc.html#KDTree.__query">source&nbsp;code</a></span>
             
@@ -214,7 +214,7 @@ object --+
         <span class="summary-sig-arg">k</span>=<span class="summary-sig-default">1</span>,
         <span class="summary-sig-arg">eps</span>=<span class="summary-sig-default">0</span>,
         <span class="summary-sig-arg">p</span>=<span class="summary-sig-default">2</span>,
-        <span class="summary-sig-arg">distance_upper_bound</span>=<span class="summary-sig-default">inf</span>)</span><br />
+        <span class="summary-sig-arg">distance_upper_bound</span>=<span class="summary-sig-default">np.inf</span>)</span><br />
       query the kd-tree for nearest neighbors</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyroms.extern.kdtree-pysrc.html#KDTree.query">source&nbsp;code</a></span>
@@ -234,7 +234,7 @@ object --+
           <td><span class="summary-sig"><a name="__query_ball_point"></a><span class="summary-sig-name">__query_ball_point</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">x</span>,
         <span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">p</span>=<span class="summary-sig-default">2.0</span>,
+        <span class="summary-sig-arg">p</span>=<span class="summary-sig-default">2.</span>,
         <span class="summary-sig-arg">eps</span>=<span class="summary-sig-default">0</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyroms.extern.kdtree-pysrc.html#KDTree.__query_ball_point">source&nbsp;code</a></span>
@@ -254,7 +254,7 @@ object --+
           <td><span class="summary-sig"><a href="pyroms.extern.kdtree.KDTree-class.html#query_ball_point" class="summary-sig-name">query_ball_point</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">x</span>,
         <span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">p</span>=<span class="summary-sig-default">2.0</span>,
+        <span class="summary-sig-arg">p</span>=<span class="summary-sig-default">2.</span>,
         <span class="summary-sig-arg">eps</span>=<span class="summary-sig-default">0</span>)</span><br />
       Find all points within r of x</td>
           <td align="right" valign="top">
@@ -275,7 +275,7 @@ object --+
           <td><span class="summary-sig"><a href="pyroms.extern.kdtree.KDTree-class.html#query_ball_tree" class="summary-sig-name">query_ball_tree</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">other</span>,
         <span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">p</span>=<span class="summary-sig-default">2.0</span>,
+        <span class="summary-sig-arg">p</span>=<span class="summary-sig-default">2.</span>,
         <span class="summary-sig-arg">eps</span>=<span class="summary-sig-default">0</span>)</span><br />
       Find all pairs of points whose distance is at most r</td>
           <td align="right" valign="top">
@@ -296,9 +296,7 @@ object --+
           <td><span class="summary-sig"><a href="pyroms.extern.kdtree.KDTree-class.html#count_neighbors" class="summary-sig-name">count_neighbors</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">other</span>,
         <span class="summary-sig-arg">r</span>,
-        <span class="summary-sig-arg">p</span>=<span class="summary-sig-default">2.0</span>)</span><br />
-      Count how many nearby pairs can be formed.</td>
-          <td align="right" valign="top">
+        <span class="summary-sig-arg">p</span>=<span class="summary-sig-default">2.</span>)</span><br />
             <span class="codelink"><a href="pyroms.extern.kdtree-pysrc.html#KDTree.count_neighbors">source&nbsp;code</a></span>
             
           </td>
@@ -311,6 +309,7 @@ object --+
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__delattr__</code>,
+      <code>__format__</code>,
       <code>__getattribute__</code>,
       <code>__hash__</code>,
       <code>__new__</code>,
@@ -318,7 +317,9 @@ object --+
       <code>__reduce_ex__</code>,
       <code>__repr__</code>,
       <code>__setattr__</code>,
-      <code>__str__</code>
+      <code>__sizeof__</code>,
+      <code>__str__</code>,
+      <code>__subclasshook__</code>
       </p>
     </td>
   </tr>
@@ -416,7 +417,7 @@ leafsize : positive integer
         <span class="sig-arg">k</span>=<span class="sig-default">1</span>,
         <span class="sig-arg">eps</span>=<span class="sig-default">0</span>,
         <span class="sig-arg">p</span>=<span class="sig-default">2</span>,
-        <span class="sig-arg">distance_upper_bound</span>=<span class="sig-default">inf</span>)</span>
+        <span class="sig-arg">distance_upper_bound</span>=<span class="sig-default">np.inf</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="pyroms.extern.kdtree-pysrc.html#KDTree.query">source&nbsp;code</a></span>&nbsp;
@@ -478,7 +479,7 @@ i : array of integers
   <h3 class="epydoc"><span class="sig"><span class="sig-name">query_ball_point</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">x</span>,
         <span class="sig-arg">r</span>,
-        <span class="sig-arg">p</span>=<span class="sig-default">2.0</span>,
+        <span class="sig-arg">p</span>=<span class="sig-default">2.</span>,
         <span class="sig-arg">eps</span>=<span class="sig-default">0</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -530,7 +531,7 @@ substantial amounts of time by putting them in a KDTree and using query_ball_tre
   <h3 class="epydoc"><span class="sig"><span class="sig-name">query_ball_tree</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">other</span>,
         <span class="sig-arg">r</span>,
-        <span class="sig-arg">p</span>=<span class="sig-default">2.0</span>,
+        <span class="sig-arg">p</span>=<span class="sig-default">2.</span>,
         <span class="sig-arg">eps</span>=<span class="sig-default">0</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -577,7 +578,7 @@ results : list of lists
   <h3 class="epydoc"><span class="sig"><span class="sig-name">count_neighbors</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">other</span>,
         <span class="sig-arg">r</span>,
-        <span class="sig-arg">p</span>=<span class="sig-default">2.0</span>)</span>
+        <span class="sig-arg">p</span>=<span class="sig-default">2.</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="pyroms.extern.kdtree-pysrc.html#KDTree.count_neighbors">source&nbsp;code</a></span>&nbsp;
@@ -643,7 +644,7 @@ result : integer or one-dimensional array of integers
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Sep 27 11:31:39 2010
+    Generated by Epydoc 3.0.1 on Mon Apr  4 12:10:12 2011
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

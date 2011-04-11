@@ -1,6 +1,6 @@
 This is yet another example based on digitised elevation contours. It provides
 a particularly good torture test for the numerics involved in Sibson 
-interpolation using Warson's method. In fact, it forced me to make changes to 
+interpolation using Watson's method. In fact, it forced me to make changes to 
 the code that handles degenerate cases during Sibson interpolation in v. 1.69.
 Many thanks to Nick Cahill for identifying the problem and providing the data 
 and to Maciej Sieczka for putting up the bug report.

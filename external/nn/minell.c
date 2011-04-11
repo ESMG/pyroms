@@ -6,6 +6,7 @@
  *
  * Author:      Pavel Sakov
  *              CSIRO Marine Research
+ *              NERSC
  *
  * Description: Minimal ellipse stuff: construction of an ellipse of minimal
  *              area containing a given set of points on a plane. Affine
@@ -56,6 +57,9 @@
  *                             imediately after test for the fifth point being
  *                             in ellipse defined by four support points
  *
+ *            PS 24/09/2008 -- fixed deficiencies in minell_calcprm() - thanks
+ *                             to Glen Low for the bug report.
+ *
  *****************************************************************************/
 
 #include <stdlib.h>
@@ -74,6 +78,7 @@
 #define BIGNUMBER 1.0e+100
 #define SECANT_COUNT_MAX 30
 #define SECANT_EPS 5.0e-11
+#define EPS 1.0e-14
 
 static int me_seed = 1;
 static int me_classic = 0;
@@ -208,8 +213,9 @@ static double minell_calcinsideeval(minell* me)
     double Z = (u * s - 2.0 * v * t) * u + v * v * r;
     double DZ = 2.0 * (u * Du * s + v * Dv * r - Du * v * t - u * Dv * t - u * v * Dt) + u * u * Ds;
     double delta = 3.0 * Dd * Z + d * (2.0 * d * Dw - Dd * w - 2.0 * DZ);
+    double ballpark = fabs(3.0 * Dd * Z) + fabs(d) * (fabs(2.0 * d * Dw) + fabs(Dd * w) + fabs(2.0 * DZ));
 
-    return r * delta;
+    return r * delta / ballpark;
 }
 
 static int minell_containspoint(minell* me, point* p)
@@ -229,30 +235,32 @@ static int minell_containspoint(minell* me, point* p)
 
         me->minell_eval3_count++;
 
-        return (me->r * dx + 2.0 * me->t * dy) * dx + me->s * dy * dy <= 1.0;
+        return (me->r * dx + 2.0 * me->t * dy) * dx + me->s * dy * dy - 1.0 <= EPS;
     } else if (me->n == 4) {
         me->minell_eval4_count++;
 
         if (!isellipse(me, p)) {
             double lambda = 2.0 * me->gamma - me->beta;
             double mu = 2.0 * me->alpha - me->beta;
+            double ballpark = fabs(mu * me->lambda0) + fabs(lambda * me->mu0);
 
-            return (mu * me->lambda0 - lambda * me->mu0) <= 0;
+            return mu * me->lambda0 - lambda * me->mu0 <= EPS * ballpark;
         } else
-            return minell_calcinsideeval(me) <= 0.0;
+            return minell_calcinsideeval(me) <= EPS;
     } else {                    /* me->n == 5 */
         double x = p->x;
         double y = p->y;
         double C1 = (me->dy12 * x - me->dx12 * y + me->d12) * (me->dy34 * x - me->dx34 * y + me->d34) * me->lambda0;
         double C2 = (me->dy23 * x - me->dx23 * y + me->d23) * (me->dy41 * x - me->dx41 * y + me->d41) * me->mu0;
         double r = me->lambda0 * me->r1 + me->mu0 * me->r2;
+        double ballpark = (fabs(me->dy12 * x) + fabs(me->dx12 * y) + fabs(me->d12)) * (fabs(me->dy34 * x) + fabs(me->dx34 * y) + fabs(me->d34)) * fabs(me->lambda0) + (fabs(me->dy23 * x) + fabs(me->dx23 * y) + fabs(me->d23)) * (fabs(me->dy41 * x) + fabs(me->dx41 * y) + fabs(me->d41)) * fabs(me->mu0);
 
         me->minell_eval5_count++;
 
         if (r > 0.0)
-            return C1 + C2 <= 0.0;
+            return (C1 + C2) / ballpark <= EPS;
         else
-            return C1 + C2 >= 0.0;
+            return (C1 + C2) / ballpark >= -EPS;
     }
 }
 
@@ -699,7 +707,32 @@ static void minell_findfifthpoint(minell* me)
         count++;
     }
     if (me_verbose > 1)
-        printf("minimal ellipse: find fifth point: count = %d\n", count);
+        fprintf(stderr, "minimal ellipse: find fifth point: count = %d\n", count);
+}
+
+static void minell_center2human(minell* me)
+{
+    double sum = me->r + me->s;
+    double diff = me->r - me->s;
+    double sqr = hypot(diff, 2.0 * me->t);
+    double a = (sum - sqr) / 2.0;
+    double b = (sum + sqr) / 2.0;
+
+    me->a = sqrt(1.0 / a);
+    me->b = sqrt(1.0 / b);
+
+    if (a == b) {
+        me->theta = 0.0;
+        return;
+    }
+
+    me->theta = -asin(2.0 * me->t / sqr) / 2.0;
+    if (me->s < me->r) {        /* cos(2 theta) < 0 */
+        if (me->theta > 0)
+            me->theta = M_PI / 2.0 - me->theta;
+        else
+            me->theta = -M_PI / 2.0 - me->theta;
+    }
 }
 
 /* Calculates human-form parameters of the minimal ellipse from whatever is
@@ -727,15 +760,9 @@ static void minell_calcprm(minell* me)
         me->c.y = (ps[0]->y + ps[1]->y) / 2.0;
         me->a = hypot(me->c.x - ps[0]->x, me->c.y - ps[0]->y);
         me->b = 0.0;
-        me->theta = atan((ps[0]->x - ps[1]->x) / (ps[0]->y - ps[1]->y));
+        me->theta = atan((ps[0]->y - ps[1]->y) / (ps[0]->x - ps[1]->x));
     } else if (me->n == 3) {
-        me->theta = 0.5 * atan(2.0 * me->t / (me->s - me->r));
-        {
-            double tmp = (me->r - me->s) / cos(2.0 * me->theta);
-
-            me->a = sqrt(2.0 / (me->r + me->s + tmp));
-            me->b = sqrt(2.0 / (me->r + me->s - tmp));
-        }
+        minell_center2human(me);
     } else {
         if (me->n == 4)
             minell_findfifthpoint(me);
@@ -765,16 +792,8 @@ static void minell_calcprm(minell* me)
 
             assert(me->r > 0.0);
             assert(me->s > 0.0);
-
-            me->theta = 0.5 * atan(2.0 * t / (s - r));
-
-            {
-                double tmp = (me->r - me->s) / cos(2.0 * me->theta);
-
-                me->a = sqrt(2.0 / (me->r + me->s + tmp));
-                me->b = sqrt(2.0 / (me->r + me->s - tmp));
-            }
         }
+        minell_center2human(me);
     }
 }
 
@@ -1041,7 +1060,7 @@ static void usage()
     printf("  -v -- verbose\n");
     printf("  -V -- very verbose\n");
     printf("  -VV -- even more verbose\n");
-    printf("Description: `minell' calculates and prints parameters of an ellipse of\n");
+    printf("Description: `minell' calculates and prints parameters of the ellipse of\n");
     printf("  minimal area containing specified points.\n");
 
     exit(0);

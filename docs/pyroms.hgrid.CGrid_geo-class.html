@@ -37,8 +37,9 @@
   <tr valign="top">
     <td width="100%">
       <span class="breadcrumbs">
-        <a href="pyroms-module.html">Package&nbsp;pyroms</a> ::
-        <a href="pyroms.hgrid-module.html">Module&nbsp;hgrid</a> ::
+        pyroms ::
+        hgrid ::
+        CGrid_geo ::
         Class&nbsp;CGrid_geo
       </span>
     </td>
@@ -161,7 +162,7 @@ Conformal Conic (projection='lcc').
         <span class="summary-sig-arg">lat_vert</span>,
         <span class="summary-sig-arg">proj</span>,
         <span class="summary-sig-arg">use_gcdist</span>=<span class="summary-sig-default">True</span>,
-        <span class="summary-sig-arg">ellipse</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">WGS84</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">ellipse</span>=<span class="summary-sig-default">'WGS84'</span>,
         <span class="summary-sig-arg">lon_rho</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">lat_rho</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">lon_u</span>=<span class="summary-sig-default">None</span>,
@@ -218,6 +219,7 @@ Conformal Conic (projection='lcc').
       </p></div>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__delattr__</code>,
+      <code>__format__</code>,
       <code>__getattribute__</code>,
       <code>__hash__</code>,
       <code>__new__</code>,
@@ -225,7 +227,55 @@ Conformal Conic (projection='lcc').
       <code>__reduce_ex__</code>,
       <code>__repr__</code>,
       <code>__setattr__</code>,
-      <code>__str__</code>
+      <code>__sizeof__</code>,
+      <code>__str__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pyroms.hgrid.CGrid_geo-class.html#lon" class="summary-name">lon</a> = <code title="property(lambda self: self.lon_vert, None, None, 'Shorthand for lon_ve\
+rt')">property(lambda self: self.lon_vert, None, None, 'Shorth<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pyroms.hgrid.CGrid_geo-class.html#lat" class="summary-name">lat</a> = <code title="property(lambda self: self.lat_vert, None, None, 'Shorthand for lat_ve\
+rt')">property(lambda self: self.lat_vert, None, None, 'Shorth<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pyroms.hgrid.CGrid-class.html">CGrid</a></code></b>:
+      <code><a href="pyroms.hgrid.CGrid-class.html#mask">mask</a></code>,
+      <code><a href="pyroms.hgrid.CGrid-class.html#mask_psi">mask_psi</a></code>,
+      <code><a href="pyroms.hgrid.CGrid-class.html#mask_u">mask_u</a></code>,
+      <code><a href="pyroms.hgrid.CGrid-class.html#mask_v">mask_v</a></code>,
+      <code><a href="pyroms.hgrid.CGrid-class.html#x">x</a></code>,
+      <code><a href="pyroms.hgrid.CGrid-class.html#y">y</a></code>
       </p>
     </td>
   </tr>
@@ -247,32 +297,8 @@ Conformal Conic (projection='lcc').
     </table>
   </td>
 </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pyroms.hgrid.CGrid_geo-class.html#lon" class="summary-name">lon</a><br />
-      Shorthand for lon_vert
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pyroms.hgrid.CGrid_geo-class.html#lat" class="summary-name">lat</a><br />
-      Shorthand for lat_vert
-    </td>
-  </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pyroms.hgrid.CGrid-class.html">CGrid</a></code></b>:
-      <code><a href="pyroms.hgrid.CGrid-class.html#mask">mask</a></code>,
-      <code><a href="pyroms.hgrid.CGrid-class.html#mask_psi">mask_psi</a></code>,
-      <code><a href="pyroms.hgrid.CGrid-class.html#mask_u">mask_u</a></code>,
-      <code><a href="pyroms.hgrid.CGrid-class.html#mask_v">mask_v</a></code>,
-      <code><a href="pyroms.hgrid.CGrid-class.html#x">x</a></code>,
-      <code><a href="pyroms.hgrid.CGrid-class.html#y">y</a></code>
-      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__class__</code>
       </p>
@@ -379,7 +405,7 @@ Calculates pm, pn, dndx, dmde from x_vert and y_vert
         <span class="sig-arg">lat_vert</span>,
         <span class="sig-arg">proj</span>,
         <span class="sig-arg">use_gcdist</span>=<span class="sig-default">True</span>,
-        <span class="sig-arg">ellipse</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">WGS84</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">ellipse</span>=<span class="sig-default">'WGS84'</span>,
         <span class="sig-arg">lon_rho</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">lat_rho</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">lon_u</span>=<span class="sig-default">None</span>,
@@ -411,17 +437,17 @@ Calculates pm, pn, dndx, dmde from x_vert and y_vert
 </td></tr></table>
 </div>
 <br />
-<!-- ==================== PROPERTY DETAILS ==================== -->
-<a name="section-PropertyDetails"></a>
+<!-- ==================== CLASS VARIABLE DETAILS ==================== -->
+<a name="section-ClassVariableDetails"></a>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
   <td colspan="2" class="table-header">
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
       <tr valign="top">
-        <td align="left"><span class="table-header">Property Details</span></td>
+        <td align="left"><span class="table-header">Class Variable Details</span></td>
         <td align="right" valign="top"
-         ><span class="options">[<a href="#section-PropertyDetails"
+         ><span class="options">[<a href="#section-ClassVariableDetails"
          class="privatelink" onclick="toggle_private();"
          >hide private</a>]</span></td>
       </tr>
@@ -435,14 +461,16 @@ Calculates pm, pn, dndx, dmde from x_vert and y_vert
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">lon</h3>
-  <pre class="literalblock">
-Shorthand for lon_vert
-
-</pre>
+  
   <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+property(lambda self: self.lon_vert, None, None, 'Shorthand for lon_ve<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+rt')
+</pre></td></tr></table>
+</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -452,14 +480,16 @@ Shorthand for lon_vert
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">lat</h3>
-  <pre class="literalblock">
-Shorthand for lat_vert
-
-</pre>
+  
   <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+property(lambda self: self.lat_vert, None, None, 'Shorthand for lat_ve<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+rt')
+</pre></td></tr></table>
+</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -490,7 +520,7 @@ Shorthand for lat_vert
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Sep 27 11:31:39 2010
+    Generated by Epydoc 3.0.1 on Mon Apr  4 12:10:12 2011
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

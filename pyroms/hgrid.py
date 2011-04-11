@@ -1253,12 +1253,13 @@ class edit_mask_mesh(object):
             else:
                 idx = np.argwhere(d.flatten() == d.min())
             self._mask[idx] = float(not self._mask[idx])
-            i, j = np.argwhere(d == d.min())[0]
-            self.mask[i, j] = float(not self.mask[i, j])
+            j, i = np.argwhere(d == d.min())[0]
+            self.mask[j, i] = float(not self.mask[j, i])
             #open output file
             f = open('mask_change.txt','a')
-            value = (i, j, self.mask[i, j])
-            s = str(value)
+            #value = (i, j, self.mask[i, j])
+            #s = str(value)
+            s = '%d %d %f' %(i, j, self.mask[j, i])
             f.write(s + '\n')
             #close file
             f.close()
@@ -1353,12 +1354,13 @@ class edit_mask_mesh_ij(object):
         x, y = event.xdata, event.ydata
         if event.button==1 and event.inaxes is not None and self._clicking == True:
             d = (x-self._xc)**2 + (y-self._yc)**2
-            i, j = np.argwhere(d == d.min())[0]
-            self.mask[i, j] = float(not self.mask[i, j])
+            j, i = np.argwhere(d == d.min())[0]
+            self.mask[j, i] = float(not self.mask[j, i])
             #open output file
             f = open('mask_change.txt','a')
-            value = (i, j, self.mask[i, j])
-            s = str(value)
+            #value = (i, j, self.mask[i, j])
+            #s = str(value)
+            s = '%d %d %f' %(i, j, self.mask[j, i])
             f.write(s + '\n')
             #close file
             f.close()
@@ -1410,7 +1412,9 @@ class edit_mask_mesh_ij(object):
 
         self.coast = coast
 
-        self.ijcoast = pyroms.utility.ijcoast(self.coast, grd)
+        ijcoast = pyroms.utility.ijcoast(self.coast, grd)
+
+        self.ijcoast = ijcoast + 0.5 
 
         land_color = kwargs.pop('land_color', (0.6, 1.0, 0.6))
         sea_color = kwargs.pop('sea_color', (0.6, 0.6, 1.0))
@@ -1460,45 +1464,6 @@ def uvp_masks(rmask):
     pmask = rmask[:-1, :-1] * rmask[:-1, 1:] * rmask[1:, :-1] * rmask[1:, 1:]
 
     return umask, vmask, pmask
-
-
-
-if __name__ == '__main__':
-    geographic = False
-    if geographic:
-        from mpl_toolkits.basemap import Basemap
-        proj = Basemap(projection='lcc',
-                       resolution='i',
-                       llcrnrlon=-72.0,
-                       llcrnrlat= 40.0,
-                       urcrnrlon=-63.0,
-                       urcrnrlat=47.0,
-                       lat_0=43.0,
-                       lon_0=-62.5)
-        
-        lon = (-71.977385177601761, -70.19173825913137,
-               -63.045075098584945,-64.70104074097425)
-        lat = (42.88215610827428, 41.056141745853786,
-               44.456701607935841, 46.271758064353897)
-        beta = [1.0, 1.0, 1.0, 1.0]
-
-        grd = Gridgen(lon, lat, beta, (32, 32), proj=proj)
-        
-        for seg in proj.coastsegs:
-            grd.mask_polygon(seg)
-        
-        plt.pcolor(grd.x, grd.y, grd.mask)
-        plt.show()
-    else:
-        x = [0.2, 0.85, 0.9, 0.82, 0.23]
-        y = [0.2, 0.25, 0.5, 0.82, .83]
-        beta = [1.0, 1.0, 0.0, 1.0, 1.0]
-        
-        grd = Gridgen(x, y, beta, (32, 32))
-        
-        ax = plt.subplot(111)
-        BoundaryInteractor(x, y, beta)
-        plt.show()
 
 
 

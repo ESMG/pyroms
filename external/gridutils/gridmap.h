@@ -33,7 +33,7 @@ gridmap* gridmap_build(int nce1, int nce2, double** gx, double** gy);
 void gridmap_destroy(gridmap* gm);
 int gridmap_fij2xy(gridmap* gm, double fi, double fj, double* x, double* y);
 int gridmap_xy2ij(gridmap* gm, double x, double y, int* i, int* j);
-int gridmap_xy2fij(gridmap* map, double x, double y, double* fi, double* fj);
+int gridmap_xy2fij(gridmap* gm, double x, double y, double* fi, double* fj);
 int gridmap_getnce1(gridmap* gm);
 int gridmap_getnce2(gridmap* gm);
 void gridmap_getextent(gridmap* gm, double* xmin, double* xmax, double* ymin, double* ymax);

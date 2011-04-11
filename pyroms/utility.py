@@ -8,7 +8,7 @@ from datetime import datetime
 from matplotlib.nxutils import pnpoly
 from scipy import interpolate
 
-from pyroms import io
+import pyroms
 import _interp
 
 
@@ -28,9 +28,12 @@ def get_lonlat(iindex, jindex, grd, Cpos='rho'):
         lat = grd.hgrid.lat_v[:,:]
     elif Cpos is 'rho':
         lon = grd.hgrid.lon_rho[:,:]
-        lat = grd.hgrid.lat_rho[:,:]   
+        lat = grd.hgrid.lat_rho[:,:]
+    elif Cpos is 'psi':
+        lon = grd.hgrid.lon_psi[:,:]
+        lat = grd.hgrid.lat_psi[:,:]
     else:
-        raise Warning, '%s bad position. Cpos must be rho, u or v.' % Cpos
+        raise Warning, '%s bad position. Cpos must be rho, psi, u or v.' % Cpos
 
     return lon[jindex, iindex], lat[jindex, iindex]
 
@@ -51,9 +54,12 @@ def get_ij(longitude, latitude, grd, Cpos='rho'):
         lat = grd.hgrid.lat_v[:,:]
     elif Cpos is 'rho':
         lon = grd.hgrid.lon_rho[:,:]
-        lat = grd.hgrid.lat_rho[:,:]   
+        lat = grd.hgrid.lat_rho[:,:]
+    elif Cpos is 'psi':
+        lon = grd.hgrid.lon_psi[:,:]
+        lat = grd.hgrid.lat_psi[:,:]
     else:
-        raise Warning, '%s bad position. Cpos must be rho, u or v.' % Cpos
+        raise Warning, '%s bad position. Cpos must be rho, psi, u or v.' % Cpos
 
     lon = lon[:,:] - longitude
     lat = lat[:,:] - latitude
@@ -186,8 +192,15 @@ def get_coast_from_map(map):
     return np.array(coast)
 
 
-    
 def ijcoast(coast, grd):
+
+    i, j = pyroms.tools.hindices(coast[:,0], coast[:,1], grd, spval=np.nan)
+    ijcoast = np.concatenate([[i],[j]], axis=0).T
+
+    return ijcoast
+
+ 
+def ijcoast_old(coast, grd):
 
 
     if type(grd).__name__ == 'ROMS_Grid':
@@ -247,10 +260,11 @@ def get_grid_proj(grd, type='merc', resolution='h', **kwargs):
     height = y_max - y_min
 
     lat_1 = lat_min
+    lat_2 = lat_max
 
     if type == 'lcc' or type == 'stere':
-        map = Basemap(projection=type, width=width,height=height, \
-                      lat_1=lat_1,lat_0=lat_0,lon_0=lon_0, \
+        map = Basemap(projection=type, width=width, height=height, \
+                      lat_1=lat_1, lat_2=lat_2, lat_0=lat_0, lon_0=lon_0, \
                       resolution=resolution, **kwargs)
     else:
         map = Basemap(projection=type, llcrnrlon=lon_min, llcrnrlat=lat_min, \
@@ -268,7 +282,7 @@ def get_nc_var(varname, filename):
     a simple wraper for netCDF4
     """
 
-    data = io.MFDataset(filename)
+    data = pyroms.io.MFDataset(filename)
     var = data.variables[varname]
 
     return var
@@ -404,3 +418,18 @@ def get_date_tag(roms_time, ref=(2006, 01, 01), format="%d %b %Y at %H:%M:%S"):
     return tag
 
 
+def apply_mask_change(file, grd):
+    '''
+    Apply mask change saved by edit_mesh_mask in the mask_change.txt file
+    '''
+
+    mask_changes = open(file,'r')
+    lines = mask_changes.readlines()
+    mask_changes.close()
+
+    for line in lines:
+        s = line.split()
+        i = int(s[0])
+        j = int(s[1])
+        mask = float(s[2])
+        grd.hgrid.mask_rho[j,i] = mask

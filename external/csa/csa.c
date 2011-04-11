@@ -22,6 +22,7 @@
  *
  * Revisions:      09/04/2003 PS: Modified points_read() to read from a
  *                   file specified by name, not by handle.
+ *                 25/05/2009 PS: Added csa_approximatepoints2().
  *
  *****************************************************************************/
 
@@ -1323,6 +1324,9 @@ void csa_approximatepoint(csa* a, point* p)
     int ti;
     double bc[3];
 
+    if (a->squares == NULL)
+        quit("csa_approximatepoint(): csa_calculatespline() had to be called\n");
+
     if (fabs(rint(ii) - ii) / h < EPS)
         ii = rint(ii);
     if (fabs(rint(jj) - jj) / h < EPS)
@@ -1409,6 +1413,101 @@ void csa_setk(csa* a, int k)
 void csa_setnppc(csa* a, int nppc)
 {
     a->nppc = nppc;
+}
+
+/** Approximates data in given locations. Specially for Rob. Allocates the
+ ** output array - needs to be cleaned up by the calling code.
+ * @param nin - number of input data points
+ * @param xin - X coordinates of input data points [nin]
+ * @param yin - Y coordinates of input data points [nin]
+ * @param zin - Z coordinates of input data points [nin]
+ * @param sigma - standard deviations of input data (optional) [nin]; or NULL
+ * @param nout - number of output data points
+ * @param xout - X coordinates of output data points [nout]
+ * @param yout - Y coordinates of output data points [nout]
+ * @param npmin - algorithm parameter NPMIN; 0 for default
+ * @param npmax - algorithm parameter NPMAX; 0 for default
+ * @param k - algorithm parameter K; 0.0 for default
+ * @param nppc - algorithm parameter NPPC; 0 for default
+ * @return - Z coordinates of output data points [nout] - to be deallocated by
+ *           the calling code
+ */
+double* csa_approximatepoints2(int nin, double xin[], double yin[], double zin[], double sigma[], int nout, double xout[], double yout[], int npmin, int npmax, int k, int nppc)
+{
+    point* pin = NULL;
+    point* pout = NULL;
+    csa* a = NULL;
+    double* zout = NULL;
+    int ii;
+
+    if (nin <= 0 || nout <= 0)
+        return zout;
+
+    /*
+     * create approximator
+     */
+    a = csa_create();
+    if (npmin > 0)
+        csa_setnpmin(a, npmin);
+    if (npmax > 0 && npmax > npmin)
+        csa_setnpmax(a, npmax);
+    if (k > 0.0)
+        csa_setk(a, k);
+    if (nppc > 0)
+        csa_setnppc(a, nppc);
+
+    /*
+     * read input data into point array
+     */
+    pin = malloc(sizeof(point) * nin);
+    for (ii = 0; ii < nin; ++ii) {
+        point* p = &pin[ii];
+
+        p->x = xin[ii];
+        p->y = yin[ii];
+        p->z = zin[ii];
+    }
+    csa_addpoints(a, nin, pin);
+    if (sigma != NULL)
+        csa_addstd(a, nin, sigma);
+
+    /*
+     * calculate spline
+     */
+    csa_calculatespline(a);
+
+    /*
+     * read ioutput data into point array
+     */
+    pout = malloc(sizeof(point) * nout);
+    for (ii = 0; ii < nout; ++ii) {
+        point* p = &pout[ii];
+
+        p->x = xout[ii];
+        p->y = yout[ii];
+        p->z = NaN;
+    }
+
+    /*
+     * approximate
+     */
+    csa_approximatepoints(a, nout, pout);
+
+    /*
+     * write results to the output array
+     */
+    zout = malloc(nout * sizeof(double));
+    for (ii = 0; ii < nout; ++ii)
+        zout[ii] = pout[ii].z;
+
+    /*
+     * clean up
+     */
+    csa_destroy(a);
+    free(pin);
+    free(pout);
+
+    return zout;
 }
 
 #if defined(CSA_STANDALONE)
@@ -1659,8 +1758,8 @@ static void usage()
     printf("  -z <zoom>       -- zoom in (if <zoom> < 1) or out (<zoom> > 1) (activated\n");
     printf("                     only when used in conjunction with -n)\n");
     printf("  -P nppc=<value> -- set the average number of points per cell (default = 5,\n");
-    printf("                     increase if the point distribution is strongly non-uniform\n");
-    printf("                     to get larger cells)\n");
+    printf("                     works best for uniform data. Decrease to get smaller\n");
+    printf("                     cells or increase to get larger cells)\n");
     printf("  -P k=<value>    -- set the spline sensitivity (default = 140, reduce to get\n");
     printf("                     smoother results)\n");
     printf("  -V              -- very verbose / version\n");

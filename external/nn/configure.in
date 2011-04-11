@@ -90,6 +90,21 @@ AC_HAVE_LIBRARY(m,,AC_MSG_ERROR([unable to find library]))
 dnl Checks for library functions.
 AC_CHECK_FUNCS(realloc strtod strtok hypot,,AC_MSG_ERROR([unable to find function]))
 
+dnl check compiler option "-fno-force-mem"
+OLD_CFLAGS=$CFLAGS
+CFLAGS="$CFLAGS -fno-force-mem"
+AC_MSG_CHECKING(for -fno-force-mem option)
+AC_CACHE_VAL(ac_cv_fnoforcemem,
+  AC_TRY_COMPILE([], [char a;], ac_cv_fnoforcemem=yes, ac_cv_fnoforcemem=no))
+echo $ac_cv_fnoforcemem
+if test $ac_cv_fnoforcemem = no; then
+   CFLAGS=$OLD_CFLAGS
+fi
+
+if test "$ac_cv_fnoforcemem" = yes; then
+   CFLAGS_VULNERABLE="$CFLAGS_VULNERABLE -fno-force-mem"
+fi
+
 AC_SUBST(CC)
 AC_SUBST(CFLAGS)
 AC_SUBST(LDFLAGS)

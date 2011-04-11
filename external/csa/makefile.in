@@ -109,7 +109,16 @@ clean:
 configclean:
 	rm -f config.h makefile config.cache config.status config.log
 
-distclean: clean configclean
+ex1clean:
+	cd examples/1; make clean;
+
+ex2clean:
+	cd examples/2; make clean;
+
+ex3clean:
+	cd examples/3; make clean;
+
+distclean: clean configclean ex1clean ex2clean ex3clean
 
 indent:
 	indent -T FILE -T point -T csa -T square -T triangle -T minell $(SRC) $(HEADERS)

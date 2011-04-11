@@ -96,7 +96,7 @@ static void info()
     printf("  5. A grid cell is valid if all four corner nodes are valid (not NaNs).\n");
     printf("     If a cell mask was specified, then a valid corner node must also have\n");
     printf("     at least one valid neigbour cell.\n");
-    printf("  6. The grid (union of all valid grid cells) must be simpy connected.\n");
+    printf("  6. The grid (union of all valid grid cells) must be simply connected.\n");
 
     exit(0);
 }

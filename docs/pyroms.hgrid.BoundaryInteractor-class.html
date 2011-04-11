@@ -37,8 +37,9 @@
   <tr valign="top">
     <td width="100%">
       <span class="breadcrumbs">
-        <a href="pyroms-module.html">Package&nbsp;pyroms</a> ::
-        <a href="pyroms.hgrid-module.html">Module&nbsp;hgrid</a> ::
+        pyroms ::
+        hgrid ::
+        BoundaryInteractor ::
         Class&nbsp;BoundaryInteractor
       </span>
     </td>
@@ -315,7 +316,7 @@ Attributes:
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="save_bry"></a><span class="summary-sig-name">save_bry</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">bry_file</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">bry.pickle</code><code class="variable-quote">'</code></span>)</span></td>
+        <span class="summary-sig-arg">bry_file</span>=<span class="summary-sig-default">'bry.pickle'</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyroms.hgrid-pysrc.html#BoundaryInteractor.save_bry">source&nbsp;code</a></span>
             
@@ -332,7 +333,7 @@ Attributes:
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="load_bry"></a><span class="summary-sig-name">load_bry</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">bry_file</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">bry.pickle</code><code class="variable-quote">'</code></span>)</span></td>
+        <span class="summary-sig-arg">bry_file</span>=<span class="summary-sig-default">'bry.pickle'</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyroms.hgrid-pysrc.html#BoundaryInteractor.load_bry">source&nbsp;code</a></span>
             
@@ -349,7 +350,7 @@ Attributes:
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="save_grid"></a><span class="summary-sig-name">save_grid</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">grid_file</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">grid.pickle</code><code class="variable-quote">'</code></span>)</span></td>
+        <span class="summary-sig-arg">grid_file</span>=<span class="summary-sig-default">'grid.pickle'</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyroms.hgrid-pysrc.html#BoundaryInteractor.save_grid">source&nbsp;code</a></span>
             
@@ -381,9 +382,41 @@ Attributes:
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a name="verts"></a><span class="summary-sig-name">verts</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyroms.hgrid-pysrc.html#BoundaryInteractor.verts">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a name="get_xdata"></a><span class="summary-sig-name">get_xdata</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyroms.hgrid-pysrc.html#BoundaryInteractor.get_xdata">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="x"></a><span class="summary-sig-name">x</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyroms.hgrid-pysrc.html#BoundaryInteractor.x">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -407,10 +440,27 @@ Attributes:
       
     </td>
   </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="y"></a><span class="summary-sig-name">y</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyroms.hgrid-pysrc.html#BoundaryInteractor.y">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__delattr__</code>,
+      <code>__format__</code>,
       <code>__getattribute__</code>,
       <code>__hash__</code>,
       <code>__new__</code>,
@@ -418,7 +468,9 @@ Attributes:
       <code>__reduce_ex__</code>,
       <code>__repr__</code>,
       <code>__setattr__</code>,
-      <code>__str__</code>
+      <code>__sizeof__</code>,
+      <code>__str__</code>,
+      <code>__subclasshook__</code>
       </p>
     </td>
   </tr>
@@ -486,27 +538,6 @@ Attributes:
     </table>
   </td>
 </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pyroms.hgrid.BoundaryInteractor-class.html#verts" class="summary-name">verts</a>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pyroms.hgrid.BoundaryInteractor-class.html#x" class="summary-name">x</a>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pyroms.hgrid.BoundaryInteractor-class.html#y" class="summary-name">y</a>
-    </td>
-  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -565,67 +596,6 @@ Attributes:
 </td></tr></table>
 </div>
 <br />
-<!-- ==================== PROPERTY DETAILS ==================== -->
-<a name="section-PropertyDetails"></a>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Property Details</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-PropertyDetails"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-</table>
-<a name="verts"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">verts</h3>
-  
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><a href="pyroms.hgrid.BoundaryInteractor-class.html#_get_verts" class="summary-sig-name" onclick="show_private();">_get_verts</a>(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="x"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">x</h3>
-  
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><a href="pyroms.hgrid.BoundaryInteractor-class.html#get_xdata" class="summary-sig-name">get_xdata</a>(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="y"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">y</h3>
-  
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><a href="pyroms.hgrid.BoundaryInteractor-class.html#get_ydata" class="summary-sig-name">get_ydata</a>(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
        bgcolor="#a0c0ff" cellspacing="0">
@@ -652,7 +622,7 @@ Attributes:
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Sep 27 11:31:39 2010
+    Generated by Epydoc 3.0.1 on Mon Apr  4 12:10:12 2011
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

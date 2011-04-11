@@ -275,15 +275,15 @@ void gridgen_printhelpalg(void)
     printf("  The underlying idea for using conformal mappings is that these mappings do\n");
     printf("preserve local angles. Therefore, if the image polygon is set to be a rectangle\n");
     printf("or a set of intersecting rectangles, one can easily put an orthogonal grid on it\n");
-    printf("and ...provided he can do the inverse transform... this orthogonal grid would\n");
+    printf("and ...provided the inverse transform is available... this orthogonal grid would\n");
     printf("yield a (quasi)-orthogonal grid in the original polygon.\n");
     printf("  The main obstacle to this idyllic picture is a potential loss of precision on\n");
     printf("the way, when a number of vertices degenerate into a single prevertex\n");
     printf("(\"crowding\"). The effect of crowding is particularly strong for polygons with\n");
-    printf("long (thin) arms, and this is where the CRDT algorithm comes into play.\n");
+    printf("long (thin) arms. The CRDT algorithm is designed to handle this problem.\n");
     printf("  The essence of the CRDT algorithm is in splitting the original polygon into a\n");
-    printf("number of intersecting quadrilaterals and generating not one but a number of\n");
-    printf("conformally equivalent transformations (\"embeddings\") of the original polygon\n");
+    printf("number of intersecting quadrilaterals, and generating not one but a number of\n");
+    printf("equivalent conformal transformations (\"embeddings\") of the original polygon\n");
     printf("to the unit circumcircle, each of them attributed with a certain quadrilateral\n");
     printf("and working numerically best for this and adjacent quadrilaterals.\n");
     printf("  All these details are transparent to a user of `gridgen', who has to define\n");
@@ -346,7 +346,8 @@ void gridgen_printhelpprm(void)
     printf("       -i*infty. If not specified, beta_i is set to 0.\n");
     printf("    3. A uniform grid is specified by `nx' and `ny' parameters. This may be\n");
     printf("       overridden by specifying a custom grid from an input grid file. Such a\n");
-    printf("       file should contain node coordinates scaled to 1x1 square.\n");
+    printf("       file should contain the desired node coordinates in index space scaled\n");
+    printf("       to a 1x1 square.\n");
     printf("    4. The `nnodes' parameter affects precision and computation time; it is\n");
     printf("       advised to be set to the same value as -log10(<precision>) or slightly\n");
     printf("       higher.\n");
@@ -357,13 +358,14 @@ void gridgen_printhelpprm(void)
     printf("       output.\n");
     printf("    7. If `sigmas' specified, the sigmas (an intermediate solution of nonlinear\n");
     printf("       system) will be read from/saved to a binary file. This may save a fair\n");
-    printf("       bit of time in the case of multiple runs of the program.\n");
+    printf("       bit of time in the case of multiple runs of the program for the same\n");
+    printf("       boundary polygon but different grid corners or grid resolution.\n");
     printf("    8. If `rectangle' specified, the image polygon vertex coordinates will be\n");
     printf("       written to the corresponding text file.\n");
     printf("    9. Parameter `nppe' controls the coarseness of mapping of quadrilaterals.\n");
     printf("       Large values can take some time; small values can lead to failing\n");
-    printf("       to map some points in difficult cases when quadrilateral images are\n");
-    printf("       strongly distorted.\n");
+    printf("       to map some points in difficult cases when the images of quadrilaterals\n");
+    printf("       are strongly distorted.\n");
     printf("  Acknowledgments. This program uses the following public code/algorithms:\n");
     printf("    1. CRDT algorithm by Tobin D. Driscoll and Stephen A. Vavasis -- for\n");
     printf("       conformal mapping.\n");
@@ -371,7 +373,7 @@ void gridgen_printhelpprm(void)
     printf("    3. `SCPACK' by Lloyd N. Trefethen -- for Schwarz-Christoffel transform.\n");
     printf("    4. `DOPRI8' by E. Hairer, S.P. Norsett, G. Wanner -- for solving ODEs.\n");
     printf("    5. Shamos-Hoey algorithm implementation by softSurfer -- for testing a\n");
-    printf("       polyline on self-intersections.\n");
+    printf("       polyline for self-intersections.\n");
     printf("\n");
     printf("  Good luck!\n");
     printf("\n");
@@ -694,7 +696,7 @@ static gridgen* gridgen_create(char* prmfname)
         gg->frect = gg_fopen(buf, "w");
     }
 
-    if (prm_read(prmfname, prm, "ppe", buf))
+    if (prm_read(prmfname, prm, "nppe", buf))
         gg->nppe = atoi(buf);
     gg->nppq = gg->nppe * 4 + 5;
 
@@ -1547,7 +1549,7 @@ static int get_first_quadrilateral(gridgen* gg)
 /* Finds index (0..3) of a vertex within quadrilateral "newqid" not 
  * contained in the quadrilateral "qid".
  */
-static int find_newvertice(int nq, quadrilateral qs[], int qid, int pqid)
+static int find_newvertex(int nq, quadrilateral qs[], int qid, int pqid)
 {
     int* pvids = qs[pqid].vids;
     int* vids = qs[qid].vids;
@@ -1571,13 +1573,12 @@ static void calculate_zs(int nq, quadrilateral qs[], int nz, zdouble zs[], int q
     int* vids = q->vids;
     zdouble z0 = zs[vids[0]];
     zdouble z2 = zs[vids[2]];
-    zdouble dzeta0, dzeta2, dzeta;
     int i;
 
     if (*count) {
-        dzeta0 = integrate(sc, vids[0], &w[qindex * nz]);
-        dzeta2 = integrate(sc, vids[2], &w[qindex * nz]);
-        dzeta = integrate(sc, vid, &w[qindex * nz]);
+        zdouble dzeta0 = integrate(sc, vids[0], &w[qindex * nz]);
+        zdouble dzeta2 = integrate(sc, vids[2], &w[qindex * nz]);
+        zdouble dzeta = integrate(sc, vid, &w[qindex * nz]);
 
         B[qindex] = (z2 - z0) / (dzeta2 - dzeta0);
         A[qindex] = z0 - B[qindex] * dzeta0;
@@ -1590,14 +1591,13 @@ static void calculate_zs(int nq, quadrilateral qs[], int nz, zdouble zs[], int q
 
     for (i = 0; i < q->nneighbours; ++i) {
         int nid = q->neighbours[i];
+        int vid;
 
         if (done[nid])
             continue;
-        {
-            int vid = find_newvertice(nq, qs, nid, qindex);
 
-            calculate_zs(nq, qs, nz, zs, nid, vid, sc, w, count, done, A, B);
-        }
+        vid = find_newvertex(nq, qs, nid, qindex);
+        calculate_zs(nq, qs, nz, zs, nid, vid, sc, w, count, done, A, B);
     }
 }
 

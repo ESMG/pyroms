@@ -78,7 +78,7 @@ static void info()
     printf("  3. An empty or commented line in the input grid file as well as NaNs for\n");
     printf("     node coordinates indicate an invalid node.\n");
     printf("  4. A grid cell is valid if all corner nodes are valid (not NaNs).\n");
-    printf("  5. The grid (union of all valid grid cells) must be simpy connected.\n");
+    printf("  5. The grid (union of all valid grid cells) must be simply connected.\n");
 
     exit(0);
 }

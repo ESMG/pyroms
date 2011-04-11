@@ -24,6 +24,7 @@
 #include "gridnodes.h"
 #include "gridmap.h"
 #include "gucommon.h"
+#include "kdtree.h"
 
 #define BUFSIZE 10240
 
@@ -440,6 +441,55 @@ gridnodes* gridnodes_subgrid(gridnodes* gn, int imin, int imax, int jmin, int jm
     return new;
 }
 
+/* Calculates (x,y) coordinates from fractional indices (fi,fj) using mapping 
+ * of the cell (i,j).
+ *
+ * The transformation used to compute the coords is a forward
+ * tetragonal bilinear texture mapping.
+ *
+ * @param gn Pointer to the gridnodes structure used for mapping
+ * @param fi I index value
+ * @param fj J index value
+ * @param i I index of the cell to be used for mapping
+ * @param j J index of the cell to be used for mapping
+ * @param x Pointer to returned X coordinate
+ * @param y Pointer to returned Y coordinate
+ * @return non-zero if successful
+ */
+static void fij2xy(gridnodes* gn, double fi, double fj, int i, int j, double* x, double* y)
+{
+    double u, v;
+    double** gx = gn->gx;
+    double** gy = gn->gy;
+    double a, b, c, d, e, f, g, h;
+
+    u = fi - i;
+    v = fj - j;
+
+    if (u == 0.0 && v == 0.0) {
+        *x = gx[j][i];
+        *y = gy[j][i];
+    } else if (u == 0.0) {
+        *x = gx[j + 1][i] * v + gx[j][i] * (1.0 - v);
+        *y = gy[j + 1][i] * v + gy[j][i] * (1.0 - v);
+    } else if (v == 0.0) {
+        *x = gx[j][i + 1] * u + gx[j][i] * (1.0 - u);
+        *y = gy[j][i + 1] * u + gy[j][i] * (1.0 - u);
+    } else {
+        a = gx[j][i] - gx[j][i + 1] - gx[j + 1][i] + gx[j + 1][i + 1];
+        b = gx[j][i + 1] - gx[j][i];
+        c = gx[j + 1][i] - gx[j][i];
+        d = gx[j][i];
+        e = gy[j][i] - gy[j][i + 1] - gy[j + 1][i] + gy[j + 1][i + 1];
+        f = gy[j][i + 1] - gy[j][i];
+        g = gy[j + 1][i] - gy[j][i];
+        h = gy[j][i];
+
+        *x = a * u * v + b * u + c * v + d;
+        *y = e * u * v + f * u + g * v + h;
+    }
+}
+
 /* Transforms grid nodes of one type into grid nodes of another type.
  * @param gn Grid nodes
  * @param type Type of new grid nodes
@@ -486,7 +536,7 @@ gridnodes* gridnodes_transform(gridnodes* gn, NODETYPE type)
         }
     } else if (gn->type == NT_COR) {
         if (type == NT_CEN) {
-            gridmap* map = gridmap_build(gn->nx - 1, gn->ny - 1, gn->gx, gn->gy);
+            gridmap* gm = gridmap_build(gn->nx - 1, gn->ny - 1, gn->gx, gn->gy);
 
             gn1->nx = gn->nx - 1;
             gn1->ny = gn->ny - 1;
@@ -498,11 +548,11 @@ gridnodes* gridnodes_transform(gridnodes* gn, NODETYPE type)
              */
             for (i = 0; i < gn1->nx; ++i)
                 for (j = 0; j < gn1->ny; ++j)
-                    gridmap_fij2xy(map, i + 0.5, j + 0.5, &gn1->gx[j][i], &gn1->gy[j][i]);
+                    gridmap_fij2xy(gm, i + 0.5, j + 0.5, &gn1->gx[j][i], &gn1->gy[j][i]);
 
-            gridmap_destroy(map);
+            gridmap_destroy(gm);
         } else if (type == NT_DD) {
-            gridmap* map = gridmap_build(gn->nx - 1, gn->ny - 1, gn->gx, gn->gy);
+            gridmap* gm = gridmap_build(gn->nx - 1, gn->ny - 1, gn->gx, gn->gy);
 
             gn1->nx = gn->nx * 2 - 1;
             gn1->ny = gn->ny * 2 - 1;
@@ -514,12 +564,112 @@ gridnodes* gridnodes_transform(gridnodes* gn, NODETYPE type)
              */
             for (i = 0; i < gn1->nx; ++i)
                 for (j = 0; j < gn1->ny; ++j)
-                    gridmap_fij2xy(map, i / 2.0, j / 2.0, &gn1->gx[j][i], &gn1->gy[j][i]);
+                    gridmap_fij2xy(gm, i / 2.0, j / 2.0, &gn1->gx[j][i], &gn1->gy[j][i]);
 
-            gridmap_destroy(map);
+            gridmap_destroy(gm);
         }
     } else if (gn->type == NT_CEN) {
-        gu_quit("transforming nodes of type \"%s\" into \"%s\" is not supported\n", nodetype2str[gn->type], nodetype2str[type]);
+        if (type == NT_COR) {
+	    kdtree* kt = kd_create(2); /* 2 dimensions */
+
+            gn1->nx = gn->nx + 1;
+            gn1->ny = gn->ny + 1;
+            gn1->gx = gu_alloc2d(gn1->nx, gn1->ny, sizeof(double));
+            gn1->gy = gu_alloc2d(gn1->nx, gn1->ny, sizeof(double));
+	    
+	    /*
+	     * put positions of the cells formed by cell centers into kd tree
+	     */
+	    for (i = 0; i < gn->nx - 1; ++i) {
+		for (j = 0; j < gn->ny - 1; ++j) {
+		    if (!isnan(gn->gx[j][i]) && !isnan(gn->gx[j + 1][i]) && !isnan(gn->gx[j][i + 1]) && !isnan(gn->gx[j + 1][i + 1])) {
+			double pos[2];
+
+			pos[0] = (double) i + 0.5;
+			pos[1] = (double) j + 0.5;
+			kd_insert(kt, pos, NULL);
+		    }
+		}
+	    }
+
+	    /*
+	     * for each node coordinate find the nearest point in the kd tree;
+	     * if it is in a neighbour cell - then extrapolate the cell
+	     * position using the mapping of this cell
+	     */
+	    for (i = 0; i < gn1->nx; ++i) {
+		for (j = 0; j < gn1->ny; ++j) {
+		    double pos[2];
+		    double pos1[2];
+		    kdres* nearest = NULL;
+
+		    pos[0] = (double) i - 0.5;
+		    pos[1] = (double) j - 0.5;
+		    nearest = kd_nearest(kt, pos);
+		    kd_res_item(nearest, pos1);
+
+		    if (hypot(pos1[0] - pos[0], pos1[1] - pos[1]) < 1.5) {
+			fij2xy(gn, pos[0], pos[1], (int) pos1[0], (int) pos1[1], &gn1->gx[j][i], &gn1->gy[j][i]);
+		    } else {
+			gn1->gx[j][i] = NaN;
+			gn1->gy[j][i] = NaN;
+		    }
+		}
+	    }
+	    gn->type = NT_COR;
+	    gridnodes_validate_cor(gn1);
+	    kd_free(kt);
+	} else if (type == NT_DD) {
+	    kdtree* kt = kd_create(2); /* 2 dimensions */
+
+            gn1->nx = gn->nx * 2 + 1;
+            gn1->ny = gn->ny * 2 + 1;
+            gn1->gx = gu_alloc2d(gn1->nx, gn1->ny, sizeof(double));
+            gn1->gy = gu_alloc2d(gn1->nx, gn1->ny, sizeof(double));
+
+	    /*
+	     * put positions of the cells formed by cell centers into kd tree
+	     */
+	    for (i = 0; i < gn->nx - 1; ++i) {
+		for (j = 0; j < gn->ny - 1; ++j) {
+		    if (!isnan(gn->gx[j][i]) && !isnan(gn->gx[j + 1][i]) && !isnan(gn->gx[j][i + 1]) && !isnan(gn->gx[j + 1][i + 1])) {
+			double pos[2];
+
+			pos[0] = (double) i + 0.5;
+			pos[1] = (double) j + 0.5;
+			kd_insert(kt, pos, NULL);
+		    }
+		}
+	    }
+
+	    /*
+	     * for each node coordinate find the nearest point in the kd tree;
+	     * if it is in a neighbour cell - then extrapolate the cell
+	     * position using the mapping of this cell
+	     */
+	    for (i = 0; i < gn1->nx; ++i) {
+		for (j = 0; j < gn1->ny; ++j) {
+		    double pos[2];
+		    double pos1[2];
+		    kdres* nearest = NULL;
+
+		    pos[0] = (double) i / 2.0 - 0.5;
+		    pos[1] = (double) j / 2.0 - 0.5;
+		    nearest = kd_nearest(kt, pos);
+		    kd_res_item(nearest, pos1);
+
+		    if (hypot(pos1[0] - pos[0], pos1[1] - pos[1]) < 1.5) {
+			fij2xy(gn, pos[0], pos[1], (int) pos1[0], (int) pos1[1], &gn1->gx[j][i], &gn1->gy[j][i]);
+		    } else {
+			gn1->gx[j][i] = NaN;
+			gn1->gy[j][i] = NaN;
+		    }
+		}
+	    }
+	    gn->type = NT_DD;
+	    gridnodes_validate_dd(gn1);
+	    kd_free(kt);
+	}
     }
 
     gn1->validated = 1;         /* an internally generated grid is supposed

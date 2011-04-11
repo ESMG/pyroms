@@ -1,0 +1,23 @@
+v. 1.21, 1 Feb 2011
+        -- A small chamge in makefile.in: "make distclean" now cleans the 
+           examples as well
+v. 1.20, 26 May 2009
+        -- Bug fix in csa_approximatepoints2().
+v. 1.19, 25 May 2009
+        -- Added  csa_approximatepoints2() by request of Rob Hetland.
+v. 1.18, 18 February 2009
+        -- Changed the license for compatibility with GPL. Added the file
+           LICENSE.
+v. 1.17, 19 October 2007
+   	-- Introduced this file
+	-- Corrected the advice in the help message:
+
+	   -P nppc=<value> -- set the average number of points per cell 
+	   (default = 5, increase if the point distribution is strongly
+	   non-uniform to get larger cells)
+
+	   became:
+
+	   -P nppc=<value> -- set the average number of points per cell 
+	   (default = 5, works best for uniformly distributed data. Decrease 
+           to get smaller cells or increase to get larger cells)

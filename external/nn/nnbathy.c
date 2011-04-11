@@ -42,7 +42,7 @@
 #if !defined(NN_SERIAL)
 #define NMAX 4096
 #endif
-#define STRBUFSIZE 64
+#define STRBUFSIZE 256
 
 typedef struct {
     int generate_points;
@@ -201,12 +201,12 @@ static specs* specs_create(void)
     return s;
 }
 
-void specs_destroy(specs * s)
+void specs_destroy(specs* s)
 {
     free(s);
 }
 
-static void parse_commandline(int argc, char* argv[], specs * s)
+static void parse_commandline(int argc, char* argv[], specs* s)
 {
     int i;
 
@@ -553,6 +553,8 @@ int main(int argc, char* argv[])
     delaunay* d = NULL;
     void* interpolator = NULL;
     int ndone = 0;
+    char percent_prev[STRBUFSIZE] = "";
+    char percent[STRBUFSIZE];
 
     parse_commandline(argc, argv, s);
 
@@ -619,8 +621,14 @@ int main(int argc, char* argv[])
         points_write(1, pout);
         ndone++;
 
-        if (s->npoints > 0)
-            fprintf(stderr, "  %5.2f%% done\r", 100.0 * ndone / s->npoints);
+        if (s->npoints > 0) {
+            snprintf(percent, STRBUFSIZE, "  %5.1f%% done\r", 100.0 * ndone / s->npoints);
+            if (strcmp(percent, percent_prev) != 0) {
+                strcpy(percent_prev, percent);
+                fprintf(stderr, "%s", percent);
+                fflush(stderr);
+            }
+        }
     }
     if (s->npoints > 0)
         fprintf(stderr, "                \r");

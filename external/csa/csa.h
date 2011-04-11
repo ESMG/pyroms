@@ -45,4 +45,6 @@ void csa_setnpmax(csa* a, int npmax);
 void csa_setk(csa* a, int k);
 void csa_setnppc(csa* a, int nppc);
 
+double* csa_approximatepoints2(int nin, double xin[], double yin[], double zin[], double sigma[], int nout, double xout[], double yout[], int npmin, int npmax, int k, int nppc);
+
 #endif

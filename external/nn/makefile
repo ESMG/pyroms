@@ -17,10 +17,10 @@ INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_DATA = ${INSTALL} -m 644
 
-CC = /usr/bin/gcc34
+CC = gcc
 CFLAGS = -g -O2 -Wall -pedantic
 CFLAGS_TRIANGLE = -g -O2 -Wall -pedantic -w -ffloat-store
-CFLAGS_VULNERABLE = -fno-force-mem -ffloat-store
+CFLAGS_VULNERABLE = -ffloat-store
 LDFLAGS = 
 
 AR = ar
@@ -70,6 +70,7 @@ all: libnn.a $(PROGRAMS)
 minell: minell.c
 	$(CC) -o minell minell.c -DME_STANDALONE $(CFLAGS) -I. $(LDFLAGS) $(MLIB)
 
+nnbathy: override CFLAGS+=-DNN_SERIAL
 nnbathy: libnn.a nnbathy.c
 	$(CC) -o nnbathy nnbathy.c $(CFLAGS) -I. $(LDFLAGS) libnn.a $(MLIB)
 
@@ -138,10 +139,13 @@ ex4clean:
 ex5clean:
 	cd examples/5; make clean;
 
-distclean: clean configclean ex1clean ex2clean ex3clean ex4clean ex5clean
+ex6clean:
+	cd examples/6; make clean;
+
+distclean: clean configclean ex1clean ex2clean ex3clean ex4clean ex5clean ex6clean
 
 indent:
-	indent -T FILE -T NN_ALGORITHM -T point -T delaunay -T lpi -T nnpi -T nnhpi -T indexedpoint -T nnai -T ht_bucket -T hashtable -T istack -T triangle -T triangle_neighbours -T circle -T nn_weights -T lweights -T minell $(LIBSRC) $(UTILSRC) $(HEADERS)
+	indent -T FILE -T NN_ALGORITHM -T point -T delaunay -T lpi -T nnpi -T nnhpi -T indexedpoint -T nnai -T ht_bucket -T hashtable -T istack -T triangle -T triangle_neighbours -T circle -T nn_weights -T lweights -T minell -T specs $(LIBSRC) $(UTILSRC) $(HEADERS)
 	rm -f *~
 
 dist:
@@ -155,6 +159,12 @@ dist:
 	make clean;\
 	rm -f  example.pdf;\
 	cd /tmp/$$DIR/examples/3;\
+	make clean;\
+	cd /tmp/$$DIR/examples/4;\
+	make clean;\
+	cd /tmp/$$DIR/examples/5;\
+	make clean;\
+	cd /tmp/$$DIR/examples/6;\
 	make clean;\
 	cd /tmp/$$DIR;\
 	rm -rf `find /tmp/$$DIR -name CVS`;\

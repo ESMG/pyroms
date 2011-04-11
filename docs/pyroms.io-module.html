@@ -117,7 +117,7 @@ with an input of a netCDF4.Dataset or MFnetCDF4.Dataset object:
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pyroms.io-module.html#MFDataset" class="summary-sig-name">MFDataset</a>(<span class="summary-sig-arg">ncfile</span>)</span><br />
-      A thin wrapper for netCDF4.Dataset and netCDF4.MFDataset</td>
+      Return an MFnetCDF4 object given a string or list.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyroms.io-pysrc.html#MFDataset">source&nbsp;code</a></span>
             
@@ -133,8 +133,7 @@ with an input of a netCDF4.Dataset or MFnetCDF4.Dataset object:
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pyroms.io-module.html#Dataset" class="summary-sig-name">Dataset</a>(<span class="summary-sig-arg">ncfile</span>)</span><br />
-      A thin wrapper for netCDF4.Dataset and netCDF4.MFDataset</td>
+          <td><span class="summary-sig"><a name="Dataset"></a><span class="summary-sig-name">Dataset</span>(<span class="summary-sig-arg">ncfile</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyroms.io-pysrc.html#Dataset">source&nbsp;code</a></span>
             
@@ -178,93 +177,8 @@ with an input of a netCDF4.Dataset or MFnetCDF4.Dataset object:
   </tr></table>
   
   <pre class="literalblock">
-A thin wrapper for netCDF4.Dataset and netCDF4.MFDataset
-
-This module provides two functions, Dataset and MFDataset, that are similar to the
-netCDF[3/4] functions of the same name. This package is a thin wrapper around these
-functions, and provides two services. First of all, it will use either netCDF3 or
-netCDF4 (prefering the later), so that the netCDF package does not need to be changed
-on different systems that only have one or the other. Second, it will pass through
-netCDF[3/4] objects unchanged, so that netCDF objects, filenames, lists of files, or
-strings with wildcards can be passed to the function indescriminately.
-
-Examples of usage
------------------
-
-with an input of a string:
-    # returns netCDF4.Dataset object based on file
-    nc = pyroms.io.Dataset(file) 
-  
-    # returns MFnetCDF4.Dataset object based on file (with wildcard chars)
-    nc = pyroms.io.MFDataset(file) 
-
-with an input of a list of files:
-    # returns MFDataset object based on list of files
-    nc = pyroms.io.Dataset(files) 
-    
-    # returns MFDataset object based on list of files
-    nc = pyroms.io.MFDataset(files)
-
-with an input of a netCDF4.Dataset or MFnetCDF4.Dataset object:
-    # passes through netCDF4.Dataset or MFnetCDF4.Dataset object
-    nc = pyroms.io.Dataset(nc)
-    
-    # passes through MFDataset object based on file (with wildcard chars)
-    nc = pyroms.io.MFDataset(nc)
-
-</pre>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
-<a name="Dataset"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">Dataset</span>(<span class="sig-arg">ncfile</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyroms.io-pysrc.html#Dataset">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <pre class="literalblock">
-A thin wrapper for netCDF4.Dataset and netCDF4.MFDataset
-
-This module provides two functions, Dataset and MFDataset, that are similar to the
-netCDF[3/4] functions of the same name. This package is a thin wrapper around these
-functions, and provides two services. First of all, it will use either netCDF3 or
-netCDF4 (prefering the later), so that the netCDF package does not need to be changed
-on different systems that only have one or the other. Second, it will pass through
-netCDF[3/4] objects unchanged, so that netCDF objects, filenames, lists of files, or
-strings with wildcards can be passed to the function indescriminately.
-
-Examples of usage
------------------
-
-with an input of a string:
-    # returns netCDF4.Dataset object based on file
-    nc = pyroms.io.Dataset(file) 
-  
-    # returns MFnetCDF4.Dataset object based on file (with wildcard chars)
-    nc = pyroms.io.MFDataset(file) 
-
-with an input of a list of files:
-    # returns MFDataset object based on list of files
-    nc = pyroms.io.Dataset(files) 
-    
-    # returns MFDataset object based on list of files
-    nc = pyroms.io.MFDataset(files)
-
-with an input of a netCDF4.Dataset or MFnetCDF4.Dataset object:
-    # passes through netCDF4.Dataset or MFnetCDF4.Dataset object
-    nc = pyroms.io.Dataset(nc)
-    
-    # passes through MFDataset object based on file (with wildcard chars)
-    nc = pyroms.io.MFDataset(nc)
+Return an MFnetCDF4 object given a string or list.  A string is expanded
+with wildcards using glob.  A netCDF4 or MFnetCDF4 object returns itself.
 
 </pre>
   <dl class="fields">
@@ -298,7 +212,7 @@ with an input of a netCDF4.Dataset or MFnetCDF4.Dataset object:
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Sep 27 11:31:38 2010
+    Generated by Epydoc 3.0.1 on Mon Apr  4 12:10:12 2011
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

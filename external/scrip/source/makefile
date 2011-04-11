@@ -9,16 +9,19 @@
 # SVN $URL$
 #===============================================================================
 
+LIBDIR = /opt/local/lib
+INCDIR = /opt/local/include
+SRCDIR  = .
+PREFIX  = /usr/local
+
 COMPILE = gfortran
 FLAGS = -g -fdefault-real-8 -ffixed-form -O2 -fPIC
-LIB  = -L/usr/local/lib/ -lnetcdff
-INCLUDE = -I/usr/local/include/
+LIB  = -L${LIBDIR} -lnetcdf -lnetcdff
+INCLUDE = -I${INCDIR}
 F2PY = f2py
-F2PY_LIB = -L/usr/local/lib/ -lnetcdf -lnetcdff -lhdf5 -lhdf5_hl
-F2PY_INCLUDE = -I/usr/local/include/
+F2PY_LIB = -L${LIBDIR} -lnetcdf -lnetcdff -lhdf5 -lhdf5_hl
+F2PY_INCLUDE = -I${INCDIR}
 F2PY_F90_FLAG= '-g -fdefault-real-8 -ffixed-form -O2 -fPIC'
-SRCDIR  = .
-EXEDIR  = ..
 
 OBJSET  = \
 	kinds_mod.o \
@@ -63,18 +66,18 @@ OBJF2PY  = \
         remap_write.o \
 
 
-all: $(EXEDIR)/scrip $(EXEDIR)/scrip_test
+all: $(SRCDIR)/scrip $(SRCDIR)/scrip_test
 
-$(EXEDIR)/scrip: $(OBJSET)
-	$(COMPILE) $(FLAGS) $(OBJSET) $(LIB) $(INCLUDE) -o $(EXEDIR)/scrip
+$(SRCDIR)/scrip: $(OBJSET)
+	$(COMPILE) $(FLAGS) $(OBJSET) $(LIB) $(INCLUDE) -o $(SRCDIR)/scrip
 
-$(EXEDIR)/scrip_test: $(OBJTEST) scrip_test.o
+$(SRCDIR)/scrip_test: $(OBJTEST) scrip_test.o
 	$(COMPILE) $(FLAGS) $(OBJTEST) scrip_test.o $(LIB) \
-	-o $(EXEDIR)/scrip_test
+	-o $(SRCDIR)/scrip_test
 
-scrip_test_repeat: $(OBJTEST) scrip_test_repeat.o
+$(SRCDIR)/scrip_test_repeat: $(OBJTEST) scrip_test_repeat.o
 	$(COMPILE) $(FLAGS) $(OBJTEST) scrip_test_repeat.o $(LIB) \
-	-o $(EXEDIR)/scrip_test_repeat
+	-o $(SRCDIR)/scrip_test_repeat
 
 kinds_mod.o: $(SRCDIR)/kinds_mod.f
 	$(COMPILE) $(FLAGS) $(INCLUDE) -c $(SRCDIR)/kinds_mod.f
@@ -140,13 +143,15 @@ scrip_test_repeat.o: $(SRCDIR)/scrip_test_repeat.f kinds_mod.o \
 
 f2py: $(SRCDIR)/scrip.so
 
-scrip.so: $(SRCDIR)/pyscrip.f90 $(OBJF2PY)
+$(SRCDIR)/scrip.so: $(SRCDIR)/pyscrip.f90 $(OBJF2PY)
 	$(F2PY) --fcompiler=gnu95 --f90flags=$(F2PY_F90_FLAG) \
 	$(F2PY_LIB) $(F2PY_INCLUDE) -m scrip \
 	-c $(OBJF2PY) pyscrip.f90
 
-clean: 
-	/bin/rm *.o *.mod
+install:
+	/bin/cp $(SRCDIR)/scrip $(PREFIX)/bin
+	/bin/cp $(SRCDIR)/scrip_test $(PREFIX)/bin
+	/bin/cp $(SRCDIR)/scrip.so $(PREFIX)/lib
 
-clean_so:
-	/bin/rm *.so
+clean: 
+	/bin/rm *.o *.mod *.so scrip scrip_test

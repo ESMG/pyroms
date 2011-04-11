@@ -12,9 +12,14 @@
  * Description:    None
  *
  * Revisions:      10/06/2003 PS: delaunay_build(); delaunay_destroy();
- *                 struct delaunay: from now on, only shallow copy of the
- *                 input data is contained in struct delaunay. This saves
- *                 memory and is consistent with libcsa.
+ *                   struct delaunay: from now on, only shallow copy of the
+ *                   input data is contained in struct delaunay. This saves
+ *                   memory and is consistent with libcsa.
+ *                 30/10/2007 PS: added delaunay_addflag() and
+ *                   delaunay_resetflags(); modified delaunay_circles_find()
+ *                   to reset the flags to 0 on return. This is very important
+ *                   for large datasets, many thanks to John Gerschwitz,
+ *                   Petroleum Geo-Services, for identifying the problem.
  *
  *****************************************************************************/
 
@@ -40,6 +45,8 @@
  *     do more complicated stuff
  */
 #define N_SEARCH_TURNON 20
+#define N_FLAGS_TURNON 1000
+#define N_FLAGS_INC 100
 
 static void tio_init(struct triangulateio* tio)
 {
@@ -122,6 +129,9 @@ static delaunay* delaunay_create()
     d->first_id = -1;
     d->t_in = NULL;
     d->t_out = NULL;
+    d->nflags = 0;
+    d->nflagsallocated = 0;
+    d->flagids = NULL;
 
     return d;
 }
@@ -177,6 +187,7 @@ static void tio2delaunay(struct triangulateio* tio_out, delaunay* d)
         triangle* t = &d->triangles[i];
         triangle_neighbours* n = &d->neighbours[i];
         circle* c = &d->circles[i];
+        int status;
 
         t->vids[0] = tio_out->trianglelist[offset];
         t->vids[1] = tio_out->trianglelist[offset + 1];
@@ -186,7 +197,8 @@ static void tio2delaunay(struct triangulateio* tio_out, delaunay* d)
         n->tids[1] = tio_out->neighborlist[offset + 1];
         n->tids[2] = tio_out->neighborlist[offset + 2];
 
-        assert(circle_build1(c, &d->points[t->vids[0]], &d->points[t->vids[1]], &d->points[t->vids[2]]));
+        status = circle_build1(c, &d->points[t->vids[0]], &d->points[t->vids[1]], &d->points[t->vids[2]]);
+        assert(status);
 
         if (nn_verbose)
             fprintf(stderr, "  %d: (%d,%d,%d)\n", i, t->vids[0], t->vids[1], t->vids[2]);
@@ -335,6 +347,8 @@ void delaunay_destroy(delaunay* d)
         istack_destroy(d->t_in);
     if (d->t_out != NULL)
         istack_destroy(d->t_out);
+    if (d->flagids != NULL)
+        free(d->flagids);
     free(d);
 }
 
@@ -378,6 +392,25 @@ int delaunay_xytoi(delaunay* d, point* p, int id)
     } while (i < 3);
 
     return id;
+}
+
+static void delaunay_addflag(delaunay* d, int i)
+{
+    if (d->nflags == d->nflagsallocated) {
+        d->nflagsallocated += N_FLAGS_INC;
+        d->flagids = realloc(d->flagids, d->nflagsallocated * sizeof(int));
+    }
+    d->flagids[d->nflags] = i;
+    d->nflags++;
+}
+
+static void delaunay_resetflags(delaunay* d)
+{
+    int i;
+
+    for (i = 0; i < d->nflags; ++i)
+        d->flags[d->flagids[i]] = 0;
+    d->nflags = 0;
 }
 
 /* Finds all tricircles specified point belongs to.
@@ -494,6 +527,7 @@ void delaunay_circles_find(delaunay* d, point* p, int* n, int** out)
 
     istack_push(d->t_in, d->first_id);
     d->flags[d->first_id] = 1;
+    delaunay_addflag(d, d->first_id);
 
     /*
      * main cycle 
@@ -515,6 +549,7 @@ void delaunay_circles_find(delaunay* d, point* p, int* n, int** out)
                     if (d->flags[ntid] == 0) {
                         istack_push(d->t_in, ntid);
                         d->flags[ntid] = 1;
+                        delaunay_addflag(d, ntid);
                     }
                 }
             }
@@ -524,4 +559,5 @@ void delaunay_circles_find(delaunay* d, point* p, int* n, int** out)
 
     *n = d->t_out->n;
     *out = d->t_out->v;
+    delaunay_resetflags(d);
 }

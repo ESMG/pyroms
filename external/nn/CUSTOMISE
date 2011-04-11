@@ -31,7 +31,7 @@ if [ -z "$CFLAGS" ]; then
 fi
 
 CFLAGS_TRIANGLE="$CFLAGS -w -ffloat-store"
-CFLAGS_VULNERABLE="-fno-force-mem -ffloat-store"
+CFLAGS_VULNERABLE="-ffloat-store"
 
 # Installation prefix (default is /usr/local)
 if [ "${prefix}" = "NONE" ]; then

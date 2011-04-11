@@ -80,7 +80,7 @@ LIBSRC=$(SRC) $(COMPLEXSRC)
 
 LIBOBJS = $(LIBSRC:.c=.o)
 
-SLIBOBJS = $(LIBSRC:.c=.t)
+SHLIBOBJS = $(LIBSRC:.c=.t)
 %.t: %.c
 	$(CC) $(CFLAGS) -fPIC -c $*.c -o $*.t
 
@@ -99,8 +99,7 @@ shlib: libgridgen.so
 gridgen: main.c $(HEADERS) $(SRC) triangle.o
 	$(CC) -o gridgen -DGRIDGEN_STANDALONE $(CFLAGS) main.c $(SRC) triangle.o $(LDFLAGS) $(MLIB)
 
-tests: avl.c broyden.c issimplepoly.c hash.c
-	$(CC) -o test_avl avl.c -DTEST_AVL $(CFLAGS) -I. $(MLIB)
+tests: broyden.c issimplepoly.c hash.c
 	$(CC) -o test_broyden broyden.c -DTEST_BROYDEN $(CFLAGS) -I. $(MLIB)
 	$(CC) -o issimplepoly issimplepoly.c -DTEST_SI $(CFLAGS) -I. $(MLIB)
 	$(CC) -o test_hash hash.c -DHT_TEST $(CFLAGS) -I. $(MLIB)
@@ -114,9 +113,9 @@ libgridgen.a: $(HEADERS) triangle.o $(LIBOBJS)
 	$(AR) $(ARFLAGS) $@ $(LIBOBJS) triangle.o
 	chmod go+r $@
 
-libgridgen.so: $(HEADERS) triangle.t $(SLIBOBJS)
+libgridgen.so: $(HEADERS) triangle.t $(SHLIBOBJS)
 	rm -f $@
-	$(CC) -shared -o $@ $(SLIBOBJS) triangle.t $(LIBS)
+	$(CC) -shared -o $@ $(SHLIBOBJS) triangle.t $(LIBS)
 
 triangle.o: triangle.c
 	$(CC) -c -DTRILIBRARY $(CFLAGS_TRIANGLE) -I. triangle.c
@@ -145,7 +144,7 @@ install: all installdirs
 	done
 
 clean:
-	rm -f *.o *.t c99-min/*.o *.a *.so *~ \#*\# core gridgen issimplepoly test_broyden test_hash test_avl
+	rm -f *.o *.t c99-min/*.o *.a *.so *~ \#*\# core gridgen issimplepoly test_broyden test_hash
 
 configclean:
 	rm -f config.h makefile config.cache config.status config.log

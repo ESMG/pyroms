@@ -1,21 +1,10 @@
 csa
 Bivariate Cubic Spline approximation library + standalone utility
-Version 1.16
+Version 1.21
 
-Copyright 2002 CSIRO Marine Research
-GPO 1538 Hobart
-TAS 7001
-Australia
-Please send comments and bugs to Pavel.Sakov@csiro.au
+`csa' is a free software. See LICENSE for details.
 
-There is no warranty whatsoever.  Use at your own risk. 
-
-These code may be freely redistributed under the condition that the copyright 
-notices are not removed. You may distribute modified versions of this code 
-UNDER THE CONDITION THAT THIS CODE AND ANY MODIFICATIONS MADE TO IT IN THE 
-SAME FILE REMAIN UNDER COPYRIGHT OF CSIRO, BOTH SOURCE AND OBJECT CODE ARE 
-MADE FREELY AVAILABLE WITHOUT CHARGE, AND CLEAR NOTICE IS GIVEN OF THE 
-MODIFICATIONS.
+Please send comments and bugs to Pavel.Sakov<at>gmail.com .
 
 This code has been developed and used mainly on pc-linux platform, however,
 it should compile on other platforms. Beware that the configure script 
@@ -55,9 +44,7 @@ http://www.math.uni-mannheim.de/~lsmath4/paper/VIS2001.pdf.gz
 
 *The singular value decomposition code was borrowed from EISPACK
 
-Please acknowledge the use of this software in any publications:
-"Bivariate cubic spline interpolation software was provided by Pavel Sakov and
-is available at URL: http://www.marine.csiro.au/~sakov/csa.tar.gz".
+Please acknowledge the use of this software in publications.
 
 Good luck!
 Pavel Sakov

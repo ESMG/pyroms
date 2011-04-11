@@ -6,6 +6,7 @@
  *
  *  Author:         Pavel Sakov
  *                  CSIRO Marine Research
+ *                  NERSC
  *
  *  Purpose:        For a given scattered data calculates (interpolates/
  *                  approximates/averages) values in centres of a specified
@@ -19,6 +20,9 @@
  *
  *  Revisions:      PS 28 Aug 2003: added option "-a 4" to average within
  *                    the grid cells.
+ *                  PS 12 Dec 2008: fixed a defect on l. 461: now correctly
+ *                    checking isnan(gx[j + 1][i]) instead of the second check
+ *                    of gx[j + 1][i + 1].
  *
  *****************************************************************************/
 
@@ -457,7 +461,7 @@ int main(int argc, char* argv[])
                 int count = 0;
                 int ii, jj;
 
-                if ((mask != NULL && mask[j][i] == 0) || isnan(gx[j][i]) || isnan(gx[j + 1][i + 1]) || isnan(gx[j][i + 1]) || isnan(gx[j + 1][i + 1])) {
+                if ((mask != NULL && mask[j][i] == 0) || isnan(gx[j][i]) || isnan(gx[j + 1][i + 1]) || isnan(gx[j][i + 1]) || isnan(gx[j + 1][i])) {
                     printf("NaN\n");
                     continue;
                 }

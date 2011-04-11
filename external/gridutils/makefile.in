@@ -58,6 +58,7 @@ gridaverager.h\
 gridmap.h\
 gridnodes.h\
 gucommon.h\
+kdtree.h\
 nan.h\
 poly.h\
 version.h
@@ -66,7 +67,15 @@ LIBOBJECTS =\
 gridmap.o\
 gridnodes.o\
 gucommon.o\
+kdtree.o\
 poly.o
+
+SHLIBOBJECTS =\
+gridmap.t\
+gridnodes.t\
+gucommon.t\
+kdtree.t\
+poly.t
 
 PROGRAMS =\
 getbound\
@@ -77,14 +86,27 @@ subgrid\
 xy2ij\
 gridbathy
 
-.c.o:
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) -I. $*.c -o $*.o
+%.o: %.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -I. -c $*.c -o $*.o
+%.t: %.c
+	$(CC) $(CFLAGS) -fPIC $(CPPFLAGS) -I. -c $*.c -o $*.t
 
-all: libgu.a $(PROGRAMS)
+all: lib shlib $(PROGRAMS)
+	@if [ ! -f libgu.so ] ; then \
+	   echo "  type 'make shlib' to make libgu.so"; \
+	fi
+
+lib: libgu.a
+
+shlib: libgu.so
 
 libgu.a: $(LIBOBJECTS)
 	$(AR) $(ARFLAGS) libgu.a $(LIBOBJECTS)
 	chmod go+r libgu.a
+
+libgu.so: $(SHLIBOBJECTS)
+	rm -f $@
+	$(CC) -shared -o $@ $(SHLIBOBJECTS)
 
 standalone: override LDFLAGS+=-static
 standalone: $(PROGRAMS)
@@ -112,24 +134,29 @@ xy2ij: libgu.a xy2ij.o
 	$(CC) -o $@ xy2ij.o $(CFLAGS) $(LDFLAGS) libgu.a $(MLIB)
 
 installdirs:
-	$(SHELL) mkinstalldirs $(INSTALLDIRS)
+	@$(SHELL) mkinstalldirs $(INSTALLDIRS)
 
 install: all installdirs
-	for i in libgu.a; do \
-	   $(INSTALL_DATA) $$i $(libdir)/$$i; \
+	@for i in libgu.a libgu.so; do \
+	   if test -f $$i; then \
+	      echo "  installing $$i"; \
+	      $(INSTALL_DATA) $$i $(libdir)/$$i; \
+	   fi \
 	done
 
-	for i in gridmap.h gucommon.h gridnodes.h; do \
+	@for i in gridmap.h gucommon.h gridnodes.h; do \
+	   echo "  installing $$i"; \
 	   $(INSTALL_DATA) $$i $(includedir); \
 	done
 
-	for i in $(PROGRAMS); do \
+	@for i in $(PROGRAMS); do \
+	   echo "  installing $$i"; \
 	   fname=`basename $$i`; \
 	   $(INSTALL_PROGRAM) $$i $(bindir); \
 	done
 
 clean:
-	rm -f *.o *.a $(PROGRAMS) *~ \#*\# core
+	rm -f *.o *.t *.a *.so $(PROGRAMS) *~ \#*\# core
 	cd test; make clean
 
 configclean:
@@ -138,7 +165,7 @@ configclean:
 distclean: clean configclean
 
 indent:
-	indent -T FILE -T gridmap -T gridnodes -T gridaverager -T extent -T poly -T subgrid -T NODETYPE -T COORDTYPE -T gridstats $(SRC) $(HEADERS)
+	indent -T FILE -T gridmap -T gridnodes -T gridaverager -T extent -T poly -T subgrid -T NODETYPE -T COORDTYPE -T gridstats -T kdtree -T kdnode $(SRC) $(HEADERS)
 	rm -f *~
 
 dist:

@@ -82,7 +82,7 @@
           <td><span class="summary-sig"><a href="pyroms.utility-module.html#get_lonlat" class="summary-sig-name">get_lonlat</a>(<span class="summary-sig-arg">iindex</span>,
         <span class="summary-sig-arg">jindex</span>,
         <span class="summary-sig-arg">grd</span>,
-        <span class="summary-sig-arg">Cpos</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">rho</code><code class="variable-quote">'</code></span>)</span><br />
+        <span class="summary-sig-arg">Cpos</span>=<span class="summary-sig-default">'rho'</span>)</span><br />
       lon, lat = get_lonlat(iindex, jindex, grd)</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyroms.utility-pysrc.html#get_lonlat">source&nbsp;code</a></span>
@@ -102,7 +102,7 @@
           <td><span class="summary-sig"><a href="pyroms.utility-module.html#get_ij" class="summary-sig-name">get_ij</a>(<span class="summary-sig-arg">longitude</span>,
         <span class="summary-sig-arg">latitude</span>,
         <span class="summary-sig-arg">grd</span>,
-        <span class="summary-sig-arg">Cpos</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">rho</code><code class="variable-quote">'</code></span>)</span><br />
+        <span class="summary-sig-arg">Cpos</span>=<span class="summary-sig-default">'rho'</span>)</span><br />
       i, j = get_ij(longitude, latitude, grd)</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyroms.utility-pysrc.html#get_ij">source&nbsp;code</a></span>
@@ -122,7 +122,7 @@
           <td><span class="summary-sig"><a name="find_nearestgridpoints"></a><span class="summary-sig-name">find_nearestgridpoints</span>(<span class="summary-sig-arg">longitude</span>,
         <span class="summary-sig-arg">latitude</span>,
         <span class="summary-sig-arg">grd</span>,
-        <span class="summary-sig-arg">Cpos</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">rho</code><code class="variable-quote">'</code></span>)</span></td>
+        <span class="summary-sig-arg">Cpos</span>=<span class="summary-sig-default">'rho'</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyroms.utility-pysrc.html#find_nearestgridpoints">source&nbsp;code</a></span>
             
@@ -138,9 +138,60 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a name="get_coast_from_map"></a><span class="summary-sig-name">get_coast_from_map</span>(<span class="summary-sig-arg">map</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyroms.utility-pysrc.html#get_coast_from_map">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="ijcoast"></a><span class="summary-sig-name">ijcoast</span>(<span class="summary-sig-arg">coast</span>,
+        <span class="summary-sig-arg">grd</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyroms.utility-pysrc.html#ijcoast">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="ijcoast_old"></a><span class="summary-sig-name">ijcoast_old</span>(<span class="summary-sig-arg">coast</span>,
+        <span class="summary-sig-arg">grd</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyroms.utility-pysrc.html#ijcoast_old">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pyroms.utility-module.html#get_grid_proj" class="summary-sig-name">get_grid_proj</a>(<span class="summary-sig-arg">grd</span>,
-        <span class="summary-sig-arg">type</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">merc</code><code class="variable-quote">'</code></span>,
-        <span class="summary-sig-arg">resolution</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">h</code><code class="variable-quote">'</code></span>)</span><br />
+        <span class="summary-sig-arg">type</span>=<span class="summary-sig-default">'merc'</span>,
+        <span class="summary-sig-arg">resolution</span>=<span class="summary-sig-default">'h'</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
       map = get_grid_proj(grd)</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyroms.utility-pysrc.html#get_grid_proj">source&nbsp;code</a></span>
@@ -194,7 +245,7 @@
         <tr>
           <td><span class="summary-sig"><a name="get_bottom"></a><span class="summary-sig-name">get_bottom</span>(<span class="summary-sig-arg">varz</span>,
         <span class="summary-sig-arg">mask</span>,
-        <span class="summary-sig-arg">spval</span>=<span class="summary-sig-default">1e+37</span>)</span></td>
+        <span class="summary-sig-arg">spval</span>=<span class="summary-sig-default">1e37</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyroms.utility-pysrc.html#get_bottom">source&nbsp;code</a></span>
             
@@ -212,7 +263,7 @@
         <tr>
           <td><span class="summary-sig"><a name="get_surface"></a><span class="summary-sig-name">get_surface</span>(<span class="summary-sig-arg">varz</span>,
         <span class="summary-sig-arg">mask</span>,
-        <span class="summary-sig-arg">spval</span>=<span class="summary-sig-default">1e+37</span>)</span></td>
+        <span class="summary-sig-arg">spval</span>=<span class="summary-sig-default">1e37</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyroms.utility-pysrc.html#get_surface">source&nbsp;code</a></span>
             
@@ -248,11 +299,29 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pyroms.utility-module.html#get_date_tag" class="summary-sig-name">get_date_tag</a>(<span class="summary-sig-arg">roms_time</span>,
-        <span class="summary-sig-arg">ref</span>=<span class="summary-sig-default"><code class="variable-group">(</code>2006<code class="variable-op">, </code>1<code class="variable-op">, </code>1<code class="variable-group">)</code></span>,
-        <span class="summary-sig-arg">format</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">%d %b %Y at %H:%M:%S</code><code class="variable-quote">'</code></span>)</span><br />
+        <span class="summary-sig-arg">ref</span>=<span class="summary-sig-default">(2006,01,01)</span>,
+        <span class="summary-sig-arg">format</span>=<span class="summary-sig-default">&quot;%d %b %Y at %H:%M:%S&quot;</span>)</span><br />
       tag = get_date_tag(roms_time)</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyroms.utility-pysrc.html#get_date_tag">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="apply_mask_change"></a><span class="summary-sig-name">apply_mask_change</span>(<span class="summary-sig-arg">file</span>,
+        <span class="summary-sig-arg">grd</span>)</span><br />
+      Apply mask change saved by edit_mesh_mask in the mask_change.txt file</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyroms.utility-pysrc.html#apply_mask_change">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -289,7 +358,7 @@
   <h3 class="epydoc"><span class="sig"><span class="sig-name">get_lonlat</span>(<span class="sig-arg">iindex</span>,
         <span class="sig-arg">jindex</span>,
         <span class="sig-arg">grd</span>,
-        <span class="sig-arg">Cpos</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">rho</code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">Cpos</span>=<span class="sig-default">'rho'</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="pyroms.utility-pysrc.html#get_lonlat">source&nbsp;code</a></span>&nbsp;
@@ -313,7 +382,7 @@
   <h3 class="epydoc"><span class="sig"><span class="sig-name">get_ij</span>(<span class="sig-arg">longitude</span>,
         <span class="sig-arg">latitude</span>,
         <span class="sig-arg">grd</span>,
-        <span class="sig-arg">Cpos</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">rho</code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">Cpos</span>=<span class="sig-default">'rho'</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="pyroms.utility-pysrc.html#get_ij">source&nbsp;code</a></span>&nbsp;
@@ -335,8 +404,9 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">get_grid_proj</span>(<span class="sig-arg">grd</span>,
-        <span class="sig-arg">type</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">merc</code><code class="variable-quote">'</code></span>,
-        <span class="sig-arg">resolution</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">h</code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">type</span>=<span class="sig-default">'merc'</span>,
+        <span class="sig-arg">resolution</span>=<span class="sig-default">'h'</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="pyroms.utility-pysrc.html#get_grid_proj">source&nbsp;code</a></span>&nbsp;
@@ -429,8 +499,8 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">get_date_tag</span>(<span class="sig-arg">roms_time</span>,
-        <span class="sig-arg">ref</span>=<span class="sig-default"><code class="variable-group">(</code>2006<code class="variable-op">, </code>1<code class="variable-op">, </code>1<code class="variable-group">)</code></span>,
-        <span class="sig-arg">format</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">%d %b %Y at %H:%M:%S</code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">ref</span>=<span class="sig-default">(2006,01,01)</span>,
+        <span class="sig-arg">format</span>=<span class="sig-default">&quot;%d %b %Y at %H:%M:%S&quot;</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="pyroms.utility-pysrc.html#get_date_tag">source&nbsp;code</a></span>&nbsp;
@@ -471,7 +541,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Sep 27 11:31:38 2010
+    Generated by Epydoc 3.0.1 on Mon Apr  4 12:10:12 2011
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

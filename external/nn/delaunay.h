@@ -11,7 +11,9 @@
  *
  * Description:    None
  *
- * Revisions:      None
+ * Revisions:      30/10/2007 PS: Added fields nflags, nflagsallocated and
+ *                   flagids for flag accounting, to make it possible to reset
+ *                   only engaged flags rather than the whole array.
  *
  *****************************************************************************/
 
@@ -85,6 +87,13 @@ struct delaunay {
                                  * new search */
     istack* t_in;
     istack* t_out;
+
+    /*
+     * to keep track of flags set to 1 in the case of very large data sets
+     */
+    int nflags;
+    int nflagsallocated;
+    int* flagids;
 };
 
 /*
