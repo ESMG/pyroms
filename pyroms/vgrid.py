@@ -173,7 +173,7 @@ class s_coordinate_2(s_coordinate):
 
 class s_coordinate_4(s_coordinate):
     """
-    A. Shchepetkin (2010) UCLA-ROMS vertical coordinate transformation (Vtransform=2) and
+    A. Shchepetkin (2005) UCLA-ROMS vertical coordinate transformation (Vtransform=2) and
     stretching functions (Vstretching=4).
     
     return an object that can be indexed to return depths
@@ -226,8 +226,8 @@ class s_coordinate_4(s_coordinate):
         else:
             Csur = -self.s_rho**2
         if (self.theta_b >= 0):
-            Cbot = ( np.exp(self.theta_b * Csur) - self.c1 ) / \
-                   ( self.c1 - np.exp(-self.theta_b) )
+            Cbot = (np.exp(self.theta_b * Csur) - self.c1 ) / \
+                   (self.c1 - np.exp(-self.theta_b))
             self.Cs_r = Cbot
         else:
             self.Cs_r = Csur         
@@ -239,7 +239,7 @@ class s_coordinate_4(s_coordinate):
         else:
             Csur = -self.s_w**2
         if (self.theta_b >= 0):
-            Cbot = ( np.exp(self.theta_b * Csur) - self.c1 ) / \
+            Cbot = (np.exp(self.theta_b * Csur) - self.c1 ) / \
                    ( self.c1 - np.exp(-self.theta_b) )
             self.Cs_w = Cbot
         else:
@@ -289,7 +289,7 @@ class z_r(object):
                 for  k in range(self.N):
                     z0 = (self.hc * self.s_rho[k] + self.h * self.Cs_r[k]) / \
                           (self.hc + self.h)
-                    z_r[n,k,:] = zeta[n,:] + (zeta[n,:] + self.h * z0)
+                    z_r[n,k,:] = zeta[n,:] + (zeta[n,:] + self.h) * z0
 
         return np.squeeze(z_r[res_index])
 
@@ -337,7 +337,7 @@ class z_w(object):
                 for  k in range(self.Np):
                     z0 = (self.hc * self.s_w[k] + self.h * self.Cs_w[k]) / \
                           (self.hc + self.h)
-                    z_w[n,k,:] = zeta[n,:] + (zeta[n,:] + self.h * z0)
+                    z_w[n,k,:] = zeta[n,:] + (zeta[n,:] + self.h) * z0
 
         return np.squeeze(z_w[res_index])
 

@@ -9,6 +9,7 @@ set(LIBSRC
 gridmap.c
 gridnodes.c
 gucommon.c
+kdtree.c
 poly.c
 )
 
@@ -16,6 +17,7 @@ set(LIBHEADERS
 gridmap.h
 gridnodes.h
 gucommon.h
+kdtree.h
 poly.h
 )
 
