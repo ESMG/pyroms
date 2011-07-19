@@ -1,0 +1,8 @@
+This example reconstructs the Franke test function from 100, 300 and 1000
+random data points in [0,1]^2 square.
+
+To generate and approximate the data, run ./test.sh.
+To visualize, in Matlab run "viewexample".
+
+Good luck!
+Pavel Sakov

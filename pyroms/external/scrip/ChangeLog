@@ -1,0 +1,58 @@
+================================================================================
+SVN $Id: $
+SVN $URL: $
+================================================================================
+
+Originator: jwolfe
+Date: Tue Dec 19 15:23:14 MST 2006
+Model: scrip
+Version: scrip1.4_pop-roms_01
+One-line summary:  Modifications to correctly remap between ROMS and POP grids
+
+Changes made:
+
+* added two arrays to grids.f, grid1_periodic and grid2_periodic, to help track
+  the periodicity of the grids.  SCRIP had previously assumed, at least in the
+  bilinear remapping, that the grids were both periodic and it created trouble
+  for regridding ROMS and POP grids, since the ROMS grid is regional
+* added grid1_periodic and grid2_periodic to the namelist read in by SCRIP.
+  The defaults for these arrays are set to TRUE, so that it does not impact
+  the typical use of SCRIP.
+* added an optional argument "check_mask" to the routine grid_search_nbr in
+  remap_distwgt.  The use of this argument is intended to force the search
+  routine to return the nearest unmasked neighbors instead of simply returning
+  the nearest neighbors.
+* heavily modified the routine remap_bilin to handle the situation where a 
+  returned square of source grid points contains the search point but some of
+  the points in that square are masked.  Previously, SCRIP would simply blow
+  off that found point and create no links - or regrid weights - associated
+  with it.  The modifications add logic to:
+  - for the case where some, but not all, of the points in the square are masked
+    the masked points are discarded and the weights associated with the unmasked
+    points are renormalized
+  - for the case where all of the points in the square are masked, the code now
+    does a nearest neighbor search using grid_search_nbr requesting the routine
+    only return unmasked neighbors, as described above
+* the routine remap_bilin is also changed to not use a distance-weighted average
+  after a failed search.  That logic was included in SCRIP to handle a situation
+  near the poles, but the unaligned grids cause many failed searches that really
+  should not succeed.
+
+M      source/grids.f
+M      source/remap_distwgt.f
+M      source/remap_bilinear.f
+M      source/scrip.f
+
+================================================================================
+
+Originator: kauff
+Date: Tue Dec 19 15:23:14 MST 2006
+Model: scrip
+Version: scrip1.4
+One-line summary:  initial/original scrip1.4
+
+Changes made:
+- initial/original scrip1.4 download tar file (circa Aug 2001)
+- except for the inclusion of this ChangeLog file
+
+================================================================================

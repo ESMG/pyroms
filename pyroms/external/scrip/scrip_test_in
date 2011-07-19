@@ -1,0 +1,5 @@
+&remap_inputs
+    field_choice = 2
+    interp_file = 'rmp_T42_to_POP43_conserv.nc'
+    output_file = 'out_T42_to_POP43_conserv.nc'
+/

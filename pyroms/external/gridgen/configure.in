@@ -1,0 +1,82 @@
+dnl configure.in for gridgen
+
+AC_INIT(CUSTOMISE)
+AC_CONFIG_HEADER(config.h)
+
+dnl Get the shell variable to override local customisations.
+AC_DEFUN([AC_CUSTOMISE],
+[dnl
+    AC_BEFORE([$0], [AC_DEFAULT])dnl
+    if test -r CUSTOMISE; then
+        . ./CUSTOMISE
+    fi
+])
+
+AC_CUSTOMISE
+
+dnl Checks for programs.
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_CHECK_PROG(AR, ar, ar, :)
+
+AC_CHECK_HEADER(math.h, , AC_MSG_ERROR([unable to find header]))
+AC_HAVE_LIBRARY(m, , AC_MSG_ERROR([unable to find library]))
+
+AC_CHECK_FUNCS(tgamma)
+if test "$ac_cv_func_tgamma" = no; then
+  AC_CHECK_LIB(m, tgamma, AC_DEFINE(HAVE_TGAMMA))
+fi
+
+if test "$ac_cv_lib_m_tgamma" = no; then
+  AC_CHECK_FUNCS(lgamma)
+  if test "$ac_cv_func_lgamma" = no; then
+    AC_CHECK_LIB(m, lgamma, AC_DEFINE(HAVE_LGAMMA), AC_MSG_ERROR('Unable to locate both tgamma and lgamma'))
+  fi
+fi
+
+AC_CHECK_HEADER(complex.h, complex_h=yes, complex_h=no)
+AC_CHECK_FUNCS(clog, , complex_h=no)
+AC_CHECK_FUNCS(cexp, , complex_h=no)
+if test "$complex_h" = yes; then
+  echo -n 'checking for keyword _Complex... '
+  AC_TRY_COMPILE([#include <complex.h>], [_Complex double z = 1.0 + 1.0 * I;], _Complex=yes, _Complex=no)
+  echo $_Complex
+
+  if test "$_Complex" = yes; then
+    AC_DEFINE(HAVE_COMPLEX)
+  else
+    echo -n 'checking for keyword __complex__... '
+    AC_TRY_COMPILE([#include <complex.h>], [__complex__ double z = 1.0 + 1.0 * I;], __complex__=yes, __complex__=no)
+    echo $complex
+    if test "$__complex__" = no; then
+      AC_MSG_ERROR(keywords _Complex or __complex__ not supported)
+    else
+      AC_DEFINE(HAVE__COMPLEX__)
+    fi
+  fi
+else
+  echo '  using code in gridgen/c99-min for complex arithmetics support...'
+  echo '  warning: this may slow down things by a factor of two or so compared'
+  echo '           to a native implementation'
+  NOCOMPLEX=yes
+  AC_DEFINE(NOCOMPLEX)
+fi
+
+AC_CHECK_HEADER(gridnodes.h, gridnodes_h=yes, gridnodes_h=no)
+if test "$gridnodes_h" = yes; then
+   AC_DEFINE(HAVE_GRIDNODES_H)
+else
+   AC_MSG_WARN([unable to find gridnodes.h. You will not be able to compile the library function gridgen_generategrid2(). Please modify your LD_LIBRARY_PATH and re-run this script if necessary.])
+fi
+
+AC_CHECK_LIB(gu, gridnodes_readnextpoint, , AC_MSG_WARN([unable to find library libgu; you will not be able to build the shared library]))
+
+AC_SUBST(NOCOMPLEX)
+AC_SUBST(CC)
+AC_SUBST(CFLAGS)
+AC_SUBST(AR)
+AC_SUBST(LDFLAGS)
+AC_SUBST(CFLAGS_TRIANGLE)
+AC_SUBST(HAVE_GRIDNODES_H)
+
+AC_OUTPUT(makefile)

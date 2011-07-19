@@ -1,0 +1,1 @@
+{'integer':{'int_kind':'int'}, 'real':{'real_kind':'real'}, 'real':{'dbl_kind':'double'}, 'logical':{'log_kind':'char'}}

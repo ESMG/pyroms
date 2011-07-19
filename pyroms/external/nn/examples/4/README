@@ -1,0 +1,12 @@
+This real-life example is run on a topographic data from satellite altimeter. 
+(Thanks to Prof. David A. Paige, Dept. of Earth and Space Sciences, UCLA.)
+Similar to example 3, the data points belong to nodes of a rectangular grid,
+but also there is a large gap between two main clusters of data.
+
+To reproduce the example, run "./test.sh" or "make".
+To visualize, in Matlab run "viewexample" or 
+"viewinterp('data.txt', 'nn-0.txt');".
+To clean up, run "make clean".
+
+Good luck!
+Pavel Sakov
