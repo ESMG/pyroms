@@ -49,5 +49,10 @@ setup.py scripts for each, plus an examples directory.
 
 For now,
 
-  cd pyroms_toolbox; python setup.py build --fcompiler=gnu95
-
+  cd pyroms_toolbox; python setup.py build --fcompiler=gnu95;
+                     python setup.py install --prefix=xxx;
+                     cd ..
+  cd bathy_smoother; python setup.py build;
+                     python setup.py install --prefix=xxx;
+                     cd ..
+  cd pyroms; see if the install script runs...
