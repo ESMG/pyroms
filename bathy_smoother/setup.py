@@ -23,7 +23,8 @@ doclines = __doc__.split("\n")
 
 def configuration(parent_package='',top_path=None):
     from numpy.distutils.misc_util import Configuration
-    config = Configuration('pyroms_toolbox',parent_package,top_path)
+    config = Configuration('bathy_smoother',parent_package,top_path,
+         package_path='bathy_smoother')
     config.set_options(ignore_setup_xxx_py=True,
                        assume_default_configuration=True,
                        delegate_options_to_subpackages=True)

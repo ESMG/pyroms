@@ -15,26 +15,12 @@ doclines = __doc__.split("\n")
 
 def configuration(parent_package='',top_path=None):
     from numpy.distutils.misc_util import Configuration
-    config = Configuration('pyroms_toolbox',parent_package,top_path)
+    config = Configuration(None,parent_package,top_path)
     config.set_options(ignore_setup_xxx_py=True,
                        assume_default_configuration=True,
                        delegate_options_to_subpackages=True)
 #                       quiet=True)
-    config.add_subpackage('pyroms_toolbox.BGrid_GFDL')
-    config.add_subpackage('pyroms_toolbox.BGrid_POP')
-    config.add_subpackage('pyroms_toolbox.BGrid_SODA')
-    config.add_subpackage('pyroms_toolbox.seawater')
-    config.add_subpackage('pyroms_toolbox.SODA')
-    config.add_library('_average', sources=['src/average.f90']),
-    config.add_library('_move_runoff', sources=['src/move_runoff.f90']),
-    config.add_extension('_average',
-          sources = ['src/average.f90'],
-          libraries = ['_average']
-          )
-    config.add_extension('_move_runoff',
-          sources = ['src/move_runoff.f90'],
-          libraries = ['_move_runoff']
-          )
+    config.add_subpackage('pyroms_toolbox')
     return config
 
 if __name__ == '__main__':

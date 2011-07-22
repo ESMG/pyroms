@@ -1,5 +1,0 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4.6)
-MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY)
-
-add_subdirectory(lp_solve)
-add_subdirectory(lpsolve55)
