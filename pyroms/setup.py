@@ -84,8 +84,12 @@ iso = Extension(name = '_iso',
 interp = Extension(name = '_interp',
                 sources = ['pyroms/src/interp.f'])
 
+obs_interp = Extension(name = '_obs_interp',
+                sources = ['pyroms/src/obs_interp.f'])
+
+
 remapping = Extension(name = '_remapping',
-                sources = ['pyroms/src/remapping.f'])
+                sources = ['pyroms/src/remapping.f90'])
 
 doclines = __doc__.split("\n")
 
@@ -103,6 +107,6 @@ if __name__ == '__main__':
                       'pyroms.extern'],
           license = 'BSD',
           platforms = ["any"],
-          ext_modules = [iso,interp,remapping],
+          ext_modules = [iso, interp, obs_interp, remapping],
           classifiers = filter(None, classifiers.split("\n")),
           )

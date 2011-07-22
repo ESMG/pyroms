@@ -4,11 +4,14 @@ Pyroms is a collection of tools to help with input and output files
 from the Regional Ocean Modeling System (ROMS). It was originally
 started by Rob Hetland as a googlecode project, then he morphed it
 into octant, also at googlecode. Frederic Castruccio then created a
-fork and renamed it back to pyroms. This version is now in private
-development, but we will release it here when it's ready.
+fork and renamed it back to pyroms. This version is still rather
+rough around the edges.
 
-Meanwhile, you can prepare by installing this collection of
-packages:
+Prerequisites
+-------------
+
+Meanwhile, you can prepare by installing Enthought Python
+(http://www.enthought.com/) or by this collection of packages:
 
    * Python itself. You will need a version between 2.4 and 2.6, inclusive.
 
@@ -36,3 +39,15 @@ packages:
      pylab package.
 
 We may also add pyngl and pynio from NCAR to this list.
+
+Installing
+----------
+
+Pyroms is currently in three different packages, pyroms itself,
+pyroms_toolbox, and bathy_smoother. We are in the process of creating
+setup.py scripts for each, plus an examples directory.
+
+For now,
+
+  cd pyroms_toolbox; python setup.py build --fcompiler=gnu95
+

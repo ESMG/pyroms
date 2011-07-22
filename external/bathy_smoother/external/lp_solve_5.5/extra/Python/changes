@@ -1,9 +1,0 @@
-12.11.05 version 5.5.0.1 released
-
-19.11.05 version 5.5.0.2 released
-      - For routines that need an lp handle, this handle can now also be the model name.
-      - New call get_handle to get handle from model name.
-
-09.03.05 version 5.5.0.3 released
-      - When sensitivity is not known (integer models), but requested then a crash occured.
-        This is fixed.

@@ -1,8 +1,0 @@
-This is a stripped version of "experimental implementation of complex variables
-in gcc (the GNU C language compiler) corresponding to the proposed C9X new C
-language specification" available from
-
-http://www.netlib.org/cephes/c9x-complex.tgz
-
-It is sufficient for compiling `gridgen' on platforms with gcc if the version
-used lacks c99 support.
