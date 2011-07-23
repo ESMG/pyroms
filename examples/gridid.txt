@@ -1,0 +1,165 @@
+# gridid definition file
+#
+id      = CORAL
+name    = CORAL
+grdfile = /Volumes/R1/ROMS/CORAL/Grid/coral_grd.nc
+N       = 50
+grdtype = roms
+Vtrans  = 2
+theta_s = 7
+theta_b = 0.1
+Tcline  = 250
+#
+#
+id      = CORAL2
+name    = CORAL
+grdfile = /Volumes/R1/ROMS/CORAL/Grid/coral_grd_SRTM_v2.nc
+N       = 50
+grdtype = roms
+Vtrans  = 2
+theta_s = 7
+theta_b = 0.1
+Tcline  = 250
+#
+#
+id      = CORAL3
+name    = CORAL
+grdfile = /Volumes/R1/ROMS/CORAL/Grid/coral_grd_SRTM_v3.nc
+N       = 50
+grdtype = roms
+Vtrans  = 2
+theta_s = 7
+theta_b = 0.1
+Tcline  = 250
+#
+#
+id      = CORAL4
+name    = CORAL
+grdfile = /Volumes/R1/ROMS/CORAL/Grid/coral_grd_SRTM_v4.nc
+N       = 50
+grdtype = roms
+Vtrans  = 2
+theta_s = 7
+theta_b = 0.1
+Tcline  = 250
+#
+#
+id      = CORAL5
+name    = CORAL
+grdfile = /Volumes/R1/ROMS/CORAL/Grid/coral_grd_SRTM_v5.nc
+N       = 50
+grdtype = roms
+Vtrans  = 2
+theta_s = 7
+theta_b = 0.1
+Tcline  = 250
+#
+#
+id      = RCCS
+name    = RCCS
+grdfile = /Volumes/R1/ROMS/RCCS/Grid/grd_rccs.nc
+N       = 60
+grdtype = roms
+Vtrans  = 1
+theta_s = 5
+theta_b = 0.4
+Tcline  = 10
+#
+#
+id      = CCS_10
+name    = CCS_10
+grdfile = /archive/u1/uaf/kate/gridpak/CCS_30/grid_ccs_10k.nc
+N       = 42
+grdtype = roms
+Vtrans  = 1
+theta_s = 5
+theta_b = 0.4
+Tcline  = 10
+#
+#
+id      = NEP5
+name    = NEP5
+grdfile = /archive/u1/uaf/kate/gridpak/NEP4/NEP_grid_5a.nc
+N       = 60
+grdtype = roms
+Vtrans  = 1
+theta_s = 5
+theta_b = 0.4
+Tcline  = 10
+#
+#
+id      = NEP6
+name    = NEP6
+grdfile = /archive/u1/uaf/kate/gridpak/NEP4/NEP_grid_5a.nc
+N       = 50
+grdtype = roms
+Vtrans  = 4
+theta_s = 7
+theta_b = 2
+Tcline  = 250
+#
+#
+id      = BERING
+name    = BERING
+grdfile = /archive/u1/uaf/kate/gridpak/Bering/Bering_grid_4.nc
+N       = 60
+grdtype = roms
+Vtrans  = 1
+theta_s = 5
+theta_b = 0.4
+Tcline  = 10
+#
+#
+id      = YELLOW
+name    = YELLOW
+grdfile = /home/romsuser/Yellow_Sea/yellow_sea_grid.nc
+N       = 42
+grdtype = roms
+Vtrans  = 1
+theta_s = 5
+theta_b = 0.4
+Tcline  = 5
+#
+#
+id      = CHUKCHI
+name    = CHUKCHI
+grdfile = /archive/u1/uaf/kate/gridpak/Chukchi/grid_Chukchi.nc
+N       = 50
+grdtype = roms
+Vtrans  = 4
+theta_s = 7
+theta_b = 2
+Tcline  = 250
+#
+#
+id      = ARC_NATL
+name    = ARC_NATL
+grdfile = /archive/u1/uaf/kate/ARC_NATL/Files/ARC_NATL_40_grd.nc
+N       = 50
+grdtype = roms
+Vtrans  = 4
+theta_s = 7
+theta_b = 2
+Tcline  = 250
+#
+#
+id      = BENGUELA
+name    = BENGUELA
+grdfile = /archive/u1/uaf/kate/gridpak/s_africa/grid_SW_Africa.nc
+N       = 50
+grdtype = roms
+Vtrans  = 4
+theta_s = 7
+theta_b = 2
+Tcline  = 250
+#
+#
+id      = S_AFRICA
+name    = S_AFRICA
+grdfile = /archive/u1/uaf/kate/gridpak/s_africa/grid_S_Africa.nc
+N       = 50
+grdtype = roms
+Vtrans  = 4
+theta_s = 7
+theta_b = 2
+Tcline  = 250

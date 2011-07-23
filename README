@@ -56,3 +56,11 @@ For now,
                      python setup.py install --prefix=xxx;
                      cd ..
   cd pyroms; see if the install script runs...
+
+Running
+-------
+
+We have a gridid.txt file that's pointed to by the PYROMS_GRIDID_FILE
+environment variable. If you are operating on files containing
+sufficient grid information already, you won't need to use this.
+An example is provided in the examples directory.

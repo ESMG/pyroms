@@ -80,7 +80,7 @@ def configuration(parent_package='',top_path=None):
 
 if __name__ == '__main__':
     from numpy.distutils.core import setup
-    setup(name = "bathy_smoother",
+    setup(name = '',
           version = '0.1',
           description = doclines[0],
           long_description = "\n".join(doclines[2:]),
