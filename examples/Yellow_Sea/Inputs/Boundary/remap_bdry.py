@@ -42,7 +42,7 @@ def remap_bdry(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, 
     print '\nCreating boundary file', dst_file
     if os.path.exists(dst_file) is True:
         os.remove(dst_file)
-    pyroms_toolbox.nc_create_roms_bdry_file(dst_file, dst_grd, nctime)
+    pyroms_toolbox.nc_create_roms_file(dst_file, dst_grd, nctime, Lgrid=False)
 
     # open boundary file
     nc = netCDF.Dataset(dst_file, 'a', format='NETCDF3_CLASSIC')

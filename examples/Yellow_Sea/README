@@ -1,0 +1,9 @@
+The boundary and initial conditions are derived from SODA
+(http://www.atmos.umd.edu/~ocean/). For another domain, you will
+have to change all the python files under the Inputs directory. New
+domains will require changes to irange, jrange, and the names of the
+files it searches for - just search on YELLOW to find them all.
+
+irange and jrange are the range of indices on the SODA grid to be
+searched. You can save a lot of time by picking judicious values -
+or you can mess up and miss your target.

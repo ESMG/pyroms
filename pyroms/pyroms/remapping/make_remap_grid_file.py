@@ -7,7 +7,7 @@ except:
 import pyroms
 
 
-def make_remap_grid_file(grid, Cpos='rho'):
+def make_remap_grid_file(grid, Cpos='rho', irange=None, jrange=None):
     '''
     make_remap_grid_file(grid)
 
@@ -21,6 +21,19 @@ def make_remap_grid_file(grid, Cpos='rho'):
     else:
         grd = pyroms.grid.get_ROMS_grid(grid)
 
+    Mp, Lp = grd.vgrid.h.shape
+    if irange is None:
+        irange = (0,Lp-1)
+    else:
+        assert irange[1]-irange[0] > 0, \
+               'irange must span a positive range'
+
+    if jrange is None:
+        jrange = (0,Mp-1)
+    else:
+        assert jrange[1]-jrange[0] > 0, \
+               'jrange must span a positive range'
+
     #create remap file
     remap_filename = 'remap_grid_' + grd.name + '_' + Cpos + '.nc'
     nc = netCDF.Dataset(remap_filename, 'w', format='NETCDF3_CLASSIC')
@@ -30,34 +43,81 @@ def make_remap_grid_file(grid, Cpos='rho'):
     nc.title = grd.name
 
     if Cpos == 'rho':
-        lon_corner = grd.hgrid.lon_vert
-        lat_corner = grd.hgrid.lat_vert
-        grid_center_lon = grd.hgrid.lon_rho.flatten()
-        grid_center_lat = grd.hgrid.lat_rho.flatten()
-        grid_imask = grd.hgrid.mask_rho.flatten()
-        Mp, Lp = grd.hgrid.mask_rho.shape
+        if jrange != (0,Mp-1) or irange != (0,Lp-1):
+            lon_corner = grd.hgrid.lon_vert[jrange[0]:jrange[1]+1, \
+	          irange[0]:irange[1]+1]
+            lat_corner = grd.hgrid.lat_vert[jrange[0]:jrange[1]+1, \
+	          irange[0]:irange[1]+1]
+            grid_center_lon = grd.hgrid.lon_rho[jrange[0]:jrange[1], \
+	          irange[0]:irange[1]].flatten()
+            grid_center_lat = grd.hgrid.lat_rho[jrange[0]:jrange[1], \
+	          irange[0]:irange[1]].flatten()
+            grid_imask = grd.hgrid.mask_rho[jrange[0]:jrange[1], \
+	          irange[0]:irange[1]].flatten()
+	    Lp = irange[1] - irange[0]
+	    Mp = jrange[1] - jrange[0]
+        else:
+            lon_corner = grd.hgrid.lon_vert
+            lat_corner = grd.hgrid.lat_vert
+            grid_center_lon = grd.hgrid.lon_rho.flatten()
+            grid_center_lat = grd.hgrid.lat_rho.flatten()
+            grid_imask = grd.hgrid.mask_rho.flatten()
+            Mp, Lp = grd.hgrid.mask_rho.shape
     elif Cpos == 'u':
-        lon_corner = 0.5 * (grd.hgrid.lon_vert[:,:-1] + \
-                            grd.hgrid.lon_vert[:,1:])
-        lat_corner = 0.5 * (grd.hgrid.lat_vert[:,:-1] + \
-                            grd.hgrid.lat_vert[:,1:])
-        grid_center_lon = grd.hgrid.lon_u.flatten()
-        grid_center_lat = grd.hgrid.lat_u.flatten()
-        grid_imask = grd.hgrid.mask_u.flatten()
-        Mp, Lp = grd.hgrid.mask_u.shape
+        if jrange != (0,Mp-1) or irange != (0,Lp-1):
+            lon_corner = 0.5 * \
+	          (grd.hgrid.lon_vert[jrange[0]:jrange[1]+1,irange[0]:irange[1]] + \
+                   grd.hgrid.lon_vert[jrange[0]:jrange[1]+1,1+irange[0]:irange[1]+1])
+            lat_corner = 0.5 * \
+	          (grd.hgrid.lat_vert[jrange[0]:jrange[1]+1,irange[0]:irange[1]] + \
+                   grd.hgrid.lat_vert[jrange[0]:jrange[1]+1,1+irange[0]:irange[1]+1])
+            grid_center_lon = grd.hgrid.lon_u[jrange[0]:jrange[1], \
+	           irange[0]:irange[1]-1].flatten()
+            grid_center_lat = grd.hgrid.lat_u[jrange[0]:jrange[1], \
+	           irange[0]:irange[1]-1].flatten()
+            grid_imask = grd.hgrid.mask_u[jrange[0]:jrange[1], \
+	           irange[0]:irange[1]-1].flatten()
+	    Lp = irange[1] - irange[0] - 1
+	    Mp = jrange[1] - jrange[0]
+	else:
+            lon_corner = 0.5 * (grd.hgrid.lon_vert[:,:-1] + \
+                                grd.hgrid.lon_vert[:,1:])
+            lat_corner = 0.5 * (grd.hgrid.lat_vert[:,:-1] + \
+                                grd.hgrid.lat_vert[:,1:])
+            grid_center_lon = grd.hgrid.lon_u.flatten()
+            grid_center_lat = grd.hgrid.lat_u.flatten()
+            grid_imask = grd.hgrid.mask_u.flatten()
+            Mp, Lp = grd.hgrid.mask_u.shape
     elif Cpos == 'v':
-        lon_corner = 0.5 * (grd.hgrid.lon_vert[:-1,:] + \
-                            grd.hgrid.lon_vert[1:,:])
-        lat_corner = 0.5 * (grd.hgrid.lat_vert[:-1,:] + \
-                            grd.hgrid.lat_vert[1:,:])
-        grid_center_lon = grd.hgrid.lon_v.flatten()
-        grid_center_lat = grd.hgrid.lat_v.flatten()
-        grid_imask = grd.hgrid.mask_v.flatten()
-        Mp, Lp = grd.hgrid.mask_v.shape
+        if jrange != (0,Mp-1) or irange != (0,Lp-1):
+            lon_corner = 0.5 * \
+	          (grd.hgrid.lon_vert[jrange[0]:jrange[1],irange[0]:irange[1]+1] + \
+                   grd.hgrid.lon_vert[1+jrange[0]:jrange[1]+1,irange[0]:irange[1]+1])
+            lat_corner = 0.5 * \
+	          (grd.hgrid.lat_vert[jrange[0]:jrange[1],irange[0]:irange[1]+1] + \
+                   grd.hgrid.lat_vert[1+jrange[0]:jrange[1]+1,irange[0]:irange[1]+1])
+            grid_center_lon = grd.hgrid.lon_v[jrange[0]:jrange[1]-1, \
+	                        irange[0]:irange[1]].flatten()
+            grid_center_lat = grd.hgrid.lat_v[jrange[0]:jrange[1]-1, \
+	                        irange[0]:irange[1]].flatten()
+            grid_imask = grd.hgrid.mask_v[jrange[0]:jrange[1]-1, \
+	                        irange[0]:irange[1]].flatten()
+	    Lp = irange[1] - irange[0]
+	    Mp = jrange[1] - jrange[0] - 1
+	else:
+            lon_corner = 0.5 * (grd.hgrid.lon_vert[:-1,:] + \
+                                grd.hgrid.lon_vert[1:,:])
+            lat_corner = 0.5 * (grd.hgrid.lat_vert[:-1,:] + \
+                                grd.hgrid.lat_vert[1:,:])
+            grid_center_lon = grd.hgrid.lon_v.flatten()
+            grid_center_lat = grd.hgrid.lat_v.flatten()
+            grid_imask = grd.hgrid.mask_v.flatten()
+            Mp, Lp = grd.hgrid.mask_v.shape
     else:
         raise ValueError, 'Cpos must be rho, u or v'
 
     grid_size = Lp * Mp
+    print 'grid shape', Mp, Lp
 
     grid_corner_lon = np.zeros((grid_size, 4))
     grid_corner_lat = np.zeros((grid_size, 4))

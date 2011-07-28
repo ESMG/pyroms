@@ -18,9 +18,12 @@ import datetime
 
 def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
               rotate_uv=False, trange=None, irange=None, jrange=None, \
-              dstdir='./' ,zlevel=None, dmax=0, cdepth=0, kk=0):
+              dstdir='./' ,zlevel=None, dmax=0, cdepth=0, kk=0, \
+              uvar='u', vvar='v'):
     '''
-    A remaping function to go from a ROMS grid to another ROMS grid.
+    A remapping function to go from a ROMS grid to another ROMS grid.
+    If the u/v variables need to be rotated, it must be called for each
+    u/v pair (such as ubar/vbar, uice/vice).
     '''
 
     # get input and output grid
@@ -35,7 +38,8 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
 
     # build intermediaire zgrid
     if zlevel is None:
-        zlevel = np.array([-4500.,-4000.,-3500.,-3000.,-2500.,-2000.,-1750.,\
+        zlevel = np.array([-7500.,-7000.,-6500.,-6000.,-5500.,-5000.,\
+                   -4500.,-4000.,-3500.,-3000.,-2500.,-2000.,-1750.,\
                    -1500.,-1250.,-1000.,-900.,-800.,-700.,-600.,-500.,\
                    -400.,-300.,-250.,-200.,-175.,-150.,-125.,-100.,-90.,\
                    -80.,-70.,-60.,-50.,-45.,-40.,-35.,-30.,-25.,-20.,-17.5,\
@@ -58,12 +62,12 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
         raise ValueError, 'varname must be a str or a list of str'
     # if rotate_uv=True, check that u and v are in varname
     if rotate_uv is True:
-        if varname.__contains__('u') == 0 or varname.__contains__('v') == 0:
-            raise Warning, 'varname must include u and v in order to rotate \
-the velocity field'
+        if varname.__contains__(uvar) == 0 or varname.__contains__(vvar) == 0:
+            raise Warning, 'varname must include uvar and vvar in order to' \
+                   + ' rotate the velocity field'
         else:
-            varname.remove('u')
-            varname.remove('v')
+            varname.remove(uvar)
+            varname.remove(vvar)
             nvar = nvar-2
 
     # srcfile argument
@@ -95,14 +99,12 @@ the velocity field'
 
         # create destination file
         dstfile = dstdir + os.path.basename(srcfile[nf])[:-3] + '_' + dstgrd.name + '.nc'
-        print 'Creating destination file', dstfile
-        if os.path.exists(dstfile) is True:
-            os.remove(dstfile) 
-        pyroms_toolbox.nc_create_roms_file(dstfile, dstgrd, ocean_time)
+        if os.path.exists(dstfile) is False:
+            print 'Creating destination file', dstfile
+            pyroms_toolbox.nc_create_roms_file(dstfile, dstgrd, ocean_time)
 
         # open destination file
         nc = netCDF.Dataset(dstfile, 'a', format='NETCDF3_CLASSIC')
-
 
         nctidx = 0
         # loop over time
@@ -158,8 +160,13 @@ the velocity field'
                     print 'Creating variable', varname[nv]
                     nc.createVariable(varname[nv], 'f8', src_var.dimensions)
                     nc.variables[varname[nv]].long_name = src_var.long_name
-                    if varname[nv] != 'salt':
+                    try:
                         nc.variables[varname[nv]].units = src_var.units
+                    except:
+                        print varname[nv]+' has no units'
+                    nc.variables[varname[nv]].time = src_var.time
+                    nc.variables[varname[nv]].coordinates = \
+                        src_var.coordinates
                     nc.variables[varname[nv]].field = src_var.field
                     nc.variables[varname[nv]]._FillValue = spval
 
@@ -221,22 +228,32 @@ the velocity field'
                       'to', dstgrd.name
 
                 # get source data
-                src_u = pyroms.utility.get_nc_var('u', srcfile[nf])
-                src_v = pyroms.utility.get_nc_var('v', srcfile[nf])
+                src_u = pyroms.utility.get_nc_var(uvar, srcfile[nf])
+                src_v = pyroms.utility.get_nc_var(vvar, srcfile[nf])
+
+                # get spval
+                try:
+                    spval = src_v._FillValue
+                except:
+                    raise Warning, 'Did not find a _FillValue attribute.' 
 
                 # create variable in destination file
-                print 'Creating variable u'
-                nc.createVariable('u', 'f8', src_u.dimensions)
-                nc.variables['u'].long_name = src_u.long_name
-                nc.variables['u'].units = src_u.units
-                nc.variables['u'].field = src_u.field
-                nc.variables['u']._FillValue = spval
-                print 'Creating variable v'
-                nc.createVariable('v', 'f8', src_v.dimensions)
-                nc.variables['v'].long_name = src_v.long_name
-                nc.variables['v'].units = src_v.units
-                nc.variables['v'].field = src_v.field
-                nc.variables['v']._FillValue = spval
+                print 'Creating variable '+uvar
+                nc.createVariable(uvar, 'f8', src_u.dimensions)
+                nc.variables[uvar].long_name = src_u.long_name
+                nc.variables[uvar].units = src_u.units
+                nc.variables[uvar].time = src_u.time
+                nc.variables[uvar].coordinates = src_u.coordinates
+                nc.variables[uvar].field = src_u.field
+                nc.variables[uvar]._FillValue = spval
+                print 'Creating variable '+vvar
+                nc.createVariable(vvar, 'f8', src_v.dimensions)
+                nc.variables[vvar].long_name = src_v.long_name
+                nc.variables[vvar].units = src_v.units
+                nc.variables[vvar].time = src_v.time
+                nc.variables[uvar].coordinates = src_u.coordinates
+                nc.variables[uvar].field = src_u.field
+                nc.variables[vvar]._FillValue = spval
 
                 # get the right remap weights file
                 for s in range(len(wts_files)):
@@ -247,35 +264,81 @@ the velocity field'
 
                 # vertical interpolation from sigma to standard z level
                 print 'vertical interpolation from sigma to standard z level'
-                src_uz = pyroms.remapping.roms2z( \
+                # irange
+                if irange is None:
+                    iirange = (0,src_u._shape()[-1])
+                else:
+                    iirange = irange
+
+                # jrange
+                if jrange is None:
+                    jjrange = (0,src_u._shape()[-2])
+                else:
+                    jjrange = jrange
+
+                ndim = len(src_v.dimensions)-1
+                if ndim == 3:
+                    src_uz = pyroms.remapping.roms2z( \
                             src_u[nt,:,jjrange[0]:jjrange[1],iirange[0]:iirange[1]], \
                             srcgrd, srcgrdz, Cpos='u', irange=iirange, jrange=jjrange)
-                src_vz = pyroms.remapping.roms2z( \
+                    # flood the grid
+                    print 'flood the u grid'
+                    src_uz = pyroms.remapping.flood(src_uz, srcgrdz, Cpos='u', \
+                                  irange=iirange, jrange=jjrange, \
+                                  spval=spval, dmax=dmax, cdepth=cdepth, kk=kk)
+                    tmp_src_uz = np.zeros((nzlevel, src_u[:].shape[-2], src_u[:].shape[-1]))
+                    tmp_src_uz[:,jjrange[0]:jjrange[1],iirange[0]:iirange[1]] = src_uz
+                else:
+                    src_uz = src_u[nt,jjrange[0]:jjrange[1],iirange[0]:iirange[1]]
+                    tmp_src_uz = np.zeros(src_u[nt,:].shape)
+                    tmp_src_uz[jjrange[0]:jjrange[1],iirange[0]:iirange[1]] = src_uz
+
+                # irange
+                if irange is None:
+                    iirange = (0,src_v._shape()[-1])
+                else:
+                    iirange = irange
+
+                # jrange
+                if jrange is None:
+                    jjrange = (0,src_v._shape()[-2])
+                else:
+                    jjrange = jrange
+
+                if ndim == 3:
+                    src_vz = pyroms.remapping.roms2z( \
                             src_v[nt,:,jjrange[0]:jjrange[1],iirange[0]:iirange[1]], \
                             srcgrd, srcgrdz, Cpos='v', irange=iirange, jrange=jjrange)
 
-                # flood the grid
-                print 'flood the grid'
-                src_uz = pyroms.remapping.flood(src_uz, srcgrdz, Cpos='u', \
+                    # flood the grid
+                    print 'flood the v grid'
+                    src_vz = pyroms.remapping.flood(src_vz, srcgrdz, Cpos='v', \
                                   irange=iirange, jrange=jjrange, \
                                   spval=spval, dmax=dmax, cdepth=cdepth, kk=kk)
-                src_vz = pyroms.remapping.flood(src_vz, srcgrdz, Cpos='v', \
-                                  irange=iirange, jrange=jjrange, \
-                                  spval=spval, dmax=dmax, cdepth=cdepth, kk=kk)
+                    tmp_src_vz = np.zeros((nzlevel, src_v[:].shape[-2], src_v[:].shape[-1]))
+                    tmp_src_vz[:,jjrange[0]:jjrange[1],iirange[0]:iirange[1]] = src_vz
+                else:
+                    src_vz = src_v[nt,jjrange[0]:jjrange[1],iirange[0]:iirange[1]]
+                    tmp_src_vz = np.zeros(src_v[nt,:].shape)
+                    tmp_src_vz[jjrange[0]:jjrange[1],iirange[0]:iirange[1]] = src_vz
 
                 # horizontal interpolation using scrip weights
                 print 'horizontal interpolation using scrip weights'
-                dst_uz = pyroms.remapping.remap(src_uz, wts_file_u, \
+                dst_uz = pyroms.remapping.remap(tmp_src_uz, wts_file_u, \
                                                   spval=spval)
-                dst_vz = pyroms.remapping.remap(src_vz, wts_file_v, \
+                dst_vz = pyroms.remapping.remap(tmp_src_vz, wts_file_v, \
                                                   spval=spval)
 
-                # vertical interpolation from standard z level to sigma
-                print 'vertical interpolation from standard z level to sigma'
-                dst_u = pyroms.remapping.z2roms(dst_uz, dstgrdz, dstgrd, \
+                if ndim == 3:
+                    # vertical interpolation from standard z level to sigma
+                    print 'vertical interpolation from standard z level to sigma'
+                    dst_u = pyroms.remapping.z2roms(dst_uz, dstgrdz, dstgrd, \
                                  Cpos='rho', spval=spval, flood=False)
-                dst_v = pyroms.remapping.z2roms(dst_vz, dstgrdz, dstgrd, \
+                    dst_v = pyroms.remapping.z2roms(dst_vz, dstgrdz, dstgrd, \
                                  Cpos='rho', spval=spval, flood=False)
+                else:
+                    dst_u = dst_uz
+                    dst_v = dst_vz
 
                 # rotate u,v fields
                 for s in range(len(wts_files)):
@@ -299,8 +362,8 @@ the velocity field'
 
                 # write data in destination file
                 print 'write data in destination file'
-                nc.variables['u'][nctidx] = dst_u
-                nc.variables['v'][nctidx] = dst_v
+                nc.variables[uvar][nctidx] = dst_u
+                nc.variables[vvar][nctidx] = dst_v
 
         nctidx = nctidx + 1
  
