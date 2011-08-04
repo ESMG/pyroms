@@ -60,6 +60,19 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
         nvar = len(varname)
     else:
         raise ValueError, 'varname must be a str or a list of str'
+
+    # if we're working on u and v, we'll compute ubar,vbar afterwards
+    compute_ubar = False
+    if varname.__contains__('u') == 1 and varname.__contains__('v') == 1:
+        compute_ubar = True
+        print 'ubar/vbar to be computed from u/v' 
+        if varname.__contains__('ubar'):
+            varname.remove('ubar')
+            nvar = nvar-1
+        if varname.__contains__('vbar'):
+            varname.remove('vbar')
+            nvar = nvar-1
+
     # if rotate_uv=True, check that u and v are in varname
     if rotate_uv is True:
         if varname.__contains__(uvar) == 0 or varname.__contains__(vvar) == 0:
@@ -219,6 +232,10 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 # write data in destination file
                 print 'write data in destination file'
                 nc.variables[varname[nv]][nctidx] = dst_var
+                if varname[nv] == 'u':
+                    dst_u = dst_var
+                if varname[nv] == 'v':
+                    dst_v = dst_var
 
 
             # rotate the velocity field if requested
@@ -360,10 +377,66 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 dst_u = 0.5 * (dst_u[:,:,:-1] + dst_u[:,:,1:])
                 dst_v = 0.5 * (dst_v[:,:-1,:] + dst_v[:,1:,:])
 
+                # spval
+                idxu = np.where(dstgrd.hgrid.mask_u == 0)
+                idxv = np.where(dstgrd.hgrid.mask_v == 0)
+                for n in range(dstgrd.vgrid.N):
+                    dst_u[n,idxu[0], idxu[1]] = spval
+                    dst_v[n,idxv[0], idxv[1]] = spval
+
                 # write data in destination file
                 print 'write data in destination file'
                 nc.variables[uvar][nctidx] = dst_u
                 nc.variables[vvar][nctidx] = dst_v
+
+            if compute_ubar:
+                print 'Creating variable ubar'
+                nc.createVariable('ubar', 'f8', \
+                     ('ocean_time', 'eta_u', 'xi_u'), fill_value=spval)
+                nc.variables['ubar'].long_name = '2D u-momentum component'
+                nc.variables['ubar'].units = 'meter second-1'
+                nc.variables['ubar'].time = 'ocean_time'
+                nc.variables['ubar'].coordinates = 'xi_u eta_u ocean_time'
+                nc.variables['ubar'].field = 'ubar-velocity,, scalar, series'
+                nc.variables['ubar']._FillValue = spval
+                print 'Creating variable vbar'
+                nc.createVariable('vbar', 'f8', \
+                     ('ocean_time', 'eta_v', 'xi_v'), fill_value=spval)
+                nc.variables['vbar'].long_name = '2D v-momentum component'
+                nc.variables['vbar'].units = 'meter second-1'
+                nc.variables['vbar'].time = 'ocean_time'
+                nc.variables['vbar'].coordinates = 'xi_v eta_v ocean_time'
+                nc.variables['vbar'].field = 'vbar-velocity,, scalar, series'
+                nc.variables['vbar']._FillValue = spval
+
+                # compute depth average velocity ubar and vbar
+                # get z at the right position
+                z_u = 0.5 * (dstgrd.vgrid.z_w[0,:,:,:-1] + \
+                        dstgrd.vgrid.z_w[0,:,:,1:])
+                z_v = 0.5 * (dstgrd.vgrid.z_w[0,:,:-1,:] + \
+                        dstgrd.vgrid.z_w[0,:,1:,:])
+
+                dst_ubar = np.zeros((dst_u.shape[1], dst_u.shape[2]))
+                dst_vbar = np.zeros((dst_v.shape[1], dst_v.shape[2]))
+
+                for i in range(dst_ubar.shape[1]):
+                    for j in range(dst_ubar.shape[0]):
+                        dst_ubar[j,i] = (dst_u[:,j,i] * \
+                                np.diff(z_u[:,j,i])).sum() / -z_u[0,j,i]
+
+                for i in range(dst_vbar.shape[1]):
+                    for j in range(dst_vbar.shape[0]):
+                        dst_vbar[j,i] = (dst_v[:,j,i] * \
+                                np.diff(z_v[:,j,i])).sum() / -z_v[0,j,i]
+
+                # spval
+                idxu = np.where(dstgrd.hgrid.mask_u == 0)
+                idxv = np.where(dstgrd.hgrid.mask_v == 0)
+                dst_ubar[idxu[0], idxu[1]] = spval
+                dst_vbar[idxv[0], idxv[1]] = spval
+
+                nc.variables['ubar'][0] = dst_ubar
+                nc.variables['vbar'][0] = dst_vbar
 
         nctidx = nctidx + 1
  

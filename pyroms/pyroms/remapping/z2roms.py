@@ -66,13 +66,13 @@ def z2roms(varz, grdz, grd, Cpos='rho', irange=None, jrange=None, \
         irange = (0,Lm)
     else:
         assert varz.shape[2] == irange[1]-irange[0], \
-               'var shape and irange must agreed'
+               'var shape and irange must agree'
 
     if jrange is None:
         jrange = (0,Mm)
     else:
         assert varz.shape[1] == jrange[1]-jrange[0], \
-               'var shape and jrange must agreed'
+               'var shape and jrange must agree'
 
     # flood varz if requested
     if flood is True:

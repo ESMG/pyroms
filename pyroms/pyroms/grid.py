@@ -304,7 +304,7 @@ def get_ROMS_hgrid(gridid):
         if 'lon_vert' in nc.variables.keys() and 'lat_vert' in nc.variables.keys():
             lon_vert = nc.variables['lon_vert'][:]
             lat_vert = nc.variables['lat_vert'][:]
-        elif 'lon_rho' in nc.variables.keys() and 'lon_rho' in nc.variables.keys() \
+        elif 'lon_rho' in nc.variables.keys() and 'lat_rho' in nc.variables.keys() \
                 and 'lon_psi' in nc.variables.keys() and 'lat_psi' in nc.variables.keys():
             lon_rho = nc.variables['lon_rho'][:]
             lat_rho = nc.variables['lat_rho'][:]

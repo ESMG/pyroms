@@ -1,0 +1,22 @@
+Here are some examples of using the pyroms package (plus maybe a few
+plain python examples).
+
+For those of us who don't have the grid information in every ROMS
+output file, the gridid.txt file here is used to provide some
+information to pyroms about our grids. Point to it with the
+PYROMS_GRIDID_FILE environment variable.
+
+The Yellow_Sea directory contains code for creating a grid,
+bathymetry, initial and boundary files (the last from SODA,
+http://www.atmos.umd.edu/~ocean/).
+
+For creating initial and boundary files from larger ROMS grids,
+there are two cases:
+
+1. Where the small grid is aligned with the large grid, no velocity
+rotation needed. See the Bering directory.
+
+2. Where the grids are not aligned and velocities need to be rotated.
+See the Chukchi example.
+
+In either case, run make_weight_file.py first.
