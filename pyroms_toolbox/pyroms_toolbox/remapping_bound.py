@@ -242,19 +242,19 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                                                   spval=spval)
 
                 if ndim == 3:
-                    dst_var_north = pyroms.remapping.z2roms(dst_varz[::-1, \
+                    dst_var_north = pyroms.remapping.z2roms(dst_varz[:, \
                           Mp-1:Mp,0:Lp], dst_grdz, dst_grd, Cpos=Cpos, \
                           spval=spval, flood=False, irange=(0,Lp), \
                           jrange=(Mp-1,Mp))
-                    dst_var_south = pyroms.remapping.z2roms(dst_varz[::-1, \
+                    dst_var_south = pyroms.remapping.z2roms(dst_varz[:, \
                           0:1, :], dst_grdz, dst_grd, Cpos=Cpos, \
                           spval=spval, flood=False, irange=(0,Lp), \
                           jrange=(0,1))
-                    dst_var_east = pyroms.remapping.z2roms(dst_varz[::-1, \
+                    dst_var_east = pyroms.remapping.z2roms(dst_varz[:, \
                           :, Lp-1:Lp], dst_grdz, dst_grd, Cpos=Cpos, \
                           spval=spval, flood=False, irange=(Lp-1,Lp), \
                           jrange=(0,Mp))
-                    dst_var_west = pyroms.remapping.z2roms(dst_varz[::-1, \
+                    dst_var_west = pyroms.remapping.z2roms(dst_varz[:, \
                           :, 0:1], dst_grdz, dst_grd, Cpos=Cpos, \
                           spval=spval, flood=False, irange=(0,1), \
                           jrange=(0,Mp))
@@ -432,29 +432,29 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 if ndim == 3:
                     # vertical interpolation from standard z level to sigma
                     print 'vertical interpolation from standard z level to sigma'
-                    dst_u_north = pyroms.remapping.z2roms(dst_uz[::-1, Mp-2:Mp, 0:Lp], \
+                    dst_u_north = pyroms.remapping.z2roms(dst_uz[:, Mp-2:Mp, 0:Lp], \
                          dst_grdz, dst_grd, Cpos='rho', spval=spval, \
                          flood=False, irange=(0,Lp), jrange=(Mp-2,Mp))
-                    dst_u_south = pyroms.remapping.z2roms(dst_uz[::-1, 0:2, 0:Lp], \
+                    dst_u_south = pyroms.remapping.z2roms(dst_uz[:, 0:2, 0:Lp], \
                          dst_grdz, dst_grd, Cpos='rho', spval=spval, \
                          flood=False, irange=(0,Lp), jrange=(0,2))
-                    dst_u_east = pyroms.remapping.z2roms(dst_uz[::-1, 0:Mp, Lp-2:Lp], \
+                    dst_u_east = pyroms.remapping.z2roms(dst_uz[:, 0:Mp, Lp-2:Lp], \
                          dst_grdz, dst_grd, Cpos='rho', spval=spval, \
                          flood=False, irange=(Lp-2,Lp), jrange=(0,Mp))
-                    dst_u_west = pyroms.remapping.z2roms(dst_uz[::-1, 0:Mp, 0:2], \
+                    dst_u_west = pyroms.remapping.z2roms(dst_uz[:, 0:Mp, 0:2], \
                          dst_grdz, dst_grd, Cpos='rho', spval=spval, \
                          flood=False, irange=(0,2), jrange=(0,Mp))
 
-                    dst_v_north = pyroms.remapping.z2roms(dst_vz[::-1, Mp-2:Mp, 0:Lp], \
+                    dst_v_north = pyroms.remapping.z2roms(dst_vz[:, Mp-2:Mp, 0:Lp], \
                          dst_grdz, dst_grd, Cpos='rho', spval=spval, \
                          flood=False, irange=(0,Lp), jrange=(Mp-2,Mp))
-                    dst_v_south = pyroms.remapping.z2roms(dst_vz[::-1, 0:2, 0:Lp], \
+                    dst_v_south = pyroms.remapping.z2roms(dst_vz[:, 0:2, 0:Lp], \
                          dst_grdz, dst_grd, Cpos='rho', spval=spval, \
                          flood=False, irange=(0,Lp), jrange=(0,2))
-                    dst_v_east = pyroms.remapping.z2roms(dst_vz[::-1, 0:Mp, Lp-2:Lp], \
+                    dst_v_east = pyroms.remapping.z2roms(dst_vz[:, 0:Mp, Lp-2:Lp], \
                          dst_grdz, dst_grd, Cpos='rho', spval=spval, \
                          flood=False, irange=(Lp-2,Lp), jrange=(0,Mp))
-                    dst_v_west = pyroms.remapping.z2roms(dst_vz[::-1, 0:Mp, 0:2], \
+                    dst_v_west = pyroms.remapping.z2roms(dst_vz[:, 0:Mp, 0:2], \
                       dst_grdz, dst_grd, Cpos='rho', spval=spval, \
                       flood=False, irange=(0,2), jrange=(0,Mp))
                 else:
@@ -683,6 +683,7 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
 
                 # compute depth average velocity ubar and vbar
                 # get z at the right position
+		print 'Computing ubar/vbar from u/v'
                 z_u_north = 0.5 * (dst_grd.vgrid.z_w[0,:,-1,:-1] +
                         dst_grd.vgrid.z_w[0,:,-1, 1:])
                 z_v_north = 0.5 * (dst_grd.vgrid.z_w[0,:,-1,:] +
@@ -769,7 +770,7 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 nc.variables['vbar_east'][nctidx] = dst_vbar_east
                 nc.variables['vbar_west'][nctidx] = dst_vbar_west
 
-        nctidx = nctidx + 1
+            nctidx = nctidx + 1
  
     # close destination file
     nc.close()
