@@ -5,7 +5,7 @@ import pyroms
 
 
 def quiver(uvar, vvar, tindex, depth, gridid, \
-           filename=None, proj=None, d=2, uscale=None, \
+           filename=None, proj=None, d=2, uscale=None, max_length=None, \
            xkey=0.9, ykey=0.1, ukey=1, outfile=None):
     """
     quiver(uvar, vvar, tindex, depth, gridid)
@@ -15,6 +15,7 @@ def quiver(uvar, vvar, tindex, depth, gridid, \
       - proj             Basemap object returned by sview, zview, ...
       - d                arrow density parameter
       - uscale           data units per arrow length unit parameter
+      - max_length       if defined, set maximum arrow length displayed
       - xkey             x location of the key
       - ykey             y location of the key
       - ukey             length of the key
@@ -47,8 +48,20 @@ def quiver(uvar, vvar, tindex, depth, gridid, \
 
     # get u and v
     if filename == None:
-        u = uvar[tindex,:,:,:]
-        v = vvar[tindex,:,:,:]
+
+        if tindex is not -1:
+            assert len(uvar.shape) == 4, 'uvar must be 4D (time plus space).'
+            assert len(vvar.shape) == 4, 'vvar must be 4D (time plus space).'
+        else:
+            assert len(uvar.shape) == 3, 'uvar must be 3D (no time dependency).'
+            assert len(vvar.shape) == 3, 'vvar must be 3D (no time dependency).'
+
+        if tindex == -1:
+            u = uvar[:,:,:]
+            v = vvar[:,:,:]
+        else:
+            u = uvar[tindex,:,:,:]
+            v = vvar[tindex,:,:,:]
     else:
         data = pyroms.io.Dataset(filename)
         u = data.variables[uvar][tindex,:,:,:]
@@ -60,23 +73,23 @@ def quiver(uvar, vvar, tindex, depth, gridid, \
  
     # average field at rho point position
     zsliceu = 0.5 * (zsliceu[:,:-1] + zsliceu[:,1:])    
-    zslicev = 0.5 * (zslicev[:-1,:] + zslicev[1:,:])       
-
-    # correct dimension with zeros at edges
-    zsliceu = concatenate((zeros((zsliceu.shape[0],1)), zsliceu, \
-                           zeros((zsliceu.shape[0],1))),1)
+    zsliceu = zsliceu[:,r_[0,:size(zsliceu,1),-1]]
     zsliceu = ma.masked_where(mask == 0, zsliceu)
     zsliceu = ma.masked_where(zsliceu >= 1000, zsliceu)
-    zslicev = concatenate((zeros((1,zslicev.shape[1])), zslicev, \
-                           zeros((1,zslicev.shape[1]))),0)
+    zslicev = 0.5 * (zslicev[:-1,:] + zslicev[1:,:])       
+    zslicev = zslicev[r_[0,:size(zslicev,0),-1],:]
     zslicev = ma.masked_where(mask == 0, zslicev)
     zslicev = ma.masked_where(zslicev >= 1000, zslicev)
 
+    U = zsliceu + 1j * zslicev
+
     # rotate velocity vector according to grid angle
-    rotzsliceu = zsliceu * cos(grd.hgrid.angle_rho) - \
-                 zslicev * sin(grd.hgrid.angle_rho)
-    rotzslicev = zsliceu * sin(grd.hgrid.angle_rho) + \
-                 zslicev * cos(grd.hgrid.angle_rho)
+    U = U * exp(1j * grd.hgrid.angle_rho)
+
+    #limit arrow length to max length if requested
+    if max_length is not None:
+        idx = where(abs(U) > max_length)
+        U[idx] = U[idx] * max_length / abs(U[idx])
 
     # plot
     if proj is not None:
@@ -87,20 +100,20 @@ def quiver(uvar, vvar, tindex, depth, gridid, \
     if uscale is None:
         if proj is not None: 
             qv = Basemap.quiver(proj, x[::d,::d], y[::d,::d], \
-                                rotzsliceu[::d,::d], rotzslicev[::d,::d], \
+                                real(U[::d,::d]), imag(U[::d,::d]), \
                                 linewidths=0.01)
         else: 
             qv = plt.quiver(lon[::d,::d], lat[::d,::d], \
-                            rotzsliceu[::d,::d], rotzslicev[::d,::d], \
+                            real(U[::d,::d]), imag(U[::d,::d]), \
                             linewidths=0.01)
     else:
         if proj is not None:
             qv = Basemap.quiver(proj, x[::d,::d], y[::d,::d], \
-                                      rotzsliceu[::d,::d], rotzslicev[::d,::d], \
-                                     scale=uscale, linewidths=0.01)
+                                real(U[::d,::d]), imag(U[::d,::d]), \
+                                scale=uscale, linewidths=0.01)
         else:
             qv = plt.quiver(lon[::d,::d], lat[::d,::d], \
-                            rotzsliceu[::d,::d], rotzslicev[::d,::d], \
+                            real(U[::d,::d]), imag(U[::d,::d]), \
                             scale=uscale, linewidths=0.01)
 
     if proj is None:

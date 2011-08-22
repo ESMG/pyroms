@@ -771,6 +771,7 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 nc.variables['vbar_west'][nctidx] = dst_vbar_west
 
             nctidx = nctidx + 1
+        # close files here? how?
  
     # close destination file
     nc.close()
