@@ -10,6 +10,9 @@ The Yellow_Sea directory contains code for creating a grid,
 bathymetry, initial and boundary files (the last from SODA,
 http://www.atmos.umd.edu/~ocean/).
 
+The Arctic directory has code for interpolating from SODA across all
+longitudes.
+
 For creating initial and boundary files from larger ROMS grids,
 there are two cases:
 
