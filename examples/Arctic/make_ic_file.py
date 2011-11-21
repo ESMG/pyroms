@@ -30,27 +30,27 @@ remap_uv(file, src_grd, dst_grd, dst_dir=dst_dir)
 ic_file = dst_dir + file.rsplit('/')[-1][:-4] + '_ic_' + dst_grd.name + '.nc'
 
 out_file = dst_dir + file.rsplit('/')[-1][:-4] + '_ssh_ic_' + dst_grd.name + '.nc'
-command = ('ncks', '-a', '-O', out_file, ic_file) 
+command = ('ncks', '-a', '-O', out_file, ic_file)
 #subprocess.check_call(command)
 subprocess.call(command)
 os.remove(out_file)
 out_file = dst_dir + file.rsplit('/')[-1][:-4] + '_temp_ic_' + dst_grd.name + '.nc'
-command = ('ncks', '-a', '-A', out_file, ic_file) 
+command = ('ncks', '-a', '-A', out_file, ic_file)
 #subprocess.check_call(command)
 subprocess.call(command)
 os.remove(out_file)
 out_file = dst_dir + file.rsplit('/')[-1][:-4] + '_salt_ic_' + dst_grd.name + '.nc'
-command = ('ncks', '-a', '-A', out_file, ic_file) 
+command = ('ncks', '-a', '-A', out_file, ic_file)
 #subprocess.check_call(command)
 subprocess.call(command)
 os.remove(out_file)
 out_file = dst_dir + file.rsplit('/')[-1][:-4] + '_u_ic_' + dst_grd.name + '.nc'
-command = ('ncks', '-a', '-A', out_file, ic_file) 
+command = ('ncks', '-a', '-A', out_file, ic_file)
 #subprocess.check_call(command)
 subprocess.call(command)
 os.remove(out_file)
 out_file = dst_dir + file.rsplit('/')[-1][:-4] + '_v_ic_' + dst_grd.name + '.nc'
-command = ('ncks', '-a', '-A', out_file, ic_file) 
+command = ('ncks', '-a', '-A', out_file, ic_file)
 #subprocess.check_call(command)
 subprocess.call(command)
 os.remove(out_file)

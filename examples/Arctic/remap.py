@@ -17,7 +17,7 @@ class nctime(object):
     pass
 
 def remap(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
-    
+
     # get time
     nctime.long_name = 'time'
     nctime.units = 'days since 1900-01-01 00:00:00'

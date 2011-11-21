@@ -311,7 +311,8 @@
             print *,'Dest grid lons: ',src_lons
             print *,'Dest grid addresses: ',src_add
             print *,'Current i,j : ',iguess, jguess
-            stop 'Iteration for i,j exceed max iteration count'
+            print *,'ACK: Iteration for i,j exceed max iteration count'
+!           stop 'Iteration for i,j exceed max iteration count'
           endif
 
         !***

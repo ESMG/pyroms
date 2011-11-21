@@ -103,7 +103,7 @@ def remap_uv(src_file, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
     ncv.variables['vbar'].units = 'meter second-1'
     ncv.variables['vbar'].field = 'vbar-velocity,, scalar, series'
     #ncv.variables['vbar_north']._FillValue = spval
- 
+
 
     # remaping
     print 'remapping and rotating u and v from', src_grd.name, \
@@ -172,7 +172,7 @@ def remap_uv(src_file, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
     for i in range(dst_vbar.shape[1]):
         for j in range(dst_vbar.shape[0]):
             dst_vbar[j,i] = (dst_v[:,j,i] * np.diff(z_v[:,j,i])).sum() / -z_v[0,j,i]
-        
+
     # spval
     dst_ubar[idxu[0], idxu[1]] = spval
     dst_vbar[idxv[0], idxv[1]] = spval
