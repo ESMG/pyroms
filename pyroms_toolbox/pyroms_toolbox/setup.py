@@ -7,7 +7,7 @@ def configuration(parent_package='',top_path=None):
     config.add_subpackage('BGrid_POP')
     config.add_subpackage('BGrid_SODA')
     config.add_subpackage('seawater')
-    config.add_subpackage('SODA')
+    config.add_subpackage('Grid_HYCOM')
     config.add_library('_average', sources=['src/average.f90']),
     config.add_library('_move_runoff', sources=['src/move_runoff.f90']),
     config.add_extension('_average',

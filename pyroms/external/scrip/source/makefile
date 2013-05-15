@@ -9,15 +9,16 @@
 # SVN $URL$
 #===============================================================================
 
-LIBDIR = /u1/uaf/kate/lib
-INCDIR = /u1/uaf/kate/include
+NC_CONFIG = nc-config
+LIBDIR = $(shell $(NC_CONFIG) --prefix)/lib
+INCDIR = $(shell $(NC_CONFIG) --prefix)/include
 SRCDIR  = .
-PREFIX  = /u1/uaf/kate
+PREFIX  = /usr/local
 
 COMPILE = gfortran
 FLAGS = -g -fdefault-real-8 -ffixed-form -O2 -fPIC
-LIB  = -L${LIBDIR} -lnetcdf -lnetcdff
-INCLUDE = -I${INCDIR}
+LIB  =  $(shell $(NC_CONFIG) --flibs)
+INCLUDE = -I$(INCDIR)
 F2PY = f2py
 F2PY_LIB = -L${LIBDIR} -lnetcdf -lnetcdff -lhdf5 -lhdf5_hl
 F2PY_INCLUDE = -I${INCDIR}

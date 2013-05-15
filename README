@@ -13,7 +13,8 @@ Prerequisites
 Meanwhile, you can prepare by installing Enthought Python
 (http://www.enthought.com/) or by this collection of packages:
 
-   * Python itself. You will need a version between 2.4 and 2.6, inclusive.
+   * Python itself. You will need a version that's at least 2.4 and
+     less than 3.0.
 
    * numpy. Get a version that's reasonably new, don't count on the
      version 1.0.1 that you found already on the system. How do you
@@ -55,7 +56,7 @@ For now,
   cd bathy_smoother; python setup.py build;
                      python setup.py install --prefix=xxx;
                      cd ..
-  cd pyroms; see if the install script runs...
+  cd pyroms; check the paths in the install script and see if it runs...
 
 Running
 -------

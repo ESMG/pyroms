@@ -8,22 +8,22 @@ import pyroms
 
 
 def zslice(var, depth, grd, Cpos='rho', vert=False, mode='linear'):
-    """ 
+    """
     zslice, lon, lat = zslice(var, depth, grd)
 
     optional switch:
-      - Cpos='rho', 'u', 'v' or 'w'  specify the C-grid position where 
+      - Cpos='rho', 'u', 'v' or 'w'  specify the C-grid position where
 				     the variable rely
-      - vert=True/False              If True, return the position of 
+      - vert=True/False              If True, return the position of
                                      the verticies
       - mode='linear' or 'spline'    specify the type of interpolation
 
     return a constant-z slice at depth depth from 3D variable var
     lon and lat contain the C-grid position of the slice for plotting.
-    If vert=True, lon and lat contain contain the position of the 
+    If vert=True, lon and lat contain contain the position of the
     verticies (to be used with pcolor)
     """
-  
+
     if mode=='linear':
         imode=0
     elif mode=='spline':
@@ -31,14 +31,14 @@ def zslice(var, depth, grd, Cpos='rho', vert=False, mode='linear'):
     else:
         imode=0
         raise Warning, '%s not supported, defaulting to linear' % mode
-        
+
 
     # compute the depth on Arakawa-C grid position
 
     if Cpos is 'u':
         # average z_r at Arakawa-C u points
         z = 0.5 * (grd.vgrid.z_r[0,:,:,:-1] + grd.vgrid.z_r[0,:,:,1:])
-        if vert == True: 
+        if vert == True:
             if grd.hgrid.spherical == 'T':
                 x = 0.5 * (grd.hgrid.lon_vert[:,:-1] + grd.hgrid.lon_vert[:,1:])
                 y = 0.5 * (grd.hgrid.lat_vert[:,:-1] + grd.hgrid.lat_vert[:,1:])
@@ -57,7 +57,7 @@ def zslice(var, depth, grd, Cpos='rho', vert=False, mode='linear'):
     elif Cpos is 'v':
         # average z_r at Arakawa-C v points
         z = 0.5 * (grd.vgrid.z_r[0,:,:-1,:] + grd.vgrid.z_r[0,:,1:,:])
-        if vert == True: 
+        if vert == True:
             if grd.hgrid.spherical == 'T':
                 x = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
                 y = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
@@ -94,7 +94,7 @@ def zslice(var, depth, grd, Cpos='rho', vert=False, mode='linear'):
     elif Cpos is 'rho':
         # for temp, salt, rho
         z = grd.vgrid.z_r[0,:]
-        if vert == True: 
+        if vert == True:
             if grd.hgrid.spherical == 'T':
                 x = grd.hgrid.lon_vert[:]
                 y = grd.hgrid.lat_vert[:]
@@ -120,7 +120,7 @@ def zslice(var, depth, grd, Cpos='rho', vert=False, mode='linear'):
 
     depth = -abs(depth)
     depth = depth * np.ones(z.shape[1:])
-    
+
     zslice = _iso.zslice(z, var, depth, imode)
 
     # mask land
@@ -132,19 +132,19 @@ def zslice(var, depth, grd, Cpos='rho', vert=False, mode='linear'):
 
 
 def sslice(var, sindex, grd, Cpos='rho', vert=False):
-    """ 
+    """
     sslice, lon, lat = sslice(var, sindex, grd)
 
     optional switch:
-      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where 
+      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where
 				     the variable rely
-      - vert=True/False              If True, return the position of 
+      - vert=True/False              If True, return the position of
                                      the verticies
       - mode='linear' or 'spline'    specify the type of interpolation
 
     return a constant-s slice at index sindex from 3D variable var
     lon and lat contain the C-grid position of the slice for plotting.
-    If vert=True, lon and lat contain contain the position of the 
+    If vert=True, lon and lat contain contain the position of the
     verticies (to be used with pcolor)
     """
 
@@ -153,7 +153,7 @@ def sslice(var, sindex, grd, Cpos='rho', vert=False):
     if Cpos is 'u':
         # average z_r at Arakawa-C u points
         z = 0.5 * (grd.vgrid.z_r[0,:,:,:-1] + grd.vgrid.z_r[0,:,:,1:])
-        if vert == True: 
+        if vert == True:
             if grd.hgrid.spherical == 'T':
                 x = 0.5 * (grd.hgrid.lon_vert[:,:-1] + grd.hgrid.lon_vert[:,1:])
                 y = 0.5 * (grd.hgrid.lat_vert[:,:-1] + grd.hgrid.lat_vert[:,1:])
@@ -172,7 +172,7 @@ def sslice(var, sindex, grd, Cpos='rho', vert=False):
     elif Cpos is 'v':
         # average z_r at Arakawa-C v points
         z = 0.5 * (grd.vgrid.z_r[0,:,:-1,:] + grd.vgrid.z_r[0,:,1:,:])
-        if vert == True: 
+        if vert == True:
             if grd.hgrid.spherical == 'T':
                 x = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
                 y = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
@@ -209,7 +209,7 @@ def sslice(var, sindex, grd, Cpos='rho', vert=False):
     elif Cpos is 'rho':
         # for temp, salt, rho
         z = grd.vgrid.z_r[0,:]
-        if vert == True: 
+        if vert == True:
             if grd.hgrid.spherical == 'T':
                 x = grd.hgrid.lon_vert[:]
                 y = grd.hgrid.lat_vert[:]
@@ -235,7 +235,7 @@ def sslice(var, sindex, grd, Cpos='rho', vert=False):
 
     # mask land
     sslice = np.ma.masked_where(mask == 0, sslice)
-    
+
     return sslice, x, y
 
 
@@ -245,22 +245,22 @@ def islice(var, iindex, grd, Cpos='rho', vert=False):
     islice, z, lon, lat = islice(var, iindex, grd)
 
     optional switch:
-      - Cpos='rho', 'u', 'v' or 'w'  specify the C-grid position where 
+      - Cpos='rho', 'u', 'v' or 'w'  specify the C-grid position where
 				     the variable rely
-      - vert=True/False              If True, return the position of 
+      - vert=True/False              If True, return the position of
                                      the verticies
 
 
     return a constant-i slice at index iindex from 3D variable var
     lon, lat and z contain the C-grid position of the slice for plotting.
-    If vert=True, lon, lat and z contain contain the position of the 
+    If vert=True, lon, lat and z contain contain the position of the
     verticies (to be used with pcolor)
     """
 
     # compute the depth on Arakawa-C grid position
 
     if Cpos is 'u':
-        if vert == True: 
+        if vert == True:
             z = grd.vgrid.z_w[0,:]
             z = 0.5 * (z[:,:,:-1] + z[:,:,1:])
             z = 0.5 * (z[:,:-1,:] + z[:,1:,:])
@@ -276,14 +276,14 @@ def islice(var, iindex, grd, Cpos='rho', vert=False):
             z = 0.5 * (z[:,:,:-1] + z[:,:,1:])
             if grd.hgrid.spherical == 'T':
                 x = grd.hgrid.lon_u[:]
-                y = grd.hgrid.lat_u[:]         
+                y = grd.hgrid.lat_u[:]
             elif grd.hgrid.spherical == 'F':
                 x = grd.hgrid.x_u[:]
-                y = grd.hgrid.y_u[:]         
+                y = grd.hgrid.y_u[:]
         mask = grd.hgrid.mask_u[:]
 
     elif Cpos is 'v':
-        if vert == True: 
+        if vert == True:
             z = grd.vgrid.z_w[0,:]
             if grd.hgrid.spherical == 'T':
                 x = grd.hgrid.lon_rho
@@ -331,7 +331,7 @@ def islice(var, iindex, grd, Cpos='rho', vert=False):
 
     elif Cpos is 'rho':
         # for temp, salt, rho, ...
-        if vert == True: 
+        if vert == True:
             z = grd.vgrid.z_w[0,:]
             z = 0.5 * (z[:,:-1,:] + z[:,1:,:])
             z = np.concatenate((z[:,0:1,:], z, z[:,-1:,:]), 1)
@@ -345,10 +345,10 @@ def islice(var, iindex, grd, Cpos='rho', vert=False):
             z = grd.vgrid.z_r[0,:]
             if grd.hgrid.spherical == 'T':
                 x = grd.hgrid.lon_rho[:]
-                y = grd.hgrid.lat_rho[:]      
+                y = grd.hgrid.lat_rho[:]
             elif grd.hgrid.spherical == 'F':
                 x = grd.hgrid.x_rho[:]
-                y = grd.hgrid.y_rho[:]      
+                y = grd.hgrid.y_rho[:]
         mask = grd.hgrid.mask_rho[:]
 
     else:
@@ -366,29 +366,29 @@ def islice(var, iindex, grd, Cpos='rho', vert=False):
     vari = np.ma.masked_where(maski[:,:] == 0, vari[:,:])
 
     return vari, zi, xi, yi
-    
+
 
 def jslice(var, jindex, grd, Cpos='rho', vert=False):
     """
     jslice, z, lon, lat = jslice(var, jindex, grd)
 
     optional switch:
-      - Cpos='rho', 'u', 'v' or 'w'  specify the C-grid position where 
+      - Cpos='rho', 'u', 'v' or 'w'  specify the C-grid position where
 				     the variable rely
-      - vert=True/False              If True, return the position of 
+      - vert=True/False              If True, return the position of
                                      the verticies
 
 
     return a constant-j slice at index jindex from 3D variable var
     lon, lat and z contain the C-grid position of the slice for plotting.
-    If vert=True, lon, lat and z contain contain the position of the 
+    If vert=True, lon, lat and z contain contain the position of the
     verticies (to be used with pcolor)
     """
 
     # compute the depth on Arakawa-C grid position
 
     if Cpos is 'u':
-        if vert == True: 
+        if vert == True:
             z = grd.vgrid.z_w[0,:]
             if grd.hgrid.spherical == 'T':
                 x = grd.hgrid.lon_rho
@@ -401,14 +401,14 @@ def jslice(var, jindex, grd, Cpos='rho', vert=False):
             z = 0.5 * (z[:,:,:-1] + z[:,:,1:])
             if grd.hgrid.spherical == 'T':
                 x = grd.hgrid.lon_u[:]
-                y = grd.hgrid.lat_u[:]         
+                y = grd.hgrid.lat_u[:]
             elif grd.hgrid.spherical == 'F':
                 x = grd.hgrid.x_u[:]
-                y = grd.hgrid.y_u[:]         
+                y = grd.hgrid.y_u[:]
         mask = grd.hgrid.mask_u[:]
 
     elif Cpos is 'v':
-        if vert == True: 
+        if vert == True:
             z = grd.vgrid.z_w[0,:]
             z = 0.5 * (z[:,:-1,:] + z[:,1:,:])
             z = 0.5 * (z[:,:,:-1] + z[:,:,1:])
@@ -458,7 +458,7 @@ def jslice(var, jindex, grd, Cpos='rho', vert=False):
 
     elif Cpos is 'rho':
         # for temp, salt, rho, ...
-        if vert == True: 
+        if vert == True:
             z = grd.vgrid.z_w[0,:]
             z = 0.5 * (z[:,:,:-1] + z[:,:,1:])
             z = np.concatenate((z[:,:,0:1], z, z[:,:,-1:]), 2)
@@ -472,10 +472,10 @@ def jslice(var, jindex, grd, Cpos='rho', vert=False):
             z = grd.vgrid.z_r[0,:]
             if grd.hgrid.spherical == 'T':
                 x = grd.hgrid.lon_rho[:]
-                y = grd.hgrid.lat_rho[:]      
+                y = grd.hgrid.lat_rho[:]
             elif grd.hgrid.spherical == 'F':
                 x = grd.hgrid.x_rho[:]
-                y = grd.hgrid.y_rho[:]      
+                y = grd.hgrid.y_rho[:]
         mask = grd.hgrid.mask_rho[:]
 
     else:
@@ -501,20 +501,20 @@ def isoslice(var,prop,isoval, grd, Cpos='rho', masking=True, vert=False):
     isoslice, lon, lat = isoslice(variable,property, isoval, grd)
 
     optional switch:
-      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where 
+      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where
 				     the variable rely
       - masking=True                 mask the output if True
-      - vert=True/False              If True, return the position of 
+      - vert=True/False              If True, return the position of
                                      the verticies
       - mode='linear' or 'spline'    specify the type of interpolation
 
-    
+
     result is a projection of variable at property == isoval in the first
     nonsingleton dimension.  In the case when there is more than one zero
     crossing, the results are averaged.
     lon, and lat contain the C-grid position of the slice for plotting.
-    If vert=True, lon and lat and z contain contain the position of the 
-    verticies (to be used with pcolor)    
+    If vert=True, lon and lat and z contain contain the position of the
+    verticies (to be used with pcolor)
 
     EXAMPLE:
     s_at_m5  = isoslice(s,z,-5);        # s at z == -5
@@ -530,7 +530,7 @@ def isoslice(var,prop,isoval, grd, Cpos='rho', masking=True, vert=False):
     if Cpos is 'u':
         # average z_r at Arakawa-C u points
         z = 0.5 * (grd.vgrid.z_r[0,:,:,:-1] + grd.vgrid.z_r[0,:,:,1:])
-        if vert == True: 
+        if vert == True:
             if grd.hgrid.spherical == 'T':
                 x = 0.5 * (grd.hgrid.lon_vert[:,:-1] + grd.hgrid.lon_vert[:,1:])
                 y = 0.5 * (grd.hgrid.lat_vert[:,:-1] + grd.hgrid.lat_vert[:,1:])
@@ -549,7 +549,7 @@ def isoslice(var,prop,isoval, grd, Cpos='rho', masking=True, vert=False):
     elif Cpos is 'v':
         # average z_r at Arakawa-C v points
         z = 0.5 * (grd.vgrid.z_r[0,:,:-1,:] + grd.vgrid.z_r[0,:,1:,:])
-        if vert == True: 
+        if vert == True:
             if grd.hgrid.spherical == 'T':
                 x = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
                 y = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
@@ -586,7 +586,7 @@ def isoslice(var,prop,isoval, grd, Cpos='rho', masking=True, vert=False):
     elif Cpos is 'rho':
         # for temp, salt, rho
         z = grd.vgrid.z_r[0,:]
-        if vert == True: 
+        if vert == True:
             if grd.hgrid.spherical == 'T':
                 x = grd.hgrid.lon_vert[:]
                 y = grd.hgrid.lat_vert[:]
@@ -605,7 +605,7 @@ def isoslice(var,prop,isoval, grd, Cpos='rho', masking=True, vert=False):
     else:
         raise Warning, '%s bad position. Valid Arakawa-C are \
                            rho, u or v.' % Cpos
-   
+
     prop = prop-isoval
     sz = np.shape(var)
     var = var.reshape(sz[0],-1)
@@ -641,9 +641,9 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
     transect, z, lon, lat = transect(var, istart, iend, jstart, jend, grd)
 
     optional switch:
-      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where 
+      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where
 				     the variable rely
-      - vert=True/False              If True, return the position of 
+      - vert=True/False              If True, return the position of
                                      the verticies
       - spval                        special value
       - rtol                         tolerance parameter
@@ -652,7 +652,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
     return a vertical transect between the points P1=(istart, jstart)
     and P2=(iend, jend) from 3D variable var
     lon, lat and z contain the C-grid position of the section for plotting.
-    If vert=True, lon, lat and z contain contain the position of the 
+    If vert=True, lon, lat and z contain contain the position of the
     verticies (to be used with pcolor)
     """
 
@@ -753,7 +753,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
     else:
         ai=10000.
         bi=0.
-     
+
     # Compute the integer pathway:
     # Chose the strait line with the smallest slope
     if (abs(aj) <=  1 ):
@@ -775,11 +775,11 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
             near[n,2] = np.floor(jj)
             near[n,3] = np.ceil(jj)
             n = n + 1
-        
+
         if vert == False:
             nearp = np.zeros(((i1-i0+1),4))
             nearp = near
-        else:   
+        else:
             # compute the nearest j vert point on the line crossing at i
             n=0
             nearp = np.zeros(((i1-i0+2),4))
@@ -790,7 +790,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
                 nearp[n,2] = np.floor(jj)
                 nearp[n,3] = np.ceil(jj)
                 n = n + 1
-           
+
     else:
         # Here, the best line is x(y)
         print 'Here, the best line is x(y)'
@@ -826,7 +826,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
                 nearp[n,3] = np.ceil(ii)
                 n = n + 1
 
-    
+
     # Now interpolate between the nearest point through the section
     # -------------------------------------------------------------
     # Initialize output variables
@@ -896,18 +896,18 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
 
 
     return transect, zs, xs, ys
-            
 
-            
+
+
 
 def lonslice(var, longitude, grd, Cpos='rho', vert=False, spval=1e37):
     """
     lonslice, z, lon, lat = lonslice(var, longitude, grd)
 
     optional switch:
-      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where 
+      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where
 				     the variable rely
-      - vert=True/False              If True, return the position of 
+      - vert=True/False              If True, return the position of
                                      the verticies
       - spval                        special value
       - rtol                         tolerance parameter
@@ -915,7 +915,7 @@ def lonslice(var, longitude, grd, Cpos='rho', vert=False, spval=1e37):
 
     return a longitudinal slice along longitude=longitude from 3D variable var
     lon, lat and z contain the C-grid position of the section for plotting.
-    If vert=True, lon, lat and z contain contain the position of the 
+    If vert=True, lon, lat and z contain contain the position of the
     verticies (to be used with pcolor)
     Returns a longitudinal slice of the grid
     """
@@ -1008,9 +1008,9 @@ def latslice(var, latitude, grd, Cpos='rho', vert=False, spval=1e37):
     latslice, z, lon, lat = latslice(var, latitude, grd)
 
     optional switch:
-      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where 
+      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where
 				     the variable rely
-      - vert=True/False              If True, return the position of 
+      - vert=True/False              If True, return the position of
                                      the verticies
       - spval                        special value
       - rtol                         tolerance parameter
@@ -1018,7 +1018,7 @@ def latslice(var, latitude, grd, Cpos='rho', vert=False, spval=1e37):
 
     return a latitudinal slice along latitude=latitude from 3D variable var
     lon, lat and z contain the C-grid position of the section for plotting.
-    If vert=True, lon, lat and z contain contain the position of the 
+    If vert=True, lon, lat and z contain contain the position of the
     verticies (to be used with pcolor)
     Returns a longitudinal slice of the grid
     """
@@ -1105,7 +1105,7 @@ def latslice(var, latitude, grd, Cpos='rho', vert=False, spval=1e37):
 
 
 def zlayer(var, grd, h1=None, h2=None, Cpos='rho', vert=False):
-    """    
+    """
     extract a z layer between depth h1 and h2
     """
 
@@ -1114,7 +1114,7 @@ def zlayer(var, grd, h1=None, h2=None, Cpos='rho', vert=False):
     if Cpos is 'u':
         # average z_r at Arakawa-C u points
         z = 0.5 * (grd.vgrid.z_w[0,:,:,:-1] + grd.vgrid.z_w[0,:,:,1:])
-        if vert == True: 
+        if vert == True:
             if grd.hgrid.spherical == 'T':
                 x = 0.5 * (grd.hgrid.lon_vert[:,:-1] + grd.hgrid.lon_vert[:,1:])
                 y = 0.5 * (grd.hgrid.lat_vert[:,:-1] + grd.hgrid.lat_vert[:,1:])
@@ -1133,7 +1133,7 @@ def zlayer(var, grd, h1=None, h2=None, Cpos='rho', vert=False):
     elif Cpos is 'v':
         # average z_r at Arakawa-C v points
         z = 0.5 * (grd.vgrid.z_w[0,:,:-1,:] + grd.vgrid.z_w[0,:,1:,:])
-        if vert == True: 
+        if vert == True:
             if grd.hgrid.spherical == 'T':
                 x = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
                 y = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
@@ -1152,7 +1152,7 @@ def zlayer(var, grd, h1=None, h2=None, Cpos='rho', vert=False):
     elif Cpos is 'rho':
         # for temp, salt, rho
         z = grd.vgrid.z_w[0,:]
-        if vert == True: 
+        if vert == True:
             if grd.hgrid.spherical == 'T':
                 x = grd.hgrid.lon_vert[:]
                 y = grd.hgrid.lat_vert[:]
@@ -1213,12 +1213,12 @@ def section_transport(u, v, grd, istart, iend, jstart, jend):
     """
     transpu, transpv = section_transport(u, v, grd, istart, iend, jstart, jend)
 
-    compute the transport through the section defined between 
+    compute the transport through the section defined between
     the point P1 (istart,jstart) and P2 (iend, jend).
     P1 and P2 are Arakawa-C psi points.
     The transpot is positive right handside of the section.
-    """			          
-        
+    """
+
 
     # Find the nearest point between P1 (imin,jmin) and P2 (imax, jmax)
     # -----------------------------------------------------------------
@@ -1242,7 +1242,7 @@ def section_transport(u, v, grd, istart, iend, jstart, jend):
     else:
         ai=10000.
         bi=0.
-     
+
     # Compute the integer pathway:
     # Chose the strait line with the smallest slope
     if (abs(aj) <=  1 ):
@@ -1269,7 +1269,7 @@ def section_transport(u, v, grd, istart, iend, jstart, jend):
         for i in range(i0,i1+1):
             j = aj*i + bj
             near.append(i + round(j)*1j)
-           
+
     else:
         # Here, the best line is x(y)
         print 'Here, the best line is x(y)'
@@ -1307,13 +1307,13 @@ def section_transport(u, v, grd, istart, iend, jstart, jend):
     for k in range(1,n):
         # distance between 2 neighbour points
         d = abs(inear[k] - inear[k-1])
-                
+
 	if ( d > 1 ):
             # intermediate points required if d>1
 	    neari = interm_pt(inear, k, ai, bi, aj, bj)
             near.insert(nn,neari)
             nn=nn+1
-        
+
         nn=nn+1
 
 
@@ -1324,7 +1324,7 @@ def section_transport(u, v, grd, istart, iend, jstart, jend):
     dx = grd.hgrid.dx
     dy = grd.hgrid.dy
     z_w = grd.vgrid.z_w[0,:]
-    # average z_w at Arakawa-C u points			           
+    # average z_w at Arakawa-C u points
     zu = 0.5 * (z_w[:,:,:-1] + z_w[:,:,1:])
     dzu = zu[1:,:,:] - zu[:-1,:,:]
     # average z_w at Arakawa-C v points
@@ -1361,12 +1361,12 @@ def section_transport_z(u, v, grd, istart, iend, jstart, jend, h1=None, h2=None)
     """
     transpu, transpv = section_transport(u, v, grd, istart, iend, jstart, jend, h1, h2)
 
-    compute the transport between depth h1 and h2 (if specified) through the section 
+    compute the transport between depth h1 and h2 (if specified) through the section
     defined between the point P1 (istart,jstart) and P2 (iend, jend).
     P1 and P2 are Arakawa-C psi points.
     The transpot is positive right handside of the section.
-    """			          
-        
+    """
+
 
     # Find the nearest point between P1 (imin,jmin) and P2 (imax, jmax)
     # -----------------------------------------------------------------
@@ -1390,7 +1390,7 @@ def section_transport_z(u, v, grd, istart, iend, jstart, jend, h1=None, h2=None)
     else:
         ai=10000.
         bi=0.
-     
+
     # Compute the integer pathway:
     # Chose the strait line with the smallest slope
     if (abs(aj) <=  1 ):
@@ -1417,7 +1417,7 @@ def section_transport_z(u, v, grd, istart, iend, jstart, jend, h1=None, h2=None)
         for i in range(i0,i1+1):
             j = aj*i + bj
             near.append(i + round(j)*1j)
-           
+
     else:
         # Here, the best line is x(y)
         print 'Here, the best line is x(y)'
@@ -1455,13 +1455,13 @@ def section_transport_z(u, v, grd, istart, iend, jstart, jend, h1=None, h2=None)
     for k in range(1,n):
         # distance between 2 neighbour points
         d = abs(inear[k] - inear[k-1])
-                
+
 	if ( d > 1 ):
             # intermediate points required if d>1
 	    neari = interm_pt(inear, k, ai, bi, aj, bj)
             near.insert(nn,neari)
             nn=nn+1
-        
+
         nn=nn+1
 
 
@@ -1472,7 +1472,7 @@ def section_transport_z(u, v, grd, istart, iend, jstart, jend, h1=None, h2=None)
     dx = grd.hgrid.dx
     dy = grd.hgrid.dy
     z_w = grd.vgrid.z_w[0,:]
-    # average z_w at Arakawa-C u points			           
+    # average z_w at Arakawa-C u points
     zu = 0.5 * (z_w[:,:,:-1] + z_w[:,:,1:])
     dzu = zu[1:,:,:] - zu[:-1,:,:]
     # average z_w at Arakawa-C v points
@@ -1517,7 +1517,7 @@ def section_transport_z(u, v, grd, istart, iend, jstart, jend, h1=None, h2=None)
                     ratio[idx1:] = 0.
                     ratio[idx1-1] = r
             else:
-                ratio[:] = 0. 
+                ratio[:] = 0.
         if h2 is not None:
             idx2 = np.where(z < -np.abs(h2))
             if np.any(idx2):
@@ -1539,12 +1539,12 @@ def section_tracer_transport_z(u, v, tracer, grd, istart, iend, jstart, jend, h1
     """
     transpu, transpv = section_transport(u, v, tracer, grd, istart, iend, jstart, jend, h1, h2)
 
-    compute the tracer transport between depth h1 and h2 (if specified) through the section 
+    compute the tracer transport between depth h1 and h2 (if specified) through the section
     defined between the point P1 (istart,jstart) and P2 (iend, jend).
     P1 and P2 are Arakawa-C psi points.
     The transpot is positive right handside of the section.
-    """			          
-        
+    """
+
 
     # Find the nearest point between P1 (imin,jmin) and P2 (imax, jmax)
     # -----------------------------------------------------------------
@@ -1568,7 +1568,7 @@ def section_tracer_transport_z(u, v, tracer, grd, istart, iend, jstart, jend, h1
     else:
         ai=10000.
         bi=0.
-     
+
     # Compute the integer pathway:
     # Chose the strait line with the smallest slope
     if (abs(aj) <=  1 ):
@@ -1595,7 +1595,7 @@ def section_tracer_transport_z(u, v, tracer, grd, istart, iend, jstart, jend, h1
         for i in range(i0,i1+1):
             j = aj*i + bj
             near.append(i + round(j)*1j)
-           
+
     else:
         # Here, the best line is x(y)
         print 'Here, the best line is x(y)'
@@ -1633,13 +1633,13 @@ def section_tracer_transport_z(u, v, tracer, grd, istart, iend, jstart, jend, h1
     for k in range(1,n):
         # distance between 2 neighbour points
         d = abs(inear[k] - inear[k-1])
-                
+
 	if ( d > 1 ):
             # intermediate points required if d>1
 	    neari = interm_pt(inear, k, ai, bi, aj, bj)
             near.insert(nn,neari)
             nn=nn+1
-        
+
         nn=nn+1
 
 
@@ -1650,7 +1650,7 @@ def section_tracer_transport_z(u, v, tracer, grd, istart, iend, jstart, jend, h1
     dx = grd.hgrid.dx
     dy = grd.hgrid.dy
     z_w = grd.vgrid.z_w[0,:]
-    # average z_w at Arakawa-C u points			           
+    # average z_w at Arakawa-C u points
     zu = 0.5 * (z_w[:,:,:-1] + z_w[:,:,1:])
     dzu = zu[1:,:,:] - zu[:-1,:,:]
     # average z_w at Arakawa-C v points
@@ -1703,7 +1703,7 @@ def section_tracer_transport_z(u, v, tracer, grd, istart, iend, jstart, jend, h1
                     ratio[idx1:] = 0.
                     ratio[idx1-1] = r
             else:
-                ratio[:] = 0. 
+                ratio[:] = 0.
         if h2 is not None:
             idx2 = np.where(z < -np.abs(h2))
             if np.any(idx2):
@@ -1731,9 +1731,9 @@ def interm_pt(pnear, pk, pai, pbi, paj, pbj):
     #	paj, pbj: slope and original ordinate of y(x)
     #	pneari	: vector holding the position of intermediate point
     #		-----------------------------
-    
+
     # 1 - Compute intermediate point
-    
+
     # Determine whether we use y(x) or x(y):
     if (abs(paj) <= 1):
         # y(x)
