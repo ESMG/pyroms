@@ -87,9 +87,14 @@ interp = Extension(name = '_interp',
 obs_interp = Extension(name = '_obs_interp',
                 sources = ['pyroms/src/obs_interp.f'])
 
-
 remapping = Extension(name = '_remapping',
-                sources = ['pyroms/src/remapping.f90'])
+                sources = ['pyroms/src/remapping.f'])
+
+remapping_fast = Extension(name = '_remapping_fast',
+                sources = ['pyroms/src/remapping_fast.f'])
+
+remapping_fast_weighted = Extension(name = '_remapping_fast_weighted',
+                sources = ['pyroms/src/remapping_fast_weighted.f'])
 
 doclines = __doc__.split("\n")
 
@@ -107,6 +112,6 @@ if __name__ == '__main__':
                       'pyroms.extern'],
           license = 'BSD',
           platforms = ["any"],
-          ext_modules = [iso, interp, obs_interp, remapping],
+          ext_modules = [iso, interp, obs_interp, remapping, remapping_fast, remapping_fast_weighted],
           classifiers = filter(None, classifiers.split("\n")),
           )

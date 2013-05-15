@@ -39,44 +39,75 @@ def zslice(var, depth, grd, Cpos='rho', vert=False, mode='linear'):
         # average z_r at Arakawa-C u points
         z = 0.5 * (grd.vgrid.z_r[0,:,:,:-1] + grd.vgrid.z_r[0,:,:,1:])
         if vert == True: 
-            lon = 0.5 * (grd.hgrid.lon_vert[:,:-1] + grd.hgrid.lon_vert[:,1:])
-            lat = 0.5 * (grd.hgrid.lat_vert[:,:-1] + grd.hgrid.lat_vert[:,1:])
+            if grd.hgrid.spherical == 'T':
+                x = 0.5 * (grd.hgrid.lon_vert[:,:-1] + grd.hgrid.lon_vert[:,1:])
+                y = 0.5 * (grd.hgrid.lat_vert[:,:-1] + grd.hgrid.lat_vert[:,1:])
+            elif grd.hgrid.spherical == 'F':
+                x = 0.5 * (grd.hgrid.x_vert[:,:-1] + grd.hgrid.x_vert[:,1:])
+                y = 0.5 * (grd.hgrid.y_vert[:,:-1] + grd.hgrid.y_vert[:,1:])
         else:
-            lon = grd.hgrid.lon_u[:]
-            lat = grd.hgrid.lat_u[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_u[:]
+                y = grd.hgrid.lat_u[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_u[:]
+                y = grd.hgrid.y_u[:]
         mask = grd.hgrid.mask_u[:]
 
     elif Cpos is 'v':
         # average z_r at Arakawa-C v points
         z = 0.5 * (grd.vgrid.z_r[0,:,:-1,:] + grd.vgrid.z_r[0,:,1:,:])
         if vert == True: 
-            lon = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
-            lat = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
+            if grd.hgrid.spherical == 'T':
+                x = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
+                y = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
+            elif grd.hgrid.spherical == 'F':
+                x = 0.5 * (grd.hgrid.x_vert[:-1,:] + grd.hgrid.x_vert[1:,:])
+                y = 0.5 * (grd.hgrid.y_vert[:-1,:] + grd.hgrid.y_vert[1:,:])
         else:
-            lon = grd.hgrid.lon_v[:]
-            lat = grd.hgrid.lat_v[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_v[:]
+                y = grd.hgrid.lat_v[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_v[:]
+                y = grd.hgrid.y_v[:]
         mask = grd.hgrid.mask_v[:]
 
     elif Cpos is 'w':
-        # for temp, salt, rho
         z = grd.vgrid.z_w[0,:]
         if vert == True:
-            lon = grd.hgrid.lon_vert[:]
-            lat = grd.hgrid.lat_vert[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_vert[:]
+                y = grd.hgrid.lat_vert[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_vert[:]
+                y = grd.hgrid.y_vert[:]
         else:
-            lon = grd.hgrid.lon_rho[:]
-            lat = grd.hgrid.lat_rho[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_rho[:]
+                y = grd.hgrid.lat_rho[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_rho[:]
+                y = grd.hgrid.y_rho[:]
         mask = grd.hgrid.mask_rho[:]
 
     elif Cpos is 'rho':
         # for temp, salt, rho
         z = grd.vgrid.z_r[0,:]
         if vert == True: 
-            lon = grd.hgrid.lon_vert[:]
-            lat = grd.hgrid.lat_vert[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_vert[:]
+                y = grd.hgrid.lat_vert[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_vert[:]
+                y = grd.hgrid.y_vert[:]
         else:
-            lon = grd.hgrid.lon_rho[:]
-            lat = grd.hgrid.lat_rho[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_rho[:]
+                y = grd.hgrid.lat_rho[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_rho[:]
+                y = grd.hgrid.y_rho[:]
         mask = grd.hgrid.mask_rho[:]
 
     else:
@@ -97,7 +128,7 @@ def zslice(var, depth, grd, Cpos='rho', vert=False, mode='linear'):
     # mask region with shalower depth than requisted depth
     zslice = np.ma.masked_where(zslice == 1e20, zslice)
 
-    return zslice, lon, lat
+    return zslice, x, y
 
 
 def sslice(var, sindex, grd, Cpos='rho', vert=False):
@@ -123,33 +154,75 @@ def sslice(var, sindex, grd, Cpos='rho', vert=False):
         # average z_r at Arakawa-C u points
         z = 0.5 * (grd.vgrid.z_r[0,:,:,:-1] + grd.vgrid.z_r[0,:,:,1:])
         if vert == True: 
-            lon = 0.5 * (grd.hgrid.lon_vert[:,:-1] + grd.hgrid.lon_vert[:,1:])
-            lat = 0.5 * (grd.hgrid.lat_vert[:,:-1] + grd.hgrid.lat_vert[:,1:])
+            if grd.hgrid.spherical == 'T':
+                x = 0.5 * (grd.hgrid.lon_vert[:,:-1] + grd.hgrid.lon_vert[:,1:])
+                y = 0.5 * (grd.hgrid.lat_vert[:,:-1] + grd.hgrid.lat_vert[:,1:])
+            elif grd.hgrid.spherical == 'F':
+                x = 0.5 * (grd.hgrid.x_vert[:,:-1] + grd.hgrid.x_vert[:,1:])
+                y = 0.5 * (grd.hgrid.y_vert[:,:-1] + grd.hgrid.y_vert[:,1:])
         else:
-            lon = grd.hgrid.lon_u[:]
-            lat = grd.hgrid.lat_u[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_u[:]
+                y = grd.hgrid.lat_u[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_u[:]
+                y = grd.hgrid.y_u[:]
         mask = grd.hgrid.mask_u[:]
 
     elif Cpos is 'v':
         # average z_r at Arakawa-C v points
         z = 0.5 * (grd.vgrid.z_r[0,:,:-1,:] + grd.vgrid.z_r[0,:,1:,:])
         if vert == True: 
-            lon = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
-            lat = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
+            if grd.hgrid.spherical == 'T':
+                x = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
+                y = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
+            elif grd.hgrid.spherical == 'F':
+                x = 0.5 * (grd.hgrid.x_vert[:-1,:] + grd.hgrid.x_vert[1:,:])
+                y = 0.5 * (grd.hgrid.y_vert[:-1,:] + grd.hgrid.y_vert[1:,:])
         else:
-            lon = grd.hgrid.lon_v[:]
-            lat = grd.hgrid.lat_v[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_v[:]
+                y = grd.hgrid.lat_v[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_v[:]
+                y = grd.hgrid.y_v[:]
         mask = grd.hgrid.mask_v[:]
 
+    elif Cpos is 'w':
+        z = grd.vgrid.z_w[0,:]
+        if vert == True:
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_vert[:]
+                y = grd.hgrid.lat_vert[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_vert[:]
+                y = grd.hgrid.y_vert[:]
+        else:
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_rho[:]
+                y = grd.hgrid.lat_rho[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_rho[:]
+                y = grd.hgrid.y_rho[:]
+        mask = grd.hgrid.mask_rho[:]
+
     elif Cpos is 'rho':
-        # for temp, salt, rho, w
+        # for temp, salt, rho
         z = grd.vgrid.z_r[0,:]
         if vert == True: 
-            lon = grd.hgrid.lon_vert[:]
-            lat = grd.hgrid.lat_vert[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_vert[:]
+                y = grd.hgrid.lat_vert[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_vert[:]
+                y = grd.hgrid.y_vert[:]
         else:
-            lon = grd.hgrid.lon_rho[:]
-            lat = grd.hgrid.lat_rho[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_rho[:]
+                y = grd.hgrid.lat_rho[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_rho[:]
+                y = grd.hgrid.y_rho[:]
         mask = grd.hgrid.mask_rho[:]
 
     else:
@@ -163,7 +236,7 @@ def sslice(var, sindex, grd, Cpos='rho', vert=False):
     # mask land
     sslice = np.ma.masked_where(mask == 0, sslice)
     
-    return sslice, lon, lat
+    return sslice, x, y
 
 
 
@@ -187,32 +260,46 @@ def islice(var, iindex, grd, Cpos='rho', vert=False):
     # compute the depth on Arakawa-C grid position
 
     if Cpos is 'u':
-        # average z_r at Arakawa-C u points
         if vert == True: 
             z = grd.vgrid.z_w[0,:]
             z = 0.5 * (z[:,:,:-1] + z[:,:,1:])
             z = 0.5 * (z[:,:-1,:] + z[:,1:,:])
-            z = np.concatenate((z[:,0:1,:], z, z[:,-2:-1,:]), 1)
-            lon = grd.hgrid.lon_vert[:,1:-1]
-            lat = grd.hgrid.lat_vert[:,1:-1]
+            z = np.concatenate((z[:,0:1,:], z, z[:,-1:,:]), 1)
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_vert[:,1:-1]
+                y = grd.hgrid.lat_vert[:,1:-1]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_vert[:,1:-1]
+                y = grd.hgrid.y_vert[:,1:-1]
         else:
             z = grd.vgrid.z_r[0,:]
             z = 0.5 * (z[:,:,:-1] + z[:,:,1:])
-            lon = grd.hgrid.lon_u[:]
-            lat = grd.hgrid.lat_u[:]         
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_u[:]
+                y = grd.hgrid.lat_u[:]         
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_u[:]
+                y = grd.hgrid.y_u[:]         
         mask = grd.hgrid.mask_u[:]
 
     elif Cpos is 'v':
-        # average z_r at Arakawa-C v points
         if vert == True: 
             z = grd.vgrid.z_w[0,:]
-            lon = grd.hgrid.lon_rho
-            lat = grd.hgrid.lat_rho
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_rho
+                y = grd.hgrid.lat_rho
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_rho
+                y = grd.hgrid.y_rho
         else:
             z = grd.vgrid.z_r[0,:]
             z = 0.5 * (z[:,:-1,:] + z[:,1:,:])
-            lon = grd.hgrid.lon_v[:]
-            lat = grd.hgrid.lat_v[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_v[:]
+                y = grd.hgrid.lat_v[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_v[:]
+                y = grd.hgrid.y_v[:]
         mask = grd.hgrid.mask_v[:]
 
     elif Cpos is 'w':
@@ -224,13 +311,21 @@ def islice(var, iindex, grd, Cpos='rho', vert=False):
                                 z, \
                                 np.array(grd.vgrid.z_w[0,-1,:,:], ndmin=3)), 0)
             z = 0.5 * (z[:,:,:-1] + z[:,:,1:])
-            z = np.concatenate((z[:,:,0:1], z, z[:,:,-2:-1]), 2)
-            lon = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
-            lat = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
+            z = np.concatenate((z[:,:,0:1], z, z[:,:,-1:]), 2)
+            if grd.hgrid.spherical == 'T':
+                x = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
+                y = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
+            elif grd.hgrid.spherical == 'F':
+                x = 0.5 * (grd.hgrid.x_vert[:-1,:] + grd.hgrid.x_vert[1:,:])
+                y = 0.5 * (grd.hgrid.y_vert[:-1,:] + grd.hgrid.y_vert[1:,:])
         else:
-            z = grd.vgrid.z_w[0,:]
-            lon = grd.hgrid.lon_rho[:]
-            lat = grd.hgrid.lat_rho[:]
+            z = grd.vgrid.z_r[0,:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_rho[:]
+                y = grd.hgrid.lat_rho[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_rho[:]
+                y = grd.hgrid.y_rho[:]
         mask = grd.hgrid.mask_rho[:]
 
 
@@ -239,13 +334,21 @@ def islice(var, iindex, grd, Cpos='rho', vert=False):
         if vert == True: 
             z = grd.vgrid.z_w[0,:]
             z = 0.5 * (z[:,:-1,:] + z[:,1:,:])
-            z = np.concatenate((z[:,0:1,:], z, z[:,-2:-1,:]), 1)
-            lon = 0.5 * (grd.hgrid.lon_vert[:,:-1] + grd.hgrid.lon_vert[:,1:])
-            lat = 0.5 * (grd.hgrid.lat_vert[:,:-1] + grd.hgrid.lat_vert[:,1:])
+            z = np.concatenate((z[:,0:1,:], z, z[:,-1:,:]), 1)
+            if grd.hgrid.spherical == 'T':
+                x = 0.5 * (grd.hgrid.lon_vert[:,:-1] + grd.hgrid.lon_vert[:,1:])
+                y = 0.5 * (grd.hgrid.lat_vert[:,:-1] + grd.hgrid.lat_vert[:,1:])
+            elif grd.hgrid.spherical == 'F':
+                x = 0.5 * (grd.hgrid.x_vert[:,:-1] + grd.hgrid.y_vert[:,1:])
+                y = 0.5 * (grd.hgrid.y_vert[:,:-1] + grd.hgrid.y_vert[:,1:])
         else:
             z = grd.vgrid.z_r[0,:]
-            lon = grd.hgrid.lon_rho[:]
-            lat = grd.hgrid.lat_rho[:]      
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_rho[:]
+                y = grd.hgrid.lat_rho[:]      
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_rho[:]
+                y = grd.hgrid.y_rho[:]      
         mask = grd.hgrid.mask_rho[:]
 
     else:
@@ -255,14 +358,14 @@ def islice(var, iindex, grd, Cpos='rho', vert=False):
     # get constant-i slice
     vari = var[:,:,iindex]
     zi = z[:,:,iindex]
-    loni = np.tile(lon[:,iindex], (zi.shape[0], 1))
-    lati = np.tile(lat[:,iindex], (zi.shape[0], 1))
+    xi = np.tile(x[:,iindex], (zi.shape[0], 1))
+    yi = np.tile(y[:,iindex], (zi.shape[0], 1))
 
     # land/sea mask
     maski = np.tile(mask[:,iindex], (vari.shape[0], 1))
     vari = np.ma.masked_where(maski[:,:] == 0, vari[:,:])
 
-    return vari, zi, loni, lati
+    return vari, zi, xi, yi
     
 
 def jslice(var, jindex, grd, Cpos='rho', vert=False):
@@ -285,32 +388,46 @@ def jslice(var, jindex, grd, Cpos='rho', vert=False):
     # compute the depth on Arakawa-C grid position
 
     if Cpos is 'u':
-        # average z_r at Arakawa-C u points
         if vert == True: 
             z = grd.vgrid.z_w[0,:]
-            lon = grd.hgrid.lon_rho
-            lat = grd.hgrid.lat_rho
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_rho
+                y = grd.hgrid.lat_rho
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_rho
+                y = grd.hgrid.y_rho
         else:
             z = grd.vgrid.z_r[0,:]
             z = 0.5 * (z[:,:,:-1] + z[:,:,1:])
-            lon = grd.hgrid.lon_u[:]
-            lat = grd.hgrid.lat_u[:]         
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_u[:]
+                y = grd.hgrid.lat_u[:]         
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_u[:]
+                y = grd.hgrid.y_u[:]         
         mask = grd.hgrid.mask_u[:]
 
     elif Cpos is 'v':
-        # average z_r at Arakawa-C v points
         if vert == True: 
             z = grd.vgrid.z_w[0,:]
             z = 0.5 * (z[:,:-1,:] + z[:,1:,:])
             z = 0.5 * (z[:,:,:-1] + z[:,:,1:])
-            z = np.concatenate((z[:,:,0:1], z, z[:,:,-2:-1]), 2)
-            lon = grd.hgrid.lon_vert[1:-1,:]
-            lat = grd.hgrid.lat_vert[1:-1,:]
+            z = np.concatenate((z[:,:,0:1], z, z[:,:,-1:]), 2)
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_vert[1:-1,:]
+                y = grd.hgrid.lat_vert[1:-1,:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_vert[1:-1,:]
+                y = grd.hgrid.y_vert[1:-1,:]
         else:
             z = grd.vgrid.z_r[0,:]
             z = 0.5 * (z[:,:-1,:] + z[:,1:,:])
-            lon = grd.hgrid.lon_v[:]
-            lat = grd.hgrid.lat_v[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_v[:]
+                y = grd.hgrid.lat_v[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_v[:]
+                y = grd.hgrid.y_v[:]
         mask = grd.hgrid.mask_v[:]
 
     elif Cpos is 'w':
@@ -322,13 +439,21 @@ def jslice(var, jindex, grd, Cpos='rho', vert=False):
                                 z, \
                                 np.array(grd.vgrid.z_w[0,-1,:,:], ndmin=3)), 0)
             z = 0.5 * (z[:,:,:-1] + z[:,:,1:])
-            z = np.concatenate((z[:,:,0:1], z, z[:,:,-2:-1]), 2)
-            lon = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
-            lat = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
+            z = np.concatenate((z[:,:,0:1], z, z[:,:,-1:]), 2)
+            if grd.hgrid.spherical == 'T':
+                x = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
+                y = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
+            elif grd.hgrid.spherical == 'F':
+                x = 0.5 * (grd.hgrid.x_vert[:-1,:] + grd.hgrid.x_vert[1:,:])
+                y = 0.5 * (grd.hgrid.y_vert[:-1,:] + grd.hgrid.y_vert[1:,:])
         else:
-            z = grd.vgrid.z_w[0,:]
-            lon = grd.hgrid.lon_rho[:]
-            lat = grd.hgrid.lat_rho[:]
+            z = grd.vgrid.z_r[0,:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_rho[:]
+                y = grd.hgrid.lat_rho[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_rho[:]
+                y = grd.hgrid.y_rho[:]
         mask = grd.hgrid.mask_rho[:]
 
     elif Cpos is 'rho':
@@ -336,13 +461,21 @@ def jslice(var, jindex, grd, Cpos='rho', vert=False):
         if vert == True: 
             z = grd.vgrid.z_w[0,:]
             z = 0.5 * (z[:,:,:-1] + z[:,:,1:])
-            z = np.concatenate((z[:,:,0:1], z, z[:,:,-2:-1]), 2)
-            lon = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
-            lat = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
+            z = np.concatenate((z[:,:,0:1], z, z[:,:,-1:]), 2)
+            if grd.hgrid.spherical == 'T':
+                x = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
+                y = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
+            elif grd.hgrid.spherical == 'F':
+                x = 0.5 * (grd.hgrid.x_vert[:-1,:] + grd.hgrid.x_vert[1:,:])
+                y = 0.5 * (grd.hgrid.y_vert[:-1,:] + grd.hgrid.y_vert[1:,:])
         else:
             z = grd.vgrid.z_r[0,:]
-            lon = grd.hgrid.lon_rho[:]
-            lat = grd.hgrid.lat_rho[:]      
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_rho[:]
+                y = grd.hgrid.lat_rho[:]      
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_rho[:]
+                y = grd.hgrid.y_rho[:]      
         mask = grd.hgrid.mask_rho[:]
 
     else:
@@ -352,14 +485,14 @@ def jslice(var, jindex, grd, Cpos='rho', vert=False):
     # get constant-j slice
     varj = var[:,jindex,:]
     zj = z[:,jindex,:]
-    lonj = np.tile(lon[jindex,:], (zj.shape[0], 1))
-    latj = np.tile(lat[jindex,:], (zj.shape[0], 1))
+    xj = np.tile(x[jindex,:], (zj.shape[0], 1))
+    yj = np.tile(y[jindex,:], (zj.shape[0], 1))
 
     # land/sea mask
     maskj = np.tile(mask[jindex,:], (varj.shape[0], 1))
     varj = np.ma.masked_where(maskj[:,:] == 0, varj[:,:])
 
-    return varj, zj, lonj, latj
+    return varj, zj, xj, yj
 
 
 
@@ -393,37 +526,80 @@ def isoslice(var,prop,isoval, grd, Cpos='rho', masking=True, vert=False):
         raise ValueError, 'dimension of var and prop must be identical'
 
     # compute the depth on Arakawa-C grid position
+
     if Cpos is 'u':
         # average z_r at Arakawa-C u points
         z = 0.5 * (grd.vgrid.z_r[0,:,:,:-1] + grd.vgrid.z_r[0,:,:,1:])
         if vert == True: 
-            lon = 0.5 * (grd.hgrid.lon_vert[:,:-1] + grd.hgrid.lon_vert[:,1:])
-            lat = 0.5 * (grd.hgrid.lat_vert[:,:-1] + grd.hgrid.lat_vert[:,1:])
+            if grd.hgrid.spherical == 'T':
+                x = 0.5 * (grd.hgrid.lon_vert[:,:-1] + grd.hgrid.lon_vert[:,1:])
+                y = 0.5 * (grd.hgrid.lat_vert[:,:-1] + grd.hgrid.lat_vert[:,1:])
+            elif grd.hgrid.spherical == 'F':
+                x = 0.5 * (grd.hgrid.x_vert[:,:-1] + grd.hgrid.x_vert[:,1:])
+                y = 0.5 * (grd.hgrid.y_vert[:,:-1] + grd.hgrid.y_vert[:,1:])
         else:
-            lon = grd.hgrid.lon_u[:]
-            lat = grd.hgrid.lat_u[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_u[:]
+                y = grd.hgrid.lat_u[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_u[:]
+                y = grd.hgrid.y_u[:]
         mask = grd.hgrid.mask_u[:]
 
     elif Cpos is 'v':
         # average z_r at Arakawa-C v points
         z = 0.5 * (grd.vgrid.z_r[0,:,:-1,:] + grd.vgrid.z_r[0,:,1:,:])
         if vert == True: 
-            lon = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
-            lat = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
+            if grd.hgrid.spherical == 'T':
+                x = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
+                y = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
+            elif grd.hgrid.spherical == 'F':
+                x = 0.5 * (grd.hgrid.x_vert[:-1,:] + grd.hgrid.x_vert[1:,:])
+                y = 0.5 * (grd.hgrid.y_vert[:-1,:] + grd.hgrid.y_vert[1:,:])
         else:
-            lon = grd.hgrid.lon_v[:]
-            lat = grd.hgrid.lat_v[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_v[:]
+                y = grd.hgrid.lat_v[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_v[:]
+                y = grd.hgrid.y_v[:]
         mask = grd.hgrid.mask_v[:]
 
+    elif Cpos is 'w':
+        z = grd.vgrid.z_w[0,:]
+        if vert == True:
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_vert[:]
+                y = grd.hgrid.lat_vert[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_vert[:]
+                y = grd.hgrid.y_vert[:]
+        else:
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_rho[:]
+                y = grd.hgrid.lat_rho[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_rho[:]
+                y = grd.hgrid.y_rho[:]
+        mask = grd.hgrid.mask_rho[:]
+
     elif Cpos is 'rho':
-        # for temp, salt, rho, w
+        # for temp, salt, rho
         z = grd.vgrid.z_r[0,:]
         if vert == True: 
-            lon = grd.hgrid.lon_vert[:]
-            lat = grd.hgrid.lat_vert[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_vert[:]
+                y = grd.hgrid.lat_vert[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_vert[:]
+                y = grd.hgrid.y_vert[:]
         else:
-            lon = grd.hgrid.lon_rho[:]
-            lat = grd.hgrid.lat_rho[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_rho[:]
+                y = grd.hgrid.lat_rho[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_rho[:]
+                y = grd.hgrid.y_rho[:]
         mask = grd.hgrid.mask_rho[:]
 
     else:
@@ -455,7 +631,7 @@ def isoslice(var,prop,isoval, grd, Cpos='rho', masking=True, vert=False):
     # mask land
     isoslice = np.ma.masked_where(mask == 0, isoslice)
 
-    return isoslice, lon, lat
+    return isoslice, x, y
 
 
 
@@ -483,33 +659,47 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
     # compute the depth on Arakawa-C grid position and get grid information
 
     if Cpos is 'u':
-        # average z_r and z_w at Arakawa-C u points
         if vert == True:
             z = grd.vgrid.z_w[0,:]
             z = 0.5 * (z[:,:-1,:] + z[:,1:,:])
-            z = np.concatenate((z[:,0:1,:], z, z[:,-2:-1,:]), 1)
-            lon = 0.5 * (grd.hgrid.lon_vert[:,:-1] + grd.hgrid.lon_vert[:,1:])
-            lat = 0.5 * (grd.hgrid.lat_vert[:,:-1] + grd.hgrid.lat_vert[:,1:])
+            z = np.concatenate((z[:,0:1,:], z, z[:,-1:,:]), 1)
+            if grd.hgrid.spherical == 'T':
+                x = 0.5 * (grd.hgrid.lon_vert[:,:-1] + grd.hgrid.lon_vert[:,1:])
+                y = 0.5 * (grd.hgrid.lat_vert[:,:-1] + grd.hgrid.lat_vert[:,1:])
+            elif grd.hgrid.spherical == 'F':
+                x = 0.5 * (grd.hgrid.x_vert[:,:-1] + grd.hgrid.x_vert[:,1:])
+                y = 0.5 * (grd.hgrid.y_vert[:,:-1] + grd.hgrid.y_vert[:,1:])
         else:
             z = grd.vgrid.z_r[0,:]
             z = 0.5 * (z[:,:,:-1] + z[:,:,1:])
-            lon = grd.hgrid.lon_u[:]
-            lat = grd.hgrid.lat_u[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_u[:]
+                y = grd.hgrid.lat_u[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_u[:]
+                y = grd.hgrid.y_u[:]
         mask = grd.hgrid.mask_u[:]
 
     elif Cpos is 'v':
-        # average z_r and z_w at Arakawa-C v points
         if vert == True:
             z = grd.vgrid.z_w[0,:]
             z = 0.5 * (z[:,:,:-1] + z[:,:,1:])
-            z = np.concatenate((z[:,:,0:1], z, z[:,:,-2:-1]), 2)
-            lon = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
-            lat = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
+            z = np.concatenate((z[:,:,0:1], z, z[:,:,-1:]), 2)
+            if grd.hgrid.spherical == 'T':
+                x = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
+                y = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
+            elif grd.hgrid.spherical == 'F':
+                x = 0.5 * (grd.hgrid.x_vert[:-1,:] + grd.hgrid.x_vert[1:,:])
+                y = 0.5 * (grd.hgrid.y_vert[:-1,:] + grd.hgrid.y_vert[1:,:])
         else:
             z = grd.vgrid.z_r[0,:]
             z = 0.5 * (z[:,-1:,:] + z[:,1:,:])
-            lon = grd.hgrid.lon_v[:]
-            lat = grd.hgrid.lat_v[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_v[:]
+                y = grd.hgrid.lat_v[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_v[:]
+                y = grd.hgrid.y_v[:]
         mask = grd.hgrid.mask_v[:]
 
     elif Cpos is 'rho':
@@ -518,14 +708,22 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
             z = grd.vgrid.z_w[0,:]
             z = 0.5 * (z[:,:,:-1] + z[:,:,1:])
             z = 0.5 * (z[:,:-1,:] + z[:,1:,:])
-            z = np.concatenate((z[:,:,0:1], z, z[:,:,-2:-1]), 2)
-            z = np.concatenate((z[:,0:1,:], z, z[:,-2:-1,:]), 1)
-            lon = grd.hgrid.lon_vert[:]
-            lat = grd.hgrid.lat_vert[:]
+            z = np.concatenate((z[:,:,0:1], z, z[:,:,-1:]), 2)
+            z = np.concatenate((z[:,0:1,:], z, z[:,-1:,:]), 1)
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_vert[:]
+                y = grd.hgrid.lat_vert[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.lon_vert[:]
+                y = grd.hgrid.lat_vert[:]
         else:
             z = grd.vgrid.z_r[0,:]
-            lon = grd.hgrid.lon_rho[:]
-            lat = grd.hgrid.lat_rho[:]
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_rho[:]
+                y = grd.hgrid.lat_rho[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_rho[:]
+                y = grd.hgrid.y_rho[:]
         mask = grd.hgrid.mask_rho[:]
 
     else:
@@ -636,8 +834,8 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
 
     transect = np.zeros((grd.vgrid.N, near.shape[0]))
     zs = np.zeros((nlev, nearp.shape[0]))
-    lons = np.zeros((nlev, nearp.shape[0]))
-    lats = np.zeros((nlev, nearp.shape[0]))
+    xs = np.zeros((nlev, nearp.shape[0]))
+    ys = np.zeros((nlev, nearp.shape[0]))
 
     # mask variable
     for k in range(var.shape[0]):
@@ -670,34 +868,34 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
             # check if our position match a grid cell
             if (nearp[n,2] == nearp[n,3]):
                 zs[:,n] = z[:, nearp[n,2], nearp[n,0]]
-                lons[:,n] = lon[nearp[n,2], nearp[n,0]]
-                lats[:,n] = lat[nearp[n,2], nearp[n,0]]
+                xs[:,n] = x[nearp[n,2], nearp[n,0]]
+                ys[:,n] = y[nearp[n,2], nearp[n,0]]
             else:
                 zs[:,n] = (nearp[n,1] - nearp[n,2]) * z[:, nearp[n,3], nearp[n,0]] + \
                           (nearp[n,3] - nearp[n,1]) * z[:, nearp[n,2], nearp[n,0]]
-                lons[:,n] = (nearp[n,1] - nearp[n,2]) * lon[nearp[n,3], nearp[n,0]] + \
-                            (nearp[n,3] - nearp[n,1]) * lon[nearp[n,2], nearp[n,0]]
-                lats[:,n] = (nearp[n,1] - nearp[n,2]) * lat[nearp[n,3], nearp[n,0]] + \
-                            (nearp[n,3] - nearp[n,1]) * lat[nearp[n,2], nearp[n,0]]
+                xs[:,n] = (nearp[n,1] - nearp[n,2]) * x[nearp[n,3], nearp[n,0]] + \
+                            (nearp[n,3] - nearp[n,1]) * x[nearp[n,2], nearp[n,0]]
+                ys[:,n] = (nearp[n,1] - nearp[n,2]) * y[nearp[n,3], nearp[n,0]] + \
+                            (nearp[n,3] - nearp[n,1]) * y[nearp[n,2], nearp[n,0]]
         else:
             # check if our position match a grid cell
             if (nearp[n,2] == nearp[n,3]):
                 zs[:,n] = z[:, nearp[n,0], nearp[n,2]]
-                lons[:,n] = lon[nearp[n,0], nearp[n,2]]
-                lats[:,n] = lat[nearp[n,0], nearp[n,2]]
+                xs[:,n] = x[nearp[n,0], nearp[n,2]]
+                ys[:,n] = y[nearp[n,0], nearp[n,2]]
             else:
                 zs[:,n] = (nearp[n,1] - nearp[n,2]) * z[:, nearp[n,0], nearp[n,3]] + \
                           (nearp[n,3] - nearp[n,1]) * z[:, nearp[n,0], nearp[n,2]]
-                lons[:,n] = (nearp[n,1] - nearp[n,2]) * lon[nearp[n,0], nearp[n,3]] + \
-                            (nearp[n,3] - nearp[n,1]) * lon[nearp[n,0], nearp[n,2]]
-                lats[:,n] = (nearp[n,1] - nearp[n,2]) * lat[nearp[n,0], nearp[n,3]] + \
-                            (nearp[n,3] - nearp[n,1]) * lat[nearp[n,0], nearp[n,2]]
+                xs[:,n] = (nearp[n,1] - nearp[n,2]) * x[nearp[n,0], nearp[n,3]] + \
+                            (nearp[n,3] - nearp[n,1]) * x[nearp[n,0], nearp[n,2]]
+                ys[:,n] = (nearp[n,1] - nearp[n,2]) * y[nearp[n,0], nearp[n,3]] + \
+                            (nearp[n,3] - nearp[n,1]) * y[nearp[n,0], nearp[n,2]]
 
     # mask transect
     transect = np.ma.masked_values(transect, spval)
 
 
-    return transect, zs, lons, lats
+    return transect, zs, xs, ys
             
 
             
@@ -906,10 +1104,114 @@ def latslice(var, latitude, grd, Cpos='rho', vert=False, spval=1e37):
     return latslice, z, lon, lat
 
 
-
-def section_transport(u, v, istart, iend, jstart, jend, grd):
+def zlayer(var, grd, h1=None, h2=None, Cpos='rho', vert=False):
+    """    
+    extract a z layer between depth h1 and h2
     """
-    transpu, transpv = section_transport(u, v, istart, iend, jstart, jend, grd)
+
+    # compute the depth on Arakawa-C grid position
+
+    if Cpos is 'u':
+        # average z_r at Arakawa-C u points
+        z = 0.5 * (grd.vgrid.z_w[0,:,:,:-1] + grd.vgrid.z_w[0,:,:,1:])
+        if vert == True: 
+            if grd.hgrid.spherical == 'T':
+                x = 0.5 * (grd.hgrid.lon_vert[:,:-1] + grd.hgrid.lon_vert[:,1:])
+                y = 0.5 * (grd.hgrid.lat_vert[:,:-1] + grd.hgrid.lat_vert[:,1:])
+            elif grd.hgrid.spherical == 'F':
+                x = 0.5 * (grd.hgrid.x_vert[:,:-1] + grd.hgrid.x_vert[:,1:])
+                y = 0.5 * (grd.hgrid.y_vert[:,:-1] + grd.hgrid.y_vert[:,1:])
+        else:
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_u[:]
+                y = grd.hgrid.lat_u[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_u[:]
+                y = grd.hgrid.y_u[:]
+        mask = grd.hgrid.mask_u[:]
+
+    elif Cpos is 'v':
+        # average z_r at Arakawa-C v points
+        z = 0.5 * (grd.vgrid.z_w[0,:,:-1,:] + grd.vgrid.z_w[0,:,1:,:])
+        if vert == True: 
+            if grd.hgrid.spherical == 'T':
+                x = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
+                y = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
+            elif grd.hgrid.spherical == 'F':
+                x = 0.5 * (grd.hgrid.x_vert[:-1,:] + grd.hgrid.x_vert[1:,:])
+                y = 0.5 * (grd.hgrid.y_vert[:-1,:] + grd.hgrid.y_vert[1:,:])
+        else:
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_v[:]
+                y = grd.hgrid.lat_v[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_v[:]
+                y = grd.hgrid.y_v[:]
+        mask = grd.hgrid.mask_v[:]
+
+    elif Cpos is 'rho':
+        # for temp, salt, rho
+        z = grd.vgrid.z_w[0,:]
+        if vert == True: 
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_vert[:]
+                y = grd.hgrid.lat_vert[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_vert[:]
+                y = grd.hgrid.y_vert[:]
+        else:
+            if grd.hgrid.spherical == 'T':
+                x = grd.hgrid.lon_rho[:]
+                y = grd.hgrid.lat_rho[:]
+            elif grd.hgrid.spherical == 'F':
+                x = grd.hgrid.x_rho[:]
+                y = grd.hgrid.y_rho[:]
+        mask = grd.hgrid.mask_rho[:]
+
+    else:
+        raise Warning, '%s bad position. Valid Arakawa-C are \
+                           rho, u or v.' % Cpos
+
+
+
+    #set var to zero where tra is masked for the sum
+    mask = np.tile(mask, (var.shape[0],1,1))
+    var = np.where(mask == 1, var, 0)
+
+    zlayer = np.zeros((var.shape[1], var.shape[2]))
+    dz = z[1:,:,:] - z[:-1,:,:]
+
+    for jj in range(var.shape[1]):
+        for ji in range(var.shape[2]):
+            ratio = np.ones(var.shape[0])
+            if h1 is not None:
+                if np.abs(h1) < np.abs(z[0,jj,ji]):
+                    idx1 = np.where(z[:,jj,ji] > -np.abs(h1))
+                    if np.any(idx1):
+                        idx1 = idx1[0][0]
+                        r = (-np.abs(h1) - z[idx1-1,jj,ji]) / \
+                                (z[idx1,jj,ji] -z[idx1-1,jj,ji])
+                        ratio[idx1:] = 0.
+                        ratio[idx1-1] = r
+                else:
+                    ratio[:] = 0.
+            if h2 is not None:
+                idx2 = np.where(z[:,jj,ji] < -np.abs(h2))
+                if np.any(idx2):
+                    idx2 = idx2[0][-1]
+                    r = (z[idx2+1,jj,ji] - (-np.abs(h2))) / \
+                                 (z[idx2+1,jj,ji] -z[idx2,jj,ji])
+                    ratio[:idx2] = 0.
+                    ratio[idx2] = r
+            zlayer[jj,ji] = np.sum(var[:,jj,ji] * dz[:,jj,ji] * ratio[:])/ \
+                           np.sum(dz[:,jj,ji] * ratio[:])
+
+    return zlayer, x, y
+
+
+def section_transport(u, v, grd, istart, iend, jstart, jend):
+    """
+    transpu, transpv = section_transport(u, v, grd, istart, iend, jstart, jend)
 
     compute the transport through the section defined between 
     the point P1 (istart,jstart) and P2 (iend, jend).
@@ -1053,6 +1355,371 @@ def section_transport(u, v, istart, iend, jstart, jend, grd):
 
 
     return transpu, transpv
+
+
+def section_transport_z(u, v, grd, istart, iend, jstart, jend, h1=None, h2=None):
+    """
+    transpu, transpv = section_transport(u, v, grd, istart, iend, jstart, jend, h1, h2)
+
+    compute the transport between depth h1 and h2 (if specified) through the section 
+    defined between the point P1 (istart,jstart) and P2 (iend, jend).
+    P1 and P2 are Arakawa-C psi points.
+    The transpot is positive right handside of the section.
+    """			          
+        
+
+    # Find the nearest point between P1 (imin,jmin) and P2 (imax, jmax)
+    # -----------------------------------------------------------------
+    # Initialization
+    i0=istart; j0=jstart; i1=iend;  j1=jend
+    istart = float(istart); iend = float(iend)
+    jstart = float(jstart); jend = float(jend)
+
+    # Compute equation:  j = aj i + bj
+    if istart != iend:
+        aj = (jend - jstart ) / (iend - istart)
+        bj = jstart - aj * istart
+    else:
+        aj=10000.
+        bj=0.
+
+    # Compute equation:  i = ai j + bi
+    if jstart != jend:
+        ai = (iend - istart ) / ( jend - jstart )
+        bi = istart - ai * jstart
+    else:
+        ai=10000.
+        bi=0.
+     
+    # Compute the integer pathway:
+    # Chose the strait line with the smallest slope
+    if (abs(aj) <=  1 ):
+        # Here, the best line is y(x)
+        print 'Here, the best line is y(x)'
+        # If i1 < i0 swap points and remember it has been swapped
+        if i1 <  i0:
+            i  = i0 ; j  = j0
+            i0 = i1 ; j0 = j1
+            i1 = i  ; j1 = j
+            norm = -1
+        else:
+            norm = 1
+
+        if j1 >= j0:
+            ist = 1; jst = 1
+            norm_u = 1; norm_v = -1
+        else:
+            ist = 1; jst = 0
+            norm_u = -1; norm_v = -1
+
+        near = []
+        # compute the nearest j point on the line crossing at i
+        for i in range(i0,i1+1):
+            j = aj*i + bj
+            near.append(i + round(j)*1j)
+           
+    else:
+        # Here, the best line is x(y)
+        print 'Here, the best line is x(y)'
+        # If j1 < j0 swap points and remember it has been swapped
+        if j1 <  j0:
+            i  = i0 ; j  = j0
+            i0 = i1 ; j0 = j1
+            i1 = i  ; j1 = j
+            norm = -1
+        else:
+            norm = 1
+
+        if i1 >= i0:
+            ist = 1; jst = 1
+            norm_u = 1; norm_v = -1
+        else:
+            ist = 0; jst = 1
+            norm_u = 1; norm_v = 1
+
+        near = []
+        # compute the nearest i point on the line crossing at j
+        for j in range(j0,j1+1):
+            i = ai*j + bi
+            near.append(round(i) + j*1j)
+
+
+    # Look for intermediate points to be added
+    # -------------------------------------------------------------
+
+    inear = np.copy(near)
+
+    n = len(near)
+    nn=1
+
+    for k in range(1,n):
+        # distance between 2 neighbour points
+        d = abs(inear[k] - inear[k-1])
+                
+	if ( d > 1 ):
+            # intermediate points required if d>1
+	    neari = interm_pt(inear, k, ai, bi, aj, bj)
+            near.insert(nn,neari)
+            nn=nn+1
+        
+        nn=nn+1
+
+
+    # Now extract the transport through a section
+    # -------------------------------------------
+
+    #get metrics
+    dx = grd.hgrid.dx
+    dy = grd.hgrid.dy
+    z_w = grd.vgrid.z_w[0,:]
+    # average z_w at Arakawa-C u points			           
+    zu = 0.5 * (z_w[:,:,:-1] + z_w[:,:,1:])
+    dzu = zu[1:,:,:] - zu[:-1,:,:]
+    # average z_w at Arakawa-C v points
+    zv = 0.5 * (z_w[:,:-1,:] + z_w[:,1:,:])
+    dzv = zv[1:,:,:] - zv[:-1,:,:]
+
+    #set u and v to zero where u and v are masked for the sum
+    for k in range(u.shape[0]):
+        u[k,:] = np.where(grd.hgrid.mask_u == 1, u[k,:], 0)
+        v[k,:] = np.where(grd.hgrid.mask_v == 1, v[k,:], 0)
+
+    n = len(near)
+    transpu = 0
+    transpv = 0
+
+    for l in range(0,n-1):
+
+        ii = int(np.real(near[l])); jj = int(np.imag(near[l]))
+
+        if np.real(near[l]) == np.real(near[l+1]):
+            vel = u[:, jj+jst, ii]
+            ds = dy[jj+jst, ii]
+            z = zu[:, jj+jst, ii]
+            dz = dzu[:, jj+jst, ii]
+            norm_su = norm_u * norm
+            norm_sv = 0.
+        elif np.imag(near[l]) == np.imag(near[l+1]):
+            vel = v[:, jj, ii+ist]
+            ds = dx[jj, ii+ist]
+            z = zv[:, jj, ii+ist]
+            dz = dzv[:, jj, ii+ist]
+            norm_su = 0.
+            norm_sv = norm_v * norm
+
+        ratio = np.ones(dz.shape)
+        if h1 is not None:
+            if np.abs(h1) < np.abs(z[0]):
+                idx1 = np.where(z > -np.abs(h1))
+                if np.any(idx1):
+                    idx1 = idx1[0][0]
+                    r = (-np.abs(h1) - z[idx1-1]) / (z[idx1] -z[idx1-1])
+                    ratio[idx1:] = 0.
+                    ratio[idx1-1] = r
+            else:
+                ratio[:] = 0. 
+        if h2 is not None:
+            idx2 = np.where(z < -np.abs(h2))
+            if np.any(idx2):
+                idx2 = idx2[0][-1]
+                r = (z[idx2+1] - (-np.abs(h2))) / (z[idx2+1] -z[idx2])
+                ratio[:idx2] = 0.
+                ratio[idx2] = r
+
+        for k in range(0, dzu.shape[0]):
+            transu = vel[k] * ds * dz[k] * norm_su * ratio[k]
+            transv = vel[k] * ds * dz[k] * norm_sv * ratio[k]
+            transpu = transpu + transu
+            transpv = transpv + transv
+
+    return transpu, transpv
+
+
+def section_tracer_transport_z(u, v, tracer, grd, istart, iend, jstart, jend, h1=None, h2=None):
+    """
+    transpu, transpv = section_transport(u, v, tracer, grd, istart, iend, jstart, jend, h1, h2)
+
+    compute the tracer transport between depth h1 and h2 (if specified) through the section 
+    defined between the point P1 (istart,jstart) and P2 (iend, jend).
+    P1 and P2 are Arakawa-C psi points.
+    The transpot is positive right handside of the section.
+    """			          
+        
+
+    # Find the nearest point between P1 (imin,jmin) and P2 (imax, jmax)
+    # -----------------------------------------------------------------
+    # Initialization
+    i0=istart; j0=jstart; i1=iend;  j1=jend
+    istart = float(istart); iend = float(iend)
+    jstart = float(jstart); jend = float(jend)
+
+    # Compute equation:  j = aj i + bj
+    if istart != iend:
+        aj = (jend - jstart ) / (iend - istart)
+        bj = jstart - aj * istart
+    else:
+        aj=10000.
+        bj=0.
+
+    # Compute equation:  i = ai j + bi
+    if jstart != jend:
+        ai = (iend - istart ) / ( jend - jstart )
+        bi = istart - ai * jstart
+    else:
+        ai=10000.
+        bi=0.
+     
+    # Compute the integer pathway:
+    # Chose the strait line with the smallest slope
+    if (abs(aj) <=  1 ):
+        # Here, the best line is y(x)
+        print 'Here, the best line is y(x)'
+        # If i1 < i0 swap points and remember it has been swapped
+        if i1 <  i0:
+            i  = i0 ; j  = j0
+            i0 = i1 ; j0 = j1
+            i1 = i  ; j1 = j
+            norm = -1
+        else:
+            norm = 1
+
+        if j1 >= j0:
+            ist = 1; jst = 1
+            norm_u = 1; norm_v = -1
+        else:
+            ist = 1; jst = 0
+            norm_u = -1; norm_v = -1
+
+        near = []
+        # compute the nearest j point on the line crossing at i
+        for i in range(i0,i1+1):
+            j = aj*i + bj
+            near.append(i + round(j)*1j)
+           
+    else:
+        # Here, the best line is x(y)
+        print 'Here, the best line is x(y)'
+        # If j1 < j0 swap points and remember it has been swapped
+        if j1 <  j0:
+            i  = i0 ; j  = j0
+            i0 = i1 ; j0 = j1
+            i1 = i  ; j1 = j
+            norm = -1
+        else:
+            norm = 1
+
+        if i1 >= i0:
+            ist = 1; jst = 1
+            norm_u = 1; norm_v = -1
+        else:
+            ist = 0; jst = 1
+            norm_u = 1; norm_v = 1
+
+        near = []
+        # compute the nearest i point on the line crossing at j
+        for j in range(j0,j1+1):
+            i = ai*j + bi
+            near.append(round(i) + j*1j)
+
+
+    # Look for intermediate points to be added
+    # -------------------------------------------------------------
+
+    inear = np.copy(near)
+
+    n = len(near)
+    nn=1
+
+    for k in range(1,n):
+        # distance between 2 neighbour points
+        d = abs(inear[k] - inear[k-1])
+                
+	if ( d > 1 ):
+            # intermediate points required if d>1
+	    neari = interm_pt(inear, k, ai, bi, aj, bj)
+            near.insert(nn,neari)
+            nn=nn+1
+        
+        nn=nn+1
+
+
+    # Now extract the transport through a section
+    # -------------------------------------------
+
+    #get metrics
+    dx = grd.hgrid.dx
+    dy = grd.hgrid.dy
+    z_w = grd.vgrid.z_w[0,:]
+    # average z_w at Arakawa-C u points			           
+    zu = 0.5 * (z_w[:,:,:-1] + z_w[:,:,1:])
+    dzu = zu[1:,:,:] - zu[:-1,:,:]
+    # average z_w at Arakawa-C v points
+    zv = 0.5 * (z_w[:,:-1,:] + z_w[:,1:,:])
+    dzv = zv[1:,:,:] - zv[:-1,:,:]
+
+    #tracer value at u and v position
+    trau = 0.5 * (tracer[:,:,1:] + tracer[:,:,:-1])
+    trav = 0.5 * (tracer[:,1:,:] + tracer[:,:-1,:])
+
+    #set u and v to zero where u and v are masked for the sum
+    for k in range(u.shape[0]):
+        u[k,:] = np.where(grd.hgrid.mask_u == 1, u[k,:], 0)
+        v[k,:] = np.where(grd.hgrid.mask_v == 1, v[k,:], 0)
+        trau[k,:] = np.where(grd.hgrid.mask_u == 1, trau[k,:], 0)
+        trav[k,:] = np.where(grd.hgrid.mask_v == 1, trav[k,:], 0)
+
+    n = len(near)
+    transpu = 0
+    transpv = 0
+
+    for l in range(0,n-1):
+
+        ii = int(np.real(near[l])); jj = int(np.imag(near[l]))
+
+        if np.real(near[l]) == np.real(near[l+1]):
+            vel = u[:, jj+jst, ii]
+            tra = trau[:, jj+jst, ii]
+            ds = dy[jj+jst, ii]
+            z = zu[:, jj+jst, ii]
+            dz = dzu[:, jj+jst, ii]
+            norm_su = norm_u * norm
+            norm_sv = 0.
+        elif np.imag(near[l]) == np.imag(near[l+1]):
+            vel = v[:, jj, ii+ist]
+            tra = trav[:, jj, ii+ist]
+            ds = dx[jj, ii+ist]
+            z = zv[:, jj, ii+ist]
+            dz = dzv[:, jj, ii+ist]
+            norm_su = 0.
+            norm_sv = norm_v * norm
+
+        ratio = np.ones(dz.shape)
+        if h1 is not None:
+            if np.abs(h1) < np.abs(z[0]):
+                idx1 = np.where(z > -np.abs(h1))
+                if np.any(idx1):
+                    idx1 = idx1[0][0]
+                    r = (-np.abs(h1) - z[idx1-1]) / (z[idx1] -z[idx1-1])
+                    ratio[idx1:] = 0.
+                    ratio[idx1-1] = r
+            else:
+                ratio[:] = 0. 
+        if h2 is not None:
+            idx2 = np.where(z < -np.abs(h2))
+            if np.any(idx2):
+                idx2 = idx2[0][-1]
+                r = (z[idx2+1] - (-np.abs(h2))) / (z[idx2+1] -z[idx2])
+                ratio[:idx2] = 0.
+                ratio[idx2] = r
+
+        for k in range(0, dzu.shape[0]):
+            transu = vel[k] * tra[k] * ds * dz[k] * norm_su * ratio[k]
+            transv = vel[k] * tra[k] * ds * dz[k] * norm_sv * ratio[k]
+            transpu = transpu + transu
+            transpv = transpv + transv
+
+    return transpu, transpv
+
 
 
 def interm_pt(pnear, pk, pai, pbi, paj, pbj):
@@ -1204,7 +1871,6 @@ def obs_interp2d(Finp, lon, lat, grd, Cpos='rho', rectangular=0, spval=1e37):
     """
 
     Iout, Jout = hindices(lon, lat, grd, Cpos=Cpos, rectangular=rectangular, spval=spval)
-    print Iout, Jout
 
     # fortran indexing start with one...
     Iout = Iout + 1

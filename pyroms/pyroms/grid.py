@@ -151,15 +151,15 @@ class ROMS_gridinfo(object):
 
         #now write this to deal with both ROMS 3 and 2
         try:
-          self.Vtrans=np.float(hist.Vtransform)
+          self.Vtrans=np.float(hist.Vstretching)
           self.theta_s=np.float(hist.theta_s)
           self.theta_b=np.float(hist.theta_b)
           self.Tcline=np.float(hist.Tcline)
         except AttributeError:
           try:
-            self.Vtrans=np.float(hist.variables['Vtransform'][:])
+            self.Vtrans=np.float(hist.variables['Vstretching'][:])
           except:
-            print 'variable Vtransform not found in history file. Defaulting to Vtranform=1'
+            print 'variable Vtransform not found in history file. Defaulting to Vtrans=1'
             self.Vtrans=1
           self.theta_s=np.float(hist.variables['theta_s'][:])
           self.theta_b=np.float(hist.variables['theta_b'][:])
@@ -228,7 +228,7 @@ def get_ROMS_hgrid(gridid):
     spherical = nc.variables['spherical'][:]
 
     #Get horizontal grid 
-    if spherical == 'F':
+    if ((spherical == 0) or (spherical == 'F')):
         #cartesian grid
         print 'Load cartesian grid from file'
         if 'x_vert' in nc.variables.keys() and 'y_vert' in nc.variables.keys():
@@ -488,7 +488,7 @@ def write_ROMS_grid(grd, filename='roms_grd.nc'):
 
     
     # Write ROMS grid to file
-    nc = netCDF.Dataset(filename, 'w', format='NETCDF3_CLASSIC')
+    nc = netCDF.Dataset(filename, 'w', format='NETCDF3_64BIT')
     nc.Description = 'ROMS grid'
     nc.Author = 'pyroms.grid.write_grd'
     nc.Created = datetime.now().isoformat()

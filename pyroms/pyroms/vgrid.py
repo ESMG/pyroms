@@ -220,12 +220,12 @@ class s_coordinate_4(s_coordinate):
         super(s_coordinate_4, self)._get_s_w()
 
     def _get_Cs_r(self):
-        if (self.theta_s >= 0):
+        if (self.theta_s > 0):
             Csur = (self.c1 - np.cosh(self.theta_s * self.s_rho)) / \
                      (np.cosh(self.theta_s) - self.c1)
         else:
             Csur = -self.s_rho**2
-        if (self.theta_b >= 0):
+        if (self.theta_b > 0):
             Cbot = (np.exp(self.theta_b * Csur) - self.c1 ) / \
                    (self.c1 - np.exp(-self.theta_b))
             self.Cs_r = Cbot
@@ -233,12 +233,12 @@ class s_coordinate_4(s_coordinate):
             self.Cs_r = Csur         
 
     def _get_Cs_w(self):
-        if (self.theta_s >= 0):
+        if (self.theta_s > 0):
             Csur = (self.c1 - np.cosh(self.theta_s * self.s_w)) / \
                      (np.cosh(self.theta_s) - self.c1)
         else:
             Csur = -self.s_w**2
-        if (self.theta_b >= 0):
+        if (self.theta_b > 0):
             Cbot = (np.exp(self.theta_b * Csur) - self.c1 ) / \
                    ( self.c1 - np.exp(-self.theta_b) )
             self.Cs_w = Cbot
