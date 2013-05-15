@@ -2,3 +2,8 @@ build
 *.so
 *.o
 *.pyc
+*.mod
+*.t
+*.a
+*.log
+*.status

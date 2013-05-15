@@ -1,41 +1,42 @@
 #!/bin/sh
 
-LOCALDIR=/usr/local
+#DESTDIR=/usr/local
+DESTDIR=/u1/uaf/kate/Python
 CURDIR=`pwd`
 
 echo
 echo "installing pyroms..."
 echo
-python setup.py install
+python setup.py install --prefix=$DESTDIR
 echo "installing external libraries..."
 echo "installing gridgen..."
-cd $LOCALDIR/python/pyroms/external/nn
-./configure
+cd $CURDIR/external/nn
+./configure --prefix=$DESTDIR
 make install
-cd $LOCALDIR/python/pyroms/external/csa
-./configure
+cd $CURDIR/external/csa
+./configure --prefix=$DESTDIR
 make install
-cd $LOCALDIR/python/pyroms/external/gridutils
-CPPFLAGS=-I$LOCALDIR/include ./configure
+cd $CURDIR/external/gridutils
+CPPFLAGS=-I$DESTDIR/include LDFLAGS=-L$DESTDIR/lib ./configure --prefix=$DESTDIR
 make install
-cd $LOCALDIR/python/pyroms/external/gridgen
-CPPFLAGS=-I$LOCALDIR/include CFLAGS=-I$LOCALDIR/include ./configure
+cd $CURDIR/external/gridgen
+CPPFLAGS=-I$DESTDIR/include CFLAGS=-I$DESTDIR/include ./configure --prefix=$DESTDIR
 make
 make lib
 make shlib
 make install
 PYROMS_PATH=`python -c 'import pyroms ; print pyroms.__path__[0]'`
-cp $LOCALDIR/lib/libgridgen.so $PYROMS_PATH
+cp libgridgen.so $PYROMS_PATH
+#cp $LOCALDIR/lib/libgridgen.so $PYROMS_PATH
 echo "installing scrip..."
-cd $LOCALDIR/python/pyroms/external/scrip/source
-awk '{gsub(/LIBDIR = \/opt\/local\/lib/,"LIBDIR = '$MACPORTDIR'/lib");print}' makefile > makefile2
-awk '{gsub(/INCDIR = \/opt\/local\/include/,"INCDIR = '$MACPORTDIR'/include");print}' makefile2 > makefile
-awk '{gsub(/PREFIX = \/usr\/local/,"PREFIX = '$LOCALDIR'");print}' makefile > makefile2
+cd $CURDIR/external/scrip/source
+perl -pe "s#\/usr\/local#$DESTDIR#" makefile > makefile2
 mv -f makefile2 makefile
 make
 make f2py
 make install
-cp $LOCALDIR/lib/scrip.so $PYROMS_PATH/remapping
+#cp $LOCALDIR/lib/scrip.so $PYROMS_PATH/remapping
+cp scrip.so $PYROMS_PATH/remapping
 cd $CURDIR
 echo
 echo "Done installing pyroms..."
