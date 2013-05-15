@@ -13,27 +13,28 @@ def make_remap_grid_file(Bgrd, Bpos='t'):
     #create remap file
     remap_filename = 'remap_grid_' + Bgrd.name + '_' + Bpos + '.nc'
     nc = netCDF.Dataset(remap_filename, 'w', format='NETCDF3_CLASSIC')
-    nc.Description = 'remap grid file on' + Bpos + 'points'
-    nc.Author = 'pyroms.remapping.make_remap_grid_file'
+    nc.Description = 'remap grid file for POP'
+    nc.Author = 'pyroms_toolbox.BGrid_POP.make_remap_grid_file'
     nc.Created = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     nc.title = Bgrd.name
 
+    lon_corner = Bgrd.lon_t_vert
+    lat_corner = Bgrd.lat_t_vert
+    grid_center_lon = Bgrd.lon_t.flatten()
+    grid_center_lat = Bgrd.lat_t.flatten()
+    Mp, Lp = Bgrd.lon_t.shape
     if Bpos == 't':
         lon_corner = Bgrd.lon_t_vert
         lat_corner = Bgrd.lat_t_vert
         grid_center_lon = Bgrd.lon_t.flatten()
         grid_center_lat = Bgrd.lat_t.flatten()
         grid_imask = Bgrd.mask_t[0,:].flatten()
-        Mp, Lp = Bgrd.lon_t.shape
     elif Bpos == 'uv':
-        lon_corner = Bgrd.lon_uv_vert
-        lat_corner = Bgrd.lat_uv_vert
-        grid_center_lon = Bgrd.lon_uv.flatten()
-        grid_center_lat = Bgrd.lat_uv.flatten()
-        grid_imask = Bgrd.mask_uv[0,:].flatten()
-        Mp, Lp = Bgrd.lon_uv.shape
-    else:
-        raise ValueError, 'Bpos must be t or uv'
+        lon_corner = Bgrd.lon_u_vert
+        lat_corner = Bgrd.lat_u_vert
+        grid_center_lon = Bgrd.lon_u.flatten()
+        grid_center_lat = Bgrd.lat_u.flatten()
+        grid_imask = Bgrd.mask_u[0,:].flatten()
 
     grid_size = Lp * Mp
 
@@ -51,6 +52,7 @@ def make_remap_grid_file(Bgrd, Bpos='t'):
             grid_corner_lon[k,3] = lon_corner[j+1,i]
             grid_corner_lat[k,3] = lat_corner[j+1,i]
             k = k + 1
+
 
     #Write netcdf file
     nc.createDimension('grid_size', grid_size)

@@ -14,36 +14,36 @@ def rx0(h,rmask):
        rx0         Beckmann and Haidvogel grid stiffness ratios.
     """
 
-    Lp, Mp = h.shape
+    Mp, Lp = h.shape
     L=Lp-1
     M=Mp-1
 
     #  Land/Sea mask on U-points.
-    umask = np.zeros((L,Mp))
+    umask = np.zeros((Mp,L))
     for j in range(Mp):
         for i in range(1,Lp):
-            umask[i-1,j] = rmask[i,j] * rmask[i-1,j]
+            umask[j,i-1] = rmask[j,i] * rmask[j,i-1]
 
     #  Land/Sea mask on V-points.
-    vmask = np.zeros((Lp,M))
+    vmask = np.zeros((M,Lp))
     for j in range(1,Mp):
         for i in range(Lp):
-            vmask[i,j-1] = rmask[i,j] * rmask[i,j-1]
+            vmask[j-1,i] = rmask[j,i] * rmask[j-1,i]
 
     #-------------------------------------------------------------------
     #  Compute R-factor.
     #-------------------------------------------------------------------
 
-    hx = np.zeros((L,Mp))
-    hy = np.zeros((Lp,M))
+    hx = np.zeros((Mp,L))
+    hy = np.zeros((M,Lp))
 
-    hx = abs(h[1:,:] - h[:-1,:]) / (h[1:,:] + h[:-1,:])
-    hy = abs(h[:,1:] - h[:,:-1]) / (h[:,1:] + h[:,:-1])
+    hx = abs(h[:,1:] - h[:,:-1]) / (h[:,1:] + h[:,:-1])
+    hy = abs(h[1:,:] - h[:-1,:]) / (h[1:,:] + h[:-1,:])
 
     hx = hx * umask
     hy = hy * vmask
 
-    rx0 = np.maximum(np.maximum(hx[:,:-1],hx[:,1:]), np.maximum(hy[:-1,:],hy[1:,:]))
+    rx0 = np.maximum(np.maximum(hx[:-1,:],hx[1:,:]),np.maximum(hy[:,:-1],hy[:,1:]))
 
     rmin = rx0.min()
     rmax = rx0.max()

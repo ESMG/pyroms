@@ -145,6 +145,7 @@ def sview(var, tindex, sindex, grid, filename=None, \
         map = Basemap(projection=proj, llcrnrlon=lon_min, llcrnrlat=lat_min, \
               urcrnrlon=lon_max, urcrnrlat=lat_max, lat_0=lat_0, lon_0=lon_0, \
                  resolution='h', area_thresh=5.)
+        #map = pyroms.utility.get_grid_proj(grd, type=proj)
         x, y = map(lon,lat)
     
     if fill_land is True and proj is not None:
@@ -179,12 +180,17 @@ def sview(var, tindex, sindex, grid, filename=None, \
 
     if contour is True:
         if fill is not True:
-            raise Warning, 'Please run again with fill=True to overlay contour.'
+            xc = 0.5*(x[:,1:]+x[:,1:]) 
+            xc = 0.5*(xc[1:,:]+xc[:-1,:]) 
+            yc = 0.5*(y[:,1:]+y[:,1:]) 
+            yc = 0.5*(yc[1:,:]+yc[:-1,:]) 
         else:
-            if proj is not None:
-                Basemap.contour(map, x, y, sslice, vc[::d], colors='k', linewidths=0.5, linestyles='solid')
-            else: 
-                plt.contour(lon, lat, sslice, vc[::d], colors='k', linewidths=0.5, linestyles='solid')
+            xc = x
+            yc = y
+        if proj is not None:
+            Basemap.contour(map, xc, yc, sslice, vc[::d], colors='k', linewidths=0.5, linestyles='solid')
+        else: 
+            plt.contour(lon, lat, sslice, vc[::d], colors='k', linewidths=0.5, linestyles='solid')
 
     if proj is None and range is not None:
         plt.axis(range) 

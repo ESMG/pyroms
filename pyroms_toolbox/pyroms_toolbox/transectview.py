@@ -7,7 +7,7 @@ import pyroms
 
 def transectview(var, tindex, istart, iend, jstart, jend, gridid, \
           filename=None, spval=1e37, cmin=None, cmax=None, clev=None, \
-          fill=False, contour=False, d=4, jrange=None, hrange=None,\
+          fill=False, contour=False, c=None, jrange=None, hrange=None,\
           fts=None, title=None, map=False, \
           pal=None, clb=True, xaxis='lon', outfile=None):
     """
@@ -21,8 +21,9 @@ def transectview(var, tindex, istart, iend, jstart, jend, gridid, \
       - cmax             set color maximum limit
       - clev             set the number of color step
       - fill             use contourf instead of pcolor
-      - contour          overlay contour (request fill=True)
-      - d                contour density (default d=4) 
+      - contour          overlay contour
+      - c                desired contour level. If not specified, 
+                         plot every 4 contour level.
       - jrange           j range
       - hrange           h range
       - fts              set font size (default: 12)
@@ -161,11 +162,16 @@ def transectview(var, tindex, istart, iend, jstart, jend, gridid, \
     	    t.set_fontsize(fts)
 
     if contour is True:
-        if fill is not True:
-            raise Warning, 'Please run again with fill=True for overlay contour.'
+        if c is None:
+            c = vc[::10] 
+        if fill is True:
+            plt.contour(xt, zt, transect, c, colors='k', linewidths=0.5, linestyles='solid', axes=ax)
         else:
-            plt.contour(xt, zt, transect, vc[::d], colors='k', linewidths=0.5, linestyles='solid', axes=ax)
-
+            xc = 0.5*(xt[1:,:]+xt[:-1,:])
+            xc = 0.5*(xc[:,1:]+xc[:,:-1])
+            zc = 0.5*(zt[1:,:]+zt[:-1,:])
+            zc = 0.5*(zc[:,1:]+zc[:,:-1]) 
+            plt.contour(xc, zc, transect, c, colors='k', linewidths=0.5, linestyles='solid', axes=ax)
 
     if jrange is not None:
         plt.xlim(jrange)

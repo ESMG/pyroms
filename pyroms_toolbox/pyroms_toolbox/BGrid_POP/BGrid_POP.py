@@ -5,100 +5,55 @@ try:
   import netCDF4 as netCDF
 except:
   import netCDF3 as netCDF
-import pyroms
-
-
+  import pyroms
 
 class BGrid_POP(object):
     """
-    Arakawa B-Grid for POP
+    BGrid object for POP
     """
 
-
-    def __init__(self, lon_t, lat_t, lon_uv, lat_uv, \
-                       mask_t, mask_uv, z_t, angle, name):
+    def __init__(self, lon_t, lat_t, lon_u, lat_u, angle, h_t, h_u, z_t, z_w, name, xrange, yrange):
 
         self.name = name
 
-        self.lon_t = lon_t
-        self.lat_t = lat_t
-        self.lon_uv = lon_uv
-        self.lat_uv = lat_uv
-        self.mask_t = mask_t
-        self.mask_uv = mask_uv
-#        self.h = h
-        self.z_t = z_t
-#        self.z_t_edges = z_t_edges
-#        self.z_uv = z_uv
-#        self.z_uv_edges = z_uv_edges
-#        self.f = f
+        self.xrange = xrange
+        self.yrange = yrange
 
-        self._calculate_t_vert()
-        self._calculate_uv_vert()
+        self.lon_t = lon_t[yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
+        self.lat_t = lat_t[yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
 
-        self.angle = angle
+        self.lon_u = lon_u[yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
+        self.lat_u = lat_u[yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
 
-    def _calculate_t_vert(self):
-        Mm, Lm = self.lon_t.shape
-        lon = np.zeros((Mm+1,Lm+1))
-        lat = np.zeros((Mm+1,Lm+1))
+        self.angle = angle[yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
 
-        lon[1:, 1:] = self.lon_uv[:,:]
-        lat[1:, 1:] = self.lat_uv[:,:]
+        self.h_t = h_t[yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1] / 100.
 
-        #South edge
-        lon[0,0:-1] = self.lon_t[0,:] - ( self.lon_uv[0,:] - self.lon_t[0,:] )
-        lon[0,-1] = self.lon_t[0,-1] - ( self.lon_uv[0,-2] - self.lon_t[0,-1] )
-        lat[0,0:-1] = self.lat_t[0,:] - ( self.lat_uv[0,:] - self.lat_t[0,:] )
-        lat[0,-1] = self.lat_t[0,-1] - ( self.lat_uv[0,-2] - self.lat_t[0,-1] )
+        self.h_u = h_u[yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1] / 100.
 
-        #West edge
-        lon[0:-1,0] = self.lon_t[:,0] - ( self.lon_uv[:,0] - self.lon_t[:,0] )
-        lon[-1,0] = self.lon_t[-1,0] - ( self.lon_uv[-2,0] - self.lon_t[-1,0] )
-        lat[0:-1,0] = self.lat_t[:,0] - ( self.lat_uv[:,0] - self.lat_t[:,0] )
-        lat[-1,0] = self.lat_t[-1,0] - ( self.lat_uv[-2,0] - self.lat_t[-1,0] )
+        self.z_t = np.tile(z_t,(self.h_t.shape[1],self.h_t.shape[0],1)).T / 100.
 
-        self.lon_t_vert = lon
-	self.lat_t_vert = lat
+        self.z_w = np.tile(z_w,(self.h_t.shape[1],self.h_t.shape[0],1)).T / 100.
 
+        self.lon_t_vert = lon_u[yrange[0]-1:yrange[1]+1, xrange[0]-1:xrange[1]+1]
+        self.lat_t_vert = lat_u[yrange[0]-1:yrange[1]+1, xrange[0]-1:xrange[1]+1]
 
-    def _calculate_uv_vert(self):
-        Mm, Lm = self.lon_uv.shape
-        lon = np.zeros((Mm+1,Lm+1))
-        lat = np.zeros((Mm+1,Lm+1))
+        self.lon_u_vert = lon_t[yrange[0]:yrange[1]+2, xrange[0]:xrange[1]+2]
+        self.lat_u_vert = lat_t[yrange[0]:yrange[1]+2, xrange[0]:xrange[1]+2]
 
-        lon[:-1, :-1] = self.lon_t[:,:]
-        lat[:-1, :-1] = self.lat_t[:,:]
+        # compute the mask at t point from h_t
+        self.mask_t = np.ones(self.z_t.shape)
+        for n in range(self.z_t.shape[0]):
+            depth = self.z_w[n,0,0]
+            rtol=1e-6
+            midx = np.where(np.abs(self.h_t - depth) <= rtol * np.abs(depth))
+            self.mask_t[n:,midx[0],midx[1]] = 0.
 
-        #North edge
-        lon[-1,0:-2] = self.lon_uv[-1,:-1] - ( self.lon_t[-1,1:] - self.lon_uv[-1,:-1] )
-        lon[-1,-2:] = self.lon_uv[-1,-2:] - ( self.lon_t[-1,-2:] - self.lon_uv[-1,-2:] )
-        lat[-1,0:-2] = self.lat_uv[-1,:-1] - ( self.lat_t[-1,1:] - self.lat_uv[-1,:-1] )
-        lat[-1,-2:] = self.lat_uv[-1,-2:] - ( self.lat_t[-1,-2:] - self.lat_uv[-1,-2:] )
+        # compute the mask at u point from h_u
+        self.mask_u = np.ones(self.z_t.shape)
+        for n in range(self.z_t.shape[0]):
+            depth = self.z_w[n,0,0]
+            rtol=1e-6
+            midx = np.where(np.abs(self.h_u - depth) <= rtol * np.abs(depth))
+            self.mask_u[n:,midx[0],midx[1]] = 0.
 
-        #East edge
-        lon[0:-2,-1] = self.lon_uv[:-1,-1] - ( self.lon_t[1:,-1] - self.lon_uv[:-1,-1] )
-        lon[-2,-1] = self.lon_uv[-2:-1,-1] - ( self.lon_t[-2:-1,-1] - self.lon_uv[-2:-1,-1] )
-        lat[0:-2,-1] = self.lat_uv[:-1,-1] - ( self.lat_t[1:,-1] - self.lat_uv[:-1,-1] )
-        lat[-2,-1] = self.lat_uv[-2:-1,-1] - ( self.lat_t[-2:-1,-1] - self.lat_uv[-2:-1,-1] )
-
-        self.lon_uv_vert = lon
-        self.lat_uv_vert = lat
-
-
-    def _calculate_grid_angle(self):
-        geod = pyproj.Geod(ellps='WGS84')
-        az_forward, az_back, dx = geod.inv(self.lon_t[:,:-1], self.lat_t[:,:-1], \
-                                           self.lon_t[:,1:], self.lat_t[:,1:])
-
-        angle = 0.5 * (az_forward[1:,:] + az_forward[:-1,:])
-        self.angle = (90 - angle) * np.pi/180.
-        
-
-    def _calculate_grid_angle(self):
-        geod = pyproj.Geod(ellps='WGS84')
-        az_forward, az_back, dx = geod.inv(self.lon_t_vert[:,:-1], self.lat_t_vert[:,:-1], \
-                                           self.lon_t_vert[:,1:], self.lat_t_vert[:,1:])
-
-        angle = 0.5 * (az_forward[1:,:] + az_forward[:-1,:])
-        self.angle = (90 - angle) * np.pi/180.

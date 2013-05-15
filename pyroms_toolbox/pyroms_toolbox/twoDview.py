@@ -95,6 +95,16 @@ def twoDview(var, tindex, grid, filename=None, \
             lat = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
         mask = grd.hgrid.mask_v
 
+    if M == Mp-1 and L == Lp-1:
+        Cpos='psi'
+        if fill == True:
+            lon = grd.hgrid.lon_psi
+            lat = grd.hgrid.lat_psi
+        else:
+            lon = grd.hgrid.lon_rho
+            lat = grd.hgrid.lat_rho
+        mask = grd.hgrid.mask_psi
+
     # get 2D var
     if tindex == -1:
         var = var[:,:]
@@ -160,6 +170,7 @@ def twoDview(var, tindex, grid, filename=None, \
         map = Basemap(projection=proj, llcrnrlon=lon_min, llcrnrlat=lat_min, \
               urcrnrlon=lon_max, urcrnrlat=lat_max, lat_0=lat_0, lon_0=lon_0, \
                  resolution='h', area_thresh=5.)
+        #map = pyroms.utility.get_grid_proj(grd, type=proj)
         x, y = map(lon,lat)
     
     if fill_land is True and proj is not None:
@@ -168,10 +179,10 @@ def twoDview(var, tindex, grid, filename=None, \
         map.fillcontinents(color='grey')
     else:
         if proj is not None: 
-            Basemap.pcolor(map, x, y, mask, vmin=-2, cmap=cm.gray)
+            Basemap.pcolor(map, x, y, mask, vmin=-2, cmap=cm.gray, edgecolors='face')
             pyroms_toolbox.plot_coast_line(grd, map)
         else: 
-            plt.pcolor(lon, lat, mask, vmin=-2, cmap=cm.gray)
+            plt.pcolor(lon, lat, mask, vmin=-2, cmap=cm.gray, edgecolors='face')
             pyroms_toolbox.plot_coast_line(grd)
     
     if fill is True:
@@ -183,9 +194,9 @@ def twoDview(var, tindex, grid, filename=None, \
                               norm = pal_norm)
     else:
         if proj is not None: 
-            cf = Basemap.pcolor(map, x, y, var, cmap = pal, norm = pal_norm)
+            cf = Basemap.pcolor(map, x, y, var, cmap = pal, norm = pal_norm, edgecolors='face')
         else: 
-            cf = plt.pcolor(lon, lat, var, cmap = pal, norm = pal_norm)
+            cf = plt.pcolor(lon, lat, var, cmap = pal, norm = pal_norm, edgecolors='face')
 
     if clb is True:
     	clb = plt.colorbar(cf, fraction=0.075,format='%.2f')

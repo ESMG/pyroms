@@ -1,17 +1,17 @@
 # encoding: utf-8
 
 import numpy as np
-import _remapping
+import _remapping_fast_weighted
 
 import pyroms
 
-def flood(varz, Bgrd, Bpos='t', irange=None, jrange=None, \
-          spval=-9.99e+33, dmax=0, cdepth=0, kk=0):
+def flood_fast_weighted(varz, grd, pos='t', irange=None, jrange=None, \
+          spval=1.2676506e+30, dxy=5, cdepth=0, kk=0):
     """
     var = flood(var, Bgrd)
 
     optional switch:
-      - Bpos='t', 'u'                specify the grid position where
+      - Bpos='t'                     specify the grid position where
                                      the variable rely 
       - irange                       specify grid sub-sample for i direction
       - jrange                       specify grid sub-sample for j direction
@@ -34,16 +34,11 @@ def flood(varz, Bgrd, Bpos='t', irange=None, jrange=None, \
     idx = np.where(abs((varz-spval)/spval)<=1e-5)
     varz[idx] = np.nan
 
-    if Bpos is 't':
-        x = Bgrd.lon_t
-        y = Bgrd.lat_t
-        h = Bgrd.h_t
-        mask = Bgrd.mask_t[0,:,:]
-    elif Bpos is 'u':
-        x = Bgrd.lon_u
-        y = Bgrd.lat_u
-        h = Bgrd.h_u
-        mask = Bgrd.mask_u[0,:,:]
+    x = grd.lon_t
+    y = grd.lat_t
+    h = grd.h
+    if pos is 't':
+        mask = grd.mask_t[0,:,:]
 
     nlev, Mm, Lm = varz.shape
 
@@ -79,19 +74,20 @@ def flood(varz, Bgrd, Bpos='t', irange=None, jrange=None, \
         if kk == 0:
             c3 = np.ones(mask.shape).astype(bool)
         else:
-            c3 = np.isnan(varz[min(k-kk,0),:,:]) == 0
+            c3 = np.isnan(varz[max(k-kk,0),:,:]) == 0
         c = c1 & c2 & c3
         idxnan = np.where(c == True)
         idx = np.where(c2 == False)
         if list(idx[0]):
-            wet = np.zeros((len(idx[0]),2))
+            wet_mask = np.zeros(mask.shape)
+            wet_mask[idx] = 1
             dry = np.zeros((len(idxnan[0]),2))
-            wet[:,0] = idx[0]+1
-            wet[:,1] = idx[1]+1
             dry[:,0] = idxnan[0]+1
             dry[:,1] = idxnan[1]+1
 
-            varz[k,:] = _remapping.flood(varz[k,:], wet, dry, x, y, dmax)
+            idx = np.where(np.isnan(varz[k]) == 1)
+            varz[k][idx] = spval
+            varz[k,:] = _remapping_fast_weighted.flood(varz[k,:], dry, wet_mask, dxy)
 
     # drop the deepest values down
     idx = np.where(np.isnan(varz) == 1)

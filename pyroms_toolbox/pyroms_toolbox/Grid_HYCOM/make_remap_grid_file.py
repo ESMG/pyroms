@@ -8,22 +8,22 @@ except:
 import pyroms
 
 
-def make_remap_grid_file(SODA_grd):
+def make_remap_grid_file(grd):
 
     #create remap file
-    remap_filename = 'remap_grid_' + SODA_grd.name + '.nc'
-    nc = netCDF.Dataset(remap_filename, 'w', format='NETCDF3_CLASSIC')
-    nc.Description = 'remap grid file for SODA'
-    nc.Author = 'pyroms_toolbox.SODA.make_remap_grid_file'
+    remap_filename = 'remap_grid_' + grd.name + '_t.nc'
+    nc = netCDF.Dataset(remap_filename, 'w', format='NETCDF3_64BIT')
+    nc.Description = 'remap grid file for HYCOM'
+    nc.Author = 'pyroms_toolbox.Grid_HYCOM.make_remap_grid_file'
     nc.Created = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    nc.title = SODA_grd.name
+    nc.title = grd.name
 
-    lon_corner = SODA_grd.lon_vert
-    lat_corner = SODA_grd.lat_vert
-    grid_center_lon = SODA_grd.lon.flatten()
-    grid_center_lat = SODA_grd.lat.flatten()
-    grid_imask = SODA_grd.mask[0,:].flatten()
-    Mp, Lp = SODA_grd.lon.shape
+    lon_corner = grd.lon_vert
+    lat_corner = grd.lat_vert
+    grid_center_lon = grd.lon_t.flatten()
+    grid_center_lat = grd.lat_t.flatten()
+    Mp, Lp = grd.lon_t.shape
+    grid_imask = grd.mask_t[0,:].flatten()
 
     grid_size = Lp * Mp
 

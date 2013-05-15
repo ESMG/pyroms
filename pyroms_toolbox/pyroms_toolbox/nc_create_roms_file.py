@@ -9,7 +9,7 @@ except:
 def nc_create_roms_file(filename, grd, ocean_time, lgrid=True):
 
     # create file
-    nc = netCDF.Dataset(filename, 'w', format='NETCDF3_CLASSIC')
+    nc = netCDF.Dataset(filename, 'w', format='NETCDF3_64BIT')
     nc.Description = 'ROMS file'
     nc.Author = 'pyroms_toolbox.nc_create_roms_file'
     nc.Created = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

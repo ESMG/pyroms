@@ -1,19 +1,16 @@
 import numpy as np
 
-def get_coast_line(Bgrd):
+def get_coast_line_from_mask(msk, lon, lat):
     '''
-    coast = get_coast_line(grd)
+    coast = get_coast_line_from_mask(msk, lon, lat)
 
-    return the coastline from the grid object grid 
+    return the coastline from msk
     '''
-
-    #get data
-    lon = Bgrd.lon_t_vert
-    lat = Bgrd.lat_t_vert
-    mask = Bgrd.mask_t[0,:]
 
     #get land point
-    jidx, iidx = np.where(mask == 0)
+    jidx, iidx = np.where(msk == 0)
+
+    mask = msk.copy()
 
     coast = []
 
@@ -46,4 +43,4 @@ def get_coast_line(Bgrd):
                 seg = zip(lonc,latc)
                 coast.append(seg)
 
-    return coast
+    return np.array(coast)

@@ -1,18 +1,33 @@
 import numpy as np
 
-def get_coast_line(grd):
+def get_coast_line(grd, Cpos='rho'):
     '''
     coast = get_coast_line(grd)
 
     return the coastline from the grid object grid 
     '''
 
-    #get land point
-    jidx, iidx = np.where(grd.hgrid.mask_rho == 0)
+    if Cpos is 'rho':
+        lon = grd.hgrid.lon_vert
+        lat = grd.hgrid.lat_vert
+        mask = grd.hgrid.mask_rho
+    elif Cpos is 'u':
+        lon = 0.5 * (grd.hgrid.lon_vert[:,:-1] + grd.hgrid.lon_vert[:,1:])
+        lat = 0.5 * (grd.hgrid.lat_vert[:,:-1] + grd.hgrid.lat_vert[:,1:])
+        mask = grd.hgrid.mask_u
+    elif Cpos is 'v':
+        lon = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
+        lat = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
+        mask = grd.hgrid.mask_v
+    elif Cpos is 'psi':
+        lon = grd.hgrid.lon_rho
+        lat = grd.hgrid.lat_rho
+        mask = grd.hgrid.mask_psi
+    else:
+        raise Warning, '%s bad position. Valid Arakawa-C are \
+                           rho, u or v.' % Cpos
 
-    lon = grd.hgrid.lon_vert
-    lat = grd.hgrid.lat_vert
-    mask = grd.hgrid.mask_rho
+    jidx, iidx = np.where(mask == 0)
 
     coast = []
 

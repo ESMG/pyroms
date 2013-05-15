@@ -145,6 +145,7 @@ def zview(var, tindex, depth, grid, filename=None, \
         map = Basemap(projection=proj, llcrnrlon=lon_min, llcrnrlat=lat_min, \
                  urcrnrlon=lon_max, urcrnrlat=lat_max, lat_0=lat_0, lon_0=lon_0, \
                  resolution='h', area_thresh=5.)
+        #map = pyroms.utility.get_grid_proj(grd, type=proj)
         x, y = map(lon,lat)
     
     if fill_land is True and proj is not None:

@@ -181,7 +181,7 @@ def jview(var, tindex, jindex, gridid, filename=None, \
         else:
             plt.title(title, fontsize=fts+4)
 
-    plt.xlabel('Latitude', fontsize=fts)
+    plt.xlabel('Longitude', fontsize=fts)
     plt.ylabel('Depth', fontsize=fts)
 
     if map is True:

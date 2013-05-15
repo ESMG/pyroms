@@ -4,7 +4,7 @@ import matplotlib.collections as collections
 from pyroms_toolbox import get_coast_line
 
 
-def plot_coast_line(grd, proj=None):
+def plot_coast_line(grd, proj=None, Cpos='rho'):
     '''
     plot_coast_line(grd, {proj})
 
@@ -16,7 +16,7 @@ def plot_coast_line(grd, proj=None):
 
     a = plt.gca()
 
-    coast = get_coast_line(grd)
+    coast = get_coast_line(grd, Cpos=Cpos)
     c = np.array(coast)
 
     if proj is None:

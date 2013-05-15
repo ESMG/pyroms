@@ -156,7 +156,7 @@ def average(var, ncfiles, trange=None, avgfile=None, spval=1e37, timevar='ocean_
 
                 vardims = avg.ncfiles.variables[varname].dimensions
 
-                nc.createVariable(varname, 'f8', (vardims))
+                nc.createVariable(varname, 'f8', (vardims), fill_value=str(spval))
                 nc.variables[varname].long_name = 'Temporal average of variable '+str(varname)
 
                 # try to pull the units from the original netCDF variable
@@ -168,12 +168,13 @@ def average(var, ncfiles, trange=None, avgfile=None, spval=1e37, timevar='ocean_
                     nc.variables[varname].units = 'N/A'
                     nc.variables[varname].field = 'N/A'
 
-                nc.variables[varname]._FillValue = str(spval)
                 nc.variables[varname][0] = avg.__getattribute__(varname)
+            avg.ncfiles.close()
             nc.close()
         else:
             print "avgfile must be a string that equates to the path where this netCDF file is to be placed."
         return
     else:
+        avg.ncfiles.close()
         print "Returning average object..."
         return avg

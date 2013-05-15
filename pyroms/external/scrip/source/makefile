@@ -9,10 +9,10 @@
 # SVN $URL$
 #===============================================================================
 
-LIBDIR = /opt/local/lib
-INCDIR = /opt/local/include
+LIBDIR = /u1/uaf/kate/lib
+INCDIR = /u1/uaf/kate/include
 SRCDIR  = .
-PREFIX  = /usr/local
+PREFIX  = /u1/uaf/kate
 
 COMPILE = gfortran
 FLAGS = -g -fdefault-real-8 -ffixed-form -O2 -fPIC

@@ -1,22 +1,22 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.collections as collections
-from pyroms_toolbox.BGrid_POP import get_coast_line
+from pyroms_toolbox import get_coast_line_from_mask
 
 
-def plot_coast_line(grd, proj=None):
+def plot_coast_line_from_mask(msk, lon, lat, proj=None):
     '''
-    plot_coast_line(grd, {proj})
+    plot_coast_line_from_mask(msk, {proj})
 
-    plot the coastline from the object grid. 
+    plot the coastline from msk. 
     proj=map (optional) is a Basemap object for
     projection.
-    ''' 
+    '''
 
 
     a = plt.gca()
 
-    coast = get_coast_line(grd)
+    coast = get_coast_line_from_mask(msk, lon, lat)
     c = np.array(coast)
 
     if proj is None:
@@ -28,7 +28,7 @@ def plot_coast_line(grd, proj=None):
 
         col = collections.LineCollection(cp)
 
- 
+
     a.add_collection(col, autolim=True)
     col.set_color('k')
     #a.autoscale_view()
