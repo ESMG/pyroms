@@ -31,10 +31,9 @@ cp libgridgen.so $PYROMS_PATH
 echo "installing scrip..."
 cd $CURDIR/external/scrip/source
 perl -pe "s#\/usr\/local#$DESTDIR#" makefile > makefile2
-mv -f makefile2 makefile
-make
-make f2py
-make install
+make -f makefile2
+make -f makefile2 f2py
+make -f makefile2 install
 #cp $LOCALDIR/lib/scrip.so $PYROMS_PATH/remapping
 cp scrip.so $PYROMS_PATH/remapping
 cd $CURDIR
