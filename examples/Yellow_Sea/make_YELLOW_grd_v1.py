@@ -95,11 +95,11 @@ RoughMat = bathy_tools.RoughnessMatrix(h, hgrd.mask_rho)
 print 'Max Roughness value is: ', RoughMat.max()
 
 # vertical coordinate
-theta_b = 0.4
-theta_s = 5.0
-Tcline = 5
+theta_b = 2
+theta_s = 7.0
+Tcline = 25
 N = 30
-vgrd = pyroms.vgrid.s_coordinate(h, theta_b, theta_s, Tcline, N, hraw=hraw)
+vgrd = pyroms.vgrid.s_coordinate_4(h, theta_b, theta_s, Tcline, N, hraw=hraw)
 
 # ROMS grid
 grd_name = 'YELLOW'

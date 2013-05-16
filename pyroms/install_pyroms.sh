@@ -3,6 +3,10 @@
 #DESTDIR=/usr/local
 DESTDIR=/u1/uaf/kate/Python
 CURDIR=`pwd`
+export CPPFLAGS=-I$DESTDIR/include
+export LDFLAGS=-L$DESTDIR/lib
+export CFLAGS=-I$DESTDIR/include
+export SHLIBS=-L$DESTDIR/lib
 
 echo
 echo "installing pyroms..."
@@ -17,10 +21,10 @@ cd $CURDIR/external/csa
 ./configure --prefix=$DESTDIR
 make install
 cd $CURDIR/external/gridutils
-CPPFLAGS=-I$DESTDIR/include LDFLAGS=-L$DESTDIR/lib ./configure --prefix=$DESTDIR
+./configure --prefix=$DESTDIR
 make install
 cd $CURDIR/external/gridgen
-CPPFLAGS=-I$DESTDIR/include CFLAGS=-I$DESTDIR/include ./configure --prefix=$DESTDIR
+./configure --prefix=$DESTDIR
 make
 make lib
 make shlib

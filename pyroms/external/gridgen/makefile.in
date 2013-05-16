@@ -115,7 +115,7 @@ libgridgen.a: $(HEADERS) triangle.o $(LIBOBJS)
 
 libgridgen.so: $(HEADERS) triangle.t $(SHLIBOBJS)
 	rm -f $@
-	$(CC) -shared -o $@ $(SHLIBOBJS) triangle.t $(LIBS)
+	$(CC) -shared -o $@ $(SHLIBOBJS) triangle.t $(SHLIBS) $(LIBS)
 
 triangle.o: triangle.c
 	$(CC) -c -DTRILIBRARY $(CFLAGS_TRIANGLE) -I. triangle.c
