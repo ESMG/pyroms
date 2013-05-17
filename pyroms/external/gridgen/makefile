@@ -6,11 +6,11 @@ SHELL = /bin/sh
 
 #### Start of system configuration section. ####
 
-prefix = /usr/local
+prefix = /u1/uaf/kate
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
-libdir = /usr/local/lib
+libdir = /u1/uaf/kate/lib
 includedir = ${prefix}/include
 
 INSTALLDIRS =\
@@ -28,9 +28,9 @@ NOCOMPLEX =
 HAVE_GRIDNODES_H = 
 
 CC = gcc
-CFLAGS = -I/usr/local/include
-CFLAGS_TRIANGLE = -I/usr/local/include -w -ffloat-store
-LDFLAGS = -L/usr/local/lib
+CFLAGS = -I/u1/uaf/kate/include
+CFLAGS_TRIANGLE = -I/u1/uaf/kate/include -w -ffloat-store
+LDFLAGS = -L/u1/uaf/kate/lib
 
 AR = ar
 ARFLAGS = cru
@@ -115,7 +115,7 @@ libgridgen.a: $(HEADERS) triangle.o $(LIBOBJS)
 
 libgridgen.so: $(HEADERS) triangle.t $(SHLIBOBJS)
 	rm -f $@
-	$(CC) -shared -o $@ $(SHLIBOBJS) triangle.t $(LIBS)
+	$(CC) -shared -o $@ $(SHLIBOBJS) triangle.t $(SHLIBS) $(LIBS)
 
 triangle.o: triangle.c
 	$(CC) -c -DTRILIBRARY $(CFLAGS_TRIANGLE) -I. triangle.c

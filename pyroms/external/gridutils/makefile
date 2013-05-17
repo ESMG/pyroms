@@ -7,11 +7,11 @@ SHELL = /bin/sh
 
 #### Start of system configuration section. ####
 
-prefix = /usr/local
+prefix = /u1/uaf/kate
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
-libdir = /usr/local/lib
+libdir = /u1/uaf/kate/lib
 includedir = ${prefix}/include
 
 INSTALLDIRS =\
@@ -28,9 +28,9 @@ INSTALL_DATA = ${INSTALL} -m 644
 #### End of system configuration section. ####
 
 CC = gcc
-CFLAGS = -g -O2 -Wall -pedantic
-LDFLAGS = 
-CPPFLAGS = -I/usr/local/include
+CFLAGS = -I/u1/uaf/kate/include
+LDFLAGS = -L/u1/uaf/kate/lib
+CPPFLAGS = -I/u1/uaf/kate/include
 
 AR = ar
 ARFLAGS = cru

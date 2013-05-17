@@ -1,9 +1,9 @@
 SHELL = /bin/sh
 
-prefix = /usr/local
+prefix = /u1/uaf/kate
 exec_prefix = ${prefix}
 bindir = ${exec_prefix}/bin
-libdir = /usr/local/lib
+libdir = /u1/uaf/kate/lib
 includedir = ${prefix}/include
 
 INSTALLDIRS =\
@@ -18,10 +18,10 @@ INSTALL_PROGRAM = ${INSTALL}
 INSTALL_DATA = ${INSTALL} -m 644
 
 CC = gcc
-CFLAGS = -g -O2 -Wall -pedantic
-CFLAGS_TRIANGLE = -g -O2 -Wall -pedantic -w -ffloat-store
-CFLAGS_VULNERABLE = -ffloat-store
-LDFLAGS = 
+CFLAGS = -I/u1/uaf/kate/include -fno-force-mem
+CFLAGS_TRIANGLE = -I/u1/uaf/kate/include -w -ffloat-store
+CFLAGS_VULNERABLE = -ffloat-store -fno-force-mem
+LDFLAGS = -L/u1/uaf/kate/lib
 
 AR = ar
 ARFLAGS = cru
