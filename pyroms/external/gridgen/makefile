@@ -30,12 +30,12 @@ HAVE_GRIDNODES_H =
 CC = gcc
 CFLAGS = -I/u1/uaf/kate/Python/include
 CFLAGS_TRIANGLE = -I/u1/uaf/kate/Python/include -w -ffloat-store
-LDFLAGS = -L/usr/local/lib
+LDFLAGS = -L/u1/uaf/kate/Python/lib
 
 AR = ar
 ARFLAGS = cru
 
-LIBS = -lm 
+LIBS = -lgu -lm 
 
 MLIB = -lm
 
@@ -115,7 +115,7 @@ libgridgen.a: $(HEADERS) triangle.o $(LIBOBJS)
 
 libgridgen.so: $(HEADERS) triangle.t $(SHLIBOBJS)
 	rm -f $@
-	$(CC) -shared -o $@ $(SHLIBOBJS) triangle.t $(LIBS)
+	$(CC) -shared -o $@ $(SHLIBOBJS) triangle.t $(SHLIBS) $(LIBS)
 
 triangle.o: triangle.c
 	$(CC) -c -DTRILIBRARY $(CFLAGS_TRIANGLE) -I. triangle.c

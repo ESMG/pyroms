@@ -1,5 +1,12 @@
 import numpy as np
 
+# This code is adapted from the matlab code
+# "LP Bathymetry" by Mathieu Dutour Sikiric
+# http://drobilica.irb.hr/~mathieu/Bathymetry/index.html
+# For a description of the method, see
+# M. Dutour Sikiric, I. Janekovic, M. Kuzmic, A new approach to
+# bathymetry smoothing in sigma-coordinate ocean models, Ocean
+# Modelling 29 (2009) 128--136.
 
 def RoughnessMatrix(DEP, MSK):
     """

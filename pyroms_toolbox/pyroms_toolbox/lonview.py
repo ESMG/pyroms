@@ -30,7 +30,7 @@ def lonview(var, tindex, longitude, gridid, filename=None, \
       - clb              add colorbar (defaul: True)
       - outfile          if defined, write figure to file
 
-    plot a constante-longitudinal slice of variable var. If filename 
+    plot a constant-longitudinal slice of variable var. If filename 
     is provided, var must be a string and the variable will be load 
     from the file.
     grid can be a grid object or a gridid. In the later case, the grid

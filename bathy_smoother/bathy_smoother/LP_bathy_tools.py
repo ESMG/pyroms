@@ -1,6 +1,14 @@
 import numpy as np
 from bathy_smoother import bathy_smoothing
 
+# This code is adapted from the matlab code
+# "LP Bathymetry" by Mathieu Dutour Sikiric
+# http://drobilica.irb.hr/~mathieu/Bathymetry/index.html
+# For a description of the method, see
+# M. Dutour Sikiric, I. Janekovic, M. Kuzmic, A new approach to
+# bathymetry smoothing in sigma-coordinate ocean models, Ocean
+# Modelling 29 (2009) 128--136.
+
 def GetIJS_rx0(MSK, DEP, r):
 
     eta_rho, xi_rho = DEP.shape

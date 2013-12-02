@@ -1,8 +1,9 @@
+import _iso
 import pyroms
 import pyroms_toolbox
 
 # load the grid
-srcgrd = pyroms_toolbox.BGrid_SODA.get_nc_BGrid_SODA('/Volumes/R1/DATA/SODA_2.1.6/SODA_grid.cdf', name='SODA_2.1.6_YELLOW', xrange=(225, 275), yrange=(190, 240))
+srcgrd = pyroms_toolbox.BGrid_SODA.get_nc_BGrid_SODA('/center/w/kate/SODA/SODA_grid.cdf', name='SODA_2.1.6_YELLOW', xrange=(225, 275), yrange=(190, 240))
 dstgrd = pyroms.grid.get_ROMS_grid('YELLOW')
 
 # make remap grid file for scrip
