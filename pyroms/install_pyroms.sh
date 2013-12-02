@@ -1,12 +1,18 @@
 #!/bin/sh
 
-#DESTDIR=/usr/local
-DESTDIR=/u1/uaf/kate/Python
+DESTDIR=/usr/local
+#DESTDIR=/u1/uaf/kate
 CURDIR=`pwd`
+export CPPFLAGS=-I$DESTDIR/include
+export LDFLAGS='-L$DESTDIR/lib'
+#export LDFLAGS='-L$DESTDIR/lib -L/usr/local/pkg/python/python-2.7.2/lib -shared'
+export CFLAGS=-I$DESTDIR/include
+export SHLIBS=-L$DESTDIR/lib
 
 echo
 echo "installing pyroms..."
 echo
+python setup.py build --fcompiler=gnu95;
 python setup.py install --prefix=$DESTDIR
 echo "installing external libraries..."
 echo "installing gridgen..."
@@ -17,10 +23,10 @@ cd $CURDIR/external/csa
 ./configure --prefix=$DESTDIR
 make install
 cd $CURDIR/external/gridutils
-CPPFLAGS=-I$DESTDIR/include LDFLAGS=-L$DESTDIR/lib ./configure --prefix=$DESTDIR
+./configure --prefix=$DESTDIR
 make install
 cd $CURDIR/external/gridgen
-CPPFLAGS=-I$DESTDIR/include CFLAGS=-I$DESTDIR/include ./configure --prefix=$DESTDIR
+./configure --prefix=$DESTDIR
 make
 make lib
 make shlib
@@ -34,8 +40,7 @@ perl -pe "s#\/usr\/local#$DESTDIR#" makefile > makefile2
 make -f makefile2
 make -f makefile2 f2py
 make -f makefile2 install
-#cp $LOCALDIR/lib/scrip.so $PYROMS_PATH/remapping
-cp scrip.so $PYROMS_PATH/remapping
+cp scrip.so $PYROMS_PATH
 cd $CURDIR
 echo
 echo "Done installing pyroms..."

@@ -27,8 +27,8 @@ INSTALL_DATA = ${INSTALL} -m 644
 #### End of system configuration section. ####
 
 CC = gcc
-CFLAGS = -g -O2 -Wall -pedantic
-LDFLAGS = 
+CFLAGS = -I/u1/uaf/kate/include
+LDFLAGS = -L/u1/uaf/kate/lib
 
 AR = ar
 ARFLAGS = cru

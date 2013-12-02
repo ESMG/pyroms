@@ -18,10 +18,10 @@ INSTALL_PROGRAM = ${INSTALL}
 INSTALL_DATA = ${INSTALL} -m 644
 
 CC = gcc
-CFLAGS = -g -O2 -Wall -pedantic
-CFLAGS_TRIANGLE = -g -O2 -Wall -pedantic -w -ffloat-store
-CFLAGS_VULNERABLE = -ffloat-store
-LDFLAGS = 
+CFLAGS = -I/u1/uaf/kate/include -fno-force-mem
+CFLAGS_TRIANGLE = -I/u1/uaf/kate/include -w -ffloat-store
+CFLAGS_VULNERABLE = -ffloat-store -fno-force-mem
+LDFLAGS = -L/u1/uaf/kate/lib
 
 AR = ar
 ARFLAGS = cru
