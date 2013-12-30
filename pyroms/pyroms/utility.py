@@ -2,10 +2,11 @@
 
 import sys
 import numpy as np
+import matplotlib as mpl
 from mpl_toolkits.basemap import Basemap
 import time
 from datetime import datetime
-from matplotlib.nxutils import pnpoly
+#from matplotlib.nxutils import pnpoly
 from scipy import interpolate
 
 import pyroms
@@ -130,7 +131,8 @@ def find_nearestgridpoints(longitude, latitude, grd, Cpos='rho'):
         verts = []
         for n in range(4):
             verts.append([xp[n], yp[n]])
-        inside = pnpoly(longitude, latitude, verts)
+        #inside = pnpoly(longitude, latitude, verts)
+        inside = mpl.path.Path(verts).contains_point([longitude, latitude])
 
         if inside == 0:
             iindex = [iidx, iidx+1, iidx+1, iidx]
@@ -140,7 +142,8 @@ def find_nearestgridpoints(longitude, latitude, grd, Cpos='rho'):
             verts = []
             for n in range(4):
                 verts.append([xp[n], yp[n]])
-            inside = pnpoly(longitude, latitude, verts)
+            #inside = pnpoly(longitude, latitude, verts)
+            inside = mpl.path.Path(verts).contains_point([longitude, latitude])
 
             if inside == 0:
                 iindex = [iidx-1, iidx, iidx, iidx-1]
@@ -150,7 +153,8 @@ def find_nearestgridpoints(longitude, latitude, grd, Cpos='rho'):
                 verts = []
                 for n in range(4):
                     verts.append([xp[n], yp[n]])
-                inside = pnpoly(longitude, latitude, verts)
+                #inside = pnpoly(longitude, latitude, verts)
+                inside = mpl.path.Path(verts).contains_point([longitude, latitude])
 
                 if inside == 0:
                     iindex = [iidx-1, iidx, iidx, iidx-1]
@@ -160,7 +164,8 @@ def find_nearestgridpoints(longitude, latitude, grd, Cpos='rho'):
                     verts = []
                     for n in range(4):
                         verts.append([xp[n], yp[n]])
-                    inside = pnpoly(longitude, latitude, verts)
+                    #inside = pnpoly(longitude, latitude, verts)
+                    inside = mpl.path.Path(verts).contains_point([longitude, latitude])
 
                     if inside == 0:
                         raise ValueError, 'well where is it then?'

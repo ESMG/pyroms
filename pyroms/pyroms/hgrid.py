@@ -10,13 +10,15 @@ from warnings import warn
 from copy import deepcopy
 
 import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.artist import Artist
 from matplotlib.patches import Polygon, CirclePolygon
 from matplotlib.lines import Line2D
 #from matplotlib.numerix.mlab import amin
 from matplotlib.mlab import dist_point_to_segment
-from matplotlib.nxutils import points_inside_poly
+#from matplotlib.nxutils import points_inside_poly      #decrepeted in version 1.3.0. Use maplotlib.path instead.
+
 
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.basemap import pyproj
@@ -769,9 +771,11 @@ class CGrid(object):
             'polyverts must contain at least 3 points'
         
         mask = self.mask_rho
-        inside = points_inside_poly(
-            np.vstack( (self.x_rho.flatten(), self.y_rho.flatten()) ).T,
-            polyverts)
+        #inside = points_inside_poly(
+        #    np.vstack( (self.x_rho.flatten(), self.y_rho.flatten()) ).T,
+        #    polyverts)
+        path = mpl.path.Path(polyverts)
+        inside = path.contains_points(np.vstack( (self.x_rho.flatten(), self.y_rho.flatten()) ).T)
         if np.any(inside):
             self.mask_rho.flat[inside] = mask_value
     
@@ -1020,8 +1024,8 @@ class Gridgen(CGrid):
                  nnodes=14, precision=1.0e-12, nppe=3, \
                  newton=True, thin=True, checksimplepoly=True, verbose=False):
 
-        self._libgridgen = np.ctypeslib.load_library('libgridgen',__file__)
-        #self._libgridgen = np.ctypeslib.load_library('libgridgen', pyroms.__path__[0])
+        #self._libgridgen = np.ctypeslib.load_library('libgridgen',__file__)
+        self._libgridgen = np.ctypeslib.load_library('libgridgen', pyroms.__path__[0])
 
         # In MacOSX, use of c_void_p does not return proper structure.
         # (An integer address is returned and subsequent use results in a 

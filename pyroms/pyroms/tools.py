@@ -968,32 +968,32 @@ def lonslice(var, longitude, grd, Cpos='rho', vert=False, spval=1e37):
 
 
     if side[0] == 1 and side[1] == 2:
-        lonslice, z, lon, lat = pyroms.tools.transect(var, \
+        lonslice, z, lon, lat = pyroms.tools.section(var, \
                                 idx[pt_idx[0]], Lp-2, \
                                 1, idx[pt_idx[1]], \
                                 grd, Cpos=Cpos, vert=vert, spval=spval)
     elif side[0] == 1 and side[1] == 3:
-        lonslice, z, lon, lat = pyroms.tools.transect(var, \
+        lonslice, z, lon, lat = pyroms.tools.section(var, \
                                 idx[pt_idx[0]], idx[pt_idx[1]], \
                                 1, Mp-2, \
                                 grd, Cpos=Cpos, vert=vert, spval=spval)
     elif side[0] == 1 and side[1] == 4:
-        lonslice, z, lon, lat = pyroms.tools.transect(var, \
+        lonslice, z, lon, lat = pyroms.tools.section(var, \
                                 idx[pt_idx[0]], 1, \
                                 1, idx[pt_idx[1]], \
                                 grd, Cpos=Cpos, vert=vert, spval=spval)
     elif side[0] == 2 and side[1] == 3:
-        lonslice, z, lon, lat = pyroms.tools.transect(var, \
+        lonslice, z, lon, lat = pyroms.tools.section(var, \
                                 Lp-2, idx[pt_idx[1]], \
                                 idx[pt_idx[0]], Mp-2, \
                                 grd, Cpos=Cpos, vert=vert, spval=spval)
     elif side[0] == 2 and side[1] == 4:
-        lonslice, z, lon, lat = pyroms.tools.transect(var, \
+        lonslice, z, lon, lat = pyroms.tools.section(var, \
                                 Lp-2, 1, \
                                 idx[pt_idx[0]], idx[pt_idx[0]], \
                                 grd, Cpos=Cpos, vert=vert, spval=spval)
     elif side[0] == 3 and side[1] == 4:
-        lonslice, z, lon, lat = pyroms.tools.transect(var, \
+        lonslice, z, lon, lat = pyroms.tools.section(var, \
                                 idx[pt_idx[0]], 1, \
                                 Mp-2, idx[pt_idx[1]], \
                                 grd, Cpos=Cpos, vert=vert, spval=spval)
@@ -1071,32 +1071,32 @@ def latslice(var, latitude, grd, Cpos='rho', vert=False, spval=1e37):
 
 
     if side[0] == 1 and side[1] == 2:
-        latslice, z, lon, lat = pyroms.tools.transect(var, \
+        latslice, z, lon, lat = pyroms.tools.section(var, \
                                 idx[pt_idx[0]], Lp-2, \
                                 1, idx[pt_idx[1]], \
                                 grd, Cpos=Cpos, vert=vert, spval=spval)
     elif side[0] == 1 and side[1] == 3:
-        latslice, z, lon, lat = pyroms.tools.transect(var, \
+        latslice, z, lon, lat = pyroms.tools.section(var, \
                                 idx[pt_idx[0]], idx[pt_idx[1]], \
                                 1, Mp-2, \
                                 grd, Cpos=Cpos, vert=vert, spval=spval)
     elif side[0] == 1 and side[1] == 4:
-        latslice, z, lon, lat = pyroms.tools.transect(var, \
+        latslice, z, lon, lat = pyroms.tools.section(var, \
                                 idx[pt_idx[0]], 1, \
                                 1, idx[pt_idx[1]], \
                                 grd, Cpos=Cpos, vert=vert, spval=spval)
     elif side[0] == 2 and side[1] == 3:
-        latslice, z, lon, lat = pyroms.tools.transect(var, \
+        latslice, z, lon, lat = pyroms.tools.section(var, \
                                 Lp-2, idx[pt_idx[1]], \
                                 idx[pt_idx[0]], Mp-2, \
                                 grd, Cpos=Cpos, vert=vert, spval=spval)
     elif side[0] == 2 and side[1] == 4:
-        latslice, z, lon, lat = pyroms.tools.transect(var, \
+        latslice, z, lon, lat = pyroms.tools.section(var, \
                                 Lp-2, 1, \
                                 idx[pt_idx[0]], idx[pt_idx[0]], \
                                 grd, Cpos=Cpos, vert=vert, spval=spval)
     elif side[0] == 3 and side[1] == 4:
-        latslice, z, lon, lat = pyroms.tools.transect(var, \
+        latslice, z, lon, lat = pyroms.tools.section(var, \
                                 idx[pt_idx[0]], 1, \
                                 Mp-2, idx[pt_idx[1]], \
                                 grd, Cpos=Cpos, vert=vert, spval=spval)
