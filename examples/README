@@ -23,3 +23,12 @@ rotation needed. See the Bering directory.
 See the Chukchi example.
 
 In either case, run make_weight_file.py first.
+
+New: HYCOM scripts in Arctic_HYCOM - scripts to get the HYCOM files
+(subsets of the global fields) and scripts to interpolate from them.
+In the pyroms_toolbox/pyroms_toolbox/Grid_HYCOM directory there is a
+makefile and a creeping_sea.f90. Use them to:
+
+    compile creeping_sea.f90 -> creep.so
+    put creep.so somewhere in PYTHONPATH
+
