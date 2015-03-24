@@ -65,6 +65,12 @@ setenv LDFLAGS '-L/usr/local/pkg/python/python-2.7.2/lib -shared'
 If you needed the LDFLAGS above, you'll need to add it to the
 install script too, at least for the build of scrip.
 
+For creep.so:
+
+  cd pyroms_toolbox/pyroms_toolbox/Grid_HYCOM//makefile; make
+
+Then move creep.so into a directory in your PYTHONPATH.
+
 Running
 -------
 
