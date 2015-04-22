@@ -1,0 +1,64 @@
+! Input variable information file name.  This file needs to be processed
+! first so all information arrays can be initialized properly.
+
+     VARNAME = /center/w/kate/NEP/External/varinfo.dat
+
+! Number of nested grids.
+
+      Ngrids =  1
+
+          Lm == 688           ! Number of I-direction INTERIOR RHO-points
+          Mm == 1088          ! Number of J-direction INTERIOR RHO-points
+           N == 50            ! Number of vertical levels
+
+      NtileI == 6                               ! I-direction partition
+!       NtileI == 3                               ! I-direction partition
+! ORDER MATTERS HERE!
+       NtileJ == 32                              ! J-direction partition
+
+   LBC(isTvar) ==   RadNud  RadNud  RadNud  RadNud \    ! temperature
+                    RadNud  RadNud  RadNud  RadNud \    ! salinity
+                    Clo     Clo     Clo     Clo    \    ! inert(1)
+                    Clo     Clo     Clo     Clo    \    ! inert(2)
+                    Clo     Clo     Clo     Clo    \    ! inert(3)
+                    Clo     Clo     Clo     Clo         ! inert(4)
+
+   LBC(isAice) ==   Clo     Clo     Clo     Clo         ! ice concentration
+   LBC(isHice) ==   Clo     Clo     Clo     Clo         ! ice thickness
+   LBC(isHsno) ==   Clo     Clo     Clo     Clo         ! snow thickness
+
+
+   NCLMFILES == 1                         ! number of climate files
+!     CLMNAME == /center/w/kate/Arctic2/Files/Arctic2_clim_1989.nc |
+     CLMNAME == /center/w/kate/Arctic2/Files/Arctic2_clim_1990.nc |
+                /center/w/kate/Arctic2/Files/Arctic2_clim_1991.nc
+
+    NFFILES == 14                          ! number of forcing files
+
+    FRCNAME == /center/w/kate/MERRA/MERRA_Pair_3hours_1990.nc   |
+               /center/w/kate/MERRA/MERRA_Pair_3hours_1991.nc   \
+               /center/w/kate/MERRA/MERRA_Qair_3hours_1990.nc   |
+               /center/w/kate/MERRA/MERRA_Qair_3hours_1991.nc   \
+               /center/w/kate/MERRA/MERRA_Tair_3hours_1990.nc   |
+               /center/w/kate/MERRA/MERRA_Tair_3hours_1991.nc   \
+               /center/w/kate/MERRA/MERRA_rain_3hours_1990.nc   |
+               /center/w/kate/MERRA/MERRA_rain_3hours_1991.nc   \
+               /center/w/kate/MERRA/MERRA_snow_3hours_1990.nc   |
+               /center/w/kate/MERRA/MERRA_snow_3hours_1991.nc   \
+               /center/w/kate/MERRA/MERRA_swrad_3hours_1990.nc  |
+               /center/w/kate/MERRA/MERRA_swrad_3hours_1991.nc  \
+               /center/w/kate/MERRA/MERRA_Uwind_3hours_1990.nc  |
+               /center/w/kate/MERRA/MERRA_Uwind_3hours_1991.nc  \
+               /center/w/kate/MERRA/MERRA_Vwind_3hours_1990.nc  |
+               /center/w/kate/MERRA/MERRA_Vwind_3hours_1991.nc  \
+               /center/w/kate/MERRA/MERRA_albedo_daily_1990.nc  |
+               /center/w/kate/MERRA/MERRA_albedo_daily_1991.nc  \
+               /center/w/kate/MERRA/MERRA_lwrad_down_3hours_1990.nc  |
+               /center/w/kate/MERRA/MERRA_lwrad_down_3hours_1991.nc  \
+               /center/w/kate/CORE2/sss_fill_2004.nc \
+               /center/w/kate/Arctic2/Files/runoff_ARCTIC2_daitren_inter_annual_1948-2007.nc \
+               /center/w/kate/Arctic2/Files/fastice_Arctic2.nc \
+               /center/w/kate/Arctic2/Files/Arctic2_tides_otps.nc
+
+     SPOSNAM =  /center/w/kate/Arctic2/External/stations_arctic.in
+     FPOSNAM =  /center/w/kate/Arctic2/External/floats_arctic.in
