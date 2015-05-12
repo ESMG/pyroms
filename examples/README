@@ -12,7 +12,8 @@ http://www.atmos.umd.edu/~ocean/).
 
 The Arctic2 directory has code for interpolating from SODA across all
 longitudes. It also shows how to use multiprocessing for the boundary
-conditions - be sure to set the number of processes desired.
+conditions and climatology files - be sure to set the number of processes
+desired.
 
 For creating initial and boundary files from larger ROMS grids,
 there are two cases:

@@ -54,11 +54,12 @@ def do_file(file, src_grd, dst_grd):
 year = int(sys.argv[1])
 lst_year = [year]
 
+data_dir = '/nfs/P1/Data/SODA/SODA_2.1.6/'
+
 lst_file = []
 
 for year in lst_year:
     year = np.str(year)
-    data_dir = '/nfs/P1/Data/SODA/SODA_2.1.6/'
 #    command = 'ls ' + data_dir + 'SODA_2.1.6_' + year + '0[1-6]*'
 #    command = 'ls ' + data_dir + 'SODA_2.1.6_' + year + '1*'
 #    command = 'ls ' + data_dir + 'SODA_2.1.6_' + year + '0628*'
