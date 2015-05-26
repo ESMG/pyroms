@@ -1,0 +1,133 @@
+Steps for creating a ROMS rivers file from this runoff file. Used most
+recently for a one-year climatology file for Cook Inlet. Prior to that,
+used in the NWGOA domain where some rivers were given special treatment.
+
+ROMS SIDE PREP
+
+0. maskedge can be found at:
+
+    http://www.people.arsc.edu/~kate/grids/
+
+It should probably be rewritten in Python so that it doesn't need to be
+recompiled for each grid size.
+
+1. First, the maskedge program needs to be run on the ROMS grid file.
+It produces a list of the i,j pairs along the edge of the land mask.
+Save it in a file and edit out the parts of the land mask you don't
+want included (here, i<209). Call this file maskedge.out.
+
+    maskedge cook_inlet_grd_JH_DEM_final.nc > maskedge.out
+    New body! 1, 449
+    There are 1 bodies of water.
+
+2. Run the add_rivers program to create the ROMS file of i,j river
+locations:
+
+    python add_rivers.py Cook_Inlet_rivers.nc
+
+add_rivers.py is currently setting a cycle_length of 365. Remove if
+going to interannual values.
+
+# This wasn't the right approach...
+#3. Run the add_remap program to create the remap_grid file of the
+#river locations:
+#
+#    python add_remap.py
+
+
+HILL AND BEAMER SIDE PREP
+
+# No longer needed!!
+#4. The first step is in converting file formats. I converted the
+#discharge grads file to netcdf using cdo (see wiki).
+#
+#Or, from the netcdf history:
+#
+#    cdo -f nc import_binary discharge.ctl discharge.nc
+ 
+# Assuming this hasn't changed...
+#5. The goa.outlets grads file has been replaced by coast_cells.mat
+#file. I converted this to netcdf with mat_to_nc.py:
+#
+#    python mat_to_nc.py coast_cells.mat
+#
+#6. The lat,lon file was converted (and flipped) with:
+#
+#    python latlon_to_nc.py
+#
+#7. I added the coast_cells to the lat,lon file:
+#
+#    ncks coast_cells.nc lat_lon.nc
+
+#8. The fast and slow flows were added and masked out with the
+#coast_cells info:
+8. Now just masking with the coast_cells info:
+
+    python mask_flow.py
+
+9. The remap weights were computed in:
+
+    python compute_hill_remap_weights.py
+
+THE ACTUAL REMAPPING
+
+PROBLEM: what does conservative mean in remapping? Not what I thought.
+Need to normalize by total flow.
+
+10a. Phase one onto the full ROMS grid (coastal points only):
+
+    python make_runoff_clim.py
+
+runoff_raw is to any ROMS point, then runoff is to coastal points
+only. Needs get_littoral2, a slight change to get_littoral.
+
+10b. (optional) This is to split some big rivers to flow into more than
+one grid box.
+
+    python hack_runoff_clim.py
+
+11. Phase two onto the ROMS rivers file:
+
+    python make_river_clim.py
+
+Like add_rivers, this has been hacked for an annual cycle.
+Also to fix a units problem (ROMS wants m^3/sec).
+
+12. Then there's the tracers... Seth gave me one year of daily values to
+be reused year after year. We need a second, cyclic river_time.
+Plus we need to hack ROMS to accept only one value per day - the new
+ONE_TRACER_SOURCE flag.
+
+    python add_temp.py NWGOA_rivers.nc
+
+13. Finally, setting Vshape:
+
+    python set_vshape.py NWGOA_rivers.nc
+
+14. If using dyes:
+
+    python add_dye.py
+
+15. Just because we can:
+
+    python squeeze_rivers.py NWGOA_rivers.nc squeeze.nc
+    mv squeeze.nc NWGOA_rivers.nc
+
+CHANGING THE LAND MASK
+
+If one changes the ROMS land mask, not all the steps need to be repeated.
+You do need to rerun steps 1 and 2, then 9, 10 and so on. If manually
+editing things, make sure that steps 10b and 13 have the correct river
+locations.
+
+OTHER YEARS
+
+1. Copy an empty NWGOA_rivers_xxx.nc file to the years needed.
+2. Run "python mask_flow.py" on discharge file, hacking leap years as needed.
+3. "python make_runoff_clim.py" to get gridded ROMS file.
+4. "python hack_runoff_clim.py" to change big rivers.
+5. "python make_river_clim.py" to fill ROMS river file from step 1.
+6. "python add_temp.py NWGOA_rivers_1998_1999.nc"
+7. "python set_vshape.py NWGOA_rivers_2000_2001.nc"
+
+8. "python add_dye.py" if using dyes.
