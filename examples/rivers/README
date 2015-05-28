@@ -4,21 +4,14 @@ used in the NWGOA domain where some rivers were given special treatment.
 
 ROMS SIDE PREP
 
-0. maskedge can be found at:
-
-    http://www.people.arsc.edu/~kate/grids/
-
-It should probably be rewritten in Python so that it doesn't need to be
-recompiled for each grid size.
-
 1. First, the maskedge program needs to be run on the ROMS grid file.
 It produces a list of the i,j pairs along the edge of the land mask.
 Save it in a file and edit out the parts of the land mask you don't
-want included (here, i<209). Call this file maskedge.out.
+want included (for NWGOA, i<209). Call this file maskedge.out.
 
-    maskedge cook_inlet_grd_JH_DEM_final.nc > maskedge.out
-    New body! 1, 449
-    There are 1 bodies of water.
+    python maskedge.py cook_inlet_grd_JH_DEM_final.nc > maskedge.out
+    STDERR:  New body! 1, 449
+    STDERR:  There are 1 bodies of water.
 
 2. Run the add_rivers program to create the ROMS file of i,j river
 locations:
