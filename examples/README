@@ -6,31 +6,44 @@ output file, the gridid.txt file here is used to provide some
 information to pyroms about our grids. Point to it with the
 PYROMS_GRIDID_FILE environment variable.
 
-The Yellow_Sea directory contains code for creating a grid,
-bathymetry, initial and boundary files (the last from SODA,
-http://www.atmos.umd.edu/~ocean/).
+INTERPOLATING FROM SODA:
 
-The Arctic2 directory has code for interpolating from SODA across all
-longitudes. It also shows how to use multiprocessing for the boundary
-conditions and climatology files - be sure to set the number of processes
-desired.
+   The Yellow_Sea directory contains code for creating a grid,
+   bathymetry, initial and boundary files (the last from SODA,
+   http://www.atmos.umd.edu/~ocean/).
 
-For creating initial and boundary files from larger ROMS grids,
-there are two cases:
+   The Arctic2 directory has code for interpolating from SODA across all
+   longitudes. It also shows how to use multiprocessing for the boundary
+   conditions and climatology files - be sure to set the number of processes
+   desired.
 
-1. Where the small grid is aligned with the large grid, no velocity
-rotation needed. See the Bering directory.
+INTERPOLATING FROM LARGER ROMS DOMAINS:
 
-2. Where the grids are not aligned and velocities need to be rotated.
-See the Chukchi example.
+   For creating initial and boundary files from larger ROMS grids,
+   there are two cases:
 
-In either case, run make_weight_file.py first.
+   1. Where the small grid is aligned with the large grid, no velocity
+   rotation needed. See the Bering directory.
 
-New: HYCOM scripts in Arctic_HYCOM - scripts to get the HYCOM files
-(subsets of the global fields) and scripts to interpolate from them.
-In the pyroms_toolbox/pyroms_toolbox/Grid_HYCOM directory there is a
-makefile and a creeping_sea.f90. Use them to:
+   2. Where the grids are not aligned and velocities need to be rotated.
+   See the Beaufort example.
 
-    compile creeping_sea.f90 -> creep.so
-    put creep.so somewhere in PYTHONPATH
+   In either case, run "python make_weight_files.py" first.
 
+   These all depend on pyroms_toolbox/remapping*.py and making it
+   multiprocessing aware would have to take place there.
+
+INTERPOLATING FROM GLOBAL HYCOM:
+
+    Scripts in Arctic_HYCOM - scripts to get the HYCOM files
+    (subsets of the global fields) and scripts to interpolate from them.
+
+RIVERS:
+
+    The rivers directory has stuff for turning ARDAT (Arctic Rivers)
+    into ROMS sources.
+
+NESTING:
+
+    So far the nesting directory has only tools for processing the
+    ocean_xx.in files, merging them for nested grid domains.

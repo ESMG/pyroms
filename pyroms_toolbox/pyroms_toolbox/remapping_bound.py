@@ -20,11 +20,11 @@ import datetime
 def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
               rotate_uv=False, trange=None, irange=None, jrange=None, \
               dstdir='./' ,zlevel=None, dmax=0, cdepth=0, kk=0, \
-              uvar='u', vvar='v'):
+              uvar='u', vvar='v', rotate_part=False):
     '''
     A remapping function to extract boundary conditions from one ROMS grid
     to another. It will optionally rotating u and v variables, but needs
-    to be called separately for each u/v pair (such as ubar/vbar, uice/vice).
+    to be called separately for each u/v pair (such as u/v, uice/vice).
     '''
 
     # get input and output grid
@@ -65,7 +65,8 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
 
     # if we're working on u and v, we'll compute ubar,vbar afterwards
     compute_ubar = False
-    if varname.__contains__('u') and varname.__contains__('v'):
+    if (varname.__contains__('u') == 1 and varname.__contains__('v') == 1) or \
+       (varname.__contains__('u_eastward') == 1 and varname.__contains__('v_northward') == 1):
         compute_ubar = True
         print 'ubar/vbar to be computed from u/v' 
         if varname.__contains__('ubar'):
@@ -115,9 +116,7 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
 
         # trange argument
         if trange is None:
-            ltrange = range(ntime)
-        else:
-            ltrange = range(trange[0], trange[1]+1)
+            trange = range(ntime)
 
         # create destination file
         if nctidx == 0:
@@ -129,10 +128,10 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                     ocean_time, lgrid=False)
 
             # open destination file
-            nc = netCDF.Dataset(dstfile, 'a', format='NETCDF3_CLASSIC')
+            nc = netCDF.Dataset(dstfile, 'a', format='NETCDF3_64BIT')
 
         # loop over time
-        for nt in ltrange:
+        for nt in trange:
 
             nc.variables['ocean_time'][nctidx] = ocean_time[nt]
 
@@ -149,7 +148,6 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
 
                 # determine variable dimension
                 ndim = len(src_var.dimensions)-1
-		print 'ndim =', ndim
 
                 # get spval
                 try:
@@ -159,13 +157,13 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
 
                 # irange
                 if irange is None:
-                    iirange = (0,src_var._shape()[-1])
+                    iirange = (0,src_var.shape[-1])
                 else:
                     iirange = irange
 
                 # jrange
                 if jrange is None:
-                    jjrange = (0,src_var._shape()[-2])
+                    jjrange = (0,src_var.shape[-2])
                 else:
                     jjrange = jrange
 
@@ -185,16 +183,17 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
 
                 # create variable in _destination file
                 if nctidx == 0:
-		    for sid in sides:
-		       varn = varname[nv]+str(sid)
-                       print 'Creating variable', varn
-		       dimens = [i for i in src_var.dimensions]
-		       for dim in dimens:
-		           if re.match(dimexcl[sid],dim):
-			       dimens.remove(dim)
-                       nc.createVariable(varn, 'f8', dimens)
+                    for sid in sides:
+                       varn = varname[nv]+str(sid)
+                       dimens = [i for i in src_var.dimensions]
+                       for dim in dimens:
+                           if re.match(dimexcl[sid],dim):
+                               dimens.remove(dim)
+                       print 'Creating variable', varn, dimens
+                       nc.createVariable(varn, 'f8', dimens, \
+                           fill_value=spval)
                        nc.variables[varn].long_name = varname[nv] + \
-		            ' ' + long[sid] + ' boundary condition'
+                            ' ' + long[sid] + ' boundary condition'
                        try:
                            nc.variables[varn].units = src_var.units
                        except:
@@ -203,7 +202,6 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                        nc.variables[varn].coordinates = \
                            str(dimens.reverse())
                        nc.variables[varn].field = src_var.field
-                       nc.variables[varn]._FillValue = spval
 
                 # get the right remap weights file
                 for s in range(len(wts_files)):
@@ -228,17 +226,13 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                                       irange=iirange, jrange=jjrange, spval=spval, \
                                       dmax=dmax, cdepth=cdepth, kk=kk)
 
-                    tmp_src_varz = np.zeros((nzlevel, src_var[:].shape[-2], src_var[:].shape[-1]))
-                    tmp_src_varz[:,jjrange[0]:jjrange[1],iirange[0]:iirange[1]] = src_varz
                 else:
                     src_varz = src_var[nt,jjrange[0]:jjrange[1],iirange[0]:iirange[1]]
-                    tmp_src_varz = np.zeros(src_var[nt,:].shape)
-                    tmp_src_varz[jjrange[0]:jjrange[1],iirange[0]:iirange[1]] = src_varz
 
                 print datetime.datetime.now()
                 # horizontal interpolation using scrip weights
                 print 'horizontal interpolation using scrip weights'
-                dst_varz = pyroms.remapping.remap(tmp_src_varz, wts_file, \
+                dst_varz = pyroms.remapping.remap(src_varz, wts_file, \
                                                   spval=spval)
 
                 if ndim == 3:
@@ -279,20 +273,20 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
 
                 # write data in destination file
                 print 'write data in destination file'
-		sid = '_west'
-		varn = varname[nv]+str(sid)
+                sid = '_west'
+                varn = varname[nv]+str(sid)
                 nc.variables[varn][nctidx] = np.squeeze(dst_var_west)
 
-		sid = '_east'
-		varn = varname[nv]+str(sid)
+                sid = '_east'
+                varn = varname[nv]+str(sid)
                 nc.variables[varn][nctidx] = np.squeeze(dst_var_east)
 
-		sid = '_north'
-		varn = varname[nv]+str(sid)
+                sid = '_north'
+                varn = varname[nv]+str(sid)
                 nc.variables[varn][nctidx] = np.squeeze(dst_var_north)
 
-		sid = '_south'
-		varn = varname[nv]+str(sid)
+                sid = '_south'
+                varn = varname[nv]+str(sid)
                 nc.variables[varn][nctidx] = np.squeeze(dst_var_south)
 
             # rotate the velocity field if requested
@@ -311,19 +305,41 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 except:
                     raise Warning, 'Did not find a _FillValue attribute.' 
 
+                if rotate_part:
+                    ndim = len(src_u.dimensions)-1
+                    ind = uvar.find('_eastward')
+                    uvar_out = uvar[0:ind]
+                    print "Warning: renaming uvar to", uvar_out
+                    ind = vvar.find('_northward')
+                    vvar_out = vvar[0:ind]
+                    print "Warning: renaming vvar to", vvar_out
+                    if ndim == 3:
+                        dimens_u = ['ocean_time', 's_rho', 'eta_u', 'xi_u']
+                        dimens_v = ['ocean_time', 's_rho', 'eta_v', 'xi_v']
+                    else:
+                        dimens_u = ['ocean_time', 'eta_u', 'xi_u']
+                        dimens_v = ['ocean_time', 'eta_v', 'xi_v']
+
+                else:
+                    dimens_u = [i for i in src_u.dimensions]
+                    dimens_v = [i for i in src_v.dimensions]
+                    uvar_out = uvar
+                    vvar_out = vvar
+
                 # create variable in destination file
                 if nctidx == 0:
-                    print 'Creating variable '+uvar
-		    for sid in sides:
-		       varn = uvar+str(sid)
+                    print 'Creating boundary variables for '+uvar
+                    for sid in sides:
+                       varn = uvar_out+str(sid)
                        print 'Creating variable', varn
-		       dimens = [i for i in src_u.dimensions]
-		       for dim in dimens:
-		           if re.match(dimexcl[sid],dim):
-		               dimens.remove(dim)
-                       nc.createVariable(varn, 'f8', dimens)
-                       nc.variables[varn].long_name = uvar + \
-	                   ' ' + long[sid] + ' boundary condition'
+                       dimens = list(dimens_u)
+                       for dim in dimens:
+                           if re.match(dimexcl[sid],dim):
+                               dimens.remove(dim)
+                       nc.createVariable(varn, 'f8', dimens, \
+                         fill_value=spval)
+                       nc.variables[varn].long_name = uvar_out + \
+                           ' ' + long[sid] + ' boundary condition'
                        try:
                            nc.variables[varn].units = src_u.units
                        except:
@@ -332,18 +348,18 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                        nc.variables[varn].coordinates = \
                            str(dimens.reverse())
                        nc.variables[varn].field = src_u.field
-                       nc.variables[varn]._FillValue = spval
-                    print 'Creating variable '+vvar
-		    for sid in sides:
-		       varn = vvar+str(sid)
+                    print 'Creating boundary variables for '+vvar
+                    for sid in sides:
+                       varn = vvar_out+str(sid)
                        print 'Creating variable', varn
-		       dimens = [i for i in src_v.dimensions]
-		       for dim in dimens:
-		           if re.match(dimexcl[sid],dim):
-		               dimens.remove(dim)
-                       nc.createVariable(varn, 'f8', dimens)
-                       nc.variables[varn].long_name = vvar + \
-		                ' ' + long[sid] + ' boundary condition'
+                       dimens = list(dimens_v)
+                       for dim in dimens:
+                           if re.match(dimexcl[sid],dim):
+                               dimens.remove(dim)
+                       nc.createVariable(varn, 'f8', dimens, \
+                         fill_value=spval)
+                       nc.variables[varn].long_name = vvar_out + \
+                                ' ' + long[sid] + ' boundary condition'
                        try:
                            nc.variables[varn].units = src_v.units
                        except:
@@ -352,80 +368,87 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                        nc.variables[varn].coordinates = \
                            str(dimens.reverse())
                        nc.variables[varn].field = src_v.field
-                       nc.variables[varn]._FillValue = spval
 
                 # get the right remap weights file
-                for s in range(len(wts_files)):
-                    if wts_files[s].__contains__('u_to_rho.nc'):
-                        wts_file_u = wts_files[s]
-                    if wts_files[s].__contains__('v_to_rho.nc'):
-                        wts_file_v = wts_files[s]
+                if rotate_part:
+                    for s in range(len(wts_files)):
+                        if wts_files[s].__contains__('rho_to_rho.nc'):
+                            wts_file_u = wts_files[s]
+                            wts_file_v = wts_files[s]
+                    Cpos_u = 'rho'
+                    Cpos_v = 'rho'
+                else:
+                    for s in range(len(wts_files)):
+                        if wts_files[s].__contains__('u_to_rho.nc'):
+                            wts_file_u = wts_files[s]
+                        if wts_files[s].__contains__('v_to_rho.nc'):
+                            wts_file_v = wts_files[s]
+                    Cpos_u = 'u'
+                    Cpos_v = 'v'
 
                 # vertical interpolation from sigma to standard z level
-                print 'vertical interpolation from sigma to standard z level'
                 # irange
                 if irange is None:
-                    iirange = (0,src_u._shape()[-1])
+                    iirange = (0,src_u.shape[-1])
                 else:
                     iirange = irange
 
                 # jrange
                 if jrange is None:
-                    jjrange = (0,src_u._shape()[-2])
+                    jjrange = (0,src_u.shape[-2])
                 else:
                     jjrange = jrange
 
                 ndim = len(src_v.dimensions)-1
                 if ndim == 3:
+                    print 'vertical interpolation from sigma to standard z level'
                     src_uz = pyroms.remapping.roms2z( \
                             src_u[nt,:,jjrange[0]:jjrange[1],iirange[0]:iirange[1]], \
-                            srcgrd, srcgrdz, Cpos='u', irange=iirange, jrange=jjrange)
+                            srcgrd, srcgrdz, Cpos=Cpos_u, irange=iirange, jrange=jjrange)
                     # flood the grid
                     print 'flood the u grid'
-                    src_uz = pyroms.remapping.flood(src_uz, srcgrdz, Cpos='u', \
+                    src_uz = pyroms.remapping.flood(src_uz, srcgrdz, Cpos=Cpos_u, \
                                   irange=iirange, jrange=jjrange, \
                                   spval=spval, dmax=dmax, cdepth=cdepth, kk=kk)
-                    tmp_src_uz = np.zeros((nzlevel, src_u[:].shape[-2], src_u[:].shape[-1]))
-                    tmp_src_uz[:,jjrange[0]:jjrange[1],iirange[0]:iirange[1]] = src_uz
                 else:
                     src_uz = src_u[nt,jjrange[0]:jjrange[1],iirange[0]:iirange[1]]
-                    tmp_src_uz = np.zeros(src_u[nt,:].shape)
-                    tmp_src_uz[jjrange[0]:jjrange[1],iirange[0]:iirange[1]] = src_uz
+                    src_uz = pyroms.remapping.flood2d(src_uz, srcgrdz, Cpos=Cpos_u, \
+                                      irange=iirange, jrange=jjrange, spval=spval, \
+                                      dmax=dmax)
 
                 # irange
                 if irange is None:
-                    iirange = (0,src_v._shape()[-1])
+                    iirange = (0,src_v.shape[-1])
                 else:
                     iirange = irange
 
                 # jrange
                 if jrange is None:
-                    jjrange = (0,src_v._shape()[-2])
+                    jjrange = (0,src_v.shape[-2])
                 else:
                     jjrange = jrange
 
                 if ndim == 3:
                     src_vz = pyroms.remapping.roms2z( \
                             src_v[nt,:,jjrange[0]:jjrange[1],iirange[0]:iirange[1]], \
-                            srcgrd, srcgrdz, Cpos='v', irange=iirange, jrange=jjrange)
+                            srcgrd, srcgrdz, Cpos=Cpos_v, irange=iirange, jrange=jjrange)
 
                     # flood the grid
                     print 'flood the v grid'
-                    src_vz = pyroms.remapping.flood(src_vz, srcgrdz, Cpos='v', \
+                    src_vz = pyroms.remapping.flood(src_vz, srcgrdz, Cpos=Cpos_v, \
                                   irange=iirange, jrange=jjrange, \
                                   spval=spval, dmax=dmax, cdepth=cdepth, kk=kk)
-                    tmp_src_vz = np.zeros((nzlevel, src_v[:].shape[-2], src_v[:].shape[-1]))
-                    tmp_src_vz[:,jjrange[0]:jjrange[1],iirange[0]:iirange[1]] = src_vz
                 else:
                     src_vz = src_v[nt,jjrange[0]:jjrange[1],iirange[0]:iirange[1]]
-                    tmp_src_vz = np.zeros(src_v[nt,:].shape)
-                    tmp_src_vz[jjrange[0]:jjrange[1],iirange[0]:iirange[1]] = src_vz
+                    src_vz = pyroms.remapping.flood2d(src_vz, srcgrdz, Cpos=Cpos_v, \
+                                      irange=iirange, jrange=jjrange, spval=spval, \
+                                      dmax=dmax)
 
                 # horizontal interpolation using scrip weights
                 print 'horizontal interpolation using scrip weights'
-                dst_uz = pyroms.remapping.remap(tmp_src_uz, wts_file_u, \
+                dst_uz = pyroms.remapping.remap(src_uz, wts_file_u, \
                                                   spval=spval)
-                dst_vz = pyroms.remapping.remap(tmp_src_vz, wts_file_v, \
+                dst_vz = pyroms.remapping.remap(src_vz, wts_file_v, \
                                                   spval=spval)
                 Mp, Lp = dst_grd.hgrid.mask_rho.shape
 
@@ -468,10 +491,15 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                     dst_v_west = dst_vz[0:Mp, 0:2]
 
                 # rotate u,v fields
-                for s in range(len(wts_files)):
-                    if wts_files[s].__contains__('rho_to_rho.nc'):
-                        wts_file = wts_files[s]
-                src_angle = pyroms.remapping.remap(srcgrd.hgrid.angle_rho, wts_file)
+                if rotate_part:
+                    src_angle = np.zeros(dst_grd.hgrid.angle_rho.shape)
+                else:
+                    for s in range(len(wts_files)):
+                        if wts_files[s].__contains__('rho_to_rho.nc'):
+                            wts_file = wts_files[s]
+                    src_ang = srcgrd.hgrid.angle_rho[jjrange[0]:jjrange[1],iirange[0]:iirange[1]]
+                    src_angle = pyroms.remapping.remap(src_ang, wts_file)
+
                 dst_angle = dst_grd.hgrid.angle_rho
                 angle = dst_angle - src_angle
                 if ndim == 3:
@@ -577,28 +605,28 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
 
                 # write data in destination file
                 print 'write data in destination file'
-		sid = '_west'
-		varn = uvar+str(sid)
+                sid = '_west'
+                varn = uvar_out+str(sid)
                 nc.variables[varn][nctidx] = dst_u_west
-		varn = vvar+str(sid)
+                varn = vvar_out+str(sid)
                 nc.variables[varn][nctidx] = dst_v_west
 
-		sid = '_north'
-		varn = uvar+str(sid)
+                sid = '_north'
+                varn = uvar_out+str(sid)
                 nc.variables[varn][nctidx] = dst_u_north
-		varn = vvar+str(sid)
+                varn = vvar_out+str(sid)
                 nc.variables[varn][nctidx] = dst_v_north
 
-		sid = '_east'
-		varn = uvar+str(sid)
+                sid = '_east'
+                varn = uvar_out+str(sid)
                 nc.variables[varn][nctidx] = dst_u_east
-		varn = vvar+str(sid)
+                varn = vvar_out+str(sid)
                 nc.variables[varn][nctidx] = dst_v_east
 
-		sid = '_south'
-		varn = uvar+str(sid)
+                sid = '_south'
+                varn = uvar_out+str(sid)
                 nc.variables[varn][nctidx] = dst_u_south
-		varn = vvar+str(sid)
+                varn = vvar_out+str(sid)
                 nc.variables[varn][nctidx] = dst_v_south
 
             if compute_ubar:
@@ -607,38 +635,35 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                     nc.createVariable('ubar_north', 'f8', \
                          ('ocean_time', 'xi_u'), fill_value=spval)
                     nc.variables['ubar_north'].long_name = \
-		          '2D u-momentum north boundary condition'
+                          '2D u-momentum north boundary condition'
                     nc.variables['ubar_north'].units = 'meter second-1'
                     nc.variables['ubar_north'].time = 'ocean_time'
                     nc.variables['ubar_north'].coordinates = 'xi_u ocean_time'
                     nc.variables['ubar_north'].field = 'ubar_north, scalar, series'
-                    nc.variables['ubar_north']._FillValue = spval
                     print 'Creating variable vbar_north'
                     nc.createVariable('vbar_north', 'f8', \
                          ('ocean_time', 'xi_v'), fill_value=spval)
                     nc.variables['vbar_north'].long_name = \
-		          '2D v-momentum north boundary condition'
+                          '2D v-momentum north boundary condition'
                     nc.variables['vbar_north'].units = 'meter second-1'
                     nc.variables['vbar_north'].time = 'ocean_time'
                     nc.variables['vbar_north'].coordinates = 'xi_v ocean_time'
                     nc.variables['vbar_north'].field = 'vbar_north,, scalar, series'
-                    nc.variables['vbar_north']._FillValue = spval
 
                     print 'Creating variable ubar_south'
                     nc.createVariable('ubar_south', 'f8', \
                          ('ocean_time', 'xi_u'), fill_value=spval)
                     nc.variables['ubar_south'].long_name = \
-		          '2D u-momentum south boundary condition'
+                          '2D u-momentum south boundary condition'
                     nc.variables['ubar_south'].units = 'meter second-1'
                     nc.variables['ubar_south'].time = 'ocean_time'
                     nc.variables['ubar_south'].coordinates = 'xi_u ocean_time'
                     nc.variables['ubar_south'].field = 'ubar_south, scalar, series'
-                    nc.variables['ubar_south']._FillValue = spval
                     print 'Creating variable vbar_south'
                     nc.createVariable('vbar_south', 'f8', \
                          ('ocean_time', 'xi_v'), fill_value=spval)
                     nc.variables['vbar_south'].long_name = \
-		          '2D v-momentum south boundary condition'
+                          '2D v-momentum south boundary condition'
                     nc.variables['vbar_south'].units = 'meter second-1'
                     nc.variables['vbar_south'].time = 'ocean_time'
                     nc.variables['vbar_south'].coordinates = 'xi_v ocean_time'
@@ -647,17 +672,16 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                     nc.createVariable('ubar_west', 'f8', \
                          ('ocean_time', 'eta_u'), fill_value=spval)
                     nc.variables['ubar_west'].long_name = \
-		          '2D u-momentum west boundary condition'
+                          '2D u-momentum west boundary condition'
                     nc.variables['ubar_west'].units = 'meter second-1'
                     nc.variables['ubar_west'].time = 'ocean_time'
                     nc.variables['ubar_west'].coordinates = 'eta_u ocean_time'
                     nc.variables['ubar_west'].field = 'ubar_west, scalar, series'
-                    nc.variables['ubar_west']._FillValue = spval
                     print 'Creating variable vbar_west'
                     nc.createVariable('vbar_west', 'f8', \
                          ('ocean_time', 'eta_v'), fill_value=spval)
                     nc.variables['vbar_west'].long_name = \
-		          '2D v-momentum west boundary condition'
+                          '2D v-momentum west boundary condition'
                     nc.variables['vbar_west'].units = 'meter second-1'
                     nc.variables['vbar_west'].time = 'ocean_time'
                     nc.variables['vbar_west'].coordinates = 'eta_v ocean_time'
@@ -666,24 +690,23 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                     nc.createVariable('ubar_east', 'f8', \
                          ('ocean_time', 'eta_u'), fill_value=spval)
                     nc.variables['ubar_east'].long_name = \
-		          '2D u-momentum east boundary condition'
+                          '2D u-momentum east boundary condition'
                     nc.variables['ubar_east'].units = 'meter second-1'
                     nc.variables['ubar_east'].time = 'ocean_time'
                     nc.variables['ubar_east'].coordinates = 'eta_u ocean_time'
                     nc.variables['ubar_east'].field = 'ubar_east, scalar, series'
-                    nc.variables['ubar_east']._FillValue = spval
                     print 'Creating variable vbar_east'
                     nc.createVariable('vbar_east', 'f8', \
                          ('ocean_time', 'eta_v'), fill_value=spval)
                     nc.variables['vbar_east'].long_name = \
-		          '2D v-momentum east boundary condition'
+                          '2D v-momentum east boundary condition'
                     nc.variables['vbar_east'].units = 'meter second-1'
                     nc.variables['vbar_east'].time = 'ocean_time'
                     nc.variables['vbar_east'].coordinates = 'eta_v ocean_time'
 
                 # compute depth average velocity ubar and vbar
                 # get z at the right position
-		print 'Computing ubar/vbar from u/v'
+                print 'Computing ubar/vbar from u/v'
                 z_u_north = 0.5 * (dst_grd.vgrid.z_w[0,:,-1,:-1] +
                         dst_grd.vgrid.z_w[0,:,-1, 1:])
                 z_v_north = 0.5 * (dst_grd.vgrid.z_w[0,:,-1,:] +
@@ -701,14 +724,14 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 z_v_west = 0.5 * (dst_grd.vgrid.z_w[0,:,:-1,0] +
                         dst_grd.vgrid.z_w[0,:,1:,0])
                 if not rotate_uv:
-		    dst_u_north = np.squeeze(dst_u_north)
-		    dst_v_north = np.squeeze(dst_v_north)
-		    dst_u_south = np.squeeze(dst_u_south)
-		    dst_v_south = np.squeeze(dst_v_south)
-		    dst_u_east = np.squeeze(dst_u_east)
-		    dst_v_east = np.squeeze(dst_v_east)
-		    dst_u_west = np.squeeze(dst_u_west)
-		    dst_v_west = np.squeeze(dst_v_west)
+                    dst_u_north = np.squeeze(dst_u_north)
+                    dst_v_north = np.squeeze(dst_v_north)
+                    dst_u_south = np.squeeze(dst_u_south)
+                    dst_v_south = np.squeeze(dst_v_south)
+                    dst_u_east = np.squeeze(dst_u_east)
+                    dst_v_east = np.squeeze(dst_v_east)
+                    dst_u_west = np.squeeze(dst_u_west)
+                    dst_v_west = np.squeeze(dst_v_west)
 
                 dst_ubar_north = np.zeros(dst_u_north.shape[1])
                 dst_ubar_south = np.zeros(dst_u_south.shape[1])
@@ -719,7 +742,7 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 dst_vbar_east = np.zeros(dst_v_east.shape[1])
                 dst_vbar_west = np.zeros(dst_v_west.shape[1])
 
-#		print 'Shapes 3', dst_u_north.shape, dst_ubar_north.shape, z_u_north.shape, np.diff(z_u_north[:,1]).shape
+#                print 'Shapes 3', dst_u_north.shape, dst_ubar_north.shape, z_u_north.shape, np.diff(z_u_north[:,1]).shape
                 for i in range(dst_u_north.shape[1]):
                     dst_ubar_north[i] = (dst_u_north[:,i] * \
                         np.diff(z_u_north[:,i])).sum() / -z_u_north[0,i]

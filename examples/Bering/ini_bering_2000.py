@@ -15,4 +15,4 @@ dst_grd = pyroms.grid.get_ROMS_grid('BERING')
 # directory than the one that is default which is where the file came from.
 dst_var = pyroms_toolbox.remapping(src_varname, src_filename,\
                                    wts_file,src_grd,dst_grd,rotate_uv=False,\
-                                   trange=(0,0),irange=(20,210),jrange=(340,610))
+                                   irange=(20,210),jrange=(340,610))

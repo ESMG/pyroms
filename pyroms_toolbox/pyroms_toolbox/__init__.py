@@ -36,6 +36,8 @@ from plot_ijcoast_line import plot_ijcoast_line
 from lsq_phase_amplitude import lsq_phase_amplitude
 from remapping import remapping
 from remapping_bound import remapping_bound
+from remapping_bound_sig import remapping_bound_sig
+from remapping_tensor import remapping_tensor
 from nc_create_roms_file import nc_create_roms_file
 from nc_create_roms_bdry_file import nc_create_roms_bdry_file
 from average import average

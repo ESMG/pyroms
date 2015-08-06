@@ -35,7 +35,7 @@ Meanwhile, you can prepare by installing Enthought Python
    * netCDF4 from Jeff Whitaker. This sits on top of the hdf5 and
      netcdf4 libraries.
 
-   * ipython. Fred Castruccio recommends using "ipython -pylab" for
+   * ipython. Fred Castruccio recommends using "ipython --pylab" for
      interactive fun. It preloads both numpy and the matplotlib
      pylab package.
 
