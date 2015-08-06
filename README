@@ -39,7 +39,10 @@ Meanwhile, you can prepare by installing Enthought Python
      interactive fun. It preloads both numpy and the matplotlib
      pylab package.
 
-We may also add pyngl and pynio from NCAR to this list.
+We may also add pyngl and pynio from NCAR to this list. Or ESMPy.
+Or Python 3...
+
+If you want a package manager for these bits, check out Anaconda.
 
 Installing
 ----------

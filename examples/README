@@ -26,12 +26,12 @@ INTERPOLATING FROM LARGER ROMS DOMAINS:
    rotation needed. See the Bering directory.
 
    2. Where the grids are not aligned and velocities need to be rotated.
-   See the Beaufort example.
+   See the Beaufort example. The ice boundary script uses multiprocessing,
+   by month.
 
    In either case, run "python make_weight_files.py" first.
 
-   These all depend on pyroms_toolbox/remapping*.py and making it
-   multiprocessing aware would have to take place there.
+   These all depend on pyroms_toolbox/remapping*.py.
 
 INTERPOLATING FROM GLOBAL HYCOM:
 
