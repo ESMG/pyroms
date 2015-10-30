@@ -1,0 +1,22 @@
+The subset of the Pacific files end up in a "data" directory, which
+you have to create first. Then execute "bash list" to get them all -
+each field in its own file. To make one file with all for the
+initial conditions, I did (in tcsh):
+
+foreach foo (Pacific*.nc)
+> ncks -d ocean_time,0,0 $foo day_000.nc
+> end
+
+then you have to hit "a" for the second and the rest of the files...
+
+
+Commands for making the grid file:
+
+ncks -d xi_rho,195,264 -d xi_psi,195,263 -d xi_u,195,263 \
+   -d xi_v,195,264 -d eta_rho,170,214 -d eta_psi,170,213 \
+   -d eta_u,170,214 -d eta_v,170,213 NP_grid2.nc Pacific_NWGOA_grid.nc
+
+ncatted -O -a _FillValue,,d,, Pacific_NWGOA_grid.nc
+
+The scripts here make an initial file and one boundary file per
+field.

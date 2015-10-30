@@ -22,8 +22,8 @@ def remap(src_array, remap_file, src_grad1=None, src_grad2=None, \
     src_grid_size = len(data.dimensions['src_grid_size'])
     dst_grid_size = len(data.dimensions['dst_grid_size'])
     num_links = len(data.dimensions['num_links'])
-    src_grid_dims = data.variables['src_grid_dims']
-    dst_grid_dims = data.variables['dst_grid_dims']    
+    src_grid_dims = data.variables['src_grid_dims'][:]
+    dst_grid_dims = data.variables['dst_grid_dims'][:]
 
     # get weights and addresses from remap_file
     map_wts = data.variables['remap_matrix'][:]
@@ -85,7 +85,7 @@ def remap(src_array, remap_file, src_grad1=None, src_grad2=None, \
                                              tmp_src_grad1, tmp_src_grad2, \
                                              tmp_src_grad3)
             else:
-                raise ValueError, 'Unknow method'                
+                raise ValueError, 'Unknown method'                
 
         # mask dst_array
         idx = np.where(dst_mask == 0)

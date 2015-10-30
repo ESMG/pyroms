@@ -1,0 +1,37 @@
+WARNING: I have only run the INI file script so far.
+
+1. Note to self:
+
+GLORYS has a default spval of -32.xxx for temp and salt. This is not
+a good idea for ROMS, with its:
+
+       IF (ABS(wrk(i)).ge.ABS(Aspval)) THEN
+	   wrk(i)=0.0_r8                 ! masked with _FillValue
+
+You need:
+
+ncatted -a _FillValue,temp,m,d,1.e37 -a _FillValue,salt,m,d,1.e37
+GLORYS2V3_1dAV_19980101_1998010_ic_ARCTIC2.nc
+
+(at least for salt).
+
+
+2. I chose to combine the fields for one day into one for the initial
+conditions. It's kind of a pain, so you probably want to handle the
+boundary conditions field by field, then combine them afterwards.
+
+Some of the history:
+		:history = "Thu Aug 20 15:21:10 2015: ncks
+GLORYS2V3_1dAV_19980101_19980102.nc
+GLORYS2V3_1dAV_19980101_19980102_V.nc\n",
+			"Thu Aug 20 15:10:53 2015: ncks
+GLORYS2V3_1dAV_19980101_19980102_ice.nc
+GLORYS2V3_1dAV_19980101_19980102.nc\n",
+			"Thu Aug 20 15:10:40 2015: ncrename -d
+deptht,depth_one
+GLORYS2V3_1dAV_19980101_19980102_icemod_R19980107.nc
+GLORYS2V3_1dAV_19980101_19980102_ice.nc"
+
+3. This is an arctic domain, using yrange to subset the world.
+A more equatorial problem should use irange, jrange instead. Be
+consistent and edit all the *.py files here consistently.

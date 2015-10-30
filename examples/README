@@ -6,6 +6,11 @@ output file, the gridid.txt file here is used to provide some
 information to pyroms about our grids. Point to it with the
 PYROMS_GRIDID_FILE environment variable.
 
+************************************************************************
+*** For all the interpolating, make sure all the files have the same ***
+*** irange,jrange,ystart for your specific domain.                   ***
+************************************************************************
+
 INTERPOLATING FROM SODA:
 
    The Yellow_Sea directory contains code for creating a grid,

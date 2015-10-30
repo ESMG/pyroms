@@ -1,0 +1,4 @@
+These files are for making initial/boundary files from a subset of a North
+Pacific domain, including a full suite of BGC variables (CoSiNE). The
+download scripts are included. You will need to get the Pacific grid
+file from Fei Chai or myself.

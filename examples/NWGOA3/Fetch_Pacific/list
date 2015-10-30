@@ -1,0 +1,36 @@
+python get_pacific_3d.py 1979 ddn
+python get_pacific_3d.py 1979 ddsi
+python get_pacific_3d.py 1979 nh4
+python get_pacific_3d.py 1979 no3
+python get_pacific_3d.py 1979 ox
+python get_pacific_3d.py 1979 po4
+python get_pacific_3d.py 1979 s1
+python get_pacific_3d.py 1979 s2
+python get_pacific_3d.py 1979 s3
+python get_pacific_3d.py 1979 salt
+python get_pacific_3d.py 1979 sio4
+python get_pacific_3d.py 1979 talk
+python get_pacific_3d.py 1979 tco2
+python get_pacific_3d.py 1979 temp
+python get_pacific_u.py 1979
+python get_pacific_v.py 1979
+python get_pacific_zeta.py 1979
+python get_pacific_3d.py 1979 zz1
+python get_pacific_3d.py 1979 zz2
+python get_pacific_3d.py 1979 c1
+python get_pacific_3d.py 1979 c2
+python get_pacific_3d.py 1979 c3
+python get_pacific_3d.py 1979 ddc
+python get_pacific_3d.py 1979 chl1
+python get_pacific_3d.py 1979 chl2
+python get_pacific_3d.py 1979 chl3
+python get_pacific_3d.py 1979 zzc1
+python get_pacific_3d.py 1979 zzc2
+python get_pacific_3d.py 1979 ldon
+python get_pacific_3d.py 1979 ldoc
+python get_pacific_3d.py 1979 sdon
+python get_pacific_3d.py 1979 sdoc
+python get_pacific_3d.py 1979 ddca
+python get_pacific_3d.py 1979 bac
+python get_pacific_3d.py 1979 cldoc
+python get_pacific_3d.py 1979 csdoc

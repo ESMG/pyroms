@@ -316,7 +316,8 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                     print 'vertical interpolation from sigma to standard z level'
                     src_uz = pyroms.remapping.roms2z( \
                             src_u[nt,:,jjrange[0]:jjrange[1],iirange[0]:iirange[1]], \
-                            srcgrd, srcgrdz, Cpos=Cpos_u, irange=iirange, jrange=jjrange)
+                            srcgrd, srcgrdz, Cpos=Cpos_u, spval=spval, \
+			    irange=iirange, jrange=jjrange)
                     # flood the grid
                     print 'flood the u grid'
                     src_uz = pyroms.remapping.flood(src_uz, srcgrdz, Cpos=Cpos_u, \
@@ -343,7 +344,8 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 if ndim == 3:
                     src_vz = pyroms.remapping.roms2z( \
                             src_v[nt,:,jjrange[0]:jjrange[1],iirange[0]:iirange[1]], \
-                            srcgrd, srcgrdz, Cpos=Cpos_v, irange=iirange, jrange=jjrange)
+                            srcgrd, srcgrdz, Cpos=Cpos_v, spval=spval, \
+			    irange=iirange, jrange=jjrange)
 
                     # flood the grid
                     print 'flood the v grid'
