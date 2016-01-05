@@ -10,6 +10,7 @@ def configuration(parent_package='',top_path=None):
     config.add_subpackage('Grid_HYCOM')
     config.add_library('_average', sources=['src/average.f90']),
     config.add_library('_move_runoff', sources=['src/move_runoff.f90']),
+    config.add_library('_move_river_t', sources=['src/move_river_t.f90']),
     config.add_extension('_average',
           sources = ['src/average.f90'],
           libraries = ['_average']
