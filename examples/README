@@ -43,6 +43,9 @@ INTERPOLATING FROM GLOBAL HYCOM:
     Scripts in Arctic_HYCOM - scripts to get the HYCOM files
     (subsets of the global fields) and scripts to interpolate from them.
 
+    Also Palau_HYCOM shows how to do a non-polar subset of the HYCOM
+    files.
+
 RIVERS:
 
     The rivers directory has stuff for turning ARDAT (Arctic Rivers)
