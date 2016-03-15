@@ -2,3 +2,26 @@ I present a motley crew of examples. Some are meant to be run from
 the command line, some are meant to be cut and pasted from the file.
 Some have more than one option present, not all meant to be run at
 the same time.
+
+There's another date computer in pyroms, but the one I know how to
+use is caldate:
+
+In [1]: from caldate import *
+
+In [2]: caldate_1900(37987.5)
+Year: 2004.0
+Year Day: 3.0
+Month: 1.0
+Day: 3.0
+Hour: 12.0
+Min: 0.0
+Sec: 0.0
+Out[2]: 
+{'day': 3.0,
+ 'hour': 12.0,
+ 'minute': 0.0,
+ 'month': 1.0,
+ 'second': 0.0,
+ 'year': 2004.0,
+ 'yearday': 3.0}
+

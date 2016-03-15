@@ -370,7 +370,7 @@ def get_ROMS_hgrid(gridid):
     try: 
         hgrd.mask_rho = np.array(nc.variables['mask_rho'][:])
     except: 
-        hgrd.mask_rho = np.ones(hgrd.mask_rho.shape)
+        hgrd.mask_rho = np.ones(hgrd.lat_rho.shape)
 
     return hgrd
 

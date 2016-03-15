@@ -35,7 +35,7 @@ def remap(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_d
     time = datetime(year, month, day, 0, 0, 0)
     time = date2num(time)
     time = time - ref
-    time = time + 2.5 # 5-day average
+    time = time + 0.5 # 1-day average
 
     # create IC file
     dst_file = src_file.rsplit('/')[-1]

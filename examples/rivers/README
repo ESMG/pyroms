@@ -13,6 +13,12 @@ want included (for NWGOA, i<209). Call this file maskedge.out.
     STDERR:  New body! 1, 449
     STDERR:  There are 1 bodies of water.
 
+Note: if you get 0 bodies of water, check the _FillValue attribute
+on your masks. Some old grids have them set to 1.0, which is no
+longer desired. Fix with:
+
+ncatted -O -a _FillValue,mask_rho,d,, -a _FillValue,mask_u,d,, -a _FillValue,mask_v,d,, -a _FillValue,mask_psi,d,, CGOA_grid_4.nc
+
 2. Run the add_rivers program to create the ROMS file of i,j river
 locations:
 

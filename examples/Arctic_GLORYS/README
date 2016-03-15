@@ -21,16 +21,24 @@ conditions. It's kind of a pain, so you probably want to handle the
 boundary conditions field by field, then combine them afterwards.
 
 Some of the history:
-		:history = "Thu Aug 20 15:21:10 2015: ncks
-GLORYS2V3_1dAV_19980101_19980102.nc
-GLORYS2V3_1dAV_19980101_19980102_V.nc\n",
-			"Thu Aug 20 15:10:53 2015: ncks
-GLORYS2V3_1dAV_19980101_19980102_ice.nc
-GLORYS2V3_1dAV_19980101_19980102.nc\n",
-			"Thu Aug 20 15:10:40 2015: ncrename -d
-deptht,depth_one
-GLORYS2V3_1dAV_19980101_19980102_icemod_R19980107.nc
-GLORYS2V3_1dAV_19980101_19980102_ice.nc"
+   ncrename -d deptht,depth_one -v deptht,depth_one
+GLORYS2V3_1dAV_20040101_20040102_grid2D_R20040107.nc
+GLORYS2V3_1dAV_20040101_20040102.nc
+   ncrename -d deptht,depth_one -v deptht,depth_one
+GLORYS2V3_1dAV_20040101_20040102_icemod_R20040107.nc
+GLORYS2V3_1dAV_20040101_20040102_icemod.nc
+   ncks GLORYS2V3_1dAV_20040101_20040102_icemod.nc
+GLORYS2V3_1dAV_20040101_20040102.nc
+   rm GLORYS2V3_1dAV_20040101_20040102_icemod.nc
+   ncks GLORYS2V3_1dAV_20040101_20040102_gridV_R20040107.nc
+GLORYS2V3_1dAV_20040101_20040102.nc
+   ncks GLORYS2V3_1dAV_20040101_20040102_gridU_R20040107.nc
+GLORYS2V3_1dAV_20040101_20040102.nc
+   ncks GLORYS2V3_1dAV_20040101_20040102_gridT_R20040107.nc
+GLORYS2V3_1dAV_20040101_20040102.nc
+   ncks GLORYS2V3_1dAV_20040101_20040102_gridS_R20040107.nc
+GLORYS2V3_1dAV_20040101_20040102.nc
+
 
 3. This is an arctic domain, using yrange to subset the world.
 A more equatorial problem should use irange, jrange instead. Be

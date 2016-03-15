@@ -33,7 +33,7 @@ def remap_uv(src_file, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
     time = datetime(year, month, day, 0, 0, 0)
     time = date2num(time)
     time = time - ref
-    time = time + 2.5 # 5-day average
+    time = time + 0.5 # 1-day average
 
     # get dimensions
     Mp, Lp = dst_grd.hgrid.mask_rho.shape

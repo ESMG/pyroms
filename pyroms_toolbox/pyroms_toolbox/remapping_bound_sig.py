@@ -363,6 +363,7 @@ def remapping_bound_sig(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 nc.variables[varn][nctidx] = dst_12_south
 
             nctidx = nctidx + 1
+            nc.sync()
         # close files here? how?
  
     # close destination file

@@ -30,7 +30,7 @@ def zview(var, tindex, depth, grid, filename=None, \
       - fill_land        fill land masked area with gray (defaul: True)
       - outfile          if defined, write figure to file
 
-    plot a constante-z slice of variable var. If filename is provided,
+    plot a constant-z slice of variable var. If filename is provided,
     var must be a string and the variable will be load from the file.
     grid can be a grid object or a gridid. In the later case, the grid
     object correponding to the provided gridid will be loaded.

@@ -232,6 +232,7 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
             nc.variables['sig22'][nctidx] = dst_22
 
         nctidx = nctidx + 1
+        nc.sync()
  
     # close destination file
     nc.close()

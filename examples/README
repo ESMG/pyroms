@@ -46,6 +46,12 @@ INTERPOLATING FROM GLOBAL HYCOM:
     Also Palau_HYCOM shows how to do a non-polar subset of the HYCOM
     files.
 
+INTERPOLATING FROM GLOBAL RUNOFF:
+
+    Scripts in Arctic_runoff were used to convert from Dai and Trenberth
+    global runoff to the ROMS coastal regions (like a second rain, but from
+    rivers).
+
 RIVERS:
 
     The rivers directory has stuff for turning ARDAT (Arctic Rivers)
