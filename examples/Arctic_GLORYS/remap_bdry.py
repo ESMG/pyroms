@@ -166,28 +166,24 @@ def remap_bdry(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, 
     nc.variables[dst_varname_north].long_name = long_name_north
     nc.variables[dst_varname_north].units = units
     nc.variables[dst_varname_north].field = field_north
-    #nc.variables[dst_varname_north]._FillValue = spval
 
     print 'Creating variable', dst_varname_south
     nc.createVariable(dst_varname_south, 'f8', dimensions_south, fill_value=spval)
     nc.variables[dst_varname_south].long_name = long_name_south
     nc.variables[dst_varname_south].units = units
     nc.variables[dst_varname_south].field = field_south
-    #nc.variables[dst_varname_south]._FillValue = spval
 
     print 'Creating variable', dst_varname_east
     nc.createVariable(dst_varname_east, 'f8', dimensions_east, fill_value=spval)
     nc.variables[dst_varname_east].long_name = long_name_east
     nc.variables[dst_varname_east].units = units
     nc.variables[dst_varname_east].field = field_east
-    #nc.variables[dst_varname_east]._FillValue = spval
 
     print 'Creating variable', dst_varname_west
     nc.createVariable(dst_varname_west, 'f8', dimensions_west, fill_value=spval)
     nc.variables[dst_varname_west].long_name = long_name_west
     nc.variables[dst_varname_west].units = units
     nc.variables[dst_varname_west].field = field_west
-    #nc.variables[dst_varname_west]._FillValue = spval
 
 
     # remapping

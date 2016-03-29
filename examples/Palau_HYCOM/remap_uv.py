@@ -82,27 +82,23 @@ def remap_uv(src_file, src_grd, dst_grd, dxy=20, cdepth=0, kk=0, dst_dir='./'):
     ncu.variables['u'].long_name = '3D u-momentum component'
     ncu.variables['u'].units = 'meter second-1'
     ncu.variables['u'].field = 'u-velocity, scalar, series'
-    #ncu.variables['u_north']._FillValue = spval
     # create variable in destination file
     print 'Creating variable ubar'
     ncu.createVariable('ubar', 'f8', ('ocean_time', 'eta_u', 'xi_u'), fill_value=spval)
     ncu.variables['ubar'].long_name = '2D u-momentum component'
     ncu.variables['ubar'].units = 'meter second-1'
     ncu.variables['ubar'].field = 'ubar-velocity,, scalar, series'
-    #ncu.variables['ubar_north']._FillValue = spval
 
     print 'Creating variable v'
     ncv.createVariable('v', 'f8', ('ocean_time', 's_rho', 'eta_v', 'xi_v'), fill_value=spval)
     ncv.variables['v'].long_name = '3D v-momentum component'
     ncv.variables['v'].units = 'meter second-1'
     ncv.variables['v'].field = 'v-velocity, scalar, series'
-    #ncv.variables['v_north']._FillValue = spval
     print 'Creating variable vbar'
     ncv.createVariable('vbar', 'f8', ('ocean_time', 'eta_v', 'xi_v'), fill_value=spval)
     ncv.variables['vbar'].long_name = '2D v-momentum component'
     ncv.variables['vbar'].units = 'meter second-1'
     ncv.variables['vbar'].field = 'vbar-velocity,, scalar, series'
-    #ncv.variables['vbar_north']._FillValue = spval
  
 
     # remaping

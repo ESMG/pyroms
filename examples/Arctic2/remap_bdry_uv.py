@@ -85,25 +85,21 @@ def remap_bdry_uv(src_file, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='.
     ncu.variables['u_north'].long_name = '3D u-momentum north boundary condition'
     ncu.variables['u_north'].units = 'meter second-1'
     ncu.variables['u_north'].field = 'u_north, scalar, series'
-    #ncu.variables['u_north']._FillValue = spval
     print 'Creating variable u_south'
     ncu.createVariable('u_south', 'f8', ('ocean_time', 's_rho', 'xi_u'), fill_value=spval)
     ncu.variables['u_south'].long_name = '3D u-momentum south boundary condition'
     ncu.variables['u_south'].units = 'meter second-1'
     ncu.variables['u_south'].field = 'u_south, scalar, series'
-    #ncu.variables['u_south']._FillValue = spval
     print 'Creating variable u_east'
     ncu.createVariable('u_east', 'f8', ('ocean_time', 's_rho', 'eta_u'), fill_value=spval)
     ncu.variables['u_east'].long_name = '3D u-momentum east boundary condition'
     ncu.variables['u_east'].units = 'meter second-1'
     ncu.variables['u_east'].field = 'u_east, scalar, series'
-    #ncu.variables['u_east']._FillValue = spval
     print 'Creating variable u_west'
     ncu.createVariable('u_west', 'f8', ('ocean_time', 's_rho', 'eta_u'), fill_value=spval)
     ncu.variables['u_west'].long_name = '3D u-momentum west boundary condition'
     ncu.variables['u_west'].units = 'meter second-1'
     ncu.variables['u_west'].field = 'u_east, scalar, series'
-    #ncu.variables['u_west']._FillValue = spval
 
     # create variable in destination file
     print 'Creating variable ubar_north'
@@ -111,25 +107,21 @@ def remap_bdry_uv(src_file, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='.
     ncu.variables['ubar_north'].long_name = '2D u-momentum north boundary condition'
     ncu.variables['ubar_north'].units = 'meter second-1'
     ncu.variables['ubar_north'].field = 'ubar_north, scalar, series'
-    #ncu.variables['ubar_north']._FillValue = spval
     print 'Creating variable ubar_south'
     ncu.createVariable('ubar_south', 'f8', ('ocean_time', 'xi_u'), fill_value=spval)
     ncu.variables['ubar_south'].long_name = '2D u-momentum south boundary condition'
     ncu.variables['ubar_south'].units = 'meter second-1'
     ncu.variables['ubar_south'].field = 'ubar_south, scalar, series'
-    #ncu.variables['ubar_south']._FillValue = spval
     print 'Creating variable ubar_east'
     ncu.createVariable('ubar_east', 'f8', ('ocean_time', 'eta_u'), fill_value=spval)
     ncu.variables['ubar_east'].long_name = '2D u-momentum east boundary condition'
     ncu.variables['ubar_east'].units = 'meter second-1'
     ncu.variables['ubar_east'].field = 'ubar_east, scalar, series'
-    #ncu.variables['ubar_east']._FillValue = spval
     print 'Creating variable ubar_west'
     ncu.createVariable('ubar_west', 'f8', ('ocean_time', 'eta_u'), fill_value=spval)
     ncu.variables['ubar_west'].long_name = '2D u-momentum west boundary condition'
     ncu.variables['ubar_west'].units = 'meter second-1'
     ncu.variables['ubar_west'].field = 'ubar_east, scalar, series'
-    #ncu.variables['ubar_west']._FillValue = spval
 
 
     print 'Creating variable v_north'
@@ -137,50 +129,42 @@ def remap_bdry_uv(src_file, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='.
     ncv.variables['v_north'].long_name = '3D v-momentum north boundary condition'
     ncv.variables['v_north'].units = 'meter second-1'
     ncv.variables['v_north'].field = 'v_north, scalar, series'
-    #ncv.variables['v_north']._FillValue = spval
     print 'Creating variable v_south'
     ncv.createVariable('v_south', 'f8', ('ocean_time', 's_rho', 'xi_v'), fill_value=spval)
     ncv.variables['v_south'].long_name = '3D v-momentum south boundary condition'
     ncv.variables['v_south'].units = 'meter second-1'
     ncv.variables['v_south'].field = 'v_south, scalar, series'
-    #ncv.variables['v_south']._FillValue = spval
     print 'Creating variable v_east'
     ncv.createVariable('v_east', 'f8', ('ocean_time', 's_rho', 'eta_v'), fill_value=spval)
     ncv.variables['v_east'].long_name = '3D v-momentum east boundary condition'
     ncv.variables['v_east'].units = 'meter second-1'
     ncv.variables['v_east'].field = 'v_east, scalar, series'
-    #ncv.variables['v_east']._FillValue = spval
     print 'Creating variable v_west'
     ncv.createVariable('v_west', 'f8', ('ocean_time', 's_rho', 'eta_v'), fill_value=spval)
     ncv.variables['v_west'].long_name = '3D v-momentum west boundary condition'
     ncv.variables['v_west'].units = 'meter second-1'
     ncv.variables['v_west'].field = 'v_east, scalar, series'
-    #ncv.variables['v_west']._FillValue = spval
 
     print 'Creating variable vbar_north'
     ncv.createVariable('vbar_north', 'f8', ('ocean_time', 'xi_v'), fill_value=spval)
     ncv.variables['vbar_north'].long_name = '2D v-momentum north boundary condition'
     ncv.variables['vbar_north'].units = 'meter second-1'
     ncv.variables['vbar_north'].field = 'vbar_north, scalar, series'
-    #ncv.variables['vbar_north']._FillValue = spval
     print 'Creating variable vbar_south'
     ncv.createVariable('vbar_south', 'f8', ('ocean_time', 'xi_v'), fill_value=spval)
     ncv.variables['vbar_south'].long_name = '2D v-momentum south boundary condition'
     ncv.variables['vbar_south'].units = 'meter second-1'
     ncv.variables['vbar_south'].field = 'vbar_south, scalar, series'
-    #ncv.variables['vbar_south']._FillValue = spval
     print 'Creating variable vbar_east'
     ncv.createVariable('vbar_east', 'f8', ('ocean_time', 'eta_v'), fill_value=spval)
     ncv.variables['vbar_east'].long_name = '2D v-momentum east boundary condition'
     ncv.variables['vbar_east'].units = 'meter second-1'
     ncv.variables['vbar_east'].field = 'vbar_east, scalar, series'
-    #ncv.variables['vbar_east']._FillValue = spval
     print 'Creating variable vbar_west'
     ncv.createVariable('vbar_west', 'f8', ('ocean_time', 'eta_v'), fill_value=spval)
     ncv.variables['vbar_west'].long_name = '2D v-momentum west boundary condition'
     ncv.variables['vbar_west'].units = 'meter second-1'
     ncv.variables['vbar_west'].field = 'vbar_east, scalar, series'
-    #ncv.variables['vbar_west']._FillValue = spval
 
  
 

@@ -160,7 +160,6 @@ def remap(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_d
     nc.variables[dst_varname].long_name = long_name
     nc.variables[dst_varname].units = units
     nc.variables[dst_varname].field = field
-    #nc.variables[dst_varname_north]._FillValue = spval
 
 
     # remapping
