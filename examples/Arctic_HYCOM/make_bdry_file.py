@@ -6,7 +6,8 @@ import os
 import sys
 import commands
 import numpy as np
-import pdb
+from multiprocessing import Pool
+#import pdb
 
 #increase the maximum number of open files allowed
 #import resource
@@ -28,7 +29,7 @@ lst_file = []
 
 for year in lst_year:
 #    lst = commands.getoutput('ls ' + data_dir + 'HYCOM_GLBa0.08_' + year + '*')
-    lst = commands.getoutput('ls ' + data_dir + 'HYCOM_GLBa0.08_' + year + '_2*')
+    lst = commands.getoutput('ls ' + data_dir + 'HYCOM_GLBa0.08_' + year + '_0*')
 #    lst = commands.getoutput('ls ' + data_dir + 'HYCOM_GLBa0.08_' + year + '_0[4-9]*')
     lst = lst.split()
     lst_file = lst_file + lst
@@ -41,13 +42,13 @@ src_grd_file = data_dir + '../HYCOM_GLBa0.08_North_grid2.nc'
 src_grd = pyroms_toolbox.Grid_HYCOM.get_nc_Grid_HYCOM(src_grd_file)
 dst_grd = pyroms.grid.get_ROMS_grid('ARCTIC2')
 
-for file in lst_file:
+def do_file(file):
     zeta = remap_bdry(file, 'ssh', src_grd, dst_grd, dst_dir=dst_dir)
-    dst_grd = pyroms.grid.get_ROMS_grid('ARCTIC2', zeta=zeta)
-    remap_bdry(file, 'temp', src_grd, dst_grd, dst_dir=dst_dir)
-    remap_bdry(file, 'salt', src_grd, dst_grd, dst_dir=dst_dir)
+    dst_grd2 = pyroms.grid.get_ROMS_grid('ARCTIC2', zeta=zeta)
+    remap_bdry(file, 'temp', src_grd, dst_grd2, dst_dir=dst_dir)
+    remap_bdry(file, 'salt', src_grd, dst_grd2, dst_dir=dst_dir)
 #    pdb.set_trace()
-    remap_bdry_uv(file, src_grd, dst_grd, dst_dir=dst_dir)
+    remap_bdry_uv(file, src_grd, dst_grd2, dst_dir=dst_dir)
 
     # merge file
     bdry_file = dst_dir + file.rsplit('/')[-1][:-3] + '_bdry_' + dst_grd.name + '.nc'
@@ -72,3 +73,7 @@ for file in lst_file:
     command = ('ncks', '-a', '-A', out_file, bdry_file) 
     subprocess.check_call(command)
     os.remove(out_file)
+
+processes = 4
+p = Pool(processes)
+results = p.map(do_file, lst_file)

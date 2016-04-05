@@ -1,8 +1,11 @@
-I present a motley crew of examples. Some are meant to be run from
-the command line, some are meant to be cut and pasted from the file.
-Some have more than one option present, not all meant to be run at
-the same time.
+I present a motley crew of examples.
 
+* editmask.py
+* make_grid.py
+To be cut and pasted from the file. Some have more than one option
+present, not all meant to be run at the same time.
+
+* caldate.py
 There's another date computer in pyroms, but the one I know how to
 use is caldate:
 
@@ -25,3 +28,23 @@ Out[2]:
  'year': 2004.0,
  'yearday': 3.0}
 
+* add_Jwtype_map.py
+Add the Jerlov water type to a grid file.
+
+* aice.py
+* hice.py
+* vec_ice.py
+Ngl plotting examples.
+
+* rename_file.py
+For renaming from runname_his_?????.nc to a filename with a date in it.
+
+* restart.py
+Used at ARSC to move files prior to restart.
+
+* settime.py
+Change a time in a NetCDF file.
+
+* slice.py
+* use_zview.py
+Other plots...
