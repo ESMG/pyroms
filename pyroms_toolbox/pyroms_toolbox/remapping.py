@@ -97,6 +97,8 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
     if type(wts_files).__name__ == 'str':
         wts_files = sorted(glob.glob(wts_files))
  
+
+    nctidx = 0
     # loop over the srcfile
     for nf in range(nfile):
         print 'Working with file', srcfile[nf], '...'
@@ -110,15 +112,16 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
             trange = range(ntime)
 
         # create destination file
-        dstfile = dstdir + os.path.basename(srcfile[nf])[:-3] + '_' + dstgrd.name + '.nc'
-        if os.path.exists(dstfile) is False:
-            print 'Creating destination file', dstfile
-            pyroms_toolbox.nc_create_roms_file(dstfile, dstgrd, ocean_time)
+        if nctidx == 0:
+            dstfile = dstdir + os.path.basename(srcfile[nf])[:-3] + '_' \
+	             + dstgrd.name + '.nc'
+            if os.path.exists(dstfile) is False:
+                print 'Creating destination file', dstfile
+                pyroms_toolbox.nc_create_roms_file(dstfile, dstgrd, ocean_time)
 
-        # open destination file
-        nc = netCDF.Dataset(dstfile, 'a', format='NETCDF3_64BIT')
+            # open destination file
+            nc = netCDF.Dataset(dstfile, 'a', format='NETCDF3_64BIT')
 
-        nctidx = 0
         # loop over time
         for nt in trange:
 
@@ -141,7 +144,9 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 try:
                     spval = src_var._FillValue
                 except:
-                    raise Warning, 'Did not find a _FillValue attribute.' 
+#                    raise Warning, 'Did not find a _FillValue attribute.' 
+                    print 'Warning, Did not find a _FillValue attribute.' 
+                    spval = 1.e37
 
                 # irange
                 if irange is None:
@@ -168,7 +173,7 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 print 'Arakawa C-grid position is', Cpos
 
                 # create variable in _destination file
-                if nt == trange[0]:
+                if nctidx == 0:
                     print 'Creating variable', varname[nv]
                     nc.createVariable(varname[nv], 'f8', src_var.dimensions, fill_value=spval)
                     nc.variables[varname[nv]].long_name = src_var.long_name
@@ -264,22 +269,23 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                     dimens_v = [i for i in src_v.dimensions]
 
                 # create variable in destination file
-                print 'Creating variable '+uvar
-                nc.createVariable(uvar, 'f8', dimens_u, fill_value=spval)
-                nc.variables[uvar].long_name = src_u.long_name
-                nc.variables[uvar].units = src_u.units
-                nc.variables[uvar].time = src_u.time
-                nc.variables[uvar].coordinates = \
+                if nctidx == 0:
+                    print 'Creating variable '+uvar
+                    nc.createVariable(uvar, 'f8', dimens_u, fill_value=spval)
+                    nc.variables[uvar].long_name = src_u.long_name
+                    nc.variables[uvar].units = src_u.units
+                    nc.variables[uvar].time = src_u.time
+                    nc.variables[uvar].coordinates = \
                            str(dimens_u.reverse())
-                nc.variables[uvar].field = src_u.field
-                print 'Creating variable '+vvar
-                nc.createVariable(vvar, 'f8', dimens_v, fill_value=spval)
-                nc.variables[vvar].long_name = src_v.long_name
-                nc.variables[vvar].units = src_v.units
-                nc.variables[vvar].time = src_v.time
-                nc.variables[vvar].coordinates = \
+                    nc.variables[uvar].field = src_u.field
+                    print 'Creating variable '+vvar
+                    nc.createVariable(vvar, 'f8', dimens_v, fill_value=spval)
+                    nc.variables[vvar].long_name = src_v.long_name
+                    nc.variables[vvar].units = src_v.units
+                    nc.variables[vvar].time = src_v.time
+                    nc.variables[vvar].coordinates = \
                            str(dimens_v.reverse())
-                nc.variables[vvar].field = src_v.field
+                    nc.variables[vvar].field = src_v.field
 
                 # get the right remap weights file
                 if rotate_part:
@@ -414,22 +420,23 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 nc.variables[vvar][nctidx] = dst_v
 
             if compute_ubar:
-                print 'Creating variable ubar'
-                nc.createVariable('ubar', 'f8', \
-                     ('ocean_time', 'eta_u', 'xi_u'), fill_value=spval)
-                nc.variables['ubar'].long_name = '2D u-momentum component'
-                nc.variables['ubar'].units = 'meter second-1'
-                nc.variables['ubar'].time = 'ocean_time'
-                nc.variables['ubar'].coordinates = 'xi_u eta_u ocean_time'
-                nc.variables['ubar'].field = 'ubar-velocity,, scalar, series'
-                print 'Creating variable vbar'
-                nc.createVariable('vbar', 'f8', \
-                     ('ocean_time', 'eta_v', 'xi_v'), fill_value=spval)
-                nc.variables['vbar'].long_name = '2D v-momentum component'
-                nc.variables['vbar'].units = 'meter second-1'
-                nc.variables['vbar'].time = 'ocean_time'
-                nc.variables['vbar'].coordinates = 'xi_v eta_v ocean_time'
-                nc.variables['vbar'].field = 'vbar-velocity,, scalar, series'
+                if nctidx == 0:
+                    print 'Creating variable ubar'
+                    nc.createVariable('ubar', 'f8', \
+                         ('ocean_time', 'eta_u', 'xi_u'), fill_value=spval)
+                    nc.variables['ubar'].long_name = '2D u-momentum component'
+                    nc.variables['ubar'].units = 'meter second-1'
+                    nc.variables['ubar'].time = 'ocean_time'
+                    nc.variables['ubar'].coordinates = 'xi_u eta_u ocean_time'
+                    nc.variables['ubar'].field = 'ubar-velocity,, scalar, series'
+                    print 'Creating variable vbar'
+                    nc.createVariable('vbar', 'f8', \
+                         ('ocean_time', 'eta_v', 'xi_v'), fill_value=spval)
+                    nc.variables['vbar'].long_name = '2D v-momentum component'
+                    nc.variables['vbar'].units = 'meter second-1'
+                    nc.variables['vbar'].time = 'ocean_time'
+                    nc.variables['vbar'].coordinates = 'xi_v eta_v ocean_time'
+                    nc.variables['vbar'].field = 'vbar-velocity,, scalar, series'
 
                 # compute depth average velocity ubar and vbar
                 # get z at the right position
@@ -457,11 +464,12 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 dst_ubar[idxu[0], idxu[1]] = spval
                 dst_vbar[idxv[0], idxv[1]] = spval
 
-                nc.variables['ubar'][0] = dst_ubar
-                nc.variables['vbar'][0] = dst_vbar
+                nc.variables['ubar'][nctidx] = dst_ubar
+                nc.variables['vbar'][nctidx] = dst_vbar
 
-        nctidx = nctidx + 1
-        nc.sync()
+            nctidx = nctidx + 1
+	    print 'ADDING to nctidx ', nctidx
+	    nc.sync()
  
     # close destination file
     nc.close()

@@ -61,3 +61,8 @@ NESTING:
 
     So far the nesting directory has only tools for processing the
     ocean_xx.in files, merging them for nested grid domains.
+
+BOUNDARY CONDITIONS FROM A STATIONS FILE:
+
+    BC_from_sta contains one rough stab at this. Work to be done on
+    volume transports.

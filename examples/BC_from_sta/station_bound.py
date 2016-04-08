@@ -16,42 +16,59 @@ import _remapping
 import matplotlib.pyplot as plt
 
 import datetime
+import pdb
 
-def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
-              rotate_uv=False, trange=None, irange=None, jrange=None, \
+def station_bound(varname, srcfile, srcgrd, dst_grd, \
+              rotate_uv=False, trange=None, srange=None, \
               dstdir='./' ,zlevel=None, dmax=0, cdepth=0, kk=0, \
               uvar='u', vvar='v', rotate_part=False):
     '''
-    A remapping function to extract boundary conditions from one ROMS grid
-    to another. It will optionally rotating u and v variables, but needs
-    to be called separately for each u/v pair (such as u/v, uice/vice).
+    A function to extract boundary conditions from a ROMS station file.
+    It will optionally rotating u and v variables (maybe later), but
+    would need to be called separately for each u/v pair (such as u/v,
+    uice/vice).
     '''
 
     # get input and output grid
-    if type(srcgrd).__name__ == 'ROMS_Grid':
+    if type(srcgrd).__name__ == 'Stations_Grid':
         srcgrd = srcgrd
     else:
-        srcgrd = pyroms.grid.get_ROMS_grid(srcgrd)
+        srcgrd = pyroms.sta_grid.get_Stations_grid(srcgrd, sta_file=srcfile)
     if type(dst_grd).__name__ == 'ROMS_Grid':
         dst_grd = dst_grd
     else:
         dst_grd = pyroms.grid.get_ROMS_grid(dst_grd)
 
+#    pyroms.sta_grid.write_Stations_grid(srcgrd, filename='sta_test.nc')
 
     # build intermediaire zgrid
     if zlevel is None:
-        zlevel = np.array([-7500.,-7000.,-6500.,-6000.,-5500.,-5000.,\
-                   -4500.,-4000.,-3500.,-3000.,-2500.,-2000.,-1750.,\
-                   -1500.,-1250.,-1000.,-900.,-800.,-700.,-600.,-500.,\
-                   -400.,-300.,-250.,-200.,-175.,-150.,-125.,-100.,-90.,\
-                   -80.,-70.,-60.,-50.,-45.,-40.,-35.,-30.,-25.,-20.,-17.5,\
-                   -15.,-12.5,-10.,-7.5,-5.,-2.5,0.])
+# for deep water
+#        zlevel = np.array([-7500.,-7000.,-6500.,-6000.,-5500.,-5000.,\
+#                   -4500.,-4000.,-3500.,-3000.,-2500.,-2000.,-1750.,\
+#                   -1500.,-1250.,-1000.,-900.,-800.,-700.,-600.,-500.,\
+#                   -400.,-300.,-250.,-200.,-175.,-150.,-125.,-100.,-90.,\
+#                   -80.,-70.,-60.,-50.,-45.,-40.,-35.,-30.,-25.,-20.,-17.5,\
+#                   -15.,-12.5,-10.,-7.5,-5.,-2.5,0.])
+# for Glacier bay
+        zlevel = np.array([-100.,-95.,-90.,-85.,-80.,-75.,-70.,-65., \
+                   -60.,-55.,-50.,-45.,-40.,-35.,-32.5,-30.,-27.5,-25.,-22.5,\
+                   -20.,-19.,-18.,-17.,-16.,-15.,-14.,-13.,\
+                   -12.,-11.,-10.,-9.,-8.,-7.,-6.,-5.,-4.,-3.,-2.,-1.,0.])
     else:
         zlevel = np.sort(-abs(zlevel))
     nzlevel = len(zlevel)
+    dzlevel = np.zeros(nzlevel)
+    for k in range(1,nzlevel-1):
+        dzlevel[k] = 0.5*(zlevel[k+1]-zlevel[k-1])
+    dzlevel[0] = 0.5*(zlevel[1]-zlevel[0])
+    dzlevel[-1] = 0.5*(zlevel[-1]-zlevel[-2])
+
     src_zcoord = pyroms.vgrid.z_coordinate(srcgrd.vgrid.h, zlevel, nzlevel)
     dst_zcoord = pyroms.vgrid.z_coordinate(dst_grd.vgrid.h, zlevel, nzlevel)
-    srcgrdz = pyroms.grid.ROMS_Grid(srcgrd.name+'_Z', srcgrd.hgrid, src_zcoord)
+#    print "name = ", srcgrd.name
+#    srcgrdz = pyroms.sta_grid.Stations_Grid(srcgrd.name+'_Z', srcgrd.hgrid, src_zcoord)
+    srcgrdz = pyroms.sta_grid.Stations_Grid('stations_Z', srcgrd.hgrid, src_zcoord)
     dst_grdz = pyroms.grid.ROMS_Grid(dst_grd.name+'_Z', dst_grd.hgrid, dst_zcoord)
 
     # varname argument
@@ -95,15 +112,11 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
     else:
         raise ValueError, 'src_srcfile must be a str or a list of str'
 
-    # get wts_file
-    if type(wts_files).__name__ == 'str':
-        wts_files = sorted(glob.glob(wts_files))
-
     sides = ['_west','_east','_north','_south']
     long = {'_west':'Western', '_east':'Eastern', \
             '_north':'Northern', '_south':'Southern'}
-    dimexcl = {'_west':'xi', '_east':'xi', \
-            '_north':'eta', '_south':'eta'}
+    dimincl = {'_west':'eta_rho', '_east':'eta_rho', \
+            '_north':'xi_rho', '_south':'xi_rho'}
 
     nctidx = 0
     # loop over the srcfile
@@ -138,10 +151,14 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
             # loop over variable
             for nv in range(nvar):
                 print ' '
-                print 'remapping', varname[nv], 'from', srcgrd.name, \
+                print 'extracting', varname[nv], 'from', srcgrd.name, \
                       'to', dst_grd.name
                 print 'time =', ocean_time[nt]
                 Mp, Lp = dst_grd.hgrid.mask_rho.shape
+                if varname[nv] == uvar:
+                    Lp = Lp-1
+                if varname[nv] == vvar:
+                    Mp = Mp-1
 
                 # get source data
                 src_var = pyroms.utility.get_nc_var(varname[nv], srcfile[nf])
@@ -153,31 +170,16 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 try:
                     spval = src_var._FillValue
                 except:
-                    raise Warning, 'Did not find a _FillValue attribute.'
+                    print Warning, 'Did not find a _FillValue attribute.'
 
-                # irange
-                if irange is None:
-                    iirange = (0,src_var.shape[-1])
+                # srange
+                if srange is None:
+                    ssrange = (0,src_var.shape[1])
                 else:
-                    iirange = irange
-
-                # jrange
-                if jrange is None:
-                    jjrange = (0,src_var.shape[-2])
-                else:
-                    jjrange = jrange
+                    ssrange = srange
 
                 # determine where on the C-grid these variable lies
-                if src_var.dimensions[2].find('_rho') != -1:
-                    Cpos='rho'
-                if src_var.dimensions[2].find('_u') != -1:
-                    Cpos='u'
-                    Lp = Lp-1
-                if src_var.dimensions[2].find('_v') != -1:
-                    Cpos='v'
-                    Mp = Mp-1
-                if src_var.dimensions[1].find('_w') != -1:
-                    Cpos='w'
+                Cpos='rho'
 
                 print 'Arakawa C-grid position is', Cpos
 
@@ -186,9 +188,18 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                     for sid in sides:
                        varn = varname[nv]+str(sid)
                        dimens = [i for i in src_var.dimensions]
-                       for dim in dimens:
-                           if re.match(dimexcl[sid],dim):
-                               dimens.remove(dim)
+                       print 'dimens', dimens, len(dimens)
+                       if len(dimens) == 3:
+                           dimens = ['ocean_time', 's_rho', \
+                           dimincl[sid]]
+                       elif len(dimens) == 2:
+                           dimens = ['ocean_time', dimincl[sid]]
+                       if varname[nv] == uvar:
+                           foo = dimens[-1].replace('rho', 'u')
+                           dimens[-1] = foo
+                       if varname[nv] == vvar:
+                           foo = dimens[-1].replace('rho', 'v')
+                           dimens[-1] = foo
                        print 'Creating variable', varn, dimens
                        nc.createVariable(varn, 'f8', dimens, \
                            fill_value=spval)
@@ -203,39 +214,62 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                            str(dimens.reverse())
                        nc.variables[varn].field = src_var.field
 
-                # get the right remap weights file
-                for s in range(len(wts_files)):
-                    if wts_files[s].__contains__(Cpos+'_to_'+Cpos+'.nc'):
-                        wts_file = wts_files[s]
-                        break
-                    else:
-                        if s == len(wts_files) - 1:
-                            raise ValueError, 'Did not find the appropriate remap weights file'
-
-                if ndim == 3:
+                if ndim == 2:
                     # vertical interpolation from sigma to standard z level
                     print 'vertical interpolation from sigma to standard z level'
-                    src_varz = pyroms.remapping.roms2z( \
-                                 src_var[nt,:,jjrange[0]:jjrange[1],iirange[0]:iirange[1]], \
+                    src_varz = pyroms.remapping.sta2z( \
+                                 src_var[nt,:,ssrange[0]:ssrange[1]], \
                                  srcgrd, srcgrdz, Cpos=Cpos, spval=spval, \
-                                 irange=iirange, jrange=jjrange)
+                                 srange=ssrange)
+                    # vertical flooding
+                    # HACK!! Glacier bay grid is much deeper at its edge than
+                    # the source grid is.
+                    for s in range(ssrange[0],ssrange[1]):
+                        kbot = -1
+                        for k in range(nzlevel):
+                            if src_varz[k,s]>=spval*1.e-3:
+                                kbot = k
+                        if kbot < nzlevel-1:
+                            if varname[nv] == uvar:
+#                                zsum = np.sum(src_varz[kbot+1:-1,s]*dzlevel[kbot+1:])
+#                                src_varz[0:kbot+1,s] = src_varz[kbot+1,s]
+                                src_varz[0:kbot+1,s] = 0.0
+                            if varname[nv] == vvar:
+#                                zsum = np.sum(src_varz[kbot+1:-1,s]*dzlevel[kbot+1:])
+#                                src_varz[0:kbot+1,s] = src_varz[kbot+1,s]
+                                src_varz[0:kbot+1,s] = 0.0
+                            else:
+                                src_varz[0:kbot+1,s] = src_varz[kbot+1,s]
 
-                    # flood the grid
-                    print 'flood the grid'
-                    src_varz = pyroms.remapping.flood(src_varz, srcgrdz, Cpos=Cpos, \
-                                      irange=iirange, jrange=jjrange, spval=spval, \
-                                      dmax=dmax, cdepth=cdepth, kk=kk)
+                    # horizontal placement of stations into target grid.
+                    # HACK - this is grid dependent!!!
+#                    pdb.set_trace()
+                    dst_varz = np.zeros((nzlevel, Mp, Lp))
+                    dst_varz[:, 44:79, 0] = src_varz[:, 0:35, 0]
+                    dst_varz[:, 0, 56:87] = src_varz[:, 35:, 0]
+                    if varname[nv] == uvar:
+                        dst_varz[:, 0, 56] = dst_varz[:, 0, 58]
+                        dst_varz[:, 0, 57] = dst_varz[:, 0, 58]
+                        dst_varz[:, 0, 85] = dst_varz[:, 0, 84]
+                        dst_varz[:, 0, 86] = dst_varz[:, 0, 84]
+                        Cpos = 'u'
+                    if varname[nv] == vvar:
+                        dst_varz[:, 76, 0] = dst_varz[:, 75, 0]
+                        dst_varz[:, 77, 0] = dst_varz[:, 75, 0]
+                        dst_varz[:, 78, 0] = dst_varz[:, 75, 0]
+                        Cpos = 'v'
 
                 else:
-                    src_varz = src_var[nt,jjrange[0]:jjrange[1],iirange[0]:iirange[1]]
+                    src_varz = src_var[nt,ssrange[0]:ssrange[1]]
+                    # horizontal placement of stations into target grid.
+                    dst_varz = np.zeros((Mp, Lp))
+                    dst_varz[44:79, 0] = src_varz[0:35]
+                    dst_varz[0, 56:87] = src_varz[35:]
 
                 print datetime.datetime.now()
-                # horizontal interpolation using scrip weights
-                print 'horizontal interpolation using scrip weights'
-                dst_varz = pyroms.remapping.remap(src_varz, wts_file, \
-                                                  spval=spval)
+                # horizontal placement of stations into target grid.
 
-                if ndim == 3:
+                if ndim == 2:
                     dst_var_north = pyroms.remapping.z2roms(dst_varz[:, \
                           Mp-1:Mp,0:Lp], dst_grdz, dst_grd, Cpos=Cpos, \
                           spval=spval, flood=False, irange=(0,Lp), \
@@ -303,7 +337,7 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 try:
                     spval = src_v._FillValue
                 except:
-                    raise Warning, 'Did not find a _FillValue attribute.'
+                    print Warning, 'Did not find a _FillValue attribute.'
 
                 if rotate_part:
                     ndim = len(src_u.dimensions)-1
@@ -333,9 +367,9 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                        varn = uvar_out+str(sid)
                        print 'Creating variable', varn
                        dimens = list(dimens_u)
-                       for dim in dimens:
-                           if re.match(dimexcl[sid],dim):
-                               dimens.remove(dim)
+#                       for dim in dimens:
+#                           if re.match(dimexcl[sid],dim):
+#                               dimens.remove(dim)
                        nc.createVariable(varn, 'f8', dimens, \
                          fill_value=spval)
                        nc.variables[varn].long_name = uvar_out + \
@@ -371,27 +405,18 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
 
                 # get the right remap weights file
                 if rotate_part:
-                    for s in range(len(wts_files)):
-                        if wts_files[s].__contains__('rho_to_rho.nc'):
-                            wts_file_u = wts_files[s]
-                            wts_file_v = wts_files[s]
                     Cpos_u = 'rho'
                     Cpos_v = 'rho'
                 else:
-                    for s in range(len(wts_files)):
-                        if wts_files[s].__contains__('u_to_rho.nc'):
-                            wts_file_u = wts_files[s]
-                        if wts_files[s].__contains__('v_to_rho.nc'):
-                            wts_file_v = wts_files[s]
                     Cpos_u = 'u'
                     Cpos_v = 'v'
 
                 # vertical interpolation from sigma to standard z level
                 # irange
                 if irange is None:
-                    iirange = (0,src_u.shape[-1])
+                    ssrange = (0,src_u.shape[-1])
                 else:
-                    iirange = irange
+                    ssrange = irange
 
                 # jrange
                 if jrange is None:
@@ -402,56 +427,32 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 ndim = len(src_v.dimensions)-1
                 if ndim == 3:
                     print 'vertical interpolation from sigma to standard z level'
-                    src_uz = pyroms.remapping.roms2z( \
-                            src_u[nt,:,jjrange[0]:jjrange[1],iirange[0]:iirange[1]], \
+                    src_uz = pyroms.remapping.sta2z( \
+                            src_u[nt,:,ssrange[0]:ssrange[1]], \
                             srcgrd, srcgrdz, Cpos=Cpos_u, spval=spval, \
-                            irange=iirange, jrange=jjrange)
-                    # flood the grid
-                    print 'flood the u grid'
-                    src_uz = pyroms.remapping.flood(src_uz, srcgrdz, Cpos=Cpos_u, \
-                                  irange=iirange, jrange=jjrange, \
-                                  spval=spval, dmax=dmax, cdepth=cdepth, kk=kk)
+                            srange=ssrange)
                 else:
-                    src_uz = src_u[nt,jjrange[0]:jjrange[1],iirange[0]:iirange[1]]
-                    src_uz = pyroms.remapping.flood2d(src_uz, srcgrdz, Cpos=Cpos_u, \
-                                      irange=iirange, jrange=jjrange, spval=spval, \
-                                      dmax=dmax)
+                    src_uz = src_u[nt,ssrange[0]:ssrange[1]]
 
-                # irange
-                if irange is None:
-                    iirange = (0,src_v.shape[-1])
+                # srange
+                if srange is None:
+                    ssrange = (0,src_v.shape[-1])
                 else:
-                    iirange = irange
-
-                # jrange
-                if jrange is None:
-                    jjrange = (0,src_v.shape[-2])
-                else:
-                    jjrange = jrange
+                    ssrange = srange
 
                 if ndim == 3:
-                    src_vz = pyroms.remapping.roms2z( \
-                            src_v[nt,:,jjrange[0]:jjrange[1],iirange[0]:iirange[1]], \
+                    src_vz = pyroms.remapping.sta2z( \
+                            src_v[nt,:,ssrange[0]:ssrange[1]], \
                             srcgrd, srcgrdz, Cpos=Cpos_v, spval=spval, \
-                            irange=iirange, jrange=jjrange)
+                            srange=ssrange)
 
-                    # flood the grid
-                    print 'flood the v grid'
-                    src_vz = pyroms.remapping.flood(src_vz, srcgrdz, Cpos=Cpos_v, \
-                                  irange=iirange, jrange=jjrange, \
-                                  spval=spval, dmax=dmax, cdepth=cdepth, kk=kk)
                 else:
-                    src_vz = src_v[nt,jjrange[0]:jjrange[1],iirange[0]:iirange[1]]
+                    src_vz = src_v[nt,ssrange[0]:ssrange[1]]
                     src_vz = pyroms.remapping.flood2d(src_vz, srcgrdz, Cpos=Cpos_v, \
-                                      irange=iirange, jrange=jjrange, spval=spval, \
+                                      srange=ssrange, spval=spval, \
                                       dmax=dmax)
 
                 # horizontal interpolation using scrip weights
-                print 'horizontal interpolation using scrip weights'
-                dst_uz = pyroms.remapping.remap(src_uz, wts_file_u, \
-                                                  spval=spval)
-                dst_vz = pyroms.remapping.remap(src_vz, wts_file_v, \
-                                                  spval=spval)
                 Mp, Lp = dst_grd.hgrid.mask_rho.shape
 
                 if ndim == 3:
@@ -496,11 +497,7 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 if rotate_part:
                     src_angle = np.zeros(dst_grd.hgrid.angle_rho.shape)
                 else:
-                    for s in range(len(wts_files)):
-                        if wts_files[s].__contains__('rho_to_rho.nc'):
-                            wts_file = wts_files[s]
-                    src_ang = srcgrd.hgrid.angle_rho[jjrange[0]:jjrange[1],iirange[0]:iirange[1]]
-                    src_angle = pyroms.remapping.remap(src_ang, wts_file)
+                    src_ang = srcgrd.hgrid.angle_rho[ssrange[0]:ssrange[1]]
 
                 dst_angle = dst_grd.hgrid.angle_rho
                 angle = dst_angle - src_angle

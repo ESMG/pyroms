@@ -17,8 +17,8 @@ from pyroms.grid import *
 from pyroms import io
 
 #define a dictionary that will remember gridid's that are defined from
-#a history and grid file. Because this is defined in this models name
-#space, it will remain persistent.  They keys are the gridid, and the
+#a history and grid file. Because this is defined in this model's name
+#space, it will remain persistent.  The keys are the gridid, and the
 #values are ROMS_gridinfo objects.
 gridid_dictionary={}
 

@@ -1,0 +1,3 @@
+These files are for converting NGOA stations to a boundary file for
+Glacier Bay. Search for HACK in the station_bound.py file for things
+specific to this domain.
