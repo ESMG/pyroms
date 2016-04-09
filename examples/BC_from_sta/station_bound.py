@@ -224,6 +224,9 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                     # vertical flooding
                     # HACK!! Glacier bay grid is much deeper at its edge than
                     # the source grid is.
+#                    pdb.set_trace()
+#                    if varname[nv] == uvar or varname[nv] == vvar:
+#                        print 'before', src_varz[:,0,0]
                     for s in range(ssrange[0],ssrange[1]):
                         kbot = -1
                         for k in range(nzlevel):
@@ -233,14 +236,18 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                             if varname[nv] == uvar:
 #                                zsum = np.sum(src_varz[kbot+1:-1,s]*dzlevel[kbot+1:])
 #                                src_varz[0:kbot+1,s] = src_varz[kbot+1,s]
-                                src_varz[0:kbot+1,s] = 0.0
-                            if varname[nv] == vvar:
+#				print 'before', src_varz[:,s,0]
+                                src_varz[0:kbot+1,s,0] = 0.0
+#				print 'after', src_varz[:,s,0]
+                            elif varname[nv] == vvar:
 #                                zsum = np.sum(src_varz[kbot+1:-1,s]*dzlevel[kbot+1:])
 #                                src_varz[0:kbot+1,s] = src_varz[kbot+1,s]
-                                src_varz[0:kbot+1,s] = 0.0
+                                src_varz[0:kbot+1,s,0] = 0.0
                             else:
-                                src_varz[0:kbot+1,s] = src_varz[kbot+1,s]
+                                src_varz[0:kbot+1,s,0] = src_varz[kbot+1,s,0]
 
+#                    if varname[nv] == uvar or varname[nv] == vvar:
+#                        print 'after', src_varz[:,0,0]
                     # horizontal placement of stations into target grid.
                     # HACK - this is grid dependent!!!
 #                    pdb.set_trace()
