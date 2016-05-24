@@ -7,7 +7,8 @@ information to pyroms about our grids. Point to it with the
 PYROMS_GRIDID_FILE environment variable.
 
 ************************************************************************
-*** For all the interpolating, make sure all the files have the same ***
+*** For all the interpolating, run the make_weight_files.py script   ***
+*** first. Also, make sure all the files have the same               ***
 *** irange,jrange,ystart for your specific domain.                   ***
 ************************************************************************
 
@@ -33,8 +34,6 @@ INTERPOLATING FROM LARGER ROMS DOMAINS:
    2. Where the grids are not aligned and velocities need to be rotated.
    See the Beaufort example. The ice boundary script uses multiprocessing,
    by month.
-
-   In either case, run "python make_weight_files.py" first.
 
    These all depend on pyroms_toolbox/remapping*.py.
 
