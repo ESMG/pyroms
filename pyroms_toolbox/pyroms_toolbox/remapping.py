@@ -3,6 +3,7 @@
 import os
 import numpy as np
 import glob
+import re
 try:
   import netCDF4 as netCDF
 except:
@@ -66,7 +67,7 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
     if (varname.__contains__('u') == 1 and varname.__contains__('v') == 1) or \
        (varname.__contains__('u_eastward') == 1 and varname.__contains__('v_northward') == 1):
         compute_ubar = True
-        print 'ubar/vbar to be computed from u/v' 
+        print 'ubar/vbar to be computed from u/v'
         if varname.__contains__('ubar'):
             varname.remove('ubar')
             nvar = nvar-1
@@ -96,14 +97,13 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
     # get wts_file
     if type(wts_files).__name__ == 'str':
         wts_files = sorted(glob.glob(wts_files))
- 
 
     nctidx = 0
     # loop over the srcfile
     for nf in range(nfile):
         print 'Working with file', srcfile[nf], '...'
 
-        # get time 
+        # get time
         ocean_time = pyroms.utility.get_nc_var('ocean_time', srcfile[nf])
         ntime = len(ocean_time[:])
 
@@ -114,7 +114,7 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
         # create destination file
         if nctidx == 0:
             dstfile = dstdir + os.path.basename(srcfile[nf])[:-3] + '_' \
-	             + dstgrd.name + '.nc'
+                     + dstgrd.name + '.nc'
             if os.path.exists(dstfile) is False:
                 print 'Creating destination file', dstfile
                 pyroms_toolbox.nc_create_roms_file(dstfile, dstgrd, ocean_time)
@@ -132,7 +132,7 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 print ' '
                 print 'remapping', varname[nv], 'from', srcgrd.name, \
                       'to', dstgrd.name
-                print 'time =', ocean_time[nt]   
+                print 'time =', ocean_time[nt]
 
                 # get source data
                 src_var = pyroms.utility.get_nc_var(varname[nv], srcfile[nf])
@@ -247,16 +247,16 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 try:
                     spval = src_v._FillValue
                 except:
-                    raise Warning, 'Did not find a _FillValue attribute.' 
+                    raise Warning, 'Did not find a _FillValue attribute.'
 
                 if rotate_part:
                     ndim = len(src_u.dimensions)-1
                     ind = uvar.find('_eastward')
-                    uvar = uvar[0:ind]
-                    print "Warning: renaming uvar to", uvar
+                    uvar_out = uvar[0:ind]
+                    print "Warning: renaming uvar to", uvar_out
                     ind = vvar.find('_northward')
-                    vvar = vvar[0:ind]
-                    print "Warning: renaming vvar to", vvar
+                    vvar_out = vvar[0:ind]
+                    print "Warning: renaming vvar to", vvar_out
                     if ndim == 3:
                         dimens_u = ['ocean_time', 's_rho', 'eta_u', 'xi_u']
                         dimens_v = ['ocean_time', 's_rho', 'eta_v', 'xi_v']
@@ -267,6 +267,8 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 else:
                     dimens_u = [i for i in src_u.dimensions]
                     dimens_v = [i for i in src_v.dimensions]
+                    uvar_out = uvar
+                    vvar_out = vvar
 
                 # create variable in destination file
                 if nctidx == 0:
@@ -468,8 +470,8 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 nc.variables['vbar'][nctidx] = dst_vbar
 
             nctidx = nctidx + 1
-	    print 'ADDING to nctidx ', nctidx
-	    nc.sync()
+            print 'ADDING to nctidx ', nctidx
+            nc.sync()
  
     # close destination file
     nc.close()

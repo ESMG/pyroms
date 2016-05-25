@@ -37,8 +37,7 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
     else:
         dst_grd = pyroms.grid.get_ROMS_grid(dst_grd)
 
-
-    # build intermediaire zgrid
+    # build intermediate zgrid
     if zlevel is None:
         zlevel = np.array([-7500.,-7000.,-6500.,-6000.,-5500.,-5000.,\
                    -4500.,-4000.,-3500.,-3000.,-2500.,-2000.,-1750.,\
