@@ -26,9 +26,10 @@ def do_file(month):
     wts_file = './remap_weights_ARCTIC2_to_BEAUFORT2_bilinear_*'
     src_filename = part_filename + month + '*.nc'
     lcopy = list(src_varname)
-    dst_var = pyroms_toolbox.remapping(lcopy, src_filename,\
-                     wts_file,src_grd,dst_grd,rotate_uv=True,\
-                     uvar='uice_eastward', vvar='vice_northward',\
+    dst_var = pyroms_toolbox.remapping(lcopy, src_filename, \
+                     wts_file, src_grd, dst_grd, rotate_uv=True, \
+                     irange=irange, jrange=jrange, \
+                     uvar='uice_eastward', vvar='vice_northward', \
                      rotate_part=True)
 
 #processes = 1

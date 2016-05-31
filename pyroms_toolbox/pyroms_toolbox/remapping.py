@@ -86,6 +86,7 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
             nvar = nvar-2
 
     # srcfile argument
+    print 'files', srcfile
     if type(srcfile).__name__ == 'list':
         nfile = len(srcfile)
     elif type(srcfile).__name__ == 'str':
@@ -93,6 +94,7 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
         nfile = len(srcfile)
     else:
         raise ValueError, 'src_srcfile must be a str or a list of str'
+    print 'number of files', nfile, srcfile
 
     # get wts_file
     if type(wts_files).__name__ == 'str':
@@ -235,7 +237,7 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
 
             # rotate the velocity field if requested
             if rotate_uv is True:
-                print ' ' 
+                print ' '
                 print 'remapping and rotating u and v from', srcgrd.name, \
                       'to', dstgrd.name
 
@@ -272,22 +274,22 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
 
                 # create variable in destination file
                 if nctidx == 0:
-                    print 'Creating variable '+uvar
-                    nc.createVariable(uvar, 'f8', dimens_u, fill_value=spval)
-                    nc.variables[uvar].long_name = src_u.long_name
-                    nc.variables[uvar].units = src_u.units
-                    nc.variables[uvar].time = src_u.time
-                    nc.variables[uvar].coordinates = \
+                    print 'Creating variable '+uvar_out
+                    nc.createVariable(uvar_out, 'f8', dimens_u, fill_value=spval)
+                    nc.variables[uvar_out].long_name = src_u.long_name
+                    nc.variables[uvar_out].units = src_u.units
+                    nc.variables[uvar_out].time = src_u.time
+                    nc.variables[uvar_out].coordinates = \
                            str(dimens_u.reverse())
-                    nc.variables[uvar].field = src_u.field
-                    print 'Creating variable '+vvar
-                    nc.createVariable(vvar, 'f8', dimens_v, fill_value=spval)
-                    nc.variables[vvar].long_name = src_v.long_name
-                    nc.variables[vvar].units = src_v.units
-                    nc.variables[vvar].time = src_v.time
-                    nc.variables[vvar].coordinates = \
+                    nc.variables[uvar_out].field = src_u.field
+                    print 'Creating variable '+vvar_out
+                    nc.createVariable(vvar_out, 'f8', dimens_v, fill_value=spval)
+                    nc.variables[vvar_out].long_name = src_v.long_name
+                    nc.variables[vvar_out].units = src_v.units
+                    nc.variables[vvar_out].time = src_v.time
+                    nc.variables[vvar_out].coordinates = \
                            str(dimens_v.reverse())
-                    nc.variables[vvar].field = src_v.field
+                    nc.variables[vvar_out].field = src_v.field
 
                 # get the right remap weights file
                 if rotate_part:
@@ -418,8 +420,8 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
 
                 # write data in destination file
                 print 'write data in destination file'
-                nc.variables[uvar][nctidx] = dst_u
-                nc.variables[vvar][nctidx] = dst_v
+                nc.variables[uvar_out][nctidx] = dst_u
+                nc.variables[vvar_out][nctidx] = dst_v
 
             if compute_ubar:
                 if nctidx == 0:
