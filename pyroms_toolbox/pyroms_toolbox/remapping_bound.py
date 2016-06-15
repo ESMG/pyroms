@@ -172,9 +172,13 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 if src_var.dimensions[2].find('_u') != -1:
                     Cpos='u'
                     Lp = Lp-1
+                    if irange is not None:
+                        iirange = (irange[0], irange[1]-1)
                 if src_var.dimensions[2].find('_v') != -1:
                     Cpos='v'
                     Mp = Mp-1
+                    if jrange is not None:
+                        jjrange = (jrange[0], jrange[1]-1)
                 if src_var.dimensions[1].find('_w') != -1:
                     Cpos='w'
 
@@ -390,7 +394,7 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 if irange is None:
                     iirange = (0,src_u.shape[-1])
                 else:
-                    iirange = irange
+                    iirange = (irange[0], irange[1]-1)
 
                 # jrange
                 if jrange is None:
@@ -426,7 +430,7 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 if jrange is None:
                     jjrange = (0,src_v.shape[-2])
                 else:
-                    jjrange = jrange
+                    jjrange = (jrange[0], jrange[1]-1)
 
                 if ndim == 3:
                     src_vz = pyroms.remapping.roms2z( \

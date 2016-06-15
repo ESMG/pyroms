@@ -238,8 +238,8 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
             # rotate the velocity field if requested
             if rotate_uv is True:
                 print ' '
-                print 'remapping and rotating u and v from', srcgrd.name, \
-                      'to', dstgrd.name
+                print 'remapping and rotating', uvar, 'and', vvar, 'from', \
+                      srcgrd.name, 'to', dstgrd.name
 
                 # get source data
                 src_u = pyroms.utility.get_nc_var(uvar, srcfile[nf])
@@ -313,7 +313,7 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 if irange is None:
                     iirange = (0,src_u.shape[-1])
                 else:
-                    iirange = irange
+                    iirange = (irange[0], irange[1]-1)
 
                 # jrange
                 if jrange is None:
@@ -349,7 +349,7 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 if jrange is None:
                     jjrange = (0,src_v.shape[-2])
                 else:
-                    jjrange = jrange
+                    jjrange = (jrange[0], jrange[1]-1)
 
                 if ndim == 3:
                     src_vz = pyroms.remapping.roms2z( \
@@ -398,7 +398,8 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
 
                 dst_angle = dstgrd.hgrid.angle_rho
                 angle = dst_angle - src_angle
-                angle = np.tile(angle, (dstgrd.vgrid.N, 1, 1))
+                if ndim == 3:
+                    angle = np.tile(angle, (dstgrd.vgrid.N, 1, 1))
 
                 U = dst_u + dst_v*1j
                 eitheta = np.exp(-1j*angle)
@@ -407,16 +408,22 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 dst_u = np.real(U)
                 dst_v = np.imag(U)
 
-                # move back to u,v points
-                dst_u = 0.5 * (dst_u[:,:,:-1] + dst_u[:,:,1:])
-                dst_v = 0.5 * (dst_v[:,:-1,:] + dst_v[:,1:,:])
-
                 # spval
                 idxu = np.where(dstgrd.hgrid.mask_u == 0)
                 idxv = np.where(dstgrd.hgrid.mask_v == 0)
-                for n in range(dstgrd.vgrid.N):
-                    dst_u[n,idxu[0], idxu[1]] = spval
-                    dst_v[n,idxv[0], idxv[1]] = spval
+
+                # move back to u,v points
+                if ndim == 3:
+                    dst_u = 0.5 * (dst_u[:,:,:-1] + dst_u[:,:,1:])
+                    dst_v = 0.5 * (dst_v[:,:-1,:] + dst_v[:,1:,:])
+                    for n in range(dstgrd.vgrid.N):
+                        dst_u[n,idxu[0], idxu[1]] = spval
+                        dst_v[n,idxv[0], idxv[1]] = spval
+		else:
+                    dst_u = 0.5 * (dst_u[:,:-1] + dst_u[:,1:])
+                    dst_v = 0.5 * (dst_v[:-1,:] + dst_v[1:,:])
+                    dst_u[idxu[0], idxu[1]] = spval
+                    dst_v[idxv[0], idxv[1]] = spval
 
                 # write data in destination file
                 print 'write data in destination file'
