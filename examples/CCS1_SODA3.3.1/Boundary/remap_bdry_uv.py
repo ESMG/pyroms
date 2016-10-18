@@ -23,7 +23,7 @@ def remap_bdry_uv(src_fileuv, src_grd, dst_grd, dst_fileu, dst_filev, dmax=0, cd
 
     # get time
     nctime.long_name = 'time'
-    nctime.units = 'days since 1980-01-01 00:00:00'
+    nctime.units = 'days since 1900-01-01 00:00:00'
 
     # get dimensions
     Mp, Lp = dst_grd.hgrid.mask_rho.shape
