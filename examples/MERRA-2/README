@@ -1,0 +1,31 @@
+First, create a Forcings directory where all the MERRA netcdf
+files will go.
+
+Second, you will need to set up an account at urs.earthdata.nasa.gov
+and enter your account information in your $HOME/.netrc file.
+
+In the old days, one would then simply run the 
+get_MERRA_Forcings_from_nasa_opendap_3hours.bash
+script and answer the question about which year to run:
+
+  % get_MERRA_Forcings_from_nasa_opendap_3hours.bash
+  Enter a year to process: 2014
+
+and it would go off and do its thing for a while. Now I'm getting
+timeout errors:
+
+   urllib2.URLError: <urlopen error [Errno 110] Connection timed out>
+
+I have restructured the code so that it creates a new file for each
+month and I'm using ncrcat to string months together for yearly files.
+I run these one at a time:
+
+   python get_MERRA_swrad_from_nasa_opendap_3hours.py 2016
+
+and when it fails in April, I edit the loop around line 110:
+
+    - for month in range(12):
+    + for month in range(3,12):
+
+and restart it. It's confusing because January is month 0 and April is
+month 3. I might change this...
