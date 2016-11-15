@@ -293,17 +293,17 @@ class s_coordinate_5(s_coordinate):
     def _get_s_rho(self):
         lev = np.arange(1,self.N+1,1)
         s = -(lev * lev - 2 * lev * self.N + lev + self.N * self.N - self.N) / \
-#            (self.c1 * self.N * self.N - self.N) - \
             (self.N * self.N - self.N) - \
             0.01 * (lev * lev - lev * self.N) / (self.c1 - self.N)
+#            (self.c1 * self.N * self.N - self.N) - \
         self.s_rho = s
 
     def _get_s_w(self):
         lev = np.arange(0,self.Np,1)
         s = -(lev * lev - 2 * lev * self.N + lev + self.N * self.N - self.N) / \
-#            (self.c1 * self.N * self.N - self.N) - \
             (self.N * self.N - self.N) - \
             0.01 * (lev * lev - lev * self.N) / (self.c1 - self.N)
+#            (self.c1 * self.N * self.N - self.N) - \
         self.s_w = s
 
     def _get_Cs_r(self):

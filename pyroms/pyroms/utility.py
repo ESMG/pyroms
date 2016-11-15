@@ -287,7 +287,7 @@ def get_nc_var(varname, filename):
     a simple wraper for netCDF4
     """
 
-    data = pyroms.io.MFDataset(filename)
+    data = pyroms.io.Dataset(filename)
     var = data.variables[varname]
 
     return var
