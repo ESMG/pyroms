@@ -429,17 +429,29 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                                       irange=iirange, jrange=jjrange, spval=spval, \
                                       dmax=dmax)
 
-                # irange
-                if irange is None:
-                    iirange = (0,src_v.shape[-1])
+                # get the right ranges
+                if rotate_part:
+                    # irange
+                    if irange is None:
+                        iirange = (0,src_v.shape[-1])
+                    else:
+                        iirange = irange
+                    # jrange
+                    if jrange is None:
+                        jjrange = (0,src_v.shape[-2])
+                    else:
+                        jjrange = jrange
                 else:
-                    iirange = irange
-
-                # jrange
-                if jrange is None:
-                    jjrange = (0,src_v.shape[-2])
-                else:
-                    jjrange = (jrange[0], jrange[1]-1)
+                    # irange
+                    if irange is None:
+                        iirange = (0,src_v.shape[-1])
+                    else:
+                        iirange = irange
+                    # jrange
+                    if jrange is None:
+                        jjrange = (0,src_v.shape[-2])
+                    else:
+                        jjrange = (jrange[0], jrange[1]-1)
 
                 if ndim == 3:
                     src_vz = pyroms.remapping.roms2z( \
