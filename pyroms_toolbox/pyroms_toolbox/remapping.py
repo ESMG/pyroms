@@ -256,9 +256,11 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                     ind = uvar.find('_eastward')
                     uvar_out = uvar[0:ind]
                     print "Warning: renaming uvar to", uvar_out
+                    print "uvar dims:", src_u.dimensions
                     ind = vvar.find('_northward')
                     vvar_out = vvar[0:ind]
                     print "Warning: renaming vvar to", vvar_out
+                    print "uvar dims:", src_v.dimensions
                     if ndim == 3:
                         dimens_u = ['ocean_time', 's_rho', 'eta_u', 'xi_u']
                         dimens_v = ['ocean_time', 's_rho', 'eta_v', 'xi_v']
@@ -299,6 +301,17 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                             wts_file_v = wts_files[s]
                     Cpos_u = 'rho'
                     Cpos_v = 'rho'
+                    # irange
+                    if irange is None:
+                        iirange = (0,src_u.shape[-1])
+                    else:
+                        iirange = iirange
+                    # jrange
+                    if jrange is None:
+                        jjrange = (0,src_u.shape[-2])
+                    else:
+                        jjrange = jrange
+                    print "ranges", iirange, jjrange
                 else:
                     for s in range(len(wts_files)):
                         if wts_files[s].__contains__('u_to_rho.nc'):
@@ -307,19 +320,19 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                             wts_file_v = wts_files[s]
                     Cpos_u = 'u'
                     Cpos_v = 'v'
+                    # irange
+                    if irange is None:
+                        iirange = (0,src_u.shape[-1])
+                    else:
+                        iirange = (irange[0], irange[1]-1)
+                    # jrange
+                    if jrange is None:
+                        jjrange = (0,src_u.shape[-2])
+                    else:
+                        jjrange = jrange
+                    print "ranges", iirange, jjrange
 
                 # vertical interpolation from sigma to standard z level
-                # irange
-                if irange is None:
-                    iirange = (0,src_u.shape[-1])
-                else:
-                    iirange = (irange[0], irange[1]-1)
-
-                # jrange
-                if jrange is None:
-                    jjrange = (0,src_u.shape[-2])
-                else:
-                    jjrange = jrange
 
                 ndim = len(src_v.dimensions)-1
                 if ndim == 3:
@@ -419,7 +432,7 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                     for n in range(dstgrd.vgrid.N):
                         dst_u[n,idxu[0], idxu[1]] = spval
                         dst_v[n,idxv[0], idxv[1]] = spval
-		else:
+                else:
                     dst_u = 0.5 * (dst_u[:,:-1] + dst_u[:,1:])
                     dst_v = 0.5 * (dst_v[:-1,:] + dst_v[1:,:])
                     dst_u[idxu[0], idxu[1]] = spval

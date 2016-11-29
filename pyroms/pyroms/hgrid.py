@@ -1,5 +1,5 @@
 # encoding: utf-8
-'''Tools for creating and working with Arikawa C-Grids'''
+'''Tools for creating and working with Arakawa C-Grids'''
 __docformat__ = "restructuredtext en"
 
 import os
