@@ -19,6 +19,10 @@ def configuration(parent_package='',top_path=None):
           sources = ['src/move_runoff.f90'],
           libraries = ['_move_runoff']
           )
+    config.add_extension('move_river_t',
+          sources = ['src/move_river_t.f90'],
+          libraries = ['_move_river_t']
+          )
     return config
 
 if __name__ == '__main__':
