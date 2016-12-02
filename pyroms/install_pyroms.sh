@@ -51,6 +51,6 @@ echo "use, ..."
 echo "Please set the environment variable PYROMS_GRIDID_FILE"
 echo "to point to your gridid file. A gridid file template"
 echo "is available here:"
-echo "$LOCALDIR/python/pyroms/pyroms/gridid.txt"
+echo "$CURDIR/pyroms/gridid.txt"
 read -p "Press any key to continue or Ctrl+C to quit this install"
 echo
