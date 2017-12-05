@@ -3,8 +3,12 @@ import pyroms_toolbox
 import CGrid_TPXO8
 
 # load the grid
-srcgrd = CGrid_TPXO8.get_nc_CGrid_TPXO8('/Volumes/R1/scratch/chuning/data/tpxo8nc/grid_tpxo8atlas_30_v1.nc')
-dstgrd = pyroms.grid.get_ROMS_grid('GB')
+pth_tpxo = '/archive/u1/uaf/kate/tides/tpxo8/'
+srcgrd = CGrid_TPXO8.get_nc_CGrid_TPXO8(pth_tpxo+'grid_tpxo8atlas_30_v1.nc', \
+      xrange=(4400, 5100), yrange=(5200, 6500))
+#srcgrd_lr = CGrid_TPXO8.get_nc_CGrid_TPXO8(pth_tpxo+'grid_tpxo8_atlas6.nc', name='TPXO8atlas6', \
+#      xrange=(920, 1020), yrange=(1030, 1300))
+dstgrd = pyroms.grid.get_ROMS_grid('CHUKCHI2')
 
 # make remap grid file for scrip
 CGrid_TPXO8.make_remap_grid_file(srcgrd, Cpos='t')
