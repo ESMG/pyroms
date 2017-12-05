@@ -1,0 +1,4 @@
+# first run make_ic_file_bio.py to create initial conditions from COBALT results
+
+# second run make_ic_file_bio_addons.py to create the WOA and GLODAP fields and merge with original file
+

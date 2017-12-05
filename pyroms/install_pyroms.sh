@@ -1,7 +1,7 @@
 #!/bin/sh
 
-DESTDIR=/usr/local
-#DESTDIR=/u1/uaf/kate
+#DESTDIR=/usr/local
+DESTDIR=/u1/uaf/kshedstrom/python
 CURDIR=`pwd`
 export CPPFLAGS=-I$DESTDIR/include
 export LDFLAGS='-L$DESTDIR/lib'

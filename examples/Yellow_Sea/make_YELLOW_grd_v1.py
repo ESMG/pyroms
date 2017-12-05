@@ -39,8 +39,17 @@ lonv, latv = map(hgrd.x_vert, hgrd.y_vert, inverse=True)
 hgrd = pyroms.grid.CGrid_geo(lonv, latv, map)
 
 # generate the mask
-for verts in map.coastsegs:
-    hgrd.mask_polygon(verts)
+#for verts in map.coastsegs:
+#    hgrd.mask_polygon(verts)
+# alternate version from johan.navarro.padron
+
+for xx,yy in map.coastpolygons:
+    xa = np.array(xx, np.float32)
+    ya = np.array(yy,np.float32)
+    vv = np.zeros((xa.shape[0],2))
+    vv[:, 0] = xa
+    vv[:, 1] = ya
+    hgrd.mask_polygon(vv,mask_value=0)
 
 # Edit the land mask interactively.
 #pyroms.grid.edit_mask_mesh(hgrd, proj=map)

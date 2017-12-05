@@ -46,7 +46,7 @@ for file in lst_file:
     clim_file = dst_dir + file.rsplit('/')[-1][:-3] + '_clim_' + dst_grd.name + '.nc'
 
     out_file = dst_dir + file.rsplit('/')[-1][:-3] + '_ssh_clim_' + dst_grd.name + '.nc'
-    command = ('ncks', '-a', '-O', out_file, clim_file) 
+    command = ('ncks', '-a', '-O', out_file, clim_file)
     print command
     subprocess.check_call(command)
     os.remove(out_file)

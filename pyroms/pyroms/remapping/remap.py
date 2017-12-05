@@ -45,12 +45,12 @@ def remap(src_array, remap_file, src_grad1=None, src_grad2=None, \
         print ' '
         print 'Remapping between:'
         print src_grid_name
-        print 'and' 
+        print 'and'
         print dst_grid_name
         print 'Remapping method: ', map_method
 
     ndim = len(src_array.squeeze().shape)
-    
+
     if (ndim == 2):
         tmp_dst_array = np.zeros((dst_grid_size))
         tmp_src_array = src_array.flatten()
@@ -85,7 +85,7 @@ def remap(src_array, remap_file, src_grad1=None, src_grad2=None, \
                                              tmp_src_grad1, tmp_src_grad2, \
                                              tmp_src_grad3)
             else:
-                raise ValueError, 'Unknown method'                
+                raise ValueError, 'Unknown method'
 
         # mask dst_array
         idx = np.where(dst_mask == 0)
@@ -133,7 +133,7 @@ def remap(src_array, remap_file, src_grad1=None, src_grad2=None, \
                                                  tmp_src_grad1, tmp_src_grad2, \
                                                  tmp_src_grad3)
                 else:
-                    raise ValueError, 'Unknow method'                
+                    raise ValueError, 'Unknown method'
 
 
             # mask dst_array

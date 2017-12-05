@@ -14,7 +14,7 @@ import _interp
 
 
 def get_lonlat(iindex, jindex, grd, Cpos='rho'):
-    """ 
+    """
     lon, lat = get_lonlat(iindex, jindex, grd)
 
     return the longitude (degree east) and latitude (degree north)
@@ -40,10 +40,10 @@ def get_lonlat(iindex, jindex, grd, Cpos='rho'):
 
 
 def get_ij(longitude, latitude, grd, Cpos='rho'):
-    """ 
+    """
     i, j = get_ij(longitude, latitude, grd)
 
-    return the index of the closest point on the grid from the 
+    return the index of the closest point on the grid from the
     point (longitude,latitude) in degree
     """
 
@@ -68,7 +68,7 @@ def get_ij(longitude, latitude, grd, Cpos='rho'):
     diff = (lon * lon) + (lat * lat)
 
     jindex, iindex = np.where(diff==diff.min())
-    
+
     return iindex[0], jindex[0]
 
 
@@ -177,7 +177,7 @@ def find_nearestgridpoints(longitude, latitude, grd, Cpos='rho'):
         #print 'point (%f, %f) is not in the grid' %(longitude, latitude)
         iindex = []
         jindex = []
-        
+
     return iindex, jindex
 
 
@@ -204,7 +204,7 @@ def ijcoast(coast, grd):
 
     return ijcoast
 
- 
+
 def ijcoast_old(coast, grd):
 
 
@@ -343,7 +343,7 @@ def get_bottom(varz, mask, spval=1e37):
 
     bottom[:,:] = _interp.get_bottom(varz,mask,spval)
 
-    return bottom
+    return np.int(bottom)
 
 
 def get_surface(varz, mask, spval=1e37):
@@ -413,7 +413,7 @@ def get_date_tag(roms_time, ref=(2006, 01, 01), format="%d %b %Y at %H:%M:%S"):
     tag = get_date_tag(roms_time)
 
     return date tag for roms_time (in second since initialisation).
-    default reference time is January 1st 2006. 
+    default reference time is January 1st 2006.
     '''
 
     ref = time.mktime(datetime(ref[0], ref[1], ref[2]).timetuple())

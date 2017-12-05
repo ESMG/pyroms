@@ -1,0 +1,244 @@
+!! ------------------- 
+!! Namelist for SOSIE 
+!! ------------------- 
+!! 
+!! 
+!! *********************** 
+!! Input characteristics : 
+!! *********************** 
+!! 
+!! ivect : vector correction control on treated field [integer] 
+!!         ivect = 0 : input field is not a component of a vector 
+!!         or the target grid is regular (lregout = T) 
+!!         * if non-regular distorted target grids (like ORCAX): 
+!!         ivect = 1 : input field is a zonal (X) component of a vector 
+!!         ivect = 2 : input field is a meridional (Y) component of a vector 
+!! 
+!! lregin : is the source grid regular? [logical] 
+!!          (ie : are input longitude and latitude 1D?) 
+!! 
+!! cf_in   : file containing the input field to be interpolated [char]
+!! cv_in   : name of treated variable (in input field file) [char]
+!!
+!! cv_t_in : name of time record variable in the input file [char]
+!!           or 'missing_rec' if no time record is present in the input file
+!!
+!! jt1     : first time record to be interpolated
+!! jt2     : last  time record to be interpolated
+!!           => set jt1 and jt2 to 0 if you want to skip this option 
+!!              and interpolate the nt time steps of the current field
+!! 
+!! jplev : level to treat if your file is 3D (spatial), has no influence if 
+!!         your file is 2D !
+!!         jplev > 0 = level to treat (ex : jplev = 1 will interpolate only 
+!!                     surface field corresponding to the 1st level )
+!!       ------------------------------------------------------------------
+!!       | jplev = 0 : perform 3D interpolation (if input file is 3D) !!! |
+!!       ------------------------------------------------------------------
+!!
+!! cf_x_in   : file containing the input grid (usually = cf_in) [char] 
+!! cv_lon_in : name of longitude in the input grid file [char] 
+!! cv_lat_in : name of latitude in the input grid file [char] 
+!! 
+!! cf_lsm_in : file containing the input land-sea mask [char]
+!!             or specify 'missing_value' if a 'missing_value' netcdf
+!!             attribute defines the mask on the input data field
+!!             (not needed if "ldrown = .FALSE." --> '')
+
+!! cv_lsm_in : name of land-sea mask variable [char]
+!!             (not needed if "ldrown = .FALSE." 
+!!              or if cf_lsm_in = 'missing_value'--> '')
+!!             by default ocean is flagged with value 1
+!!             and continents are flagged with value 0
+!!
+!! ldrown : whether we call DROWN land filling procedure [logical] 
+!!
+!! ewper : east-west periodicity on the input file/grid [integer] 
+!!         = -1 --> no periodicity 
+!!         >= 0 --> periodicity with overlap of ewper points 
+!! 
+!! vmax : upper bound not to exceed for treated variable [real] 
+!! vmin : lower bound not to exceed for treated variable [real] 
+!!-------------------------------------------------------------------------- 
+!! 
+&ninput
+ivect     = 0
+lregin    = T
+cf_in     = '/archive/u1/uaf/kate/COBALT/news_nutrients_conc_mom_nodet_may25.nc'
+cv_in     = '<VARNAME>_CONC'
+cv_t_in   = 'TIME' 
+jt1       = 0   ! sdfgdfhgdfgh
+jt2       = 0
+jplev     = 1
+cf_x_in   = '/archive/u1/uaf/kate/COBALT/news_nutrients_conc_mom_nodet_may25.nc'
+cv_lon_in = 'XT'
+cv_lat_in = 'YT'
+cf_lsm_in = 'missing_value'
+cv_lsm_in = ''
+ldrown    = T
+ewper     = 0
+vmax      =  1.E6
+vmin      =  0.E6
+/
+!!
+!!
+!!
+!!
+!! ***********************************
+!!  IF 3D INTERPOLATION ( jplev = 0 )
+!! ***********************************
+!!
+!! Only mind if you do want to perform a 3D (spatial) interpolation
+!! 
+!! Mind only if you do want to perform a 3D interpolation !
+!! First, make sure that jplev is set to 0 !
+!!
+!! cf_z_in  : file containing the input depth vector (associates a depth to a 
+!!            given level). In most cases should be the same file than cf_x_in.
+!! cv_z_in  : name of the variable for the input depth vector
+!!
+!! cf_z_out : file containing the output depth vector (associates a depth to a 
+!!            given level). In most cases should be the same file than cf_x_in.
+!! cv_z_out : name of the variable for the output depth vector in file 'cf_z_out'
+!! cv_z_out_name: name you wish to give to depth variable in file to be created...
+!!
+!! ctype_z_in  : type of coordinates in input file (currently available z/sigma)
+!! ctype_z_out : type of coordinates in output file (currently available z/sigma)
+!!
+!! These are to be set ONLY if ctype_z_in = 'sigma'
+!! cf_bathy_in : file containing the bathymetry on input grid (usually ROMS grid file)
+!! cv_bathy_in : name of bathymetry variable (usually h)
+!! ssig_in     : structure with ROMS s-coordinates parameters on input grid
+!! Vtransform | Vstretching | Nlevels | theta_s | theta_b | Tcline | hmin
+!!
+!! These are to be set ONLY if ctype_z_out = 'sigma'
+!! cf_bathy_out : file containing the bathymetry on output grid (usually ROMS grid file)
+!! cv_bathy_out : name of bathymetry variable (usually h)
+!! ssig_out     : structure with ROMS s-coordinates parameters on output grid (see above)
+!!
+&n3d
+cf_z_in  = '/data/toto/my_file.nc'
+cv_z_in  = 'level'
+cf_z_out = '/data/toto/mesh_zgr.nc'
+cv_z_out = 'nav_lev'
+cv_z_out_name = 'depth'
+ctype_z_in = 'sigma'
+ctype_z_out = 'z'
+cf_bathy_in = ''
+cv_bathy_in = ''
+cf_bathy_out = '/data/toto/roms_grid.nc'
+cv_bathy_out = 'h'
+!! ROMS s-coordinates parameters (if ctype_z_in or/and ctype_z_out = 'sigma' )
+!! Vtransform | Vstretching | Nlevels | theta_s | theta_b | Tcline | hmin
+ssig_in =  2,         4,         40,       7.,       2.,     250. ,   15.
+ssig_out = 2,         4,         40,       7.,       2.,     250. ,   15.
+/
+!! 
+!!
+!!
+!!
+!!
+!! ***************************** 
+!! Output Grid characteristics : 
+!! ***************************** 
+!! 
+!! lregout : is the target grid regular ? [logical] 
+!!           (ie : are output longitude and latitude 1D?) 
+!!
+!! cf_x_out   : file containing the target grid [char] 
+!! cv_lon_out : name of longitude variable [char] 
+!! cv_lat_out : name of latitude variable [char] 
+!!
+!! TRICK:  for interpolating onto a global regular spherical grid
+!! ------  with a resolution of dx deg. of longitude and dy deg. of latitude
+!!         * cf_x_out   = 'spheric' ! tells SOSIE to build a spherical output grid
+!!         * cv_lon_out = '1.0'  ! your dx, here 1.0 deg. 
+!!         * cv_lat_out = '1.0'  ! your dy, here 1.0 deg.
+!!
+!!
+!! cf_lsm_out : file containing output land-sea mask [char] 
+!!              MUST BE 3D for 3D interpolation!
+!!              or specify 'missing_value' if a 'missing_value' netcdf
+!!              attribute defines the mask on a field 'X' in file 'cf_x_out'
+!!              (not needed if "lmout = .FALSE." --> '') 
+!!
+!! cv_lsm_out : name of land-sea mask variable in 'cf_lsm_out'     [char]
+!!              or name of field 'X' in 'cf_x_out' if you specified 
+!!              cf_lsm_out = 'missing_value'
+!!              (not needed if "lmout = .FALSE." --> '') 
+!!
+!! lmout : whether to mask the interpolated field on the output file [logical] 
+!!         if lmout is set to .FALSE. and cf_lsm_out is different than '' the output
+!!         field will be drowned using the mask defined by cf_lsm_out (and cv_lsm_out)
+!!
+!! rmaskvalue : missing value given to output field (for continents) [logical] 
+!!
+!! lct   : whether to control or not time variable [logical] 
+!!         TRUE -> specify time array with starting time 't0' and step 't_stp' 
+!!         FALSE -> same time array as in input file is used 
+!! t0    : time to start (if lct is set to .TRUE.) [real] 
+!! t_stp : time step (if lct is set to .TRUE.) [real]
+!!
+!! ewper_out : east-west periodicity on the output file/grid [integer] 
+!!             = -1 --> no periodicity 
+!!             >= 0 --> periodicity with overlap of ewper points 
+!!
+!!
+&noutput
+lregout    = F
+cf_x_out   = '/archive/u1/uaf/kate/gridpak/Cook_inlet/NWGOA_grid_3.nc'
+cv_lon_out = 'lon_rho'
+cv_lat_out = 'lat_rho'
+cf_lsm_out = '/archive/u1/uaf/kate/gridpak/Cook_inlet/NWGOA_grid_3.nc'
+cv_lsm_out = 'mask_rho'
+lmout      = T
+rmaskvalue = 1.0e+15
+lct        = F
+t0         = 0.
+t_stp      = 0.25
+ewper_out  = 0
+/
+!! 
+!! 
+!! 
+!! 
+!! ******************************* 
+!! Netcdf output characteristics : 
+!! ******************************* 
+!! 
+!! This mostly deals with how the output file to be created is going to look like!
+!!
+!! cmethod  : the 2D interpolation method to be used
+!!            use 'akima' if your input domain is regular (non-distorted grid)
+!!            use 'bilin' otherwise, which is bilinear 2D interpolation
+!!
+!! *** Into the netcdf file to be created : *** 
+!! cv_l_out : name for longitude on the output file [char] 
+!! cv_p_out : name for latitude on the output file [char] 
+!! cv_t_out : name for time on the output file [char] 
+!! cv_out   : name for treated variable on the output file [char] 
+!! cu_out   : treated variable units [char] 
+!! cu_t     : time unit [char]
+!! cln_out  : treated variable long name [char] 
+!! cd_out   : directory to create output file to [char]
+!! 
+!! *** Name of the output file : *** 
+!! csource  : short string to describe origin of the file [char] 
+!! ctarget  : short string to describe the target grid [char] 
+!! cextra   : short extra indication about the file [char] 
+!! 
+&nnetcdf
+cmethod  = 'akima'
+cv_l_out = 'lon_rho'
+cv_p_out = 'lat_rho'
+cv_t_out = 'time'
+cv_out   = '<VARNAME>'
+cu_out   = ''
+cu_t     = 'N/A'
+cln_out  = '<VARNAME>'
+cd_out   = '.'
+csource  = 'NEWS'
+ctarget  = 'CCS1'
+cextra   = 'clim'
+/ 
+!!
