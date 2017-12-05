@@ -380,6 +380,16 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                             wts_file_v = wts_files[s]
                     Cpos_u = 'rho'
                     Cpos_v = 'rho'
+                    # irange
+                    if irange is None:
+                        iirange = (0,src_u.shape[-1])
+                    else:
+                        iirange = irange
+                    # jrange
+                    if jrange is None:
+                        jjrange = (0,src_u.shape[-2])
+                    else:
+                        jjrange = jrange
                 else:
                     for s in range(len(wts_files)):
                         if wts_files[s].__contains__('u_to_rho.nc'):
@@ -388,19 +398,18 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                             wts_file_v = wts_files[s]
                     Cpos_u = 'u'
                     Cpos_v = 'v'
+                    # irange
+                    if irange is None:
+                        iirange = (0,src_u.shape[-1])
+                    else:
+                        iirange = (irange[0], irange[1]-1)
+                    # jrange
+                    if jrange is None:
+                        jjrange = (0,src_u.shape[-2])
+                    else:
+                        jjrange = jrange
 
                 # vertical interpolation from sigma to standard z level
-                # irange
-                if irange is None:
-                    iirange = (0,src_u.shape[-1])
-                else:
-                    iirange = (irange[0], irange[1]-1)
-
-                # jrange
-                if jrange is None:
-                    jjrange = (0,src_u.shape[-2])
-                else:
-                    jjrange = jrange
 
                 ndim = len(src_v.dimensions)-1
                 if ndim == 3:
@@ -420,17 +429,29 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                                       irange=iirange, jrange=jjrange, spval=spval, \
                                       dmax=dmax)
 
-                # irange
-                if irange is None:
-                    iirange = (0,src_v.shape[-1])
+                # get the right ranges
+                if rotate_part:
+                    # irange
+                    if irange is None:
+                        iirange = (0,src_v.shape[-1])
+                    else:
+                        iirange = irange
+                    # jrange
+                    if jrange is None:
+                        jjrange = (0,src_v.shape[-2])
+                    else:
+                        jjrange = jrange
                 else:
-                    iirange = irange
-
-                # jrange
-                if jrange is None:
-                    jjrange = (0,src_v.shape[-2])
-                else:
-                    jjrange = (jrange[0], jrange[1]-1)
+                    # irange
+                    if irange is None:
+                        iirange = (0,src_v.shape[-1])
+                    else:
+                        iirange = irange
+                    # jrange
+                    if jrange is None:
+                        jjrange = (0,src_v.shape[-2])
+                    else:
+                        jjrange = (jrange[0], jrange[1]-1)
 
                 if ndim == 3:
                     src_vz = pyroms.remapping.roms2z( \

@@ -11,6 +11,7 @@ def configuration(parent_package='',top_path=None):
     config.add_library('_average', sources=['src/average.f90']),
     config.add_library('_move_runoff', sources=['src/move_runoff.f90']),
     config.add_library('_move_river_t', sources=['src/move_river_t.f90']),
+    config.add_library('creep', sources=['src/creeping_sea.f90']),
     config.add_extension('_average',
           sources = ['src/average.f90'],
           libraries = ['_average']
@@ -18,6 +19,14 @@ def configuration(parent_package='',top_path=None):
     config.add_extension('_move_runoff',
           sources = ['src/move_runoff.f90'],
           libraries = ['_move_runoff']
+          )
+    config.add_extension('_move_river_t',
+          sources = ['src/move_river_t.f90'],
+          libraries = ['_move_river_t']
+          )
+    config.add_extension('creep',
+          sources = ['src/creeping_sea.f90'],
+          libraries = ['creep']
           )
     return config
 
