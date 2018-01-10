@@ -17,7 +17,7 @@ class nctime(object):
     pass
 
 def remap_bio_woa(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
-    
+
     # NWGOA3 grid sub-sample
     xrange=src_grd.xrange; yrange=src_grd.yrange
 
@@ -47,7 +47,7 @@ def remap_bio_woa(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./
     nc = netCDF.Dataset(dst_file, 'a', format='NETCDF3_64BIT')
 
     #load var
-    cdf = netCDF.Dataset(src_file) 
+    cdf = netCDF.Dataset(src_file)
     src_var = cdf.variables[src_varname]
 
 
@@ -143,7 +143,7 @@ def remap_bio_woa(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./
     if ndim == 3:
        for kz in np.arange(dst_grd.vgrid.N):
            tmp = dst_var[kz,:,:].copy()
-       	   tmp[np.where(dst_grd.hgrid.mask_rho == 0)] = spval2
+           tmp[np.where(dst_grd.hgrid.mask_rho == 0)] = spval2
            dst_var[kz,:,:] = tmp.copy()
 
     # write data in destination file

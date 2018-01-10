@@ -17,7 +17,7 @@ class nctime(object):
     pass
 
 def remap_bdry_bio_glodap(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
-    
+
     # NWGOA3 grid sub-sample
     xrange=src_grd.xrange; yrange=src_grd.yrange
     src_varname = argdict['tracer']
@@ -44,7 +44,7 @@ def remap_bdry_bio_glodap(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst
     nc = netCDF.Dataset(dst_file, 'a', format='NETCDF3_64BIT')
 
     #load var
-    cdf = netCDF.Dataset(src_file) 
+    cdf = netCDF.Dataset(src_file)
     src_var = cdf.variables[src_varname]
 
     # correct time to some classic value
@@ -65,9 +65,9 @@ def remap_bdry_bio_glodap(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst
         src_var = src_var[0,yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
 
     if tracer == 'alk':
-       unit_conversion = 1. / 1e6 
+       unit_conversion = 1. / 1e6
     elif tracer == 'dic':
-       unit_conversion = 1. / 1e6 
+       unit_conversion = 1. / 1e6
 
     src_var = src_var * unit_conversion
 
@@ -155,7 +155,7 @@ def remap_bdry_bio_glodap(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst
         dst_var_south = pyroms.remapping.z2roms(dst_varz[::-1, 0:1, :], \
                           dst_grdz, dst_grd, Cpos=Cpos, spval=spval, \
                           flood=False, irange=(0,Lp), jrange=(0,1))
-	dst_var_east = pyroms.remapping.z2roms(dst_varz[::-1, :, Lp-1:Lp], \
+        dst_var_east = pyroms.remapping.z2roms(dst_varz[::-1, :, Lp-1:Lp], \
                           dst_grdz, dst_grd, Cpos=Cpos, spval=spval, \
                           flood=False, irange=(Lp-1,Lp), jrange=(0,Mp))
         dst_var_west = pyroms.remapping.z2roms(dst_varz[::-1, :, 0:1], \
@@ -164,7 +164,7 @@ def remap_bdry_bio_glodap(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst
     else:
         dst_var_north = dst_varz[-1, :]
         dst_var_south = dst_varz[0, :]
-	dst_var_east = dst_varz[:, -1]
+        dst_var_east = dst_varz[:, -1]
         dst_var_west = dst_varz[:, 0]
 
     dst_var_north[np.where(dst_var_north == spval)] = spval2

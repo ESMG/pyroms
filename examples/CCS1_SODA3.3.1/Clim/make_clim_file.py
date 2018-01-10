@@ -24,8 +24,8 @@ filelst = subprocess.check_output(['ls', data_dir_year]).replace('/n',' ').split
 
 filelstyear = []
 for ff in filelst:
-	if ff.find(str(my_year)) > 0:
-		filelstyear.append(ff)
+    if ff.find(str(my_year)) > 0:
+        filelstyear.append(ff)
 
 src_grd = pyroms_toolbox.BGrid_GFDL.get_nc_BGrid_GFDL(data_dir + 'grid/SODA3_0.5deg_grid.nc', name='SODA3.3.1', xrange=(400, 500), yrange=(180, 280) )
 dst_grd = pyroms.grid.get_ROMS_grid('CCS')

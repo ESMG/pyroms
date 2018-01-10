@@ -56,26 +56,26 @@ mask_u[np.where(u.mask == True)] = 0
 kmt = np.empty((ny,nx))
 ht = np.empty((ny,nx))
 for ky in np.arange(ny):
-	for kx in np.arange(nx):
-		indlist = np.where(mask_t[:,ky,kx] == 1)[0]
-		if len(indlist) == 0:
-			kmt[ky,kx] = 0
-			ht[ky,kx] = 0
-		else:
-			kmt[ky,kx] = indlist.max() + 1
-			ht[ky,kx] = st_edges_ocean[indlist.max() + 1]
+    for kx in np.arange(nx):
+        indlist = np.where(mask_t[:,ky,kx] == 1)[0]
+        if len(indlist) == 0:
+            kmt[ky,kx] = 0
+            ht[ky,kx] = 0
+        else:
+            kmt[ky,kx] = indlist.max() + 1
+            ht[ky,kx] = st_edges_ocean[indlist.max() + 1]
 
 kmt[np.where(kmt == 0)] = spval
 ht[np.where(ht == 0)] = spval
 
 kmu = np.empty((ny,nx))
 for ky in np.arange(ny):
-	for kx in np.arange(nx):
-		indlist = np.where(mask_u[:,ky,kx] == 1)[0]
-		if len(indlist) == 0:
-			kmu[ky,kx] = 0
-		else:
-			kmu[ky,kx] = indlist.max() + 1
+    for kx in np.arange(nx):
+        indlist = np.where(mask_u[:,ky,kx] == 1)[0]
+        if len(indlist) == 0:
+            kmu[ky,kx] = 0
+        else:
+            kmu[ky,kx] = indlist.max() + 1
 
 kmu[np.where(kmu == 0)] = spval
 
