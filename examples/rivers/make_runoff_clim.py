@@ -8,7 +8,7 @@ import pyroms_toolbox
 
 # load 2-dimentional interannual discharge data 
 # from Hill and Beamer.
-print 'Load interannual discharge data'
+print('Load interannual discharge data')
 nc_data = netCDF.Dataset('runoff.nc', 'r')
 time = nc_data.variables['time'][:]
 data = nc_data.variables['runoff'][:]
@@ -95,7 +95,7 @@ nct=0
 #for t in range(nt):
 for t in range(nt-243,nt):
     flow = np.sum(data[t,280:600,160:460])
-    print nct+1, 'Remapping runoff for time %f' %time[t]
+    print(nct+1, 'Remapping runoff for time %f' %time[t])
 #    print 'Remapping runoff for time %f' %time[nct]
     # conservative horizontal interpolation using scrip
     runoff_raw = pyroms.remapping.remap(data[t,:,:], wts_file, \
@@ -115,17 +115,17 @@ for t in range(nt-243,nt):
 # HACK    nc.variables['runoff_time'][nct] = time[nct]
 
     if t==180:
-        print 'Sum 2', np.sum(runoff_raw)
-        print 'Sum 3', np.sum(runoff)
+        print('Sum 2', np.sum(runoff_raw))
+        print('Sum 3', np.sum(runoff))
     if nct==180:
-        print 'Sum 2 new 180', np.sum(runoff_raw)
-        print 'Sum 3 new 180', np.sum(runoff)
+        print('Sum 2 new 180', np.sum(runoff_raw))
+        print('Sum 3 new 180', np.sum(runoff))
     nct = nct + 1
 
 # Get rest of year
 for t in range(nt-243):
     flow = np.sum(data[t,280:600,160:460])
-    print nct+1, 'Remapping runoff for time %f' %time[t]
+    print(nct+1, 'Remapping runoff for time %f' %time[t])
 
     # conservative horizontal interpolation using scrip
     runoff_raw = pyroms.remapping.remap(data[t,:,:], wts_file, \
@@ -145,8 +145,8 @@ for t in range(nt-243):
     nct = nct + 1
 
     if t==180:
-        print 'Sum 2', np.sum(runoff_raw)
-        print 'Sum 3', np.sum(runoff)
+        print('Sum 2', np.sum(runoff_raw))
+        print('Sum 3', np.sum(runoff))
 
 # close netcdf file
 nc.close()

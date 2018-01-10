@@ -5,7 +5,7 @@ __docformat__ = "restructuredtext en"
 import os
 import sys
 import ctypes
-import cPickle
+import pickle
 from warnings import warn
 from copy import deepcopy
 

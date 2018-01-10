@@ -58,7 +58,7 @@ try:
                    'variables attribute must be a dictionary'
             return ncfile
         else:
-            raise TypeError, 'type %s not supported' % type(ncfile)
+            raise TypeError('type %s not supported' % type(ncfile))
     
     Dataset.__doc__ = __doc__
 
@@ -75,7 +75,7 @@ try:
                    'variables attribute must be a dictionary'
             return ncfile
         else:
-            raise TypeError, 'type %s not supported' % type(ncfile)
+            raise TypeError('type %s not supported' % type(ncfile))
             return MFnetCDF4.Dataset(files)
     
     MFDataset.__doc__ = __doc__
@@ -92,7 +92,7 @@ except:
         elif isinstance(ncfile, pupynere.NetCDFFile):
             return ncfile
         else:
-            raise TypeError, 'type %s not supported' % type(ncfile)
+            raise TypeError('type %s not supported' % type(ncfile))
     
     Dataset.__doc__ = __doc__
 

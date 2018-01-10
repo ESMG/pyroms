@@ -116,13 +116,13 @@ txres             = Ngl.Resources()          # Text resources desired
 txres.txFontHeightF = 0.015
 
 for file in lst_file:
-    print "Plotting "+file
+    print("Plotting "+file)
     nc = netCDF4.Dataset(file, "r")
     aice = nc.variables["aice"][0,:,:]
     time = nc.variables["ocean_time"][0]
     myday = jday2date(time/86400.)
     date_tag = myday.strftime('%d %B %Y')
-    print date_tag
+    print(date_tag)
     plot = Ngl.contour_map(wks, aice, res)
     Ngl.text_ndc(wks, date_tag, 0.85, 0.94, txres)
     nc.close()

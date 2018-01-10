@@ -47,20 +47,20 @@ def get_Stations_hgrid(gridid, sta_file):
     #Get horizontal grid 
     if ((spherical == 0) or (spherical == 'F')):
         #cartesian grid
-        print 'Load cartesian grid from file'
-        if 'x_rho' in nc.variables.keys() and 'y_rho' in nc.variables.keys():
+        print('Load cartesian grid from file')
+        if 'x_rho' in list(nc.variables.keys()) and 'y_rho' in list(nc.variables.keys()):
             x_rho = nc.variables['x_rho'][:]
             y_rho = nc.variables['y_rho'][:]
             try: angle = nc.variables['angle'][:]
             except: angle = np.zeros(x_rho.shape)
         else:
-            raise ValueError, 'NetCDF file must contain x_rho and y_rho \
-                     and possibly angle for a cartesian grid'
+            raise ValueError('NetCDF file must contain x_rho and y_rho \
+                     and possibly angle for a cartesian grid')
 
         x_rho = nc.variables['x_rho'][:]
         y_rho = nc.variables['y_rho'][:]
 
-        if 'angle' in nc.variables.keys():
+        if 'angle' in list(nc.variables.keys()):
             angle = nc.variables['angle'][:]
         else:
             angle = None
@@ -70,19 +70,19 @@ def get_Stations_hgrid(gridid, sta_file):
 
     else:
         #geographical grid
-        print 'Load geographical grid from file'
+        print('Load geographical grid from file')
         proj = Basemap(projection='merc', resolution=None, lat_0=0, lon_0=0)
-        if 'lon_rho' in nc.variables.keys() and 'lat_rho' in nc.variables.keys():
+        if 'lon_rho' in list(nc.variables.keys()) and 'lat_rho' in list(nc.variables.keys()):
             lon_rho = nc.variables['lon_rho'][:]
             lat_rho = nc.variables['lat_rho'][:]
         else:
-            raise ValueError, 'NetCDF file must contain lon_rho and lat_rho \
-                  for a geographical grid'
+            raise ValueError('NetCDF file must contain lon_rho and lat_rho \
+                  for a geographical grid')
 
         lon_rho = nc.variables['lon_rho'][:]
         lat_rho = nc.variables['lat_rho'][:]
 
-        if 'angle' in nc.variables.keys():
+        if 'angle' in list(nc.variables.keys()):
             angle = nc.variables['angle'][:]
         else:
             angle = None
@@ -156,7 +156,7 @@ def write_Stations_grid(grd, filename='roms_grd.nc'):
         if units is not None:
             nc.variables[name].units = units
         nc.variables[name][:] = var
-        print ' ... wrote ', name
+        print(' ... wrote ', name)
 
     if hasattr(grd.vgrid, 's_rho') is True and grd.vgrid.s_rho is not None:
         write_nc_var(grd.vgrid.theta_s, 'theta_s', (), 'S-coordinate surface control parameter')
@@ -179,7 +179,7 @@ def write_Stations_grid(grd, filename='roms_grd.nc'):
     nc.createVariable('spherical', 'c')
     nc.variables['spherical'].long_name = 'Grid type logical switch'
     nc.variables['spherical'][:] = grd.hgrid.spherical
-    print ' ... wrote ', 'spherical'
+    print(' ... wrote ', 'spherical')
 
     write_nc_var(grd.hgrid.angle_rho, 'angle', ('station'), 'angle between XI-axis and EAST', 'radians')
 

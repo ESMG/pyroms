@@ -23,7 +23,7 @@ for typ in type:
         num_maps = 1
         map_method = 'bilinear'
             
-        print "Making "+str(interp_file1)+"..."
+        print("Making "+str(interp_file1)+"...")
             
         pyroms.remapping.compute_remap_weights(grid1_file,grid2_file,\
                          interp_file1,interp_file2,map1_name,\

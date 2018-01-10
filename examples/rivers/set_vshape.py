@@ -18,7 +18,7 @@ for k in range(N):
 
 area = sum(vshape[:,0])
 vshape = (1.0/area)*vshape
-print vshape[:,0]
+print(vshape[:,0])
 
 vshape2 = np.zeros([N])
 for k in range(N):
@@ -26,7 +26,7 @@ for k in range(N):
 
 area = sum(vshape2[:])
 vshape2 = (1.0/area)*vshape2
-print vshape2
+print(vshape2)
 
 # Copper River
 #for k in range(5490,5497):

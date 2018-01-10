@@ -8,7 +8,7 @@ import pyroms_toolbox
 
 ##  load 2-dimentional interannual discharge data 
 ##  from 1948-2007. See Dai and Trenberth (2002) and Dai et al. (2009)
-print 'Load interannual discharge data'
+print('Load interannual discharge data')
 nc_data = netCDF.Dataset('/archive/u1/uaf/kate/CORE2/runoff.daitren.iaf.10FEB2011.nc', 'r')
 runoff = nc_data.variables['runoff'][:]
 lon = nc_data.variables['xc'][:]
@@ -18,7 +18,7 @@ lat_corner = nc_data.variables['yv'][:]
 mask = nc_data.variables['mask'][:]
 
 ##  create data remap file for scrip
-print 'Create remap grid file for Dai and Trenberth runoff'
+print('Create remap grid file for Dai and Trenberth runoff')
 remap_filename = 'remap_grid_daitren.nc'
 nc = netCDF.Dataset(remap_filename, 'w', format='NETCDF3_CLASSIC')
 nc.Description = 'remap grid file for Dai and Trenberth runoff data'
@@ -84,14 +84,14 @@ nc.close()
 
 
 ##  create Arctic2 remap file for scrip
-print 'Create remap grid file for Arctic2 grid'
+print('Create remap grid file for Arctic2 grid')
 dstgrd = pyroms.grid.get_ROMS_grid('ARCTIC2')
 dstgrd.hgrid.mask_rho = np.ones(dstgrd.hgrid.mask_rho.shape)
 pyroms.remapping.make_remap_grid_file(dstgrd, Cpos='rho')
 
 
 ## compute remap weights
-print 'compute remap weights using scrip'
+print('compute remap weights using scrip')
 # input namelist variables for conservative remapping at rho points
 grid1_file = 'remap_grid_daitren.nc'
 grid2_file = 'remap_grid_ARCTIC2_rho.nc'

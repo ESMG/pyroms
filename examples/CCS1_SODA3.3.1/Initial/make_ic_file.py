@@ -1,7 +1,7 @@
 import subprocess
 import os
 import sys
-import commands
+import subprocess
 import numpy as np
 import pyroms
 import pyroms_toolbox
@@ -20,7 +20,7 @@ filein=data_dir + 'soda3.3.1_5dy_ocean_reg_' + tag + '.nc'
 src_grd = pyroms_toolbox.BGrid_GFDL.get_nc_BGrid_GFDL(data_dir + 'grid/SODA3_0.5deg_grid.nc', name='SODA3.3.1', xrange=(400, 500), yrange=(180, 280))
 dst_grd = pyroms.grid.get_ROMS_grid('CCS')
 
-print '\nBuild IC file from %s' %filein
+print('\nBuild IC file from %s' %filein)
 
 zeta_dst_file = dst_dir + dst_grd.name + '_ic_zeta_' + tag + '_' + src_grd.name + '.nc'
 temp_dst_file = dst_dir + dst_grd.name + '_ic_temp_' + tag + '_' + src_grd.name + '.nc'

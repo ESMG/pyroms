@@ -1,7 +1,7 @@
 import subprocess
 import os
 import sys
-import commands
+import subprocess
 import numpy as np
 
 #increase the maximum number of open files allowed
@@ -27,7 +27,7 @@ dst_grd = pyroms.grid.get_ROMS_grid('CCS')
 
 for filein in filelst:
     tag=filein.replace('soda3.3.1_5dy_ocean_reg_','').replace('.nc','')
-    print '\nBuild OBC file for time %s' %filein
+    print('\nBuild OBC file for time %s' %filein)
     zeta_dst_file = dst_dir + dst_grd.name + '_bdry_zeta_' + tag + '_' + src_grd.name + '.nc'
     temp_dst_file = dst_dir + dst_grd.name + '_bdry_temp_' + tag + '_' + src_grd.name + '.nc'
     salt_dst_file = dst_dir + dst_grd.name + '_bdry_salt_' + tag + '_' + src_grd.name + '.nc'

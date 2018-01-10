@@ -45,7 +45,7 @@ def flood(varz, Bgrdz, Bpos='t', irange=None, jrange=None, \
         h = Bgrdz.h
         mask = Bgrdz.mask_uv[0,:,:]
     else:
-        raise Warning, '%s bad position. Bpos must be t or uv' % Bpos
+        raise Warning('%s bad position. Bpos must be t or uv' % Bpos)
 
     nlev, Mm, Lm = varz.shape
 

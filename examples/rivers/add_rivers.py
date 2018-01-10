@@ -90,7 +90,7 @@ times.long_name = 'river runoff time'
 
 river = out.createVariable('river', 'i4', ('river'))
 river.long_name = 'river runoff identification number'
-out.variables['river'][:] = range(1,len(i)+1)
+out.variables['river'][:] = list(range(1,len(i)+1))
 
 flag = out.createVariable('river_sign', 'f8', ('river'))
 flag.long_name = 'river directional sign'

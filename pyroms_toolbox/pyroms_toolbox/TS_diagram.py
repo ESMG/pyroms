@@ -40,8 +40,8 @@ def TS_diagram(temp, salt, depth=None, dens_lev=None, marker_size=2, fmt='%2.2f'
     if outfile is not None:
         if outfile.find('.png') != -1 or outfile.find('.svg') != -1 or \
            outfile.find('.eps') != -1:
-            print 'Write figure to file', outfile
+            print('Write figure to file', outfile)
             plt.savefig(outfile, dpi=200, facecolor='w', edgecolor='w', \
                         orientation='portrait')
         else:
-            print 'Unrecognized file extension. Please use .png, .svg or .eps file extension.'
+            print('Unrecognized file extension. Please use .png, .svg or .eps file extension.')

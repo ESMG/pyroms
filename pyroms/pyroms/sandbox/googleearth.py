@@ -109,7 +109,7 @@ def kmz_anim(lon, lat, time, prop, **kwargs):
         for frame in range(prop.shape[0]):
             tstart = time_starts[frame]
             tstop = time_stops[frame]
-            print 'Writing frame ', frame, tstart.isoformat(), tstop.isoformat()
+            print('Writing frame ', frame, tstart.isoformat(), tstop.isoformat())
             ax.cla()
             pc = ax.pcolor(lon, lat, prop[frame], **kwargs)
             ax.set_xlim(lon.min(), lon.max())

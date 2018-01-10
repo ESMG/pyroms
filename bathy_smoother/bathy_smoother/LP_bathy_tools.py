@@ -12,7 +12,7 @@ from bathy_smoother import bathy_smoothing
 def GetIJS_rx0(MSK, DEP, r):
 
     eta_rho, xi_rho = DEP.shape
-    print 'eta_rho = ', eta_rho, '  xi_rho = ', xi_rho
+    print('eta_rho = ', eta_rho, '  xi_rho = ', xi_rho)
 
     nbVert = 0
     ListCoord = np.zeros((eta_rho, xi_rho))
@@ -23,8 +23,8 @@ def GetIJS_rx0(MSK, DEP, r):
                ListCoord[iEta,iXi] = nbVert
 
     TotalNbVert = nbVert
-    print 'ListCoord built'
-    print 'Computing inequalities for r = ', r
+    print('ListCoord built')
+    print('Computing inequalities for r = ', r)
 
     TotalNbConstant = 0
     TotalNbEntry = 0
@@ -80,7 +80,7 @@ def GetIJS_rx0(MSK, DEP, r):
                 sList[nbEntry,0] = 1-r
                 nbEntry = nbEntry + 1
 
-    print 'Inequalities for dh(iEta,iXi) and dh(iEta+1,iXi)'
+    print('Inequalities for dh(iEta,iXi) and dh(iEta+1,iXi)')
 
     for iEta in range(eta_rho):
         for iXi in range(xi_rho-1):
@@ -112,7 +112,7 @@ def GetIJS_rx0(MSK, DEP, r):
                 sList[nbEntry,0] = 1-r
                 nbEntry = nbEntry + 1
 
-    print 'Inequalities for dh(iEta,iXi) and dh(iEta,iXi+1)'
+    print('Inequalities for dh(iEta,iXi) and dh(iEta,iXi+1)')
 
     for iEta in range(eta_rho):
         for iXi in range(xi_rho):
@@ -141,16 +141,16 @@ def GetIJS_rx0(MSK, DEP, r):
                 sList[nbEntry,0] = -1
                 nbEntry = nbEntry + 1
 
-    print 'Inequalities dh <= ad and -dh <= ad'
+    print('Inequalities dh <= ad and -dh <= ad')
 
-    print 'rx0: nbEntry = ', nbEntry, '  nbConst = ', nbConst
-    print ' '
+    print('rx0: nbEntry = ', nbEntry, '  nbConst = ', nbConst)
+    print(' ')
 
     if (abs(nbEntry - TotalNbEntry) > 0):
-        raise ValueError, 'We have a coding inconsistency for nbEntry. Please correct'
+        raise ValueError('We have a coding inconsistency for nbEntry. Please correct')
 
     if (abs(nbConst - TotalNbConstant) > 0):
-        raise ValueError, 'We have a coding inconsistency for nbConst. Please correct'
+        raise ValueError('We have a coding inconsistency for nbConst. Please correct')
 
 
     return iList, jList, sList, Constant
@@ -161,7 +161,7 @@ def GetIJS_maxamp(MSK, DEP, AmpConst):
 
 
     eta_rho, xi_rho = DEP.shape
-    print 'eta_rho = ', eta_rho, '  xi_rho = ', xi_rho
+    print('eta_rho = ', eta_rho, '  xi_rho = ', xi_rho)
 
     nbVert = 0
     ListCoord = np.zeros((eta_rho, xi_rho))
@@ -209,15 +209,15 @@ def GetIJS_maxamp(MSK, DEP, AmpConst):
 	            nbConst = nbConst + 1
 	            nbEntry = nbEntry + 1
 
-    print 'Inequalities |h^{new} - h^{old}| <= alpha h^{old}'
-    print 'maxamp: nbEntry = ', nbEntry, '  nbConst = ', nbConst
-    print ' '
+    print('Inequalities |h^{new} - h^{old}| <= alpha h^{old}')
+    print('maxamp: nbEntry = ', nbEntry, '  nbConst = ', nbConst)
+    print(' ')
 
     if (abs(nbEntry - TotalNbEntry) > 0):
-        raise ValueError, 'We have a coding inconsistency for nbEntry. Please correct'
+        raise ValueError('We have a coding inconsistency for nbEntry. Please correct')
 
     if (abs(nbConst - TotalNbConstant) > 0):
-        raise ValueError, 'We have a coding inconsistency for nbConst. Please correct'
+        raise ValueError('We have a coding inconsistency for nbConst. Please correct')
 
 
     return iList, jList, sList, Constant
@@ -227,7 +227,7 @@ def GetIJS_maxamp(MSK, DEP, AmpConst):
 def GetIJS_signs(MSK, SignConst):
 
     eta_rho, xi_rho = MSK.shape
-    print 'eta_rho = ', eta_rho, '  xi_rho = ', xi_rho
+    print('eta_rho = ', eta_rho, '  xi_rho = ', xi_rho)
 
     nbVert = 0
     ListCoord = np.zeros((eta_rho, xi_rho))
@@ -267,18 +267,18 @@ def GetIJS_signs(MSK, SignConst):
                elif (SignConst[iEta, iXi] == -1):
                    sList[nbEntry,0] = 1
                else:
-                   raise ValueError, 'Wrong assigning please check SignConst'
+                   raise ValueError('Wrong assigning please check SignConst')
                nbEntry = nbEntry + 1
 
-    print 'Inequalities dh >= 0 or dh <= 0'
-    print 'signs: nbEntry = ', nbEntry, '  nbConst = ', nbConst
-    print ' '
+    print('Inequalities dh >= 0 or dh <= 0')
+    print('signs: nbEntry = ', nbEntry, '  nbConst = ', nbConst)
+    print(' ')
 
     if (abs(nbEntry - TotalNbEntry) > 0):
-        raise ValueError, 'We have a coding inconsistency for nbEntry. Please correct'
+        raise ValueError('We have a coding inconsistency for nbEntry. Please correct')
 
     if (abs(nbConst - TotalNbConstant) > 0):
-        raise ValueError, 'We have a coding inconsistency for nbConst. Please correct'
+        raise ValueError('We have a coding inconsistency for nbConst. Please correct')
 
 
     return iList, jList, sList, Constant

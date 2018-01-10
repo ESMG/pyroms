@@ -29,7 +29,7 @@ def roms2z(var, grd, grdz, Cpos='rho', irange=None, jrange=None, \
         imode=1
     else:
         imode=0
-        raise Warning, '%s not supported, defaulting to linear' % mode
+        raise Warning('%s not supported, defaulting to linear' % mode)
 
 
     if Cpos is 'rho':
@@ -49,7 +49,7 @@ def roms2z(var, grd, grdz, Cpos='rho', irange=None, jrange=None, \
         depth = grdz.vgrid.z
         mask = grd.hgrid.mask_rho
     else:
-        raise Warning, '%s unknown position. Cpos must be rho, u, v or w.' % Cpos
+        raise Warning('%s unknown position. Cpos must be rho, u, v or w.' % Cpos)
 
     Nm, Mm, Lm = var.shape
     nlev = grdz.vgrid.N

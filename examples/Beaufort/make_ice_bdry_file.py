@@ -33,7 +33,7 @@ dst_grd = pyroms.grid.get_ROMS_grid('BEAUFORT2')
 def do_file(month):
     src_filename = part_filename + month + '*.nc'
     lcopy = list(src_varname)
-    print 'working on file '+src_filename
+    print('working on file '+src_filename)
 # didn't work even with processes=1
 #    pdb.set_trace()
     dst_var = pyroms_toolbox.remapping_bound(lcopy, src_filename,\

@@ -8,14 +8,14 @@ import string
 
 import pyroms
 from station_bound import *
-import commands
+import subprocess
 import pdb
 
 irange = None
 jrange = None
 
 def do_file(file):
-    print 'file is: ' + file
+    print('file is: ' + file)
     var_list = ['u', 'v', 'temp', 'salt', 'zeta']
 #    pdb.set_trace()
     dst_var = station_bound(var_list, file,\
@@ -23,7 +23,7 @@ def do_file(file):
 
 # Change src_filename to your directory for the file's containing variable data
 data_dir = '/archive/u1/uaf/kate/NGOA/run05/'
-lst = commands.getoutput('ls ' + data_dir + 'nwgoa_sta.nc')
+lst = subprocess.getoutput('ls ' + data_dir + 'nwgoa_sta.nc')
 lst_file = lst.split()
 
 src_grd = pyroms.sta_grid.get_Stations_grid('NWGOA3', lst_file[0])

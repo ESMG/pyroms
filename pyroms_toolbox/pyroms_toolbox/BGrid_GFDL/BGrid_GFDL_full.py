@@ -175,7 +175,7 @@ def make_remap_BGrid_GFDL_file(Bgrd, Bpos='t'):
         grid_imask = Bgrd.mask_uv[0,:].flatten()
         Mp, Lp = Bgrd.lon_uv.shape
     else:
-        raise ValueError, 'Bpos must be t or uv'
+        raise ValueError('Bpos must be t or uv')
 
     grid_size = Lp * Mp
 

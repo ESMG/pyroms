@@ -5,7 +5,7 @@ __docformat__ = "restructuredtext en"
 import os
 import sys
 import ctypes
-import cPickle
+import pickle
 from warnings import warn
 from copy import deepcopy
 
@@ -84,7 +84,7 @@ class BoundaryInteractor(object):
     
     def _update_beta_lines(self):
         """Update m/pline by finding the points where self.beta== -/+ 1"""
-        x, y = zip(*self._poly.xy)
+        x, y = list(zip(*self._poly.xy))
         num_points = len(x)-1  # the first and last point are repeated
         
         xp = [x[n] for n in range(num_points) if self.beta[n]==1]
@@ -132,7 +132,7 @@ class BoundaryInteractor(object):
     def _get_ind_under_point(self, event):
         'get the index of the vertex under point if within epsilon tolerance'
         try:
-            x, y = zip(*self._poly.xy)
+            x, y = list(zip(*self._poly.xy))
             
             # display coords
             xt, yt = self._poly.get_transform().numerix_x_y(x, y)
@@ -188,7 +188,7 @@ class BoundaryInteractor(object):
             if ind is not None:
                 self._poly.xy = [tup for i,tup in enumerate(self._poly.xy) \
                                  if i!=ind]
-                self._line.set_data(zip(*self._poly.xy))
+                self._line.set_data(list(zip(*self._poly.xy)))
                 self.beta = [beta for i,beta in enumerate(self.beta) \
                              if i!=ind]
         elif event.key=='p':
@@ -219,7 +219,7 @@ class BoundaryInteractor(object):
                         list(self._poly.xy[:i+1]) +
                         [(event.xdata, event.ydata)] +
                         list(self._poly.xy[i+1:]))
-                    self._line.set_data(zip(*self._poly.xy))
+                    self._line.set_data(list(zip(*self._poly.xy)))
                     self.beta.insert(i+1, 0)
                     break
             s0 = xys[-1]
@@ -229,7 +229,7 @@ class BoundaryInteractor(object):
                 self._poly.xy = np.array(
                     list(self._poly.xy) +
                     [(event.xdata, event.ydata)])
-                self._line.set_data(zip(*self._poly.xy))
+                self._line.set_data(list(zip(*self._poly.xy)))
                 self.beta.append(0)
         elif event.key=='G' or event.key == '1':
             options = deepcopy(self.gridgen_options)
@@ -276,7 +276,7 @@ class BoundaryInteractor(object):
         if self._ind == 0:
             self._poly.xy[-1] = x, y
         
-        x, y = zip(*self._poly.xy)
+        x, y = list(zip(*self._poly.xy))
         self._line.set_data(x[:-1], y[:-1])
         self._update_beta_lines()
         
@@ -311,7 +311,7 @@ class BoundaryInteractor(object):
         # Set default gridgen option, and copy over specified options.
         self.gridgen_options = {'ul_idx': 0, 'shp': (32, 32)}
         
-        for key, value in gridgen_options.iteritems():
+        for key, value in gridgen_options.items():
             self.gridgen_options[key] = gridgen_options[key]
         
         x = list(x); y = list(y)
@@ -364,7 +364,7 @@ class BoundaryInteractor(object):
     def save_bry(self, bry_file='bry.pickle'):
         f = open(bry_file, 'wb')
         bry_dict = {'x': self.x, 'y': self.y, 'beta': self.beta}
-        cPickle.dump(bry_dict, f, protocol=-1)
+        pickle.dump(bry_dict, f, protocol=-1)
         f.close()
     
     def load_bry(self, bry_file='bry.pickle'):
@@ -374,17 +374,17 @@ class BoundaryInteractor(object):
         self._line.set_data(x, y)
         self.beta = bry_dict['beta']
         if hasattr(self, '_poly'):
-            self._poly.xy = zip(x, y)
+            self._poly.xy = list(zip(x, y))
             self._update_beta_lines()
             self._draw_callback(None)
             self._canvas.draw()
     
     def save_grid(self, grid_file='grid.pickle'):
         f = open(grid_file, 'wb')
-        cPickle.dump(self.grd, f, protocol=-1)
+        pickle.dump(self.grd, f, protocol=-1)
         f.close()
     
-    def _get_verts(self): return zip(self.x, self.y)
+    def _get_verts(self): return list(zip(self.x, self.y))
     verts = property(_get_verts)    
     def get_xdata(self): return self._line.get_xdata()
     x = property(get_xdata)
@@ -934,9 +934,9 @@ class CGrid_geo(CGrid):
 
 
     def mask_polygon_geo(lonlat_verts, mask_value=0.0):
-        lon, lat = zip(*lonlat_verts)
+        lon, lat = list(zip(*lonlat_verts))
         x, y = proj(lon, lat, inverse=True)
-        self.mask_polygon(zip(x, y), mask_value)
+        self.mask_polygon(list(zip(x, y)), mask_value)
     
     lon = property(lambda self: self.lon_vert, None, None, 'Shorthand for lon_vert')
     lat = property(lambda self: self.lat_vert, None, None, 'Shorthand for lat_vert')
@@ -1376,25 +1376,25 @@ class edit_mask_mesh_ij(object):
 
         if type(grd).__name__ == 'ROMS_Grid':
             try:
-                x = range(grd.hgrid.lon_vert.shape[1])
-                y = range(grd.hgrid.lat_vert.shape[0])
+                x = list(range(grd.hgrid.lon_vert.shape[1]))
+                y = list(range(grd.hgrid.lat_vert.shape[0]))
                 xv, yv = np.meshgrid(x,y)
                 mask = grd.hgrid.mask_rho
             except:
-                x = range(grd.hgrid.x_vert.shape[1])
-                y = range(grd.hgrid.y_vert.shape[0])
+                x = list(range(grd.hgrid.x_vert.shape[1]))
+                y = list(range(grd.hgrid.y_vert.shape[0]))
                 xv, yv = np.meshgrid(x,y)
                 mask = grd.hgrid.mask_rho
 
         if type(grd).__name__ == 'CGrid_geo':
             try:
-                x = range(grd.lon_vert.shape[1])
-                y = range(grd.lat_vert.shape[0])
+                x = list(range(grd.lon_vert.shape[1]))
+                y = list(range(grd.lat_vert.shape[0]))
                 xv, yv = np.meshgrid(x,y)
                 mask = grd.mask_rho
             except:
-                x = range(grd.x_vert.shape[1])
-                y = range(grd.y_vert.shape[0])
+                x = list(range(grd.x_vert.shape[1]))
+                y = list(range(grd.y_vert.shape[0]))
                 xv, yv = np.meshgrid(x,y)
                 mask = grd.mask_rho
 
@@ -1498,12 +1498,12 @@ class get_position_from_map(object):
             else:
                 idx = np.argwhere(d.flatten() == d.min())
             j, i = np.argwhere(d == d.min())[0]
-            print 'Position on the grid (rho point): i =', i, ', j =', j
+            print('Position on the grid (rho point): i =', i, ', j =', j)
             if self.proj is not None:
                 lon, lat = self.proj(self._xc[j,i], self._yc[j,i], inverse=True)
-                print 'corresponding geographical position : lon = ', lon, ', lat =', lat
+                print('corresponding geographical position : lon = ', lon, ', lat =', lat)
             else:
-                print 'corresponding cartesian position : x = ', self._xc[j,i], ', y =', self._yc[j,i]
+                print('corresponding cartesian position : x = ', self._xc[j,i], ', y =', self._yc[j,i])
     
     def __init__(self, grd, proj=None, **kwargs):
 

@@ -34,7 +34,7 @@ def get_lonlat(iindex, jindex, grd, Cpos='rho'):
         lon = grd.hgrid.lon_psi[:,:]
         lat = grd.hgrid.lat_psi[:,:]
     else:
-        raise Warning, '%s bad position. Cpos must be rho, psi, u or v.' % Cpos
+        raise Warning('%s bad position. Cpos must be rho, psi, u or v.' % Cpos)
 
     return lon[jindex, iindex], lat[jindex, iindex]
 
@@ -60,7 +60,7 @@ def get_ij(longitude, latitude, grd, Cpos='rho'):
         lon = grd.hgrid.lon_psi[:,:]
         lat = grd.hgrid.lat_psi[:,:]
     else:
-        raise Warning, '%s bad position. Cpos must be rho, psi, u or v.' % Cpos
+        raise Warning('%s bad position. Cpos must be rho, psi, u or v.' % Cpos)
 
     lon = lon[:,:] - longitude
     lat = lat[:,:] - latitude
@@ -91,7 +91,7 @@ def find_nearestgridpoints(longitude, latitude, grd, Cpos='rho'):
             lon = grd.hgrid.lon_vert[:,:]
             lat = grd.hgrid.lat_vert[:,:]
         else:
-            raise Warning, '%s bad position. Cpos must be rho, u or v.' % Cpos
+            raise Warning('%s bad position. Cpos must be rho, u or v.' % Cpos)
 
 
     if type(grd).__name__ == 'CGrid_geo':
@@ -109,7 +109,7 @@ def find_nearestgridpoints(longitude, latitude, grd, Cpos='rho'):
             lon = grd.lon_vert[:,:]
             lat = grd.lat_vert[:,:]
         else:
-            raise Warning, '%s bad position. Cpos must be rho, u or v.' % Cpos
+            raise Warning('%s bad position. Cpos must be rho, u or v.' % Cpos)
 
 
     dlon = lon[:,:] - longitude
@@ -168,7 +168,7 @@ def find_nearestgridpoints(longitude, latitude, grd, Cpos='rho'):
                     inside = mpl.path.Path(verts).contains_point([longitude, latitude])
 
                     if inside == 0:
-                        raise ValueError, 'well where is it then?'
+                        raise ValueError('well where is it then?')
 
         iindex = iindex[:2]
         jindex = jindex[1:3]
@@ -190,7 +190,7 @@ def get_coast_from_map(map):
     for k in range(kk):
         ll = len(map.coastsegs[k])
         for l in range(ll):
-            c = map(map.coastsegs[k][l][0], map.coastsegs[k][l][1], inverse=True)
+            c = list(map(map.coastsegs[k][l][0], map.coastsegs[k][l][1], inverse=True))
             coast.append(c)
         coast.append((np.nan, np.nan))
 
@@ -326,7 +326,7 @@ def roms_varlist(option):
         varlist = (['h','s_rho','s_w','Cs_r','Cs_w', \
           'theta_s','theta_b','Tcline','hc'])
     else:
-        raise Warning, 'Unknow varlist id'
+        raise Warning('Unknow varlist id')
 
     return varlist
 
@@ -384,7 +384,7 @@ def move2grid(varin, init_grid, final_grid):
         elif (init_grid == 'v' and final_grid == 'psi'):
             varout = 0.5 * (varin[:,1:] + varin[:,:-1])
         else:
-            raise ValueError, 'Undefined combination for init_grid and final_grid'
+            raise ValueError('Undefined combination for init_grid and final_grid')
 
     elif ndim == 3:
 
@@ -400,15 +400,15 @@ def move2grid(varin, init_grid, final_grid):
         elif (init_grid == 'v' and final_grid == 'psi'):
             varout = 0.5 * (varin[:,:,1:] + varin[:,:,:-1])
         else:
-            raise ValueError, 'Undefined combination for init_grid and final_grid'
+            raise ValueError('Undefined combination for init_grid and final_grid')
 
     else:
-        raise ValueError, 'varin must be 2D or 3D'
+        raise ValueError('varin must be 2D or 3D')
 
     return varout
 
 
-def get_date_tag(roms_time, ref=(2006, 01, 01), format="%d %b %Y at %H:%M:%S"):
+def get_date_tag(roms_time, ref=(2006, 0o1, 0o1), format="%d %b %Y at %H:%M:%S"):
     '''
     tag = get_date_tag(roms_time)
 

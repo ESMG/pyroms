@@ -59,7 +59,7 @@ def flood(varz, grdz, Cpos='rho', irange=None, jrange=None, \
         h = grdz.vgrid.h
         mask = grdz.hgrid.mask_rho
     else:
-        raise Warning, '%s bad position. Use depth at Arakawa-C rho points instead.' % Cpos
+        raise Warning('%s bad position. Use depth at Arakawa-C rho points instead.' % Cpos)
 
     nlev, Mm, Lm = varz.shape
 

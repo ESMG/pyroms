@@ -28,7 +28,7 @@ def sta2z(var, grd, grdz, Cpos='rho', srange=None, \
         imode=1
     else:
         imode=0
-        raise Warning, '%s not supported, defaulting to linear' % mode
+        raise Warning('%s not supported, defaulting to linear' % mode)
 
     if Cpos is 'rho':
         z = grd.vgrid.z_r[0,:]
@@ -37,7 +37,7 @@ def sta2z(var, grd, grdz, Cpos='rho', srange=None, \
         z = grd.vgrid.z_w[0,:]
         depth = grdz.vgrid.z
     else:
-        raise Warning, '%s unknown position. Cpos must be rho or w.' % Cpos
+        raise Warning('%s unknown position. Cpos must be rho or w.' % Cpos)
 
     var = var.T
     Nm, Sm = var.shape

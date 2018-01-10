@@ -114,10 +114,10 @@ def make_remap_grid_file(grid, Cpos='rho', irange=None, jrange=None):
             grid_imask = grd.hgrid.mask_v.flatten()
             Mp, Lp = grd.hgrid.mask_v.shape
     else:
-        raise ValueError, 'Cpos must be rho, u or v'
+        raise ValueError('Cpos must be rho, u or v')
 
     grid_size = Lp * Mp
-    print 'grid shape', Mp, Lp
+    print('grid shape', Mp, Lp)
 
     grid_corner_lon = np.zeros((grid_size, 4))
     grid_corner_lat = np.zeros((grid_size, 4))

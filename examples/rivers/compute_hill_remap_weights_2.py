@@ -15,7 +15,7 @@ import pyroms_toolbox
 #
 #
 ### compute remap weights
-print 'compute remap weights using scrip'
+print('compute remap weights using scrip')
 # input namelist variables for conservative remapping at rho points
 grid1_file = '../version1/remap_grid_runoff.nc'
 grid2_file = 'remap_grid_CI_rho.nc'

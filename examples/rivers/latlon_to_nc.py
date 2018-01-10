@@ -17,7 +17,7 @@ lat2 = np.zeros(lat.shape)
 lon2 = np.zeros(lat.shape)
 
 numy, numx = lat.shape
-print numy, numx
+print(numy, numx)
 
 for j in range(numy):
      lat2[j,:] = lat[numy-1-j,:]

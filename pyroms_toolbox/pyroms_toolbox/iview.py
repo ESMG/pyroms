@@ -160,7 +160,7 @@ def iview(var, tindex, iindex, gridid, filename=None, \
 
     if contour is True:
         if fill is not True:
-            raise Warning, 'Please run again with fill=True for overlay contour.'
+            raise Warning('Please run again with fill=True for overlay contour.')
         else:
             plt.contour(lati, zi, islice, vc[::d], colors='k', linewidths=0.5, linestyles='solid', axes=ax)
 
@@ -203,7 +203,7 @@ def iview(var, tindex, iindex, gridid, filename=None, \
         map = Basemap(projection='merc', llcrnrlon=lon_min, llcrnrlat=lat_min, \
                  urcrnrlon=lon_max, urcrnrlat=lat_max, lat_0=lat_0, lon_0=lon_0, \
                  resolution='i', area_thresh=10.)
-        x, y = map(lon,lat)
+        x, y = list(map(lon,lat))
         # fill land and draw coastlines
         map.drawcoastlines()
         map.fillcontinents(color='grey')
@@ -215,10 +215,10 @@ def iview(var, tindex, iindex, gridid, filename=None, \
 
     if outfile is not None:
         if outfile.find('.png') != -1 or outfile.find('.svg') != -1 or outfile.find('.eps') != -1:
-            print 'Write figure to file', outfile
+            print('Write figure to file', outfile)
             plt.savefig(outfile, dpi=200, facecolor='w', edgecolor='w', orientation='portrait')
         else:
-            print 'Unrecognized file extension. Please use .png, .svg or .eps file extension.'	 
+            print('Unrecognized file extension. Please use .png, .svg or .eps file extension.')	 
 
 
     return

@@ -17,28 +17,28 @@ def get_ijcoast_line(mask):
             if mask[jidx[i], iidx[i]] != mask[jidx[i]+1, iidx[i]]:
                 ic = ([iidx[i]-0.5, iidx[i]+1-0.5])
                 jc = ([jidx[i]+1-0.5, jidx[i]+1-0.5])
-                seg = zip(ic,jc)
+                seg = list(zip(ic,jc))
                 ijcoast.append(seg)
 
         if jidx[i] != 0:
             if mask[jidx[i], iidx[i]] != mask[jidx[i]-1, iidx[i]]:
                 ic = ([iidx[i]-0.5, iidx[i]+1-0.5])
                 jc = ([jidx[i]-0.5, jidx[i]-0.5])
-                seg = zip(ic,jc)
+                seg = list(zip(ic,jc))
                 ijcoast.append(seg)
 
         if iidx[i] != mask.shape[1]-1:
             if mask[jidx[i], iidx[i]] != mask[jidx[i], iidx[i]+1]:
                 ic = ([iidx[i]+1-0.5, iidx[i]+1-0.5])
                 jc = ([jidx[i]-0.5, jidx[i]+1-0.5])
-                seg = zip(ic,jc)
+                seg = list(zip(ic,jc))
                 ijcoast.append(seg)
 
         if iidx[i] != 0:
             if mask[jidx[i], iidx[i]] != mask[jidx[i], iidx[i]-1]:
                 ic = ([iidx[i]-0.5, iidx[i]-0.5])
                 jc = ([jidx[i]-0.5, jidx[i]+1-0.5])
-                seg = zip(ic,jc)
+                seg = list(zip(ic,jc))
                 ijcoast.append(seg)
 
     return np.array(ijcoast)

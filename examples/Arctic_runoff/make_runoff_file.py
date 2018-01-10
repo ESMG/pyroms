@@ -14,7 +14,7 @@ import pyroms_toolbox
 
 # load 2-dimentional interannual discharge data 
 # from 1948-2007. See Dai and Trenberth (2002) and Dai et al. (2009)
-print 'Load interannual discharge data'
+print('Load interannual discharge data')
 nc_data = netCDF.Dataset('/archive/u1/uaf/kate/CORE2/runoff.daitren.iaf.10FEB2011.nc', 'r')
 data = nc_data.variables['runoff'][:]
 # time with leap year
@@ -111,7 +111,7 @@ mask_idx = np.where(grd.hgrid.mask_rho == 0)
 
 nct=0
 for t in range(nt):
-    print 'Remapping runoff for time %f' %time[nct]
+    print('Remapping runoff for time %f' %time[nct])
     # conservative horizontal interpolation using scrip
     runoff_raw = pyroms.remapping.remap(data[t,:,:], wts_file, \
                                            spval=spval)
@@ -124,8 +124,8 @@ for t in range(nt):
     runoff_spread = np.zeros((Mp,Lp))
     idx = np.where(runoff != 0)
     for p in range(np.size(idx,1)):
-        j = range(max(0,idx[0][p]-rspread), min(Mp-1,idx[0][p]+rspread+1))
-        i = range(max(0,idx[1][p]-rspread), min(Lp-1,idx[1][p]+rspread+1))
+        j = list(range(max(0,idx[0][p]-rspread), min(Mp-1,idx[0][p]+rspread+1)))
+        i = list(range(max(0,idx[1][p]-rspread), min(Lp-1,idx[1][p]+rspread+1)))
         ji = np.meshgrid(j,i)
         sidx = np.where(maskl[ji] == 1)
         nbpt = np.size(sidx) / 2

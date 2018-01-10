@@ -150,7 +150,7 @@ def isoview(var, prop, tindex, isoval, grid, filename=None, \
               urcrnrlon=lon_max, urcrnrlat=lat_max, lat_0=lat_0, lon_0=lon_0, \
                  resolution='h', area_thresh=5.)
         #map = pyroms.utility.get_grid_proj(grd, type=proj)
-        x, y = map(lon,lat)
+        x, y = list(map(lon,lat))
     
     if fill_land is True and proj is not None:
         # fill land and draw coastlines
@@ -184,7 +184,7 @@ def isoview(var, prop, tindex, isoval, grid, filename=None, \
 
     if contour is True:
         if fill is not True:
-            raise Warning, 'Please run again with fill=True to overlay contour.'
+            raise Warning('Please run again with fill=True to overlay contour.')
         else:
             if proj is not None:
                 Basemap.contour(map, x, y, isoslice, vc[::d], colors='k', linewidths=0.5, linestyles='solid')
@@ -207,11 +207,11 @@ def isoview(var, prop, tindex, isoval, grid, filename=None, \
     if outfile is not None:
         if outfile.find('.png') != -1 or outfile.find('.svg') != -1 or \
            outfile.find('.eps') != -1:
-            print 'Write figure to file', outfile
+            print('Write figure to file', outfile)
             plt.savefig(outfile, dpi=200, facecolor='w', edgecolor='w', \
                         orientation='portrait')
         else:
-            print 'Unrecognized file extension. Please use .png, .svg or .eps file extension.'	 
+            print('Unrecognized file extension. Please use .png, .svg or .eps file extension.')	 
 
 
     if proj is None:

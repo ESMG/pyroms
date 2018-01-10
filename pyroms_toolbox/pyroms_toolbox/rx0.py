@@ -50,10 +50,10 @@ def rx0(h,rmask):
     ravg = rx0.mean()
     rmed = np.median(rx0)
 
-    print '  '
-    print 'Minimum r-value = ', rmin
-    print 'Maximum r-value = ', rmax
-    print 'Mean    r-value = ', ravg
-    print 'Median  r-value = ', rmed
+    print('  ')
+    print('Minimum r-value = ', rmin)
+    print('Maximum r-value = ', rmax)
+    print('Mean    r-value = ', ravg)
+    print('Median  r-value = ', rmed)
 
     return rx0

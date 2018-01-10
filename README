@@ -69,11 +69,11 @@ If you needed the LDFLAGS above, you'll need to add it to the
 install script too, at least for the build of scrip.
 
 I'm getting inconsistent results with where the .so files need to be. Best
-results for me are if I go to the site-packages directory where pycnal
+results for me are if I go to the site-packages directory where pyroms
 got installed and copy all the .so files:
 
-    cp pycnal/*.so .
-    cp pycnal_toolbox/*.so .
+    cp pyroms/*.so .
+    cp pyroms_toolbox/*.so .
     cp bathy_smoother/*.so .
 
 Make sure this site-packages directory is in your PYTHONPATH.

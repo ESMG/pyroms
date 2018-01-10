@@ -66,7 +66,7 @@ class ocean_in:
 	    key = key.strip()
 	    value = value.lstrip()
         except:
-            print("trouble!", first)
+            print(("trouble!", first))
             exit()
         key = key.strip()
         value_list = [value]
@@ -135,7 +135,7 @@ class ocean_in:
                     eq = m.group(2)
                     value = m.group(3)
                 except:
-                    print("trouble with line:", line)
+                    print(("trouble with line:", line))
                     exit()
                 key = key.strip()
                 value = [value.strip()]
@@ -155,7 +155,7 @@ class ocean_in:
         try:
             fh = open(fname, 'w')
         except:
-            print('trouble opening file', fname)
+            print(('trouble opening file', fname))
             exit()
 
         for item in self.var_list:
@@ -261,7 +261,7 @@ class ocean_in:
 		            t_dict[var][-1] += ' \\'
 	                t_dict[var] = t_dict[var] + new_dict[var]
                     except:
- 	                print("List", i, "is missing variable", var)
+ 	                print(("List", i, "is missing variable", var))
 
             t_dict['Ngrids'][0] = str(int(t_dict['Ngrids'][0]) + \
 	           int(new_dict['Ngrids'][0]))

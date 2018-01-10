@@ -28,7 +28,7 @@ def plot_Robinson_pyngl(var,lon,lat,wks_name='plot', clim=None, cspace=None, cma
         try:
             Ngl.define_colormap(wks,mycmap)
         except:
-            raise Warning, 'Unknown colormap'
+            raise Warning('Unknown colormap')
 
     #
     #  The next set of resources will apply to the contour plot and the labelbar.

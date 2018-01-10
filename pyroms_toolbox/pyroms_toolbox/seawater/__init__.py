@@ -56,9 +56,9 @@
 # --- Exceptions ---
 class OutOfRangeError(Exception): pass
 
-from density import dens, svan, sigma, drhodt, alpha, drhods, beta
-from salinity import salt, cond
-from heat import heatcap, adtgrad, temppot, temppot0
-from misc import freezept, soundvel, depth
+from .density import dens, svan, sigma, drhodt, alpha, drhods, beta
+from .salinity import salt, cond
+from .heat import heatcap, adtgrad, temppot, temppot0
+from .misc import freezept, soundvel, depth
 
 

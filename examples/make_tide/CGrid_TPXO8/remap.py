@@ -23,7 +23,7 @@ def remap(src_varname, src_file, src_grd, dst_grd, dst_file, dmax=0, cdepth=0, k
     nctime.units = 'days since 1900-01-01 00:00:00'
 
     # create tide file
-    print '\nCreating tide file', dst_file
+    print('\nCreating tide file', dst_file)
     if os.path.exists(dst_file) is True:
         os.remove(dst_file)
     pyroms_toolbox.nc_create_roms_file(dst_file, dst_grd, nctime)
@@ -96,10 +96,10 @@ def remap(src_varname, src_file, src_grd, dst_grd, dst_file, dmax=0, cdepth=0, k
         field = 'y-velocity, scalar, series'
 
     else:
-        raise ValueError, 'Undefined src_varname'
+        raise ValueError('Undefined src_varname')
 
     # create variable in file
-    print 'Creating variable', dst_varname
+    print('Creating variable', dst_varname)
     nc.createVariable(dst_varname, 'f8', dimensions, fill_value=spval)
     # nc.createVariable(dst_varname, 'f8', dimensions)
     nc.variables[dst_varname].long_name = long_name
@@ -107,15 +107,15 @@ def remap(src_varname, src_file, src_grd, dst_grd, dst_file, dmax=0, cdepth=0, k
     nc.variables[dst_varname].field = field
 
     # remapping
-    print 'remapping', dst_varname, 'from', src_grd.name, \
-              'to', dst_grd.name
+    print('remapping', dst_varname, 'from', src_grd.name, \
+              'to', dst_grd.name)
 
     # horizontal interpolation using scrip weights
-    print 'horizontal interpolation using scrip weights'
+    print('horizontal interpolation using scrip weights')
     dst_var = pyroms.remapping.remap(src_var, wts_file, spval=spval)
 
     # write data in destination file
-    print 'write data in destination file\n'
+    print('write data in destination file\n')
     nc.variables[dst_varname][:] = dst_var
 
     # close file

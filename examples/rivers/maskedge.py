@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import numpy as np
 import netCDF4
 import sys
@@ -310,10 +310,10 @@ def edges(imask, plist, iwat, iland):
     for i in range(1,Lp-2):
         if ((imask[Mp-2,i] == iwat) and (imask[Mp-2,i+1] == iland)):
             peninsula(imask, plist, i+1, Mp-1, 'south', iwat, iland)
-    for j in list(reversed(range(2,Mp-1))):
+    for j in list(reversed(list(range(2,Mp-1)))):
         if ((imask[j,Lp-2] == iwat) and (imask[j-1,Lp-2] == iland)):
             peninsula(imask, plist, Lp-1, j, 'west', iwat, iland)
-    for i in list(reversed(range(2,Lp-1))):
+    for i in list(reversed(list(range(2,Lp-1)))):
         if ((imask[1,i] == iwat) and (imask[1,i-1] == iland)):
             peninsula(imask, plist, i, 1, 'north', iwat, iland)
 

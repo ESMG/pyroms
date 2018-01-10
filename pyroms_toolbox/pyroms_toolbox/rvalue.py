@@ -15,10 +15,10 @@ def rvalue(h):
     """
     #check that h is 2D
     if (len(h.squeeze().shape)!=2):
-        raise ValueError, 'h must be two dimensions'
+        raise ValueError('h must be two dimensions')
 
     #check whether h contains any NaNs
-    if np.isnan(h).any(): raise Warning, 'the height array contains NaNs'
+    if np.isnan(h).any(): raise Warning('the height array contains NaNs')
 
     #compute  diff(h)/2*mean(h) at each velocity grid point
     dhdx_u = np.diff(h, axis=1)

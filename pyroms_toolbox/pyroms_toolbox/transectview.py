@@ -206,8 +206,8 @@ def transectview(var, tindex, istart, iend, jstart, jend, gridid, \
         map = Basemap(projection='merc', llcrnrlon=lon_min, llcrnrlat=lat_min, \
                  urcrnrlon=lon_max, urcrnrlat=lat_max, lat_0=lat_0, lon_0=lon_0, \
                  resolution='i', area_thresh=10.)
-        x, y = map(lon,lat)
-        xt, yt = map(lont[0,:],latt[0,:])
+        x, y = list(map(lon,lat))
+        xt, yt = list(map(lont[0,:],latt[0,:]))
         # fill land and draw coastlines
         map.drawcoastlines()
         map.fillcontinents(color='grey')
@@ -218,10 +218,10 @@ def transectview(var, tindex, istart, iend, jstart, jend, gridid, \
 
     if outfile is not None:
         if outfile.find('.png') != -1 or outfile.find('.svg') != -1 or outfile.find('.eps') != -1:
-            print 'Write figure to file', outfile
+            print('Write figure to file', outfile)
             plt.savefig(outfile, dpi=200, facecolor='w', edgecolor='w', orientation='portrait')
         else:
-            print 'Unrecognized file extension. Please use .png, .svg or .eps file extension.'	 
+            print('Unrecognized file extension. Please use .png, .svg or .eps file extension.')	 
 
 
     return

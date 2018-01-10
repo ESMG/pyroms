@@ -10,7 +10,7 @@ src_varname = ['zeta', 'temp', 'salt', 'u', 'v', 'bac', 'c1', 'c2', 'c3', \
 	       'ddn', 'ddsi', 'ldoc', 'ldon', 'nh4', 'no3', 'ox', 'po4', \
                's1', 's2', 's3', 'sdoc', 'sdon', 'sio4', 'talk', 'tco2', \
 	       'zz1', 'zz2', 'zzc1', 'zzc2']
-print 'Number of variables', len(src_varname)
+print('Number of variables', len(src_varname))
 irange = None
 jrange = None
 

@@ -22,28 +22,28 @@ def get_coast_line(Bgrd):
             if mask[jidx[i], iidx[i]] != mask[jidx[i]+1, iidx[i]]:
                 lonc = ([lon[jidx[i]+1,iidx[i]], lon[jidx[i]+1,iidx[i]+1]])
                 latc = ([lat[jidx[i]+1,iidx[i]], lat[jidx[i]+1,iidx[i]+1]])
-                seg = zip(lonc,latc)
+                seg = list(zip(lonc,latc))
                 coast.append(seg)
 
         if jidx[i] != 0:
             if mask[jidx[i], iidx[i]] != mask[jidx[i]-1, iidx[i]]:
                 lonc = ([lon[jidx[i],iidx[i]], lon[jidx[i],iidx[i]+1]])
                 latc = ([lat[jidx[i],iidx[i]], lat[jidx[i],iidx[i]+1]])
-                seg = zip(lonc,latc)
+                seg = list(zip(lonc,latc))
                 coast.append(seg)
 
         if iidx[i] != mask.shape[1]-1:
             if mask[jidx[i], iidx[i]] != mask[jidx[i], iidx[i]+1]:
                 lonc = ([lon[jidx[i],iidx[i]+1], lon[jidx[i]+1,iidx[i]+1]])
                 latc = ([lat[jidx[i],iidx[i]+1], lat[jidx[i]+1,iidx[i]+1]])
-                seg = zip(lonc,latc)
+                seg = list(zip(lonc,latc))
                 coast.append(seg)
 
         if iidx[i] != 0:
             if mask[jidx[i], iidx[i]] != mask[jidx[i], iidx[i]-1]:
                 lonc = ([lon[jidx[i],iidx[i]], lon[jidx[i]+1,iidx[i]]])
                 latc = ([lat[jidx[i],iidx[i]], lat[jidx[i]+1,iidx[i]]])
-                seg = zip(lonc,latc)
+                seg = list(zip(lonc,latc))
                 coast.append(seg)
 
     return coast

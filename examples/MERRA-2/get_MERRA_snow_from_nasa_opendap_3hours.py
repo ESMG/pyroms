@@ -6,9 +6,9 @@ from datetime import datetime
 import pyroms
 import pyroms_toolbox
 
-import cookielib
+import http.cookiejar
 import netrc
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import re
 import pydap.lib
 from pydap.exceptions import ClientError
@@ -25,26 +25,26 @@ debuglevel=1
 
 def install_basic_client(uri='', user='', passwd='', use_netrc=True):
     # Create special opener with support for Cookies
-    cj = cookielib.CookieJar()
+    cj = http.cookiejar.CookieJar()
     # Create the password manager and load with the credentials using
-    pwMgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+    pwMgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
     # Get passwords from the .netrc file nless use_netrc is False
     if use_netrc:
         logins = netrc.netrc()
         accounts = logins.hosts # a dist of hosts and tuples
-        for host, info in accounts.iteritems():
+        for host, info in accounts.items():
             login, account, password = info
 #            log.debug('Host: %s; login: %s; account: %s; password: %s' % (host, login, account, password))
             pwMgr.add_password(None, host, login, password)
     if uri and user and passwd:
         pwMgr.add_password(None, uri, user, passwd)
-    opener = urllib2.build_opener(urllib2.HTTPBasicAuthHandler(pwMgr), urllib2.HTTPCookieProcessor(cj))
+    opener = urllib.request.build_opener(urllib.request.HTTPBasicAuthHandler(pwMgr), urllib.request.HTTPCookieProcessor(cj))
     opener.addheaders = [('User-agent', pydap.lib.USER_AGENT)]
-    urllib2.install_opener(opener)
+    urllib.request.install_opener(opener)
     def new_request(url):
         if url[-1] is '&': url = url[0:-1]
 #        log.debug('Opening %s (install_basic_client)' % url)
-        r = urllib2.urlopen(url)
+        r = urllib.request.urlopen(url)
         resp = r.headers.dict
         resp['status'] = str(r.code)
         data = r.read()

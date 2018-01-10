@@ -9,17 +9,17 @@ import string
 
 import pyroms
 import pyroms_toolbox
-import commands
+import subprocess
 
 irange = None
 jrange = None
 
 def do_file(file):
-    print 'file is: ' + file
+    print('file is: ' + file)
     start = string.find(file,'_')
     end = string.find(file,'_',start+1)
     var = file[start+1:end]
-    print 'var is: ' + var
+    print('var is: ' + var)
     if var == 'uv':
         dst_var = pyroms_toolbox.remapping_bound(['u', 'v'], file,\
                      wts_file,src_grd,dst_grd,rotate_uv=True,\
@@ -34,7 +34,7 @@ lst_file = []
 data_dir = '/archive/u1/uaf/kate/COSINE/data/'
 #lst = commands.getoutput('ls ' + data_dir + '*_1979.nc')
 #lst = commands.getoutput('ls ' + data_dir + 'Pacific_s?o[n4]_1979.nc')
-lst = commands.getoutput('ls ' + data_dir + 'Pacific_[tuvz]*_1979.nc')
+lst = subprocess.getoutput('ls ' + data_dir + 'Pacific_[tuvz]*_1979.nc')
 lst = lst.split()
 lst_file = lst_file + lst
 

@@ -48,7 +48,7 @@ def create_HYCOM_file(name, time, lon, lat, var):
 
     nc.close()
 
-    print 'Done with file %s' %name
+    print('Done with file %s' %name)
 
 
 
@@ -81,7 +81,7 @@ else:
 #    daysinyear = 365
     daysinyear = 32
 for day in range(1,daysinyear+1):
-    print 'Processing file for day %03d, year %04d' %(day, year)
+    print('Processing file for day %03d, year %04d' %(day, year))
     url='http://tds.hycom.org/thredds/dodsC/datasets/GLBa0.08/expt_91.1/2015/2d/archv.%04d_%03d_00_2d.nc' %(year,day)
     #get data from server
     try:
@@ -90,7 +90,7 @@ for day in range(1,daysinyear+1):
         spval = var.get_fill_value()
         dataset.close()
     except:
-        print 'No file on the server... We skip this day.'
+        print('No file on the server... We skip this day.')
         retry_day.append(day)
         continue
 
@@ -102,10 +102,10 @@ for day in range(1,daysinyear+1):
 
 if retry == 'True':
     if len(retry_day) != 0:
-        print "Some files have not been downloded... Let's try again"
+        print("Some files have not been downloded... Let's try again")
     while len(retry_day) != 0:
         for day in retry_day:
-            print 'Retry file for day %03d, year %04d' %(day, year)
+            print('Retry file for day %03d, year %04d' %(day, year))
             url='http://tds.hycom.org/thredds/dodsC/datasets/GLBa0.08/expt_91.1/2015/2d/archv.%04d_%03d_00_2d.nc' %(year,day)
             #get data from server
             try:
@@ -114,7 +114,7 @@ if retry == 'True':
                 spval = var.get_fill_value()
                 dataset.close()
             except:
-                print 'No file on the server... We skip this day.'
+                print('No file on the server... We skip this day.')
             continue
 
             #create netCDF file

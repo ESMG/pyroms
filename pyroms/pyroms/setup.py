@@ -104,5 +104,5 @@ if __name__ == '__main__':
           license = 'BSD',
           platforms = ["any"],
           ext_modules = [iso,interp,remapping],
-          classifiers = filter(None, classifiers.split("\n")),
+          classifiers = [_f for _f in classifiers.split("\n") if _f],
           )

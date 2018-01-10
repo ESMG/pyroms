@@ -7,7 +7,7 @@ import pyroms_toolbox
 
 
 # load 2-dimentional discharge data 
-print 'Load discharge data'
+print('Load discharge data')
 nc_data = netCDF.Dataset('CI_runoff.nc', 'r')
 nc_rivers = netCDF.Dataset('Cook_Inlet_rivers.nc', 'a')
 data = nc_data.variables['Runoff'][:]
@@ -47,7 +47,7 @@ for k in range(Nr):
 
 nct=0
 for t in range(nt):
-    print 'Remapping runoff for time %f' %time[t]
+    print('Remapping runoff for time %f' %time[t])
     for j in range(Mp):
         for i in range(Lp):
 	    for n in range(count[j,i]):
@@ -69,4 +69,4 @@ for t in range(nt):
 # close netcdf file
 nc_rivers.close()
 
-print 'sum 4', sum180
+print('sum 4', sum180)

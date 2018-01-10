@@ -15,7 +15,7 @@ def plot_mask(gridid, Cpos='rho', proj=None, **kwargs):
         grd = pyroms.grid.get_ROMS_grid(gridid)
 
     Cpos = str(Cpos)
-    print Cpos
+    print(Cpos)
 
     # get grid information
     if Cpos == 'rho':
@@ -34,7 +34,7 @@ def plot_mask(gridid, Cpos='rho', proj=None, **kwargs):
         mask = grd.hgrid.mask_v
 
     else:
-        raise Warning, 'Cpos must be rho, u or v'
+        raise Warning('Cpos must be rho, u or v')
 
     # defined color map
     land_color = kwargs.pop('land_color', (0.6, 1.0, 0.6))

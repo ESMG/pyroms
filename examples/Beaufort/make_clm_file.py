@@ -9,7 +9,7 @@ import string
 
 import pyroms
 import pyroms_toolbox
-import commands
+import subprocess
 
 irange=(370,580)
 jrange=(460,580)

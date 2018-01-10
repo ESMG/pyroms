@@ -73,9 +73,9 @@ for year in lst_year:
     lst = lst.split()
     lst_file = lst_file + lst
 
-print 'Build CLM file from the following file list:'
-print lst_file
-print ' '
+print('Build CLM file from the following file list:')
+print(lst_file)
+print(' ')
 
 src_grd_file = data_dir + '../SODA_grid.cdf'
 src_grd = pyroms_toolbox.BGrid_SODA.get_nc_BGrid_SODA(src_grd_file, name='SODA_2.1.6_ARCTIC2', area='npolar', ystart=240)

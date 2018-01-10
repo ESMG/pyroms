@@ -5,8 +5,8 @@ import os
 try:
     from lpsolve55 import *
 except:
-    print 'lpsolve55.so not found.'
-    print 'Linear programming method will not be available.'
+    print('lpsolve55.so not found.')
+    print('Linear programming method will not be available.')
 
 
 # This code is adapted from the matlab code
@@ -24,9 +24,9 @@ def WriteLinearProgram(FileName, iList, jList, sList, Constant, ObjectiveFct):
 
     nbVar = ObjectiveFct.shape[0]
     nbConst = Constant.shape[0]
-    print 'Write linear program'
-    print 'nbvar = ', nbVar, ' nbConst = ', nbConst
-    print ' '
+    print('Write linear program')
+    print('nbvar = ', nbVar, ' nbConst = ', nbConst)
+    print(' ')
 
     f = open(FileName,'w')
 
@@ -105,7 +105,7 @@ def SolveLinearProgram(iList, jList, sList, Constant, ObjectiveFct):
 
     nbVar = ObjectiveFct.shape[0]
     nbConstraint = Constant.shape[0]
-    print 'Solving a linear program of ', nbVar, ' variables and ', nbConstraint, ' Constraints'
+    print('Solving a linear program of ', nbVar, ' variables and ', nbConstraint, ' Constraints')
 
     while(1):
         H = localtime()
@@ -120,20 +120,20 @@ def SolveLinearProgram(iList, jList, sList, Constant, ObjectiveFct):
         if (os.path.exists(FileInput) is False and os.path.exists(FileOutput) is False):
             break
 
-        print 'We failed with FileInput = ', FileInput
+        print('We failed with FileInput = ', FileInput)
 
     testfeasibility = WriteLinearProgram(FileInput, iList, jList, sList, Constant, ObjectiveFct)
     if (testfeasibility == 0):
-        raise ValueError, 'Feasibility test failed. testfeasibility = 0.'
+        raise ValueError('Feasibility test failed. testfeasibility = 0.')
 
-    print 'Linear program written in FileOutput=', FileOutput
+    print('Linear program written in FileOutput=', FileOutput)
 
     lp_handle = lpsolve('read_lp_file', FileInput)
     result = lpsolve('solve', lp_handle)
     obj, ValueVar, ValueFct, testfeasibility = lpsolve('get_solution', result)
     lpsolve('delete_lp', result)
 
-    print 'Linear program solved'
+    print('Linear program solved')
 
 
     return ValueFct, ValueVar, testfeasibility

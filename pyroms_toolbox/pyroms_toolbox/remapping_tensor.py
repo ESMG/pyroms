@@ -42,7 +42,7 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
         varname = [varname]
         nvar = len(varname)
     else:
-        raise ValueError, 'varname must be a str or a list of str'
+        raise ValueError('varname must be a str or a list of str')
 
     # srcfile argument
     if type(srcfile).__name__ == 'list':
@@ -51,7 +51,7 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
         srcfile = sorted(glob.glob(srcfile))
         nfile = len(srcfile)
     else:
-        raise ValueError, 'src_srcfile must be a str or a list of str'
+        raise ValueError('src_srcfile must be a str or a list of str')
 
     # get wts_file
     if type(wts_files).__name__ == 'str':
@@ -59,7 +59,7 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
  
     # loop over the srcfile
     for nf in range(nfile):
-        print 'Working with file', srcfile[nf], '...'
+        print('Working with file', srcfile[nf], '...')
 
         # get time 
         ocean_time = pyroms.utility.get_nc_var('ocean_time', srcfile[nf])
@@ -67,12 +67,12 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
 
         # trange argument
         if trange is None:
-            trange = range(ntime)
+            trange = list(range(ntime))
 
         # create destination file
         dstfile = dstdir + os.path.basename(srcfile[nf])[:-3] + '_' + dstgrd.name + '.nc'
         if os.path.exists(dstfile) is False:
-            print 'Creating destination file', dstfile
+            print('Creating destination file', dstfile)
             pyroms_toolbox.nc_create_roms_file(dstfile, dstgrd, ocean_time)
 
         # open destination file
@@ -86,10 +86,10 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
 
             # loop over variable
             for nv in range(nvar):
-                print ' '
-                print 'remapping', varname[nv], 'from', srcgrd.name, \
-                      'to', dstgrd.name
-                print 'time =', ocean_time[nt]   
+                print(' ')
+                print('remapping', varname[nv], 'from', srcgrd.name, \
+                      'to', dstgrd.name)
+                print('time =', ocean_time[nt])   
 
                 # get source data
                 src_var = pyroms.utility.get_nc_var(varname[nv], srcfile[nf])
@@ -98,7 +98,7 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 try:
                     spval = src_var._FillValue
                 except:
-                    raise Warning, 'Did not find a _FillValue attribute.' 
+                    raise Warning('Did not find a _FillValue attribute.') 
 
                 # irange
                 if irange is None:
@@ -116,19 +116,19 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 if src_var.dimensions[2].find('_rho') != -1:
                     Cpos='rho'
                 else:
-                    print "Sigma should be on rho points"
+                    print("Sigma should be on rho points")
 
-                print 'Arakawa C-grid position is', Cpos
+                print('Arakawa C-grid position is', Cpos)
 
                 # create variable in _destination file
                 if nt == trange[0]:
-                    print 'Creating variable', varname[nv]
+                    print('Creating variable', varname[nv])
                     nc.createVariable(varname[nv], 'f8', src_var.dimensions, fill_value=spval)
                     nc.variables[varname[nv]].long_name = src_var.long_name
                     try:
                         nc.variables[varname[nv]].units = src_var.units
                     except:
-                        print varname[nv]+' has no units'
+                        print(varname[nv]+' has no units')
                     nc.variables[varname[nv]].time = src_var.time
                     nc.variables[varname[nv]].coordinates = \
                         src_var.coordinates
@@ -142,7 +142,7 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
                         break
                     else:
                         if s == len(wts_files) - 1:
-                            raise ValueError, 'Did not find the appropriate remap weights file'
+                            raise ValueError('Did not find the appropriate remap weights file')
 
 
                 # write data in destination file
@@ -151,9 +151,9 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
 
             # rotate the velocity field if requested
 #            print datetime.datetime.now()
-            print ' ' 
-            print 'remapping and rotating sigma from', srcgrd.name, \
-                  'to', dstgrd.name
+            print(' ') 
+            print('remapping and rotating sigma from', srcgrd.name, \
+                  'to', dstgrd.name)
 
             # get source data
             src_11 = pyroms.utility.get_nc_var(varname[0], srcfile[nf])
@@ -161,7 +161,7 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
             try:
                 spval = src_11._FillValue
             except:
-                raise Warning, 'Did not find a _FillValue attribute.' 
+                raise Warning('Did not find a _FillValue attribute.') 
 
             src_11 = src_11[nt,jjrange[0]:jjrange[1],iirange[0]:iirange[1]]
 
@@ -171,22 +171,22 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
             src_12 = pyroms.utility.get_nc_var(varname[2], srcfile[nf])
             src_12 = src_12[nt,jjrange[0]:jjrange[1],iirange[0]:iirange[1]]
 
-            print "before", src_11[-1,30], src_12[-1,30], src_22[-1,30]
+            print("before", src_11[-1,30], src_12[-1,30], src_22[-1,30])
             if shapiro:
                 src_11 = pyroms_toolbox.shapiro_filter.shapiro2(src_11,2)
                 src_22 = pyroms_toolbox.shapiro_filter.shapiro2(src_22,2)
                 src_12 = pyroms_toolbox.shapiro_filter.shapiro2(src_12,2)
-            print "after", src_11[-1,30], src_12[-1,30], src_22[-1,30]
+            print("after", src_11[-1,30], src_12[-1,30], src_22[-1,30])
 
             # horizontal interpolation using scrip weights
-            print 'horizontal interpolation using scrip weights'
+            print('horizontal interpolation using scrip weights')
             dst_11 = pyroms.remapping.remap(src_11, wts_file, \
                                               spval=spval)
             dst_22 = pyroms.remapping.remap(src_22, wts_file, \
                                               spval=spval)
             dst_12 = pyroms.remapping.remap(src_12, wts_file, \
                                               spval=spval)
-            print "after remapping", dst_11[-1,30], dst_12[-1,30], dst_22[-1,30]
+            print("after remapping", dst_11[-1,30], dst_12[-1,30], dst_22[-1,30])
 
             if rotate_sig is True:
                 # rotate stress tensor
@@ -198,7 +198,7 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 sin_ang = np.sin(angle)
                 Lp = cos_ang.shape[-1]
                 Mp = cos_ang.shape[-2]
-                print "Lp, Mp", Lp, Mp
+                print("Lp, Mp", Lp, Mp)
 
                 for j in range(Mp):
                     for i in range(Lp):
@@ -216,7 +216,7 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
                         dst_11[j,i] = sig_rot[0,0]
                         dst_12[j,i] = sig_rot[0,1]
                         dst_22[j,i] = sig_rot[1,1]
-                print "after rotating", dst_11[-1,30], dst_12[-1,30], dst_22[-1,30]
+                print("after rotating", dst_11[-1,30], dst_12[-1,30], dst_22[-1,30])
 
 
             # spval
@@ -226,7 +226,7 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
             dst_22[idx[0], idx[1]] = spval
 
             # write data in destination file
-            print 'write data in destination file'
+            print('write data in destination file')
             nc.variables['sig11'][nctidx] = dst_11
             nc.variables['sig12'][nctidx] = dst_12
             nc.variables['sig22'][nctidx] = dst_22

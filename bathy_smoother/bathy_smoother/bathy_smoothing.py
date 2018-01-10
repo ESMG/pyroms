@@ -55,7 +55,7 @@ def smoothing_Positive_rx0(MSK, Hobs, rx0max):
         if (IsFinished == 1):
             break
 
-    print '     nbModif=', nbModif
+    print('     nbModif=', nbModif)
 
     return RetBathy
 
@@ -108,7 +108,7 @@ def smoothing_Negative_rx0(MSK, Hobs, rx0max):
         if (IsFinished == 1):
             break
 
-    print '     nbModif=', nbModif
+    print('     nbModif=', nbModif)
 
     return RetBathy
 
@@ -164,7 +164,7 @@ def smoothing_PositiveVolume_rx0(MSK, Hobs, rx0max, AreaMatrix):
         if (IsFinished == 1):
             break
 
-    print '     nbModif=', nbModif
+    print('     nbModif=', nbModif)
 
     VolOrig=0
     VolWork=0
@@ -230,7 +230,7 @@ def smoothing_NegativeVolume_rx0(MSK, Hobs, rx0maxi, AreaMatrix):
         if (IsFinished == 1):
             break
 
-    print '     nbModif=', nbModif
+    print('     nbModif=', nbModif)
 
     VolOrig=0
     VolWork=0
@@ -308,7 +308,7 @@ def smoothing_PlusMinus_rx0(MSK, Hobs, rx0max, AreaMatrix):
     H = AreaMatrix * RetBathy * MSK
     TheBathymetry2 = H.sum()
     DeltaBathymetry = TheBathymetry1 - TheBathymetry2
-    print 'DeltaBathymetry = ', DeltaBathymetry
+    print('DeltaBathymetry = ', DeltaBathymetry)
 
     return RetBathy, HmodifVal, ValueFct
 
@@ -403,9 +403,9 @@ def smoothing_Laplacian_rx0(MSK, Hobs, rx0max):
             eStr='';
             NumberDones = np.zeros((eta_rho, xi_rho))
 
-        print 'Iteration #', Iter
-        print 'current r=', realR, '  nbPointMod=', nbPointMod, eStr
-        print ' '
+        print('Iteration #', Iter)
+        print('current r=', realR, '  nbPointMod=', nbPointMod, eStr)
+        print(' ')
 
         Iter = Iter + 1
 

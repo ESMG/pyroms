@@ -43,7 +43,7 @@ def remapping_bound_sig(varname, srcfile, wts_files, srcgrd, dst_grd, \
         varname = [varname]
         nvar = len(varname)
     else:
-        raise ValueError, 'varname must be a str or a list of str'
+        raise ValueError('varname must be a str or a list of str')
 
     # srcfile argument
     if type(srcfile).__name__ == 'list':
@@ -52,7 +52,7 @@ def remapping_bound_sig(varname, srcfile, wts_files, srcgrd, dst_grd, \
         srcfile = sorted(glob.glob(srcfile))
         nfile = len(srcfile)
     else:
-        raise ValueError, 'src_srcfile must be a str or a list of str'
+        raise ValueError('src_srcfile must be a str or a list of str')
 
     # get wts_file
     if type(wts_files).__name__ == 'str':
@@ -67,7 +67,7 @@ def remapping_bound_sig(varname, srcfile, wts_files, srcgrd, dst_grd, \
     nctidx = 0
     # loop over the srcfile
     for nf in range(nfile):
-        print 'Working with file', srcfile[nf], '...'
+        print('Working with file', srcfile[nf], '...')
 
         # get time 
         ocean_time = pyroms.utility.get_nc_var('ocean_time', srcfile[nf])
@@ -75,14 +75,14 @@ def remapping_bound_sig(varname, srcfile, wts_files, srcgrd, dst_grd, \
 
         # trange argument
         if trange is None:
-            trange = range(ntime)
+            trange = list(range(ntime))
 
         # create destination file
         if nctidx == 0:
             dstfile = dstdir + os.path.basename(srcfile[nf])[:-3] + '_' \
                    + dst_grd.name + '_bdry.nc'
             if os.path.exists(dstfile) is False:
-                print 'Creating destination file', dstfile
+                print('Creating destination file', dstfile)
                 pyroms_toolbox.nc_create_roms_file(dstfile, dst_grd, \
                     ocean_time, lgrid=False)
 
@@ -96,10 +96,10 @@ def remapping_bound_sig(varname, srcfile, wts_files, srcgrd, dst_grd, \
 
             # loop over variable
             for nv in range(nvar):
-                print ' '
-                print 'remapping', varname[nv], 'from', srcgrd.name, \
-                      'to', dst_grd.name
-                print 'time =', ocean_time[nt]   
+                print(' ')
+                print('remapping', varname[nv], 'from', srcgrd.name, \
+                      'to', dst_grd.name)
+                print('time =', ocean_time[nt])   
                 Mp, Lp = dst_grd.hgrid.mask_rho.shape
 
                 # get source data
@@ -109,7 +109,7 @@ def remapping_bound_sig(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 try:
                     spval = src_var._FillValue
                 except:
-                    raise Warning, 'Did not find a _FillValue attribute.' 
+                    raise Warning('Did not find a _FillValue attribute.') 
 
                 # irange
                 if irange is None:
@@ -127,15 +127,15 @@ def remapping_bound_sig(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 if src_var.dimensions[2].find('_rho') != -1:
                     Cpos='rho'
                 else:
-                    print "Sigma should be on rho points"
+                    print("Sigma should be on rho points")
 
-                print 'Arakawa C-grid position is', Cpos
+                print('Arakawa C-grid position is', Cpos)
 
                 # create variable in _destination file
                 if nctidx == 0:
                     for sid in sides:
                        varn = varname[nv]+str(sid)
-                       print 'Creating variable', varn
+                       print('Creating variable', varn)
                        dimens = [i for i in src_var.dimensions]
                        for dim in dimens:
                            if re.match(dimexcl[sid],dim):
@@ -143,11 +143,11 @@ def remapping_bound_sig(varname, srcfile, wts_files, srcgrd, dst_grd, \
                        nc.createVariable(varn, 'f8', dimens, \
                            fill_value=spval)
                        nc.variables[varn].long_name = varname[nv] + \
-                            ' ' + long[sid] + ' boundary condition'
+                            ' ' + int[sid] + ' boundary condition'
                        try:
                            nc.variables[varn].units = src_var.units
                        except:
-                           print varn+' has no units'
+                           print(varn+' has no units')
                        nc.variables[varn].time = src_var.time
                        nc.variables[varn].coordinates = \
                            str(dimens.reverse())
@@ -160,7 +160,7 @@ def remapping_bound_sig(varname, srcfile, wts_files, srcgrd, dst_grd, \
                         break
                     else:
                         if s == len(wts_files) - 1:
-                            raise ValueError, 'Did not find the appropriate remap weights file'
+                            raise ValueError('Did not find the appropriate remap weights file')
 
 #                print datetime.datetime.now()
                 # horizontal interpolation using scrip weights
@@ -175,7 +175,7 @@ def remapping_bound_sig(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 dst_var_west = dst_var[:, 0]
 
                 # write data in destination file
-                print 'write data in destination file'
+                print('write data in destination file')
                 sid = '_west'
                 varn = varname[nv]+str(sid)
                 nc.variables[varn][nctidx] = np.squeeze(dst_var_west)
@@ -194,9 +194,9 @@ def remapping_bound_sig(varname, srcfile, wts_files, srcgrd, dst_grd, \
 
             # rotate the velocity field if requested
             if rotate_sig:
-                print ' ' 
-                print 'remapping and rotating sigma from', srcgrd.name, \
-                      'to', dst_grd.name
+                print(' ') 
+                print('remapping and rotating sigma from', srcgrd.name, \
+                      'to', dst_grd.name)
 
                 # get source data
                 src_11 = pyroms.utility.get_nc_var(varname[0], srcfile[nf])
@@ -204,7 +204,7 @@ def remapping_bound_sig(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 try:
                     spval = src_11._FillValue
                 except:
-                    raise Warning, 'Did not find a _FillValue attribute.' 
+                    raise Warning('Did not find a _FillValue attribute.') 
 
                 src_11 = src_11[nt,jjrange[0]:jjrange[1],iirange[0]:iirange[1]]
 
@@ -216,7 +216,7 @@ def remapping_bound_sig(varname, srcfile, wts_files, srcgrd, dst_grd, \
 
 
                 # horizontal interpolation using scrip weights
-                print 'horizontal interpolation using scrip weights'
+                print('horizontal interpolation using scrip weights')
                 dst_11 = pyroms.remapping.remap(src_11, wts_file, \
                                                   spval=spval)
                 dst_22 = pyroms.remapping.remap(src_22, wts_file, \
@@ -253,7 +253,7 @@ def remapping_bound_sig(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 sin_ang = np.sin(angle)
                 Lp = cos_ang.shape[-1]
                 Mp = cos_ang.shape[-2]
-                print "Lp, Mp", Lp, Mp
+                print("Lp, Mp", Lp, Mp)
 
                 if rotate_sig:
                     # North
@@ -329,7 +329,7 @@ def remapping_bound_sig(varname, srcfile, wts_files, srcgrd, dst_grd, \
                 dst_12_west[idx_west[0]] = spval
 
                 # write data in destination file
-                print 'write data in destination file'
+                print('write data in destination file')
                 sid = '_west'
                 varn = 'sig11'+str(sid)
                 nc.variables[varn][nctidx] = dst_11_west
