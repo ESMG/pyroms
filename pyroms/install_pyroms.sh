@@ -28,11 +28,9 @@ make
 make lib
 make shlib
 make install
-# Now setting this above because this gave me:
+# Now setting this above because this gave me an error:
 #PYROMS_PATH=`python -c 'import pyroms ; print pyroms.__path__[0]'`
 # $ echo $PYROMS_PATH
-# scrip.so not found. Remapping function will not be available
-# /u1/uaf/kshedstrom/python/lib/python3.5/site-packages/pycnal
 cp libgridgen.so $PYROMS_PATH
 echo "installing scrip..."
 cd $CURDIR/external/scrip/source

@@ -27,8 +27,8 @@ INSTALL_DATA = ${INSTALL} -m 644
 #### End of system configuration section. ####
 
 CC = gcc
-CFLAGS = -I/u1/uaf/kshedstrom/python/include
-LDFLAGS = -L$DESTDIR/lib
+CFLAGS = -g -O2 -Wall -pedantic
+LDFLAGS = 
 
 AR = ar
 ARFLAGS = cru

@@ -24,18 +24,18 @@ INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_DATA = ${INSTALL} -m 644
 
-NOCOMPLEX =
-HAVE_GRIDNODES_H =
+NOCOMPLEX = 
+HAVE_GRIDNODES_H = 
 
 CC = gcc
 CFLAGS = -I/u1/uaf/kshedstrom/python/include
 CFLAGS_TRIANGLE = -I/u1/uaf/kshedstrom/python/include -w -ffloat-store
-LDFLAGS = -L$DESTDIR/lib
+LDFLAGS = -L/u1/uaf/kshedstrom/python/lib
 
 AR = ar
 ARFLAGS = cru
 
-LIBS = -lm
+LIBS = -lgu -lm 
 
 MLIB = -lm
 

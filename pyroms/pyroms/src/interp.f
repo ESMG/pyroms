@@ -162,6 +162,9 @@
       integer i, ii, j, n, ni
       real*8 d1, d2
       real*8 x(n), y(n), xi(ni), yi(ni)
+!f2py intent(out) yi
+!f2py intent(hide) n
+!f2py intent(hide) ni
 !
 !-----------------------------------------------------------------------
 !  Begin executable code.

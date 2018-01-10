@@ -53,7 +53,7 @@ setup.py scripts for each, plus an examples directory.
 
 For now,
 
-  cd pyroms_toolbox; python setup.py build --fcompiler=gnu95;
+  cd pyroms_toolbox; python setup.py build
                      python setup.py install --prefix=xxx;
                      cd ..
 
@@ -74,7 +74,7 @@ A note on the .so files from fortran: They might now end up with names like:
 It's OK - they'll load as long as they are in your PYTHONPATH. You might
 also need libgu.so to be in your LD_LIBRARY_PATH. I'm getting inconsistent
 results with where the .so files need to be. Best results for me are if I go
-to the site-packages directory where pycnal got installed and copy all the
+to the site-packages directory where pyroms got installed and copy all the
 .so files:
 
     cp pyroms/*.so .
@@ -84,7 +84,7 @@ to the site-packages directory where pycnal got installed and copy all the
 Make sure this site-packages directory is in your PYTHONPATH.
 
 Also, f2py may or may not be called f2py3, depending. It's listed explicitly
-in the scrip makefile and under pycnal_toolbox/pycnal_toolbox/src/makefile.
+in the scrip makefile and under pyroms_toolbox/pyroms_toolbox/src/makefile.
 
 Running
 -------

@@ -29,7 +29,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 
 CC = gcc
 CFLAGS = -I/u1/uaf/kshedstrom/python/include
-LDFLAGS = -L$DESTDIR/lib
+LDFLAGS = -L/u1/uaf/kshedstrom/python/lib
 CPPFLAGS = -I/u1/uaf/kshedstrom/python/include
 
 AR = ar

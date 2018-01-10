@@ -134,7 +134,7 @@ def remap2(src_array, remap_file, src_grad1=None, src_grad2=None, \
                                                  tmp_src_grad1, tmp_src_grad2, \
                                                  tmp_src_grad3)
                 else:
-                    raise ValueError('Unknow method')
+                    raise ValueError('Unknown method')
 
 
             # mask dst_array

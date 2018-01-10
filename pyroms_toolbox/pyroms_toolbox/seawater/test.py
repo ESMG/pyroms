@@ -10,7 +10,7 @@ if __name__ == '__main__':
     # Check value from UNESCO 1983, p. 20
     print("Checking svan")
     print()
-    print("S = 40, T = 40 °C, P = 10000 dbar")
+    print("S = 40, T = 40 C, P = 10000 dbar")
     print(format1 % "svan(40, 40, 10000)", svan(40, 40, 10000))
     print(format2, "981.30210E-8")
 
@@ -18,7 +18,7 @@ if __name__ == '__main__':
     # Check value from UNESCO 1983, p. 20
     print("Checking sigma")
     print()
-    print("S = 40, T = 40 °C, P = 10000 dbar")
+    print("S = 40, T = 40 C, P = 10000 dbar")
     print(format1 % "sigma(40, 40, 10000)", sigma(40, 40, 10000))
     print(format2, 59.82037)
 
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     print("Checking salt")
     print()
     print("Salinity = 40.0000")
-    print("cond = 1.888091, T = 40 °C, P = 10000 dbar")
+    print("cond = 1.888091, T = 40 C, P = 10000 dbar")
     print(format1 % "salt(1.888091, 40, 10000)", salt(1.888091, 40, 10000))
     print(format2, 40.0000)
 
@@ -35,7 +35,7 @@ if __name__ == '__main__':
     # Check value from UNESCO 1983, p. 11
     print("Checking cond")
     print()
-    print("S = 40, T = 40 °C, P = 10000 dbar")
+    print("S = 40, T = 40 C, P = 10000 dbar")
     print(format1 % "cond(40, 40, 10000)", cond(40, 40, 10000))
     print(format2, 1.888091)
 
@@ -43,7 +43,7 @@ if __name__ == '__main__':
     # Check value from UNESCO 1983, p. 35
     print("Checking heatcap")
     print()
-    print("S = 40, T = 40 °C, P = 10000 dbar")
+    print("S = 40, T = 40 C, P = 10000 dbar")
     print(format1 % "heatcap(40, 40, 10000)", heatcap(40, 40, 10000))
     print(format2, "3849.500")
 
@@ -51,7 +51,7 @@ if __name__ == '__main__':
     # Check value from UNESCO 1983, p. 36
     print("Checking adtgrad")
     print()
-    print("S = 40, T = 40 °C, P = 10000 dbar")
+    print("S = 40, T = 40 C, P = 10000 dbar")
     print(format1 % "adtgrad(40, 40, 10000)", adtgrad(40, 40, 10000))
     print(format2, "3.255976E-4")
 
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     # Check value from UNESCO 1983, p. 44
     print("Checking temppot")
     print()
-    print("S = 40, T = 40 °C, P = 10000 dbar, Pref = 0")
+    print("S = 40, T = 40 C, P = 10000 dbar, Pref = 0")
     print(format1 % "temppot(40, 40, 10000)", temppot(40, 40, 10000))
     print(format2, 36.89073)
 
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     # Check value from UNESCO 1983, p. 49
     print("Checking soundvel")
     print()
-    print("S = 40, T = 40 °C,  P = 10000 dbar")
+    print("S = 40, T = 40 C,  P = 10000 dbar")
     print(format1 % "soundvel(40, 40, 10000)", soundvel(40, 40, 10000))
     print(format2, 1731.995)
 
