@@ -8,7 +8,7 @@ import copy
 
 """
 Some tools for parsing the ROMS ocean.in file, saving it to JSON and/or
-writing it back out to ocean.in format. The Python format is a list and 
+writing it back out to ocean.in format. The Python format is a list and
 a dictionary. The dictionary has the settable variables such as 'Ngrids'
 as keys, the values as values in string form. The list is more complex,
 containing one element for comment lines and blank lines and up to four
@@ -27,18 +27,18 @@ class Line:
     """
     def __init__(self, text, ngrids=False, pos=0, comment="", extra=[]):
         """(Line, str, bool, int, str) -> NoneType
-	Constructor for line with ROMS variable name.
+        Constructor for line with ROMS variable name.
 
-	text -    String with ROMS variable name.
-	ngrids -  One value per grid (True) or one for all grids (False)
-	pos -     Position of first = in file.
+        text -    String with ROMS variable name.
+        ngrids -  One value per grid (True) or one for all grids (False)
+        pos -     Position of first = in file.
         comment - String containing a final comment (if any)
-	"""
-	self.text = text
-	self.ngrids = ngrids
-	self.pos = pos
-	self.comment = comment
-	self.extra = extra
+        """
+        self.text = text
+        self.ngrids = ngrids
+        self.pos = pos
+        self.comment = comment
+        self.extra = extra
 
 
 class ocean_in:
@@ -51,35 +51,35 @@ class ocean_in:
     def do_lines(self, line_list):
 # Private helper function for dealing with continuation lines
         first = line_list.pop(0)
-	extra = []
+        extra = []
         if len(first) > 1:
             extra.append(first[1])
         else:
             extra.append("")
         p = re.compile('([^=]+)(=+)([^=!]+)')
         try:
-	    eq_pos = first[0].find('=')
+            eq_pos = first[0].find('=')
             m = p.match(first[0])
             key = m.group(1)
             eq = m.group(2)
             value = m.group(3)
-	    key = key.strip()
-	    value = value.lstrip()
+            key = key.strip()
+            value = value.lstrip()
         except:
             print(("trouble!", first))
             exit()
         key = key.strip()
         value_list = [value]
         for item in line_list:
-	    line = item[0]
+            line = item[0]
             line = line.strip()
             value_list.append(line)
             if len(item) > 1:
                 extra.append(item[1])
             else:
                 extra.append("")
-	ngrids = False
-	if eq == "==": ngrids = True
+        ngrids = False
+        if eq == "==": ngrids = True
         my_list = Line(key, ngrids=ngrids, pos=eq_pos, extra = extra)
         self.var_list.append(my_list)
         self.var_dict[key] = value_list
@@ -98,12 +98,12 @@ class ocean_in:
 
         fh = open(fname)
         for line in fh:
-	    # Handle blank lines and lines starting with !
-	    line = line.rstrip()
+            # Handle blank lines and lines starting with !
+            line = line.rstrip()
             if len(line) == 0 or line[0] == '!':
                 line_list = Line(line)
                 self.var_list.append(line_list)
-	        continue
+                continue
 
             # Look for comments after the assignment and stash them away
             p = re.compile('(.*\S)( *!.*)')
@@ -160,64 +160,64 @@ class ocean_in:
 
         for item in self.var_list:
             # Deal with non-var lines first
-	    if item.pos == 0:
+            if item.pos == 0:
                 fh.write(item.text)
                 fh.write("\n")
-	        continue
-	    
+                continue
+
             varname = item.text
-	    eq = "="
-	    if item.ngrids: eq = "=="
-	    value = self.var_dict[varname]
+            eq = "="
+            if item.ngrids: eq = "=="
+            value = self.var_dict[varname]
             string = ' '.join(value)
             string = item.text + ' ' + eq + ' ' + string
-	    if item.comment:
+            if item.comment:
                 string += item.comment
 
-	    index = string.find('=')
-	    # We might need pos below.
-	    pos = item.pos
+            index = string.find('=')
+            # We might need pos below.
+            pos = item.pos
             if pos > index:
-	        string = ' '*(item.pos-index) + string
+                string = ' '*(item.pos-index) + string
 
-	    # Look for continuation lines and split them up
-	    first = True
+            # Look for continuation lines and split them up
+            first = True
             p = re.compile('(\\\\|\|)')
             m = p.findall(string)
-	    if m:
-		# All continuation chunks should have an "extra"
-		# except after a merge
-		extra = item.extra
-	        count = 0
+            if m:
+                # All continuation chunks should have an "extra"
+                # except after a merge
+                extra = item.extra
+                count = 0
                 for match in m:
                     index = string.find(match)
                     part = string[0:index+len(match)]
-		    if len(extra) > count and extra[count]:
+                    if len(extra) > count and extra[count]:
                         part += extra[count]
-		    count += 1
+                    count += 1
                     string = string[index+len(match):]
 
-	            # Add space to front of trailing lines
-	            if first:
-	                first = False
-	            else:
+                    # Add space to front of trailing lines
+                    if first:
+                        first = False
+                    else:
                         p = re.compile('([^ ])')
-		        m = p.search(part)
-	                index = part.find(m.group(1))
-		        part = ' '*(pos-index + 3) + part
+                        m = p.search(part)
+                        index = part.find(m.group(1))
+                        part = ' '*(pos-index + 3) + part
 
                     fh.write(part)
                     fh.write("\n")
-	        # Get the last continued line and pad it too
+                # Get the last continued line and pad it too
                 p = re.compile('([^ ])')
-	        m = p.search(string)
-	        index = string.find(m.group(1))
-	        string = ' '*(pos-index + 3) + string
-		if len(extra) > count and extra[count]:
+                m = p.search(string)
+                index = string.find(m.group(1))
+                string = ' '*(pos-index + 3) + string
+                if len(extra) > count and extra[count]:
                     string += extra[count]
                 fh.write(string)
                 fh.write("\n")
-	    else:
+            else:
                 fh.write(string)
                 fh.write("\n")
 
@@ -243,28 +243,28 @@ class ocean_in:
         my_ocn_list - a list of dictionaries to add to self.
 
         Given a ROMS ocean_in object, merge the dictionaries from one or
-	more other grids to create a multi-grid ocean_in.
+        more other grids to create a multi-grid ocean_in.
         """
         # Copy here in case we're adding this object to itself
         t_dict = copy.deepcopy(self.var_dict)
         num_lists = len(my_ocn_list)
         for i in range(num_lists):
-	    new_dict = my_ocn_list[i].var_dict
+            new_dict = my_ocn_list[i].var_dict
             for it in self.var_list:
-	        var = it.text
-	        if it.ngrids:
- 	            try:
+                var = it.text
+                if it.ngrids:
+                    try:
 # If the first string ends in "\" or "|", it is likely to be
 # a set of long filenames for which we need to add "\" before appending
-		        first = t_dict[var][0]
-		        if first[-1] == '|' or first[-1] == '\\':
-		            t_dict[var][-1] += ' \\'
-	                t_dict[var] = t_dict[var] + new_dict[var]
+                        first = t_dict[var][0]
+                        if first[-1] == '|' or first[-1] == '\\':
+                            t_dict[var][-1] += ' \\'
+                        t_dict[var] = t_dict[var] + new_dict[var]
                     except:
- 	                print(("List", i, "is missing variable", var))
+                        print(("List", i, "is missing variable", var))
 
             t_dict['Ngrids'][0] = str(int(t_dict['Ngrids'][0]) + \
-	           int(new_dict['Ngrids'][0]))
+                          int(new_dict['Ngrids'][0]))
         self.var_dict = t_dict
 
 def main():

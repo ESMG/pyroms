@@ -62,7 +62,7 @@ def WriteLinearProgram(FileName, iList, jList, sList, Constant, ObjectiveFct):
             if (Constant[iConst,0] < -tolCrit):
                 testfeasibility = 0
                 return testfeasibility
- 
+
         else:
             string = 'row%s: ' %str(iConst+1)
             f.write(string)
@@ -71,9 +71,9 @@ def WriteLinearProgram(FileName, iList, jList, sList, Constant, ObjectiveFct):
                 sL = sList[H[iH],0]
                 string = '%.2f X%d ' %(sL, jL)
                 if (sL > 0):
-	            add='+'
+                    add='+'
                 else:
-	            add=''
+                    add=''
 
                 string = '%s%s' %(add, string)
                 f.write(string)

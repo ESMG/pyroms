@@ -18,38 +18,38 @@ from pyroms.vgrid import *
 class Sta_CGrid(object):
     """
     Stations Grid
-     
+
     EXAMPLES:
     --------
-     
+
     >>> x = arange(8)
     >>> y = arange(8)*2-1
     >>> grd = pyroms.grid.StaGrid(x, y)
     >>> print grd.x_rho
     [4.5 4.5 4.5 4.5 4.5 4.5 4.5]
     """
-    
+
     def __init__(self, x_rho, y_rho, angle_rho=None):
-                
+
         assert np.ndim(x_rho)==1 and np.ndim(y_rho)==1 and \
-	    np.shape(x_rho)==np.shape(y_rho), \
+            np.shape(x_rho)==np.shape(y_rho), \
             'x and y must be 2D arrays of the same size.'
-        
+
         if np.any(np.isnan(x_rho)) or np.any(np.isnan(y_rho)):
             x_rho = np.ma.masked_where( (isnan(x_rho)) | (isnan(y_rho)) , x_rho)
             y_rho = np.ma.masked_where( (isnan(x_rho)) | (isnan(y_rho)) , y_rho)
-            
+
         self.x_rho = x_rho
         self.y_rho = y_rho
 
         self.spherical = 'F'
-        
+
         if angle_rho is None:
             self.angle_rho = np.zeros(len(self.y_rho))
         else:
             self.angle_rho = angle_rho
 
-   
+
     x = property(lambda self: self.x_rho, None, None, 'Return x_rho')
     y = property(lambda self: self.y_rho, None, None, 'Return y_rho')
 
@@ -57,11 +57,11 @@ class Sta_CGrid(object):
 class Sta_CGrid_geo(Sta_CGrid):
     """
     Curvilinear Arakawa C-grid defined in geographic coordinates
-    
+
     For a geographic grid, a projection may be specified, or The default
     projection for will be defined by the matplotlib.toolkits.Basemap
     projection:
-    
+
     proj = Basemap(projection='merc', resolution=None, lat_ts=0.0)
     """
 

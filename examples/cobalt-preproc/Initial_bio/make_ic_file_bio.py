@@ -1,7 +1,7 @@
 import subprocess
 import os
 import sys
-import commands
+import subprocess
 import numpy as np
 import netCDF4 as nc
 
@@ -28,7 +28,7 @@ tracer_units = ['mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol
 
 
 
-print '\nBuild IC file for time %s' %tag
+print('\nBuild IC file for time %s' %tag)
 for ktr in np.arange(len(list_tracer)):
     mydict = {'tracer':list_tracer[ktr],'longname':tracer_longname[ktr],'units':tracer_units[ktr],'file':data_dir + 'ocean_cobalt_tracers.1988-2007.01.nc'}
     remap_bio(mydict, src_grd, dst_grd, dst_dir=dst_dir)

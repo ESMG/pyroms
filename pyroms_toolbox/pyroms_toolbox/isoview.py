@@ -15,29 +15,29 @@ def isoview(var, prop, tindex, isoval, grid, filename=None, \
     map = isoview(var, prop, tindex, isoval, grid, {optional switch})
 
     optional switch:
-      - filename         if defined, load the variable from file
-      - cmin		 set color minimum limit
-      - cmax		 set color maximum limit
-      - clev		 set the number of color step
-      - fill             use contourf instead of pcolor
-      - contour          overlay contour (request fill=True)
-      - d                contour density (default d=4) 
-      - range            set axis limit
-      - fts              set font size (default: 12)
-      - title            add title to the plot
-      - clb              add colorbar (defaul: True)
-      - pal              set color map (default: cm.jet)
-      - proj             set projection type (default: merc)
-      - fill_land        fill land masked area with gray (defaul: True)
-      - outfile          if defined, write figure to file
+      - filename     if defined, load the variable from file
+      - cmin         set color minimum limit
+      - cmax         set color maximum limit
+      - clev         set the number of color step
+      - fill         use contourf instead of pcolor
+      - contour      overlay contour (request fill=True)
+      - d            contour density (default d=4)
+      - range        set axis limit
+      - fts          set font size (default: 12)
+      - title        add title to the plot
+      - clb          add colorbar (defaul: True)
+      - pal          set color map (default: cm.jet)
+      - proj         set projection type (default: merc)
+      - fill_land    fill land masked area with gray (defaul: True)
+      - outfile      if defined, write figure to file
 
-    plot a projection of variable at property == isoval. If filename 
-    is provided, var and prop must be a strings and the variables will 
+    plot a projection of variable at property == isoval. If filename
+    is provided, var and prop must be a strings and the variables will
     be load from the file.
     grid can be a grid object or a gridid. In the later case, the grid
     object correponding to the provided gridid will be loaded.
-    If proj is not None, return a Basemap object to be used with quiver 
-    for example. 
+    If proj is not None, return a Basemap object to be used with quiver
+    for example.
     """
 
     # get grid
@@ -81,10 +81,10 @@ def isoview(var, prop, tindex, isoval, grid, filename=None, \
     # get constante-iso slice
     if tindex == -1:
         var = var[:,:,:]
-	prop = prop[:,:,:]
+        prop = prop[:,:,:]
     else:
         var = var[tindex,:,:,:]
-	prop = prop[tindex,:,:,:]
+        prop = prop[tindex,:,:,:]
 
     if fill == True:
         isoslice, lon, lat = pyroms.tools.isoslice(var, prop, isoval, \
@@ -132,7 +132,7 @@ def isoview(var, prop, tindex, isoval, grid, filename=None, \
         lon_max = lon.max()
         lon_0 = (lon_min + lon_max) / 2.
         lat_min = lat.min()
-        lat_max = lat.max()     
+        lat_max = lat.max()
         lat_0 = (lat_min + lat_max) / 2.
     else:
         lon_min = range[0]
@@ -151,36 +151,36 @@ def isoview(var, prop, tindex, isoval, grid, filename=None, \
                  resolution='h', area_thresh=5.)
         #map = pyroms.utility.get_grid_proj(grd, type=proj)
         x, y = list(map(lon,lat))
-    
+
     if fill_land is True and proj is not None:
         # fill land and draw coastlines
         map.drawcoastlines()
         map.fillcontinents(color='grey')
     else:
-        if proj is not None: 
+        if proj is not None:
             Basemap.pcolor(map, x, y, mask, vmin=-2, cmap=cm.gray)
             pyroms_toolbox.plot_coast_line(grd, map)
-        else: 
+        else:
             plt.pcolor(lon, lat, mask, vmin=-2, cmap=cm.gray)
             pyroms_toolbox.plot_coast_line(grd)
-    
+
     if fill is True:
-        if proj is not None: 
+        if proj is not None:
             cf = Basemap.contourf(map, x, y, isoslice, vc, cmap = pal, \
                                   norm = pal_norm)
-        else: 
+        else:
             cf = plt.contourf(lon, lat, isoslice, vc, cmap = pal, \
                               norm = pal_norm)
     else:
-        if proj is not None: 
+        if proj is not None:
             cf = Basemap.pcolor(map, x, y, isoslice, cmap = pal, norm = pal_norm)
-        else: 
+        else:
             cf = plt.pcolor(lon, lat, isoslice, cmap = pal, norm = pal_norm)
 
     if clb is True:
-    	clb = plt.colorbar(cf, fraction=0.075,format='%.2f')
-    	for t in clb.ax.get_yticklabels():
-    	    t.set_fontsize(fts)
+        clb = plt.colorbar(cf, fraction=0.075,format='%.2f')
+        for t in clb.ax.get_yticklabels():
+            t.set_fontsize(fts)
 
     if contour is True:
         if fill is not True:
@@ -188,11 +188,11 @@ def isoview(var, prop, tindex, isoval, grid, filename=None, \
         else:
             if proj is not None:
                 Basemap.contour(map, x, y, isoslice, vc[::d], colors='k', linewidths=0.5, linestyles='solid')
-            else: 
+            else:
                 plt.contour(lon, lat, isoslice, vc[::d], colors='k', linewidths=0.5, linestyles='solid')
 
     if proj is None and range is not None:
-        plt.axis(range) 
+        plt.axis(range)
 
 
     if title is not None:
@@ -211,7 +211,7 @@ def isoview(var, prop, tindex, isoval, grid, filename=None, \
             plt.savefig(outfile, dpi=200, facecolor='w', edgecolor='w', \
                         orientation='portrait')
         else:
-            print('Unrecognized file extension. Please use .png, .svg or .eps file extension.')	 
+            print('Unrecognized file extension. Please use .png, .svg or .eps file extension.')
 
 
     if proj is None:

@@ -1,7 +1,7 @@
 import subprocess
 import os
 import sys
-import commands
+import subprocess
 import numpy as np
 from datetime import *
 
@@ -69,7 +69,7 @@ for ktr in np.arange(len(list_tracer)):
 	fid_o.variables[dst_varname].field = field
 	conc = fid_n.variables[list_tracer[ktr]][:]
 	for kt in np.arange(nt):
-		print 'working on timestep', kt
+		print('working on timestep', kt)
 		runoff = fid_r.variables['Runoff'][kt,:,:]
 		river_input = conc * runoff / 1000.
 		fid_o.variables[dst_varname][kt,:,:] = river_input

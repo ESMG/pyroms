@@ -20,7 +20,7 @@ class iron_coastal():
 		if self.grd.name == 'NWGOA3':
 			self.ana_iron_ccs1()
 		else:
-			print 'domain not supported' ; pass
+			print('domain not supported') ; pass
 		self.write_nc_file(self)
 		return None
 

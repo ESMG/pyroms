@@ -178,8 +178,8 @@ def GetIJS_maxamp(MSK, DEP, AmpConst):
            if (MSK[iEta,iXi] == 1):
                 alpha = AmpConst[iEta,iXi]
                 if (alpha < 9999):
-	            TotalNbConstant = TotalNbConstant + 2
-	            TotalNbEntry = TotalNbEntry + 2
+                    TotalNbConstant = TotalNbConstant + 2
+                    TotalNbEntry = TotalNbEntry + 2
 
     nbConst = 0
     nbEntry = 0
@@ -195,19 +195,19 @@ def GetIJS_maxamp(MSK, DEP, AmpConst):
                 alpha = AmpConst[iEta,iXi]
 
                 if (alpha < 9999):
-	            Constant[nbConst,0] = alpha * DEP[iEta,iXi]
-	            iList[nbEntry,0] = nbConst + 1
-	            jList[nbEntry,0] = idx
-	            sList[nbEntry,0] = -1
-	            nbConst = nbConst + 1
+                    Constant[nbConst,0] = alpha * DEP[iEta,iXi]
+                    iList[nbEntry,0] = nbConst + 1
+                    jList[nbEntry,0] = idx
+                    sList[nbEntry,0] = -1
+                    nbConst = nbConst + 1
                     nbEntry = nbEntry + 1
 
-	            Constant[nbConst,0] = alpha * DEP[iEta,iXi]
-	            iList[nbEntry,0] = nbConst + 1
-	            jList[nbEntry,0] = idx
-	            sList[nbEntry,0] = 1
-	            nbConst = nbConst + 1
-	            nbEntry = nbEntry + 1
+                    Constant[nbConst,0] = alpha * DEP[iEta,iXi]
+                    iList[nbEntry,0] = nbConst + 1
+                    jList[nbEntry,0] = idx
+                    sList[nbEntry,0] = 1
+                    nbConst = nbConst + 1
+                    nbEntry = nbEntry + 1
 
     print('Inequalities |h^{new} - h^{old}| <= alpha h^{old}')
     print('maxamp: nbEntry = ', nbEntry, '  nbConst = ', nbConst)
@@ -242,8 +242,8 @@ def GetIJS_signs(MSK, SignConst):
     for iEta in range(eta_rho):
        for iXi in range(xi_rho):
            if (MSK[iEta,iXi] == 1 and SignConst[iEta,iXi] != 0):
-	        TotalNbConstant = TotalNbConstant + 1
-	        TotalNbEntry = TotalNbEntry + 1
+                TotalNbConstant = TotalNbConstant + 1
+                TotalNbEntry = TotalNbEntry + 1
 
     nbConst = 0
     nbEntry = 0
@@ -348,9 +348,9 @@ def Neighborhood(MSK, iEta, iXi, Kdist):
     nbPt = 1
 
     List4dir = np.array([[1, 0],
-	                  [0, 1],
-	                  [-1, 0],
-	                  [0, -1]])
+                          [0, 1],
+                          [-1, 0],
+                          [0, -1]])
 
     for iK in range(1,Kdist+1):
         nbPtOld = nbPt
@@ -359,7 +359,7 @@ def Neighborhood(MSK, iEta, iXi, Kdist):
                 iEta = ListNeigh[iPt,0]
                 iXi = ListNeigh[iPt,1]
                 for ineigh in range(4):
-	            iEtaN = iEta + List4dir[ineigh,0]
+                    iEtaN = iEta + List4dir[ineigh,0]
                     iXiN = iXi + List4dir[ineigh,1]
                     if (iEtaN <= eta_rho-1 and iEtaN >= 0 and iXiN <= xi_rho-1 \
                             and iXiN >= 0 and MSK[iEtaN,iXiN] == 1):
@@ -399,7 +399,7 @@ def ConnectedComponent(ListEdges, nbVert):
         ListAdjacency[eVert,eDeg-1] = fVert
         ListAdjacency[fVert,fDeg-1] = eVert
 
-    
+
     MaxDeg = ListDegree.max()
     ListAdjacency = ListAdjacency[:,:MaxDeg]
 
@@ -424,7 +424,7 @@ def ConnectedComponent(ListEdges, nbVert):
             for iH in range(np.size(H, 1)):
                 eVert = H[0][iH]
                 for iV in range(ListDegree[eVert, 0]):
-	            ListNewHot[ListAdjacency[eVert, iV],0] = 1
+                    ListNewHot[ListAdjacency[eVert, iV],0] = 1
 
             ListHot = ListNotDone * ListNewHot
             SumH = sum(ListHot)

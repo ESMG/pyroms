@@ -27,9 +27,9 @@ def smoothing_Positive_rx0(MSK, Hobs, rx0max):
     eta_rho, xi_rho = Hobs.shape
 
     ListNeigh = np.array([[1, 0],
-	                  [0, 1],
-	                  [-1, 0],
-	                  [0, -1]])
+                          [0, 1],
+                          [-1, 0],
+                          [0, -1]])
 
     RetBathy = Hobs.copy()
 
@@ -41,16 +41,16 @@ def smoothing_Positive_rx0(MSK, Hobs, rx0max):
         for iEta in range(eta_rho):
             for iXi in range(xi_rho):
                 if (MSK[iEta,iXi] == 1):
-	            for ineigh in range(4):
-	                iEtaN = iEta + ListNeigh[ineigh,0]
-	                iXiN = iXi + ListNeigh[ineigh,1]
+                    for ineigh in range(4):
+                        iEtaN = iEta + ListNeigh[ineigh,0]
+                        iXiN = iXi + ListNeigh[ineigh,1]
                         if (iEtaN <= eta_rho-1 and iEtaN >= 0 and iXiN <= xi_rho-1 \
                                 and iXiN >= 0 and MSK[iEtaN,iXiN] == 1):
-	                    LowerBound = RetBathy[iEtaN,iXiN] * (1-rx0max)/(1+rx0max)
-	                    if ((RetBathy[iEta,iXi] - LowerBound) < -tol):
-	                        IsFinished = 0
-	                        RetBathy[iEta,iXi] = LowerBound
-	                        nbModif = nbModif + 1
+                            LowerBound = RetBathy[iEtaN,iXiN] * (1-rx0max)/(1+rx0max)
+                            if ((RetBathy[iEta,iXi] - LowerBound) < -tol):
+                                IsFinished = 0
+                                RetBathy[iEta,iXi] = LowerBound
+                                nbModif = nbModif + 1
 
         if (IsFinished == 1):
             break
@@ -63,8 +63,8 @@ def smoothing_Positive_rx0(MSK, Hobs, rx0max):
 
 def smoothing_Negative_rx0(MSK, Hobs, rx0max):
     """
-    This program use an opposite methode to the direct iterative method from 
-    Martinho and Batteen (2006). This program optimizes the bathymetry for 
+    This program use an opposite methode to the direct iterative method from
+    Martinho and Batteen (2006). This program optimizes the bathymetry for
     a given rx0 factor by decreasing it.
 
     Usage:
@@ -80,9 +80,9 @@ def smoothing_Negative_rx0(MSK, Hobs, rx0max):
     eta_rho, xi_rho = Hobs.shape
 
     ListNeigh = np.array([[1, 0],
-	                  [0, 1],
-	                  [-1, 0],
-	                  [0, -1]])
+                          [0, 1],
+                          [-1, 0],
+                          [0, -1]])
 
     RetBathy = Hobs.copy()
 
@@ -94,16 +94,16 @@ def smoothing_Negative_rx0(MSK, Hobs, rx0max):
         for iEta in range(eta_rho):
             for iXi in range(xi_rho):
                 if (MSK[iEta, iXi] == 1):
-	            for ineigh in range(4):
-	                iEtaN = iEta + ListNeigh[ineigh,0]
-	                iXiN = iXi + ListNeigh[ineigh,1]
+                    for ineigh in range(4):
+                        iEtaN = iEta + ListNeigh[ineigh,0]
+                        iXiN = iXi + ListNeigh[ineigh,1]
                         if (iEtaN <= eta_rho-1 and iEtaN >= 0 and iXiN <= xi_rho-1 \
                                 and iXiN >= 0 and MSK[iEtaN,iXiN] == 1):
-	                    UpperBound = RetBathy[iEtaN, iXiN] * (1+rx0max)/(1-rx0max)
-	                    if (RetBathy[iEta,iXi] > (UpperBound + tol)):
-	                        IsFinished = 0
-	                        RetBathy[iEta, iXi] = UpperBound
-	                        nbModif = nbModif + 1
+                            UpperBound = RetBathy[iEtaN, iXiN] * (1+rx0max)/(1-rx0max)
+                            if (RetBathy[iEta,iXi] > (UpperBound + tol)):
+                                IsFinished = 0
+                                RetBathy[iEta, iXi] = UpperBound
+                                nbModif = nbModif + 1
 
         if (IsFinished == 1):
             break
@@ -117,8 +117,8 @@ def smoothing_Negative_rx0(MSK, Hobs, rx0max):
 def smoothing_PositiveVolume_rx0(MSK, Hobs, rx0max, AreaMatrix):
     """
     This program use the direct iterative method from Martinho and Batteen (2006)
-    The bathymetry is optimized for a given rx0 factor by increasing it. All depth 
-    are then multiplied by the coeficient K = Vol_init/Vol_final in order to 
+    The bathymetry is optimized for a given rx0 factor by increasing it. All depth
+    are then multiplied by the coeficient K = Vol_init/Vol_final in order to
     insure volume conservation.
 
     Usage:
@@ -136,9 +136,9 @@ def smoothing_PositiveVolume_rx0(MSK, Hobs, rx0max, AreaMatrix):
     eta_rho, xi_rho = Hobs.shape
 
     ListNeigh = np.array([[1, 0],
-	                  [0, 1],
-	                  [-1, 0],
-	                  [0, -1]])
+                          [0, 1],
+                          [-1, 0],
+                          [0, -1]])
 
     WorkBathy = Hobs.copy()
 
@@ -150,16 +150,16 @@ def smoothing_PositiveVolume_rx0(MSK, Hobs, rx0max, AreaMatrix):
         for iEta in range(eta_rho):
             for iXi in range(xi_rho):
                 if (MSK[iEta, iXi] == 1):
-	            for ineigh in range(4):
-	                iEtaN = iEta + ListNeigh[ineigh,0]
-	                iXiN = iXi + ListNeigh[ineigh,1]
+                    for ineigh in range(4):
+                        iEtaN = iEta + ListNeigh[ineigh,0]
+                        iXiN = iXi + ListNeigh[ineigh,1]
                         if (iEtaN <= eta_rho-1 and iEtaN >= 0 and iXiN <= xi_rho-1 \
                                 and iXiN >= 0 and MSK[iEtaN,iXiN] == 1):
-	                    LowerBound = RetBathy[iEtaN, iXiN] * (1-rx0max)/(1+rx0max)
-	                    if ((WorkBathy[iEta,iXi] - LowerBound) < -tol):
-	                        IsFinished = 0
-	                        WorkBathy[iEta, iXi] = LowerBound
-	                        nbModif = nbModif + 1
+                            LowerBound = RetBathy[iEtaN, iXiN] * (1-rx0max)/(1+rx0max)
+                            if ((WorkBathy[iEta,iXi] - LowerBound) < -tol):
+                                IsFinished = 0
+                                WorkBathy[iEta, iXi] = LowerBound
+                                nbModif = nbModif + 1
 
         if (IsFinished == 1):
             break
@@ -182,9 +182,9 @@ def smoothing_PositiveVolume_rx0(MSK, Hobs, rx0max, AreaMatrix):
 
 def smoothing_NegativeVolume_rx0(MSK, Hobs, rx0maxi, AreaMatrix):
     """
-    This program use an opposite methode to the direct iterative method from 
-    Martinho and Batteen (2006). This program optimizes the bathymetry for 
-    a given rx0 factor by decreasing it. All depth are then multiplied by 
+    This program use an opposite methode to the direct iterative method from
+    Martinho and Batteen (2006). This program optimizes the bathymetry for
+    a given rx0 factor by decreasing it. All depth are then multiplied by
     the coeficient K = Vol_init/Vol_final in order to insure volume conservation.
 
     Usage:
@@ -202,9 +202,9 @@ def smoothing_NegativeVolume_rx0(MSK, Hobs, rx0maxi, AreaMatrix):
     eta_rho, xi_rho = Hobs.shape
 
     ListNeigh = np.array([[1, 0],
-	                  [0, 1],
-	                  [-1, 0],
-	                  [0, -1]])
+                          [0, 1],
+                          [-1, 0],
+                          [0, -1]])
 
     WorkBathy = Hobs.copy()
 
@@ -216,16 +216,16 @@ def smoothing_NegativeVolume_rx0(MSK, Hobs, rx0maxi, AreaMatrix):
         for iEta in range(eta_rho):
             for iXi in range(xi_rho):
                 if (MSK[iEta, iXi] == 1):
-	            for ineigh in range(4):
-	                iEtaN = iEta + ListNeigh[ineigh,0]
-	                iXiN = iXi + ListNeigh[ineigh,1]
+                    for ineigh in range(4):
+                        iEtaN = iEta + ListNeigh[ineigh,0]
+                        iXiN = iXi + ListNeigh[ineigh,1]
                         if (iEtaN <= eta_rho-1 and iEtaN >= 0 and iXiN <= xi_rho-1 \
                                 and iXiN >= 0 and MSK[iEtaN,iXiN] == 1):
-	                    UpperBound = RetBathy[iEtaN, iXiN] * (1+rx0max)/(1-rx0max)
-	                    if (WorkBathy[iEta,iXi] > (UpperBound + tol)):
-	                        IsFinished = 0
-	                        WorkBathy[iEta, iXi] = UpperBound
-	                        nbModif = nbModif + 1
+                            UpperBound = RetBathy[iEtaN, iXiN] * (1+rx0max)/(1-rx0max)
+                            if (WorkBathy[iEta,iXi] > (UpperBound + tol)):
+                                IsFinished = 0
+                                WorkBathy[iEta, iXi] = UpperBound
+                                nbModif = nbModif + 1
 
         if (IsFinished == 1):
             break
@@ -267,9 +267,9 @@ def smoothing_PlusMinus_rx0(MSK, Hobs, rx0max, AreaMatrix):
     eta_rho, xi_rho = Hobs.shape
 
     ListNeigh = np.array([[1, 0],
-	                  [0, 1],
-	                  [-1, 0],
-	                  [0, -1]])
+                          [0, 1],
+                          [-1, 0],
+                          [0, -1]])
 
     RetBathy = Hobs.copy()
 
@@ -283,15 +283,15 @@ def smoothing_PlusMinus_rx0(MSK, Hobs, rx0max, AreaMatrix):
         for iEta in range(eta_rho):
             for iXi in range(xi_rho):
                 if (MSK[iEta, iXi] == 1):
-	            Area = AreaMatrix[iEta, iXi]
-	            for ineigh in range(4):
-	                iEtaN = iEta + ListNeigh[ineigh,0]
-	                iXiN = iXi + ListNeigh[ineigh,1]
+                    Area = AreaMatrix[iEta, iXi]
+                    for ineigh in range(4):
+                        iEtaN = iEta + ListNeigh[ineigh,0]
+                        iXiN = iXi + ListNeigh[ineigh,1]
                         if (iEtaN <= eta_rho-1 and iEtaN >= 0 and iXiN <= xi_rho-1 \
                             and iXiN >= 0 and MSK[iEtaN,iXiN] == 1):
-	                    AreaN = AreaMatrix[iEtaN,iXiN]
-	                    LowerBound = RetBathy[iEtaN,iXiN] * TheMultiplier
-	                    if ((RetBathy[iEta,iXi] - LowerBound) < -tol):
+                            AreaN = AreaMatrix[iEtaN,iXiN]
+                            LowerBound = RetBathy[iEtaN,iXiN] * TheMultiplier
+                            if ((RetBathy[iEta,iXi] - LowerBound) < -tol):
                                 IsFinished = 0
                                 h = (TheMultiplier * RetBathy[iEtaN,iXiN] - RetBathy[iEta,iXi]) \
                                          / (AreaN + TheMultiplier * Area)
@@ -332,9 +332,9 @@ def smoothing_Laplacian_rx0(MSK, Hobs, rx0max):
     eta_rho, xi_rho = Hobs.shape
 
     ListNeigh = np.array([[1, 0],
-	                  [0, 1],
-	                  [-1, 0],
-	                  [0, -1]])
+                          [0, 1],
+                          [-1, 0],
+                          [0, -1]])
 
     RetBathy = Hobs.copy()
 
@@ -344,8 +344,8 @@ def smoothing_Laplacian_rx0(MSK, Hobs, rx0max):
         for iXi in range(xi_rho):
             WeightSum = 0
             for ineigh in range(4):
-	        iEtaN = iEta + ListNeigh[ineigh,0]
-	        iXiN = iXi + ListNeigh[ineigh,1]
+                iEtaN = iEta + ListNeigh[ineigh,0]
+                iXiN = iXi + ListNeigh[ineigh,1]
                 if (iEtaN <= eta_rho-1 and iEtaN >= 0 and iXiN <= xi_rho-1 \
                       and iXiN >= 0 and MSK[iEtaN,iXiN] == 1):
                     WeightSum = WeightSum + 1
@@ -364,7 +364,7 @@ def smoothing_Laplacian_rx0(MSK, Hobs, rx0max):
         nbPointMod = 0
         AdditionalDone = np.zeros((eta_rho, xi_rho))
         for iEta in range(eta_rho):
-            for iXi in range(xi_rho):  
+            for iXi in range(xi_rho):
                 Weight = 0
                 WeightSum = 0
                 for ineigh in range(4):
@@ -378,17 +378,17 @@ def smoothing_Laplacian_rx0(MSK, Hobs, rx0max):
                 TheWeight = WeightMatrix[iEta,iXi]
                 WeDo = 0
                 if TheWeight > tol:
-	            if RoughMat[iEta,iXi] > rx0max:
-	                WeDo = 1
+                    if RoughMat[iEta,iXi] > rx0max:
+                        WeDo = 1
                     if NumberDones[iEta,iXi] > 0:
-	                WeDo = 1
+                        WeDo = 1
 
                 if WeDo == 1:
-	            IsFinished = 0
-	            TheDelta = (Weight - TheWeight * RetBathy[iEta,iXi]) / (2 * TheWeight)
-	            TheCorrect[iEta,iXi] = TheCorrect[iEta,iXi] + TheDelta
-	            nbPointMod = nbPointMod + 1
-	            NumberDones[iEta,iXi] = 1
+                    IsFinished = 0
+                    TheDelta = (Weight - TheWeight * RetBathy[iEta,iXi]) / (2 * TheWeight)
+                    TheCorrect[iEta,iXi] = TheCorrect[iEta,iXi] + TheDelta
+                    nbPointMod = nbPointMod + 1
+                    NumberDones[iEta,iXi] = 1
 
         NumberDones = NumberDones + AdditionalDone
         RetBathy = RetBathy + TheCorrect
@@ -411,5 +411,5 @@ def smoothing_Laplacian_rx0(MSK, Hobs, rx0max):
 
         if (IsFinished == 1):
             break
- 
+
     return RetBathy

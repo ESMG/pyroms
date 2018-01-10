@@ -40,7 +40,7 @@ def get_nc_CGrid_GLORYS(grdfile, name='GLORYS_CORAL', area='regional', \
 
     bottom = pyroms.utility.get_bottom(nc_mask_t[::-1,:,:], mask_t[0,:], spval=nc_mask_t.missing_value)
     nlev = mask_t.shape[0]
-    bottom = (nlev-1) - bottom
+    bottom = int((nlev-1) - bottom)
     h = np.zeros(mask_t[0,:].shape)
     for i in range(mask_t[0,:].shape[1]):
         for j in range(mask_t[0,:].shape[0]):

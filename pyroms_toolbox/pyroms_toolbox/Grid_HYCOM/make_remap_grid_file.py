@@ -5,7 +5,6 @@ try:
   import netCDF4 as netCDF
 except:
   import netCDF3 as netCDF
-import pyroms
 
 
 def make_remap_grid_file(grd):

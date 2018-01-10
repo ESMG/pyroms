@@ -72,7 +72,7 @@ class nudgcoef():
 				for ji in npy.arange(0,wd):
 					nudgcoef_west[:,ji] = mask[:,0] * fc * (wd-ji) / float(wd)
 			else:
-				print 'transition not coded' ; pass
+				print('transition not coded') ; pass
 		# east boundary
 		if self.east_dict['nudge'] is True:
 			fc = self.east_dict['factor']
@@ -85,7 +85,7 @@ class nudgcoef():
 				for ji in npy.arange(nx-wd,nx):
 					nudgcoef_east[:,ji] = mask[:,-1] * fc * (wd-nx+ji) / float(wd)
 			else:
-				print 'transition not coded' ; pass
+				print('transition not coded') ; pass
 		# south boundary
 		if self.south_dict['nudge'] is True:
 			fc = self.south_dict['factor']
@@ -98,7 +98,7 @@ class nudgcoef():
 				for jj in npy.arange(0,wd):
 					nudgcoef_south[jj,:] = mask[0,:] * fc * (wd-jj) / float(wd)
 			else:
-				print 'transition not coded' ; pass
+				print('transition not coded') ; pass
 		# north boundary
 		if self.north_dict['nudge'] is True:
 			fc = self.north_dict['factor']
@@ -111,7 +111,7 @@ class nudgcoef():
 				for jj in npy.arange(ny-wd,ny):
 					nudgcoef_south[jj,:] = mask[-1,:] * fc * (wd-ny+jj) / float(wd)
 			else:
-				print 'transition not coded' ; pass
+				print('transition not coded') ; pass
 
 
 		# create the total coefficient by combining all 4 fields

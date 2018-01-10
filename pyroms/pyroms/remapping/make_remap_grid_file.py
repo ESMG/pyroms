@@ -45,17 +45,17 @@ def make_remap_grid_file(grid, Cpos='rho', irange=None, jrange=None):
     if Cpos == 'rho':
         if jrange != (0,Mp-1) or irange != (0,Lp-1):
             lon_corner = grd.hgrid.lon_vert[jrange[0]:jrange[1]+1, \
-	          irange[0]:irange[1]+1]
+                  irange[0]:irange[1]+1]
             lat_corner = grd.hgrid.lat_vert[jrange[0]:jrange[1]+1, \
-	          irange[0]:irange[1]+1]
+                  irange[0]:irange[1]+1]
             grid_center_lon = grd.hgrid.lon_rho[jrange[0]:jrange[1], \
-	          irange[0]:irange[1]].flatten()
+                  irange[0]:irange[1]].flatten()
             grid_center_lat = grd.hgrid.lat_rho[jrange[0]:jrange[1], \
-	          irange[0]:irange[1]].flatten()
+                  irange[0]:irange[1]].flatten()
             grid_imask = grd.hgrid.mask_rho[jrange[0]:jrange[1], \
-	          irange[0]:irange[1]].flatten()
-	    Lp = irange[1] - irange[0]
-	    Mp = jrange[1] - jrange[0]
+                  irange[0]:irange[1]].flatten()
+            Lp = irange[1] - irange[0]
+            Mp = jrange[1] - jrange[0]
         else:
             lon_corner = grd.hgrid.lon_vert
             lat_corner = grd.hgrid.lat_vert
@@ -66,20 +66,20 @@ def make_remap_grid_file(grid, Cpos='rho', irange=None, jrange=None):
     elif Cpos == 'u':
         if jrange != (0,Mp-1) or irange != (0,Lp-1):
             lon_corner = 0.5 * \
-	          (grd.hgrid.lon_vert[jrange[0]:jrange[1]+1,irange[0]:irange[1]] + \
+                  (grd.hgrid.lon_vert[jrange[0]:jrange[1]+1,irange[0]:irange[1]] + \
                    grd.hgrid.lon_vert[jrange[0]:jrange[1]+1,1+irange[0]:irange[1]+1])
             lat_corner = 0.5 * \
-	          (grd.hgrid.lat_vert[jrange[0]:jrange[1]+1,irange[0]:irange[1]] + \
+                  (grd.hgrid.lat_vert[jrange[0]:jrange[1]+1,irange[0]:irange[1]] + \
                    grd.hgrid.lat_vert[jrange[0]:jrange[1]+1,1+irange[0]:irange[1]+1])
             grid_center_lon = grd.hgrid.lon_u[jrange[0]:jrange[1], \
-	           irange[0]:irange[1]-1].flatten()
+                   irange[0]:irange[1]-1].flatten()
             grid_center_lat = grd.hgrid.lat_u[jrange[0]:jrange[1], \
-	           irange[0]:irange[1]-1].flatten()
+                   irange[0]:irange[1]-1].flatten()
             grid_imask = grd.hgrid.mask_u[jrange[0]:jrange[1], \
-	           irange[0]:irange[1]-1].flatten()
-	    Lp = irange[1] - irange[0] - 1
-	    Mp = jrange[1] - jrange[0]
-	else:
+                   irange[0]:irange[1]-1].flatten()
+            Lp = irange[1] - irange[0] - 1
+            Mp = jrange[1] - jrange[0]
+        else:
             lon_corner = 0.5 * (grd.hgrid.lon_vert[:,:-1] + \
                                 grd.hgrid.lon_vert[:,1:])
             lat_corner = 0.5 * (grd.hgrid.lat_vert[:,:-1] + \
@@ -91,20 +91,20 @@ def make_remap_grid_file(grid, Cpos='rho', irange=None, jrange=None):
     elif Cpos == 'v':
         if jrange != (0,Mp-1) or irange != (0,Lp-1):
             lon_corner = 0.5 * \
-	          (grd.hgrid.lon_vert[jrange[0]:jrange[1],irange[0]:irange[1]+1] + \
+                  (grd.hgrid.lon_vert[jrange[0]:jrange[1],irange[0]:irange[1]+1] + \
                    grd.hgrid.lon_vert[1+jrange[0]:jrange[1]+1,irange[0]:irange[1]+1])
             lat_corner = 0.5 * \
-	          (grd.hgrid.lat_vert[jrange[0]:jrange[1],irange[0]:irange[1]+1] + \
+                  (grd.hgrid.lat_vert[jrange[0]:jrange[1],irange[0]:irange[1]+1] + \
                    grd.hgrid.lat_vert[1+jrange[0]:jrange[1]+1,irange[0]:irange[1]+1])
             grid_center_lon = grd.hgrid.lon_v[jrange[0]:jrange[1]-1, \
-	                        irange[0]:irange[1]].flatten()
+                                irange[0]:irange[1]].flatten()
             grid_center_lat = grd.hgrid.lat_v[jrange[0]:jrange[1]-1, \
-	                        irange[0]:irange[1]].flatten()
+                                irange[0]:irange[1]].flatten()
             grid_imask = grd.hgrid.mask_v[jrange[0]:jrange[1]-1, \
-	                        irange[0]:irange[1]].flatten()
-	    Lp = irange[1] - irange[0]
-	    Mp = jrange[1] - jrange[0] - 1
-	else:
+                                irange[0]:irange[1]].flatten()
+            Lp = irange[1] - irange[0]
+            Mp = jrange[1] - jrange[0] - 1
+        else:
             lon_corner = 0.5 * (grd.hgrid.lon_vert[:-1,:] + \
                                 grd.hgrid.lon_vert[1:,:])
             lat_corner = 0.5 * (grd.hgrid.lat_vert[:-1,:] + \

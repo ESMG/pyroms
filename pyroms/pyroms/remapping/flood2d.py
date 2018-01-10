@@ -3,20 +3,18 @@
 import numpy as np
 import _remapping
 
-import pyroms
-
 def flood2d(varz, grdz, Cpos='rho', irange=None, jrange=None, \
           spval=1e37, dmax=0, cdepth=0, kk=0):
     """
     var = flood(var, grdz)
 
     optional switch:
-      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where 
-				     the variable rely
+      - Cpos='rho', 'u' or 'v'       specify the C-grid position where
+                                     the variable rely
       - irange                       specify grid sub-sample for i direction
       - jrange                       specify grid sub-sample for j direction
       - spval=1e37                   define spval value
-      - dmax=0                       if dmax>0, maximum horizontal 
+      - dmax=0                       if dmax>0, maximum horizontal
                                      flooding distance
     Flood varz on gridz
     """
@@ -82,7 +80,7 @@ def flood2d(varz, grdz, Cpos='rho', irange=None, jrange=None, \
     idxnan = np.where(c2 == True)
     idx = np.where(c2 == False)
     if list(idx[0]):
-#	print "inside test", len(idx[0]), len(idxnan[0])
+#       print "inside test", len(idx[0]), len(idxnan[0])
         wet = np.zeros((len(idx[0]),2))
         dry = np.zeros((len(idxnan[0]),2))
         wet[:,0] = idx[0]+1

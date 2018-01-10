@@ -20,7 +20,7 @@ def lonview(var, tindex, longitude, gridid, filename=None, \
       - clev             set the number of color step
       - fill             use contourf instead of pcolor
       - contour          overlay contour (request fill=True)
-      - d                contour density (default d=4) 
+      - d                contour density (default d=4)
       - latrange         latitude range
       - hrange           h range
       - fts              set font size (default: 12)
@@ -30,8 +30,8 @@ def lonview(var, tindex, longitude, gridid, filename=None, \
       - clb              add colorbar (defaul: True)
       - outfile          if defined, write figure to file
 
-    plot a constant-longitudinal slice of variable var. If filename 
-    is provided, var must be a string and the variable will be load 
+    plot a constant-longitudinal slice of variable var. If filename
+    is provided, var must be a string and the variable will be load
     from the file.
     grid can be a grid object or a gridid. In the later case, the grid
     object correponding to the provided gridid will be loaded.
@@ -124,21 +124,21 @@ def lonview(var, tindex, longitude, gridid, filename=None, \
     #pal.set_bad('w', 1.0)
 
     pal_norm = colors.BoundaryNorm(vc,ncolors=256, clip = False)
-    
+
     # clear figure
     #plt.clf()
 
     if map is True:
-        # set axes for the main plot in order to keep space for the map       
-    	if fts < 12:
- 	    ax=None
- 	else:
-            ax = plt.axes([0.15, 0.08, 0.8, 0.65])       
-    else:       
-    	if fts < 12:
- 	    ax=None
- 	else:
- 	    ax=plt.axes([0.15, 0.1, 0.8, 0.8])
+        # set axes for the main plot in order to keep space for the map
+        if fts < 12:
+            ax=None
+        else:
+            ax = plt.axes([0.15, 0.08, 0.8, 0.65])
+    else:
+        if fts < 12:
+            ax=None
+        else:
+            ax=plt.axes([0.15, 0.1, 0.8, 0.8])
 
 
     if fill is True:
@@ -147,9 +147,9 @@ def lonview(var, tindex, longitude, gridid, filename=None, \
         cf = plt.pcolor(lats, zs, lonslice, cmap = pal, norm = pal_norm, axes=ax)
 
     if clb is True:
-    	clb = plt.colorbar(cf, fraction=0.075,format='%.2f')
-    	for t in clb.ax.get_yticklabels():
-    	    t.set_fontsize(fts)
+        clb = plt.colorbar(cf, fraction=0.075,format='%.2f')
+        for t in clb.ax.get_yticklabels():
+            t.set_fontsize(fts)
 
     if contour is True:
         if fill is not True:
@@ -181,12 +181,12 @@ def lonview(var, tindex, longitude, gridid, filename=None, \
     if map is True:
         # draw a map with constant-i slice location
         ax_map = plt.axes([0.4, 0.76, 0.2, 0.23])
-        varm = np.ma.masked_where(mask[:,:] == 0, var[var.shape[0]-1,:,:])        
+        varm = np.ma.masked_where(mask[:,:] == 0, var[var.shape[0]-1,:,:])
         lon_min = lon.min()
         lon_max = lon.max()
         lon_0 = (lon_min + lon_max) / 2.
         lat_min = lat.min()
-        lat_max = lat.max()     
+        lat_max = lat.max()
         lat_0 = (lat_min + lat_max) / 2.
         map = Basemap(projection='merc', llcrnrlon=lon_min, llcrnrlat=lat_min, \
                  urcrnrlon=lon_max, urcrnrlat=lat_max, lat_0=lat_0, lon_0=lon_0, \
@@ -213,7 +213,7 @@ def lonview(var, tindex, longitude, gridid, filename=None, \
             print('Write figure to file', outfile)
             plt.savefig(outfile, dpi=200, facecolor='w', edgecolor='w', orientation='portrait')
         else:
-            print('Unrecognized file extension. Please use .png, .svg or .eps file extension.')	 
+            print('Unrecognized file extension. Please use .png, .svg or .eps file extension.')
 
 
     return

@@ -15,8 +15,6 @@ import _remapping
 
 import matplotlib.pyplot as plt
 
-import datetime
-
 def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
               rotate_uv=False, trange=None, irange=None, jrange=None, \
               dstdir='./' ,zlevel=None, dmax=0, cdepth=0, kk=0, \
@@ -146,8 +144,8 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 try:
                     spval = src_var._FillValue
                 except:
-#                    raise Warning, 'Did not find a _FillValue attribute.' 
-                    print('Warning, Did not find a _FillValue attribute.') 
+#                    raise Warning, 'Did not find a _FillValue attribute.'
+                    print('Warning, Did not find a _FillValue attribute.')
                     spval = 1.e37
 
                 # irange
@@ -214,13 +212,11 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 else:
                     src_varz = src_var[nt,jjrange[0]:jjrange[1],iirange[0]:iirange[1]]
 
-#                print datetime.datetime.now()
                 # horizontal interpolation using scrip weights
                 print('horizontal interpolation using scrip weights')
                 dst_varz = pyroms.remapping.remap(src_varz, wts_file, \
                                                   spval=spval)
 
-#                print datetime.datetime.now()
 
                 if ndim == 3:
                     # vertical interpolation from standard z level to sigma
@@ -229,6 +225,11 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                                      Cpos=Cpos, spval=spval, flood=False)
                 else:
                     dst_var = dst_varz
+
+                if varname[nv] == 'u':
+                    dst_u = dst_var
+                if varname[nv] == 'v':
+                    dst_v = dst_var
 
                 # write data in destination file
                 print('write data in destination file')
@@ -256,11 +257,11 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                     ind = uvar.find('_eastward')
                     uvar_out = uvar[0:ind]
                     print("Warning: renaming uvar to", uvar_out)
-		    print("uvar dims:", src_u.dimensions)
+#                   print("uvar dims:", src_u.dimensions)
                     ind = vvar.find('_northward')
                     vvar_out = vvar[0:ind]
                     print("Warning: renaming vvar to", vvar_out)
-		    print("uvar dims:", src_v.dimensions)
+#                   print("vvar dims:", src_v.dimensions)
                     if ndim == 3:
                         dimens_u = ['ocean_time', 's_rho', 'eta_u', 'xi_u']
                         dimens_v = ['ocean_time', 's_rho', 'eta_v', 'xi_v']
@@ -301,16 +302,6 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                             wts_file_v = wts_files[s]
                     Cpos_u = 'rho'
                     Cpos_v = 'rho'
-                    # irange
-                    if irange is None:
-                        iirange = (0,src_u.shape[-1])
-                    else:
-                        iirange = iirange
-                    # jrange
-                    if jrange is None:
-                        jjrange = (0,src_u.shape[-2])
-                    else:
-                        jjrange = jrange
                 else:
                     for s in range(len(wts_files)):
                         if wts_files[s].__contains__('u_to_rho.nc'):
@@ -319,6 +310,20 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                             wts_file_v = wts_files[s]
                     Cpos_u = 'u'
                     Cpos_v = 'v'
+
+                # get the right ranges
+                if rotate_part:
+                    # irange
+                    if irange is None:
+                        iirange = (0,src_u.shape[-1])
+                    else:
+                        iirange = irange
+                    # jrange
+                    if jrange is None:
+                        jjrange = (0,src_u.shape[-2])
+                    else:
+                        jjrange = jrange
+                else:
                     # irange
                     if irange is None:
                         iirange = (0,src_u.shape[-1])
@@ -356,7 +361,7 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                     if irange is None:
                         iirange = (0,src_v.shape[-1])
                     else:
-                        iirange = iirange
+                        iirange = irange
                     # jrange
                     if jrange is None:
                         jjrange = (0,src_v.shape[-2])
@@ -442,7 +447,7 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
                     for n in range(dstgrd.vgrid.N):
                         dst_u[n,idxu[0], idxu[1]] = spval
                         dst_v[n,idxv[0], idxv[1]] = spval
-		else:
+                else:
                     dst_u = 0.5 * (dst_u[:,:-1] + dst_u[:,1:])
                     dst_v = 0.5 * (dst_v[:-1,:] + dst_v[1:,:])
                     dst_u[idxu[0], idxu[1]] = spval
@@ -504,7 +509,7 @@ def remapping(varname, srcfile, wts_files, srcgrd, dstgrd, \
             nctidx = nctidx + 1
             print('ADDING to nctidx ', nctidx)
             nc.sync()
- 
+
     # close destination file
     nc.close()
 

@@ -33,14 +33,14 @@ Contains:
       get_ROMS_hgrid
       get_ROMS_vgrid
       get_ROMS_grid
-      write_ROMS_grid                         
+      write_ROMS_grid
 
     io  -  wrapper for netCDF4
       Dataset
       MFDataset
 
     cf  -  CF compliant files tools
-      time 
+      time
 
     tools  -  Tools specific to the Regional Ocean Modeling System
       roms2z
@@ -55,7 +55,7 @@ Contains:
       latslice
       section_transport
 
-    utility  -  Some basic tools 
+    utility  -  Some basic tools
       get_lonlat
       get_ij
       roms_varlist
@@ -76,25 +76,16 @@ Topic :: Scientific/Engineering
 Topic :: Software Development :: Libraries :: Python Modules
 """
 
-from numpy.distutils.core import Extension
-
-iso = Extension(name = '_iso',
-                sources = ['pyroms/src/iso.f'])
-
-interp = Extension(name = '_interp',
-                sources = ['pyroms/src/interp.f'])
-
-obs_interp = Extension(name = '_obs_interp',
-                sources = ['pyroms/src/obs_interp.f'])
-
-remapping = Extension(name = '_remapping',
-                sources = ['pyroms/src/remapping.f'])
-
-remapping_fast = Extension(name = '_remapping_fast',
-                sources = ['pyroms/src/remapping_fast.f'])
-
-remapping_fast_weighted = Extension(name = '_remapping_fast_weighted',
-                sources = ['pyroms/src/remapping_fast_weighted.f'])
+def configuration(parent_package='', top_path=None):
+    from numpy.distutils.misc_util import Configuration
+    config = Configuration('pycnal', parent_package, top_path)
+    config.add_extension('_interp', sources = ['pycnal/src/interp.f'])
+    config.add_extension('_obs_interp', sources = ['pycnal/src/obs_interp.f'])
+    config.add_extension('_remapping', sources = ['pycnal/src/remapping.f'])
+    config.add_extension('_remapping_fast', sources = ['pycnal/src/remapping_fast.f'])
+    config.add_extension('_remapping_fast_weighted', sources = ['pycnal/src/remapping_fast_weighted.f'])
+    config.add_extension('_iso', sources = ['pycnal/src/iso.f'])
+    return config
 
 doclines = __doc__.split("\n")
 
@@ -104,14 +95,11 @@ if __name__ == '__main__':
           version = '0.1.0',
           description = doclines[0],
           long_description = "\n".join(doclines[2:]),
-          author = "Frederic Castruccio",
-          author_email = "frederic@marine.rutgers.edu",
-          url = "ftp://marine.rutgers.edu/pub/frederic/pyroms/",
+          url = "https://github.com/ESMG/",
           packages = ['pyroms',
                       'pyroms.remapping',
                       'pyroms.extern'],
           license = 'BSD',
           platforms = ["any"],
-          ext_modules = [iso, interp, obs_interp, remapping, remapping_fast, remapping_fast_weighted],
-          classifiers = [_f for _f in classifiers.split("\n") if _f],
           )
+    setup(**configuration(top_path='').todict())

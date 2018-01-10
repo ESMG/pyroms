@@ -196,7 +196,7 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                        nc.createVariable(varn, 'f8', dimens, \
                            fill_value=spval)
                        nc.variables[varn].long_name = varname[nv] + \
-                            ' ' + int[sid] + ' boundary condition'
+                            ' ' + long[sid] + ' boundary condition'
                        try:
                            nc.variables[varn].units = src_var.units
                        except:
@@ -342,7 +342,7 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                        nc.createVariable(varn, 'f8', dimens, \
                          fill_value=spval)
                        nc.variables[varn].long_name = uvar_out + \
-                           ' ' + int[sid] + ' boundary condition'
+                           ' ' + long[sid] + ' boundary condition'
                        try:
                            nc.variables[varn].units = src_u.units
                        except:
@@ -362,7 +362,7 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                        nc.createVariable(varn, 'f8', dimens, \
                          fill_value=spval)
                        nc.variables[varn].long_name = vvar_out + \
-                                ' ' + int[sid] + ' boundary condition'
+                                ' ' + long[sid] + ' boundary condition'
                        try:
                            nc.variables[varn].units = src_v.units
                        except:
@@ -380,6 +380,16 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                             wts_file_v = wts_files[s]
                     Cpos_u = 'rho'
                     Cpos_v = 'rho'
+                else:
+                    for s in range(len(wts_files)):
+                        if wts_files[s].__contains__('u_to_rho.nc'):
+                            wts_file_u = wts_files[s]
+                        if wts_files[s].__contains__('v_to_rho.nc'):
+                            wts_file_v = wts_files[s]
+                    Cpos_u = 'u'
+                    Cpos_v = 'v'
+
+                if rotate_part:
                     # irange
                     if irange is None:
                         iirange = (0,src_u.shape[-1])
@@ -391,13 +401,6 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                     else:
                         jjrange = jrange
                 else:
-                    for s in range(len(wts_files)):
-                        if wts_files[s].__contains__('u_to_rho.nc'):
-                            wts_file_u = wts_files[s]
-                        if wts_files[s].__contains__('v_to_rho.nc'):
-                            wts_file_v = wts_files[s]
-                    Cpos_u = 'u'
-                    Cpos_v = 'v'
                     # irange
                     if irange is None:
                         iirange = (0,src_u.shape[-1])
@@ -410,7 +413,6 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                         jjrange = jrange
 
                 # vertical interpolation from sigma to standard z level
-
                 ndim = len(src_v.dimensions)-1
                 if ndim == 3:
                     print('vertical interpolation from sigma to standard z level')
@@ -429,7 +431,6 @@ def remapping_bound(varname, srcfile, wts_files, srcgrd, dst_grd, \
                                       irange=iirange, jrange=jjrange, spval=spval, \
                                       dmax=dmax)
 
-                # get the right ranges
                 if rotate_part:
                     # irange
                     if irange is None:

@@ -43,10 +43,10 @@ class ROMS_gridinfo(object):
 
     There are two ways to define the grid information.  If grid_file
     and hist_file are not passed to the object when it is created, the
-    information is retrieved from gridid.txt.  
-    To add new grid please edit your gridid.txt. You need to define 
-    an environment variable PYROMS_GRIDID_FILE pointing to your 
-    gridid.txt file. Just copy an existing grid and modify the 
+    information is retrieved from gridid.txt.
+    To add new grid please edit your gridid.txt. You need to define
+    an environment variable PYROMS_GRIDID_FILE pointing to your
+    gridid.txt file. Just copy an existing grid and modify the
     definition accordingly to your case (Be carefull with
     space and blank line).
 
@@ -69,7 +69,7 @@ class ROMS_gridinfo(object):
         #the grid and history files from the model
         self.id = gridid
         self._get_grid_info(grid_file,hist_file)
-        
+
         #now save the data in the dictionary, so we don't need to get it again
         gridid_dictionary[gridid]=self
 
@@ -107,7 +107,7 @@ class ROMS_gridinfo(object):
             line_nb = line_nb + 1
 
         if info == []:
-            raise ValueError('Unknow gridid. Please check your gridid.txt file')
+            raise ValueError('Unknown gridid. Please check your gridid.txt file')
 
         if info[4] == 'roms':
             self.name     =          info[1]
@@ -119,7 +119,7 @@ class ROMS_gridinfo(object):
             self.theta_b  = np.float(info[7])
             self.Tcline   = np.float(info[8])
 
-        elif info[4] == 'z':  
+        elif info[4] == 'z':
             nline = len(info)
             dep = info[5]
             for line in range(6,nline):
@@ -133,14 +133,14 @@ class ROMS_gridinfo(object):
             self.depth   = dep
 
         else:
-            raise ValueError('Unknow grid type. Please check your gridid.txt file')
+            raise ValueError('Unknown grid type. Please check your gridid.txt file')
 
       else: #lets get the grid information from the history and grid files
         #print 'CJMP> getting grid info from ROMS history and grid files'
         assert type(grid_file)!=type(None), 'if specify history file you must specify grid file'
         assert type(hist_file)!=type(None), 'if specify grid file you must specify history file'
 
-        #open history file and get necessary grid information from it. 
+        #open history file and get necessary grid information from it.
         hist=netCDF.Dataset(hist_file,'r')
 
         #put data into ROMS_gridinfo object
@@ -164,7 +164,7 @@ class ROMS_gridinfo(object):
           self.theta_s=np.float(hist.variables['theta_s'][:])
           self.theta_b=np.float(hist.variables['theta_b'][:])
           self.Tcline=np.float(hist.variables['Tcline'][:])
-          
+
 
 def print_ROMS_gridinfo(gridid):
     """
@@ -202,7 +202,7 @@ def list_ROMS_gridid():
     data = open(gridid_file,'r')
     lines = data.readlines()
     data.close()
-    
+
     gridid_list = []
     for line in lines:
         s = line.split()
@@ -227,7 +227,7 @@ def get_ROMS_hgrid(gridid):
     #Check for cartesian or geographical grid
     spherical = nc.variables['spherical'][:]
 
-    #Get horizontal grid 
+    #Get horizontal grid
     if ((spherical == 0) or (spherical == 'F')):
         #cartesian grid
         print('Load cartesian grid from file')
@@ -359,7 +359,7 @@ def get_ROMS_hgrid(gridid):
         else:
             angle = None
 
-        #Get geographical grid   
+        #Get geographical grid
         hgrd = CGrid_geo(lon_vert, lat_vert, proj, \
                          lon_rho=lon_rho, lat_rho=lat_rho, \
                          lon_u=lon_u, lat_u=lat_u, lon_v=lon_v, lat_v=lat_v, \
@@ -367,9 +367,9 @@ def get_ROMS_hgrid(gridid):
                          dndx=dndx, dmde=dmde, angle_rho=angle)
 
     #load the mask
-    try: 
+    try:
         hgrd.mask_rho = np.array(nc.variables['mask_rho'][:])
-    except: 
+    except:
         hgrd.mask_rho = np.ones(hgrd.lat_rho.shape)
 
     return hgrd
@@ -382,11 +382,11 @@ def get_ROMS_vgrid(gridid, zeta=None):
     Load ROMS vertical grid object. vgrid is a s_coordinate or
     a z_coordinate object, depending on gridid.grdtype.
     vgrid.z_r and vgrid.z_w (vgrid.z for a z_coordinate object)
-    can be indexed in order to retreive the actual depths. The 
-    free surface time serie zeta can be provided as an optional 
-    argument. Note that the values of zeta are not calculated 
-    until z is indexed, so a netCDF variable for zeta may be passed, 
-    even if the file is large, as only the values that are required 
+    can be indexed in order to retreive the actual depths. The
+    free surface time serie zeta can be provided as an optional
+    argument. Note that the values of zeta are not calculated
+    until z is indexed, so a netCDF variable for zeta may be passed,
+    even if the file is large, as only the values that are required
     will be retrieved from the file.
     """
 
@@ -418,8 +418,10 @@ def get_ROMS_vgrid(gridid, zeta=None):
             vgrid = s_coordinate_2(h, theta_b, theta_s, Tcline, N, hraw=hraw, zeta=zeta)
         elif Vtrans == 4:
             vgrid = s_coordinate_4(h, theta_b, theta_s, Tcline, N, hraw=hraw, zeta=zeta)
+        elif Vtrans == 5:
+            vgrid = s_coordinate_5(h, theta_b, theta_s, Tcline, N, hraw=hraw, zeta=zeta)
         else:
-            raise Warning('Unknow vertical transformation Vtrans')
+            raise Warning('Unknown vertical transformation Vtrans')
 
     elif  gridinfo.grdtype == 'z':
         N = gridinfo.N
@@ -427,7 +429,7 @@ def get_ROMS_vgrid(gridid, zeta=None):
         vgrid = z_coordinate(h, depth, N)
 
     else:
-        raise ValueError('Unknow grid type')
+        raise ValueError('Unknown grid type')
 
     return vgrid
 
@@ -448,15 +450,15 @@ def get_ROMS_grid(gridid, zeta=None, hist_file=None,grid_file=None):
        grid information will be extracted from those files, and gridid
        will be used to name that grid for the rest of the python
        session.
- 
+
     grd.vgrid is a s_coordinate or
     a z_coordinate object, depending on gridid.grdtype.
-    grd.vgrid.z_r and grd.vgrid.z_w (grd.vgrid.z for a 
-    z_coordinate object) can be indexed in order to retreive the 
-    actual depths. The free surface time serie zeta can be provided 
-    as an optional argument. Note that the values of zeta are not 
-    calculated until z is indexed, so a netCDF variable for zeta may 
-    be passed, even if the file is large, as only the values that 
+    grd.vgrid.z_r and grd.vgrid.z_w (grd.vgrid.z for a
+    z_coordinate object) can be indexed in order to retreive the
+    actual depths. The free surface time serie zeta can be provided
+    as an optional argument. Note that the values of zeta are not
+    calculated until z is indexed, so a netCDF variable for zeta may
+    be passed, even if the file is large, as only the values that
     are required will be retrieved from the file.
     """
 
@@ -486,7 +488,7 @@ def write_ROMS_grid(grd, filename='roms_grd.nc'):
 
     Mm, Lm = grd.hgrid.x_rho.shape
 
-    
+
     # Write ROMS grid to file
     nc = netCDF.Dataset(filename, 'w', format='NETCDF3_64BIT')
     nc.Description = 'ROMS grid'
@@ -498,7 +500,7 @@ def write_ROMS_grid(grd, filename='roms_grd.nc'):
     nc.createDimension('xi_u', Lm-1)
     nc.createDimension('xi_v', Lm)
     nc.createDimension('xi_psi', Lm-1)
-    
+
     nc.createDimension('eta_rho', Mm)
     nc.createDimension('eta_u', Mm)
     nc.createDimension('eta_v', Mm-1)

@@ -1,7 +1,7 @@
 import subprocess
 import os
 import sys
-import commands
+import subprocess
 import numpy as np
 
 import pyroms
@@ -34,7 +34,7 @@ tracer_longname_update_woa = []
 tracer_units_update_woa = []
 
 for idtra in id_tracer_update_woa:
-        print list_tracer[idtra]
+        print(list_tracer[idtra])
 
 for idtra in id_tracer_update_woa:
         # add to tracer update
@@ -44,7 +44,7 @@ for idtra in id_tracer_update_woa:
 
 for mm in np.arange(12):
     bdry_file = dst_dir + dst_grd.name + '_bdry_bio_GFDL+WOA+GLODAP_m' + str(mm+1).zfill(2) + '.nc' 
-    print '\nBuild OBC file for month', mm
+    print('\nBuild OBC file for month', mm)
     for ktr in np.arange(len(list_tracer_update_woa)):
         ctra = list_tracer_update_woa[ktr]
         if ctra == 'sio4':
@@ -65,7 +65,7 @@ tracer_longname_update_glodap = []
 tracer_units_update_glodap = []
 
 for idtra in id_tracer_update_glodap:
-        print list_tracer[idtra]
+        print(list_tracer[idtra])
 
 for idtra in id_tracer_update_glodap:
         # add to tracer update
@@ -75,7 +75,7 @@ for idtra in id_tracer_update_glodap:
 
 for mm in np.arange(12):
     bdry_file = dst_dir + dst_grd.name + '_bdry_bio_GFDL+WOA+GLODAP_m' + str(mm+1).zfill(2) + '.nc' 
-    print '\nBuild OBC file for month', mm
+    print('\nBuild OBC file for month', mm)
     for ktr in np.arange(len(list_tracer_update_glodap)):
         ctra = list_tracer_update_glodap[ktr]
         if ctra == 'sio4':

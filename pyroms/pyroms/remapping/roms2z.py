@@ -9,8 +9,8 @@ def roms2z(var, grd, grdz, Cpos='rho', irange=None, jrange=None, \
     varz = roms2z(var, grd, grdz)
 
     optional switch:
-      - Cpos='rho', 'u' 'v' or 'w'   specify the C-grid position where 
-				     the variable rely
+      - Cpos='rho', 'u' 'v' or 'w'   specify the C-grid position where
+                                     the variable rely
       - irange                       specify grid sub-sample for i direction
       - jrange                       specify grid sub-sample for j direction
       - spval=1e37                   define spval value
@@ -82,5 +82,5 @@ def roms2z(var, grd, grdz, Cpos='rho', irange=None, jrange=None, \
     idx = np.where(abs((varz-spval)/spval)<=1e-5)
     varz[idx] = spval
     #varz = np.ma.masked_values(varz, spval, rtol=1e-5)
-    
+
     return varz

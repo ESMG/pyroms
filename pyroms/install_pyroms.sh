@@ -1,13 +1,9 @@
 #!/bin/sh
 
 #DESTDIR=/usr/local
-DESTDIR=/u1/uaf/kshedstrom/python
+DESTDIR=$HOME/python
+PYROMS_PATH=$DESTDIR/lib/python3.5/site-packages/pyroms
 CURDIR=`pwd`
-export CPPFLAGS=-I$DESTDIR/include
-export LDFLAGS='-L$DESTDIR/lib'
-#export LDFLAGS='-L$DESTDIR/lib -L/usr/local/pkg/python/python-2.7.2/lib -shared'
-export CFLAGS=-I$DESTDIR/include
-export SHLIBS=-L$DESTDIR/lib
 
 echo
 echo "installing pyroms..."
@@ -23,24 +19,29 @@ cd $CURDIR/external/csa
 ./configure --prefix=$DESTDIR
 make install
 cd $CURDIR/external/gridutils
-./configure --prefix=$DESTDIR
+./configure CPPFLAGS=-I$DESTDIR/include LDFLAGS=-L$DESTDIR/lib CFLAGS=-I$DESTDIR/include --prefix=$DESTDIR
 make install
 cd $CURDIR/external/gridgen
-./configure --prefix=$DESTDIR
+export SHLIBS=-L$DESTDIR/lib
+./configure CPPFLAGS=-I$DESTDIR/include LDFLAGS=-L$DESTDIR/lib CFLAGS=-I$DESTDIR/include --prefix=$DESTDIR
 make
 make lib
 make shlib
 make install
-PYROMS_PATH=`python -c 'import pyroms ; print pyroms.__path__[0]'`
+# Now setting this above because this gave me:
+#PYROMS_PATH=`python -c 'import pyroms ; print pyroms.__path__[0]'`
+# $ echo $PYROMS_PATH
+# scrip.so not found. Remapping function will not be available
+# /u1/uaf/kshedstrom/python/lib/python3.5/site-packages/pycnal
 cp libgridgen.so $PYROMS_PATH
-#cp $LOCALDIR/lib/libgridgen.so $PYROMS_PATH
 echo "installing scrip..."
 cd $CURDIR/external/scrip/source
 perl -pe "s#\/usr\/local#$DESTDIR#" makefile > makefile2
 make -f makefile2
 make -f makefile2 f2py
 make -f makefile2 install
-cp scrip.so $PYROMS_PATH
++# Write it this way for Darwin...
+cp -r scrip*.so* $PYROMS_PATH
 cd $CURDIR
 echo
 echo "Done installing pyroms..."

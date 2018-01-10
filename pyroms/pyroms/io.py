@@ -14,22 +14,22 @@ Examples of usage
 
 with an input of a string:
     # returns netCDF4.Dataset object based on file
-    nc = pyroms.io.Dataset(file) 
-  
+    nc = pyroms.io.Dataset(file)
+
     # returns MFnetCDF4.Dataset object based on file (with wildcard chars)
-    nc = pyroms.io.MFDataset(file) 
+    nc = pyroms.io.MFDataset(file)
 
 with an input of a list of files:
     # returns MFDataset object based on list of files
-    nc = pyroms.io.Dataset(files) 
-    
+    nc = pyroms.io.Dataset(files)
+
     # returns MFDataset object based on list of files
     nc = pyroms.io.MFDataset(files)
 
 with an input of a netCDF4.Dataset or MFnetCDF4.Dataset object:
     # passes through netCDF4.Dataset or MFnetCDF4.Dataset object
     nc = pyroms.io.Dataset(nc)
-    
+
     # passes through MFDataset object based on file (with wildcard chars)
     nc = pyroms.io.MFDataset(nc)
 '''
@@ -42,12 +42,12 @@ try:
         import netCDF4 as netCDF
     except:
         import netCDF3 as netCDF
-    
+
     def Dataset(ncfile):
         """Return an appropriate netcdf object:
                 netCDF4 object given a file string
                 MFnetCDF4 object given a list of files
-            
+
             A netCDF4 or MFnetCDF4 object returns itself."""
         if isinstance(ncfile, str):
             return netCDF.Dataset(ncfile, 'r')
@@ -59,7 +59,7 @@ try:
             return ncfile
         else:
             raise TypeError('type %s not supported' % type(ncfile))
-    
+
     Dataset.__doc__ = __doc__
 
     def MFDataset(ncfile):
@@ -77,15 +77,15 @@ try:
         else:
             raise TypeError('type %s not supported' % type(ncfile))
             return MFnetCDF4.Dataset(files)
-    
+
     MFDataset.__doc__ = __doc__
 
 except:
     import pyroms.extern.pupynere
     import warnings
-    
+
     warnings.warn('netCDF[3/4] not found -- using pupynere.')
-    
+
     def Dataset(ncfile):
         if isinstance(ncfile, str):
             return pupynere.NetCDFFile(ncfile)
@@ -93,11 +93,11 @@ except:
             return ncfile
         else:
             raise TypeError('type %s not supported' % type(ncfile))
-    
+
     Dataset.__doc__ = __doc__
 
 
 if __name__ == '__main__':
     pass
 
-        
+

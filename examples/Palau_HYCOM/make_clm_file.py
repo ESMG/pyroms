@@ -51,22 +51,22 @@ for file in lst_file:
     subprocess.check_call(command)
     os.remove(out_file)
     out_file = dst_dir + file.rsplit('/')[-1][:-3] + '_temp_clim_' + dst_grd.name + '.nc'
-    command = ('ncks', '-a', '-A', out_file, clim_file) 
+    command = ('ncks', '-a', '-A', out_file, clim_file)
     print(command)
     subprocess.check_call(command)
     os.remove(out_file)
     out_file = dst_dir + file.rsplit('/')[-1][:-3] + '_salt_clim_' + dst_grd.name + '.nc'
-    command = ('ncks', '-a', '-A', out_file, clim_file) 
+    command = ('ncks', '-a', '-A', out_file, clim_file)
     print(command)
     subprocess.check_call(command)
     os.remove(out_file)
     out_file = dst_dir + file.rsplit('/')[-1][:-3] + '_u_clim_' + dst_grd.name + '.nc'
-    command = ('ncks', '-a', '-A', out_file, clim_file) 
+    command = ('ncks', '-a', '-A', out_file, clim_file)
     print(command)
     subprocess.check_call(command)
     os.remove(out_file)
     out_file = dst_dir + file.rsplit('/')[-1][:-3] + '_v_clim_' + dst_grd.name + '.nc'
-    command = ('ncks', '-a', '-A', out_file, clim_file) 
+    command = ('ncks', '-a', '-A', out_file, clim_file)
     print(command)
     subprocess.check_call(command)
     os.remove(out_file)

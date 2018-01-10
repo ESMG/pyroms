@@ -13,12 +13,12 @@ def z2roms(varz, grdz, grd, Cpos='rho', irange=None, jrange=None, \
     var = z2roms(var, grdz, grd)
 
     optional switch:
-      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where 
-				     the variable rely
+      - Cpos='rho', 'u' or 'v'       specify the C-grid position where
+                                     the variable rely
       - irange                       specify grid sub-sample for i direction
       - jrange                       specify grid sub-sample for j direction
       - spval=1e37                   define spval value
-      - dmax=0                       if dmax>0, maximum horizontal 
+      - dmax=0                       if dmax>0, maximum horizontal
                                      flooding distance
       - cdepth=0                     critical depth for flooding
                                      if depth<cdepth => no flooding
@@ -84,7 +84,7 @@ def z2roms(varz, grdz, grd, Cpos='rho', irange=None, jrange=None, \
     z = np.concatenate((-9999*np.ones((1,z.shape[1], z.shape[2])), \
            z, \
            100*np.ones((1,z.shape[1], z.shape[2]))), 0)
-    
+
     var = np.ma.zeros((Nm, Mm, Lm))
 
     for k in range(Nm):
@@ -96,5 +96,5 @@ def z2roms(varz, grdz, grd, Cpos='rho', irange=None, jrange=None, \
         #mask
         var = np.ma.masked_values(var, spval, rtol=1e-5)
         #var[k,:,:] = np.ma.masked_where(mask == 0, var[k,:,:])
-    
+
     return var

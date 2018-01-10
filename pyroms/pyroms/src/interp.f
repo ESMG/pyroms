@@ -3,7 +3,6 @@
 !
       SUBROUTINE xhslice (f2d,f3d,z,depth,mask,im,jm,km,vintrp,spval)
 !
-!svn $Id: xhslice.F 159 2008-03-05 18:02:32Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2008 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -86,7 +85,9 @@
       real*8 f3d(km,jm,im), z(km,jm,im)
       real*8 depth(jm,im), mask(jm,im)
       real*8 f2d(jm,im)
-cf2py intent(out) f2d
+!f2py intent(out) f2d
+!f2py intent(hide) im
+!f2py intent(hide) jm
       real*8 fk(NK), zk(NK), wk(NK)
       parameter (der1=c1ep30,derkm=c1ep30)
 !
@@ -140,7 +141,6 @@ cf2py intent(out) f2d
 !
       SUBROUTINE lintrp (n,x,y,ni,xi,yi)
 !
-!svn $Id: lintrp.F 159 2008-03-05 18:02:32Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2008 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -195,7 +195,6 @@ cf2py intent(out) f2d
 !
       SUBROUTINE spline (x,y,n,yp1,ypn,y2)
 !
-!svn $Id: spline.F 159 2008-03-05 18:02:32Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2008 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -268,6 +267,8 @@ cf2py intent(out) f2d
       parameter (nmax=10000)
       real*8 p, qn, sig, un, ypn, yp1
       real*8 x(n), y(n), y2(n), u(nmax)
+!f2py intent(out) :: y2
+!f2py intent(hide) :: n
 !
 !-----------------------------------------------------------------------
 !  Begin excutable code.
@@ -329,7 +330,6 @@ cf2py intent(out) f2d
 !
       SUBROUTINE splint (x,y,y2,n,xx,yy,dydx)
 !
-!svn $Id: splint.F 159 2008-03-05 18:02:32Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2008 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -400,6 +400,8 @@ cf2py intent(out) f2d
       integer k, khi, klo, n
       real*8 a, b, c, d, dydx, e, f, h, xx, yy
       real*8 x(n), y(n), y2(n)
+!f2py intent(out) :: yy
+!f2py intent(hide) :: n
 !
 !-----------------------------------------------------------------------
 !  Begin executable code.
@@ -454,7 +456,9 @@ cf2py intent(out) f2d
       real*8 spval, bot
       real*8 var(km,jm,im)
       real*8 mask(jm,im), bottom(jm,im)
-cf2py intent(out) bottom
+!f2py intent(out) bottom
+!f2py intent(hide) :: jm
+!f2py intent(hide) :: im
 
       DO j=1,jm
         DO i=1,im
@@ -490,7 +494,9 @@ cf2py intent(out) bottom
       real*8 spval, surf
       real*8 var(km,jm,im)
       real*8 mask(jm,im), surface(jm,im)
-cf2py intent(out) surface
+!f2py intent(out) surface
+!f2py intent(hide) :: jm
+!f2py intent(hide) :: im
 
       DO j=1,jm
         DO i=1,im

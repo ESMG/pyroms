@@ -4,7 +4,7 @@
 pyroms_toolbox is a suite of tools for working with ROMS.
 
 Requires:
-    pyroms (https://github.com/kshedstrom/pyroms)
+    pyroms (https://github.com/ESMG/pyroms)
 
 Contains:
     many things...
@@ -29,9 +29,8 @@ if __name__ == '__main__':
           version = '0.1',
           description = doclines[0],
           long_description = "\n".join(doclines[2:]),
-          author = "Pyroms Group",
-          author_email = "kshedstrom@alaska.edu",
-          url = 'https://github.com/kshedstrom/pyroms',
+          author = "ESMG",
+          url = 'https://github.com/ESMG/pyroms',
           license = 'BSD',
           platforms = ["any"],
           configuration=configuration,

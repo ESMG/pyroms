@@ -14,7 +14,7 @@ class iron_sediment():
 		if self.grd.name == 'NWGOA3':
 			self.ana_iron_ccs1()
 		else:
-			print 'domain not supported' ; pass
+			print('domain not supported') ; pass
 		self.write_nc_file(self)
 		return None
 
@@ -33,7 +33,7 @@ class iron_sediment():
 		iron_sed = iron_sed * self.grd.hgrid.mask_rho
 		#
 		self.iron_flx = npy.zeros((12,self.ny,self.nx))
-		print self.iron_flx.shape
+		print(self.iron_flx.shape)
 		for kt in npy.arange(12):
 			self.iron_flx[kt,:,:] = iron_sed[:,:]
 		return None

@@ -9,7 +9,7 @@
 # SVN $URL$
 #===============================================================================
 
-NC_CONFIG = nc-config
+NC_CONFIG = nf-config
 LIBDIR = $(shell $(NC_CONFIG) --prefix)/lib
 INCDIR = $(shell $(NC_CONFIG) --prefix)/include
 SRCDIR  = .
@@ -125,7 +125,7 @@ remap_read.o: $(SRCDIR)/remap_read.f kinds_mod.o constants.o netcdf.o \
 		remap_vars.o grids.o
 	$(COMPILE) $(FLAGS) $(INCLUDE) -c $(SRCDIR)/remap_read.f
 
-remap.o: $(SRCDIR)/remap.f kinds_mod.o constants.o 
+remap.o: $(SRCDIR)/remap.f kinds_mod.o constants.o
 	$(COMPILE) $(FLAGS) -c $(SRCDIR)/remap.f
 
 scrip.o: $(SRCDIR)/scrip.f kinds_mod.o constants.o iounits.o timers.o \
@@ -152,7 +152,7 @@ $(SRCDIR)/scrip.so: $(SRCDIR)/pyscrip.f90 $(OBJF2PY)
 install:
 	/bin/cp $(SRCDIR)/scrip $(PREFIX)/bin
 	/bin/cp $(SRCDIR)/scrip_test $(PREFIX)/bin
-	/bin/cp $(SRCDIR)/scrip.so $(PREFIX)/lib
+	/bin/cp $(SRCDIR)/scrip*.so $(PREFIX)/lib
 
-clean: 
+clean:
 	/bin/rm *.o *.mod *.so scrip scrip_test

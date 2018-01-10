@@ -40,7 +40,7 @@ def get_nc_Grid_HYCOM(grdfile, name='GLBa0.08_NEP'):
 
     bottom = pyroms.utility.get_bottom(var[::-1,:,:], mask_t[0], spval=var.fill_value)
     nlev = len(depth)
-    bottom = (nlev-1) - bottom
+    bottom = int((nlev-1) - bottom)
     h = np.zeros(mask_t[0,:].shape)
     for i in range(mask_t[0,:].shape[1]):
         for j in range(mask_t[0,:].shape[0]):
