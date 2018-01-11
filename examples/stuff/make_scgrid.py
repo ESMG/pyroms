@@ -6,7 +6,7 @@ import netCDF4
 
 import pyroms
 import pyroms_toolbox
-from ROMS_bathy_smoother import *
+from bathy_smoother import *
 
 
 #Grid dimension
@@ -19,7 +19,7 @@ lon0=0. ; lat0=30.
 lon1=0. ; lat1=0.
 lon2=10. ; lat2=0.
 lon3=40. ; lat3=4.724700232622634
-lon4=40. ; lat3=30.
+lon4=40. ; lat4=30.
 
 #define map projection (here mercator)
 lon_min = min(lon0,lon1,lon2,lon3,lon4)
@@ -63,7 +63,7 @@ pyroms.grid.edit_mask_mesh(hgrd, proj=map)
 # read in topo data (on a regular lat/lon grid)
 # this topo come with basemap so you should have it on your laptop.
 # just update datadir with the appropriate path
-# you can get this data from matplolib svn with 
+# you can get this data from matplolib svn with
 # svn co https://matplotlib.svn.sourceforge.net/svnroot/matplotlib/trunk/htdocs/screenshots/data/"
 datadir = '/home/frederic/python/basemap-0.99.4/examples/'
 topo = np.loadtxt(os.path.join(datadir, 'etopo20data.gz'))

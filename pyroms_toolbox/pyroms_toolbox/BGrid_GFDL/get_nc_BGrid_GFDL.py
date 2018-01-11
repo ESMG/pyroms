@@ -4,7 +4,7 @@ from pyroms_toolbox.BGrid_GFDL import BGrid_GFDL
 
 
 def get_nc_BGrid_GFDL(grdfile, name='GFDL_CM2.1_North_Pacific', area='regional', \
-                      xrange=(60,175), yrange=(120, 190), ystart=235)):
+                      xrange=(60,175), yrange=(120, 190), ystart=235):
     """
     Bgrd = get_nc_BGrid_GFDL(grdfile)
 

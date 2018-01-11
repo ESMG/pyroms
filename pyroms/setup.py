@@ -78,13 +78,13 @@ Topic :: Software Development :: Libraries :: Python Modules
 
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
-    config = Configuration('pycnal', parent_package, top_path)
-    config.add_extension('_interp', sources = ['pycnal/src/interp.f'])
-    config.add_extension('_obs_interp', sources = ['pycnal/src/obs_interp.f'])
-    config.add_extension('_remapping', sources = ['pycnal/src/remapping.f'])
-    config.add_extension('_remapping_fast', sources = ['pycnal/src/remapping_fast.f'])
-    config.add_extension('_remapping_fast_weighted', sources = ['pycnal/src/remapping_fast_weighted.f'])
-    config.add_extension('_iso', sources = ['pycnal/src/iso.f'])
+    config = Configuration('pyroms', parent_package, top_path)
+    config.add_extension('_interp', sources = ['pyroms/src/interp.f'])
+    config.add_extension('_obs_interp', sources = ['pyroms/src/obs_interp.f'])
+    config.add_extension('_remapping', sources = ['pyroms/src/remapping.f'])
+    config.add_extension('_remapping_fast', sources = ['pyroms/src/remapping_fast.f'])
+    config.add_extension('_remapping_fast_weighted', sources = ['pyroms/src/remapping_fast_weighted.f'])
+    config.add_extension('_iso', sources = ['pyroms/src/iso.f'])
     return config
 
 doclines = __doc__.split("\n")
