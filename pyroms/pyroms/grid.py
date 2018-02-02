@@ -225,7 +225,13 @@ def get_ROMS_hgrid(gridid):
     nc = io.Dataset(grdfile)
 
     #Check for cartesian or geographical grid
-    spherical = nc.variables['spherical'][:]
+    spherical = nc.variables['spherical'][0]
+
+    #if it is type byte, then convert to string
+    try:
+      spherical=spherical.decode('utf8')
+    except:
+      print('Assuming spherical is integer',spherical, type(spherical))
 
     #Get horizontal grid
     if ((spherical == 0) or (spherical == 'F')):
@@ -297,6 +303,12 @@ def get_ROMS_hgrid(gridid):
                      x_psi=x_psi, y_psi=y_psi, dx=dx, dy=dy, \
                      dndx=dndx, dmde=dmde, angle_rho=angle)
 
+        #load the mask
+        try:
+            hgrd.mask_rho = np.array(nc.variables['mask_rho'][:])
+        except:
+            hgrd.mask_rho = np.ones(hgrd.x_rho.shape)
+
     else:
         #geographical grid
         print('Load geographical grid from file')
@@ -366,11 +378,11 @@ def get_ROMS_hgrid(gridid):
                          lon_psi=lon_psi, lat_psi=lat_psi, dx=dx, dy=dy, \
                          dndx=dndx, dmde=dmde, angle_rho=angle)
 
-    #load the mask
-    try:
-        hgrd.mask_rho = np.array(nc.variables['mask_rho'][:])
-    except:
-        hgrd.mask_rho = np.ones(hgrd.lat_rho.shape)
+        #load the mask
+        try:
+            hgrd.mask_rho = np.array(nc.variables['mask_rho'][:])
+        except:
+            hgrd.mask_rho = np.ones(hgrd.lat_rho.shape)
 
     return hgrd
 
