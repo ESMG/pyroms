@@ -225,7 +225,13 @@ def get_ROMS_hgrid(gridid):
     nc = io.Dataset(grdfile)
 
     #Check for cartesian or geographical grid
-    spherical = nc.variables['spherical'][:]
+    spherical = nc.variables['spherical'][0]
+
+    #if it is type byte, then convert to string
+    try:
+      spherical=spherical.decode('utf8')
+    except:
+      print('Assuming spherical is integer',spherical, type(spherical))
 
     #Get horizontal grid
     if ((spherical == 0) or (spherical == 'F')):
