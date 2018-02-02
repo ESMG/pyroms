@@ -62,6 +62,7 @@ class tagfile():
 		filetype = filein_wrk[1]
 		# write our new filename
 		self.fileout = runname + '_' + filetype + '_' + tag.isoformat() + '.nc'
+		self.fileout = self.fileout.replace(':00:00','')
 		return None
 
 
@@ -85,6 +86,7 @@ lis = subprocess.check_output(["ls *_?????.nc"], shell=True)
 lis = lis.split()
 
 for file in lis:
+    file = str(file).replace("b'","").replace("'","")
     print(file)
     mytag = tagfile(file)
     mytag()

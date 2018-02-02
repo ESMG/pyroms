@@ -81,7 +81,9 @@ to the site-packages directory where pyroms got installed and copy all the
     cp pyroms_toolbox/*.so .
     cp bathy_smoother/*.so .
 
-Make sure this site-packages directory is in your PYTHONPATH.
+Make sure this site-packages directory is in your PYTHONPATH. As for
+libgu.so, it went into $DESTDIR/lib, for me $HOME/python/lib - that's
+what needs to be in the LD_LIBRARY_PATH.
 
 Also, f2py may or may not be called f2py3, depending. It's listed explicitly
 in the scrip makefile and under pyroms_toolbox/pyroms_toolbox/src/makefile.
