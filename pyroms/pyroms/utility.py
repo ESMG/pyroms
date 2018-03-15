@@ -343,7 +343,7 @@ def get_bottom(varz, mask, spval=1e37):
 
     bottom[:,:] = _interp.get_bottom(varz,mask,spval)
 
-    return np.int(bottom)
+    return bottom
 
 
 def get_surface(varz, mask, spval=1e37):
