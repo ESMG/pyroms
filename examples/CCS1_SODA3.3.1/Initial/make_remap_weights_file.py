@@ -2,8 +2,8 @@ import pyroms
 import pyroms_toolbox
 
 # load the grid
-srcgrd = pyroms_toolbox.BGrid_GFDL.get_nc_BGrid_GFDL('/Volumes/P1/Data/SODA/SODA_3.3.1/grid/SODA3_0.5deg_grid.nc', name='SODA3.3.1', xrange=(400, 500), yrange=(180, 280))
-dstgrd = pyroms.grid.get_ROMS_grid('CCS')
+srcgrd = pyroms_toolbox.BGrid_GFDL.get_nc_BGrid_GFDL('/import/archive/u1/uaf/AKWATERS/kshedstrom/SODA/SODA3_0.5deg_grid.nc', name='SODA3.3.1', xrange=(400, 500), yrange=(180, 280))
+dstgrd = pyroms.grid.get_ROMS_grid('CCS_10')
 
 # make remap grid file for scrip
 pyroms_toolbox.BGrid_GFDL.make_remap_grid_file(srcgrd, Bpos='t')

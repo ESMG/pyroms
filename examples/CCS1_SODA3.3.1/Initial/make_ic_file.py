@@ -10,15 +10,15 @@ from remap import remap
 from remap_uv import remap_uv
 
 #date to remap
-data_dir = '/Volumes/P1/Data/SODA/SODA_3.3.1/'
+data_dir = '/import/archive/u1/uaf/AKWATERS/kshedstrom/SODA/'
 dst_dir='./'
 
-tag='1980_01_08'
+tag='2010_12_26'
 filein=data_dir + 'soda3.3.1_5dy_ocean_reg_' + tag + '.nc'
 
 # load grids
-src_grd = pyroms_toolbox.BGrid_GFDL.get_nc_BGrid_GFDL(data_dir + 'grid/SODA3_0.5deg_grid.nc', name='SODA3.3.1', xrange=(400, 500), yrange=(180, 280))
-dst_grd = pyroms.grid.get_ROMS_grid('CCS')
+src_grd = pyroms_toolbox.BGrid_GFDL.get_nc_BGrid_GFDL(data_dir + 'SODA3_0.5deg_grid.nc', name='SODA3.3.1', xrange=(400, 500), yrange=(180, 280))
+dst_grd = pyroms.grid.get_ROMS_grid('CCS_10')
 
 print('\nBuild IC file from %s' %filein)
 
@@ -32,7 +32,7 @@ v_dst_file    = dst_dir + dst_grd.name + '_ic_v_'    + tag + '_' + src_grd.name 
 zeta = remap('ssh', filein, src_grd, dst_grd, zeta_dst_file, dst_dir=dst_dir)
 
 # reload grid with zeta (more accurate)
-dst_grd = pyroms.grid.get_ROMS_grid('CCS', zeta=zeta)
+dst_grd = pyroms.grid.get_ROMS_grid('CCS_10', zeta=zeta)
 
 # regrid temp, salt and velocities
 remap('temp',filein, src_grd, dst_grd, temp_dst_file, dst_dir=dst_dir)
