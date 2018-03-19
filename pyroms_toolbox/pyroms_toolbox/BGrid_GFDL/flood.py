@@ -103,6 +103,6 @@ def flood(varz, Bgrdz, Bpos='t', irange=None, jrange=None, \
     for i in range(Lm):
         for j in range(Mm):
             if mask[j,i] == 1:
-                varz[nt(bottom[j,i]):,j,i] = varz[int(bottom[j,i]),j,i]
+                varz[int(bottom[j,i]):,j,i] = varz[int(bottom[j,i]),j,i]
 
     return varz

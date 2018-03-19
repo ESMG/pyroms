@@ -54,16 +54,26 @@ def get_nc_BGrid_GFDL(grdfile, name='GFDL_CM2.1_North_Pacific', area='regional',
 
     if area == 'npolar':
         #add one row in the north and the south
-        lon_t = lon_t[np.r_[0,:len(lon_t),-1]]
-        lon_t[0] = lon_t[1] - (lon_t[2]-lon_t[1])
-        lon_t[-1] = lon_t[-2] + (lon_t[-2]-lon_t[-3])
-        lat_t = lat_t[np.r_[0,0,:len(lat_t),-1,-1]]
-        lat_t[0] = -85
-        lat_t[1] = -80
-        lat_t[-2] = 90
-        lat_t[-1] = 91
-        lon_uv = lon_t
-        lat_uv = lat_t
+        lon_t = lon_t[np.r_[0,0,:np.size(lon_t,0),-1,-1]]
+        lon_t = lon_t[:,np.r_[0,:np.size(lon_t,1),-1]]
+        lon_t[:,0] = lon_t[:,1] - (lon_t[:,2]-lon_t[:,1])
+        lon_t[:,-1] = lon_t[:,-2] + (lon_t[:,-2]-lon_t[:,-3])
+        lat_t = lat_t[np.r_[0,0,:np.size(lat_t,0),-1,-1]]
+        lat_t = lat_t[:,np.r_[0,:np.size(lat_t,1),-1]]
+        lat_t[0,:] = -85
+        lat_t[1,:] = -80
+        lat_t[-2,:] = 90
+        lat_t[-1,:] = 91
+        lon_uv = lon_uv[np.r_[0,0,:np.size(lon_uv,0),-1,-1]]
+        lon_uv = lon_uv[:,np.r_[0,:np.size(lon_uv,1),-1]]
+        lon_uv[:,0] = lon_uv[:,1] - (lon_uv[:,2]-lon_t[:,1])
+        lon_uv[:,-1] = lon_uv[:,-2] + (lon_uv[:,-2]-lon_uv[:,-3])
+        lat_uv = lat_uv[np.r_[0,0,:np.size(lat_uv,0),-1,-1]]
+        lat_uv = lat_uv[:,np.r_[0,:np.size(lat_uv,1),-1]]
+        lat_uv[:,0] = -85
+        lat_uv[:,1] = -80
+        lat_uv[:,-2] = 90
+        lat_uv[:,-1] = 91
         mask_t = mask_t[:,np.r_[0,0,:np.size(mask_t,1),-1,-1],:]
         mask_t = mask_t[:,:,np.r_[0,:np.size(mask_t,2),-1]]
         mask_t[:,:,0] = mask_t[:,:,-2]
