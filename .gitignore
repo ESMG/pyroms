@@ -9,6 +9,7 @@ html
 *.log
 *.status
 *.dSYM
+*.nc
 bathy_smoother/Python/
 examples/Yellow_Sea/Inputs/Initial/compute_remap_weights_in
 examples/Yellow_Sea/YELLOW_grd_v1.nc
