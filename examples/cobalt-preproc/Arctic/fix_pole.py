@@ -41,16 +41,14 @@ tracer = fidic.variables['cased'][:]
 mysum = 0.25*(tracer[0,:,752,279] + tracer[0,:,768,279] + tracer[0,:,760,270] + tracer[0,:,602,287])
 for j in range(753,768):
     for i in range(271,287):
-        if tracer[0,0,j,i] == 0:
-            tracer[0,:,j,i] = mysum
+        tracer[0,:,j,i] = mysum
 fidic.variables['cased'][:] = tracer
 
 tracer = fidic.variables['irr_mem'][:]
 mysum = 0.25*(tracer[0,:,752,279] + tracer[0,:,768,279] + tracer[0,:,760,270] + tracer[0,:,602,287])
 for j in range(753,768):
     for i in range(271,287):
-        if tracer[0,0,j,i] == 0:
-            tracer[0,:,j,i] = mysum
+        tracer[0,:,j,i] = mysum
 fidic.variables['irr_mem'][:] = tracer
 
 fidic.close()
