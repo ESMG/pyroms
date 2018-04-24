@@ -19,7 +19,7 @@ from remap_uv import remap_uv
 #my_year=int(sys.argv[-1])
 my_year = '2010'
 
-data_dir = '/archive/u1/uaf/AKWATERS/kshedstrom/SODA/'
+data_dir = '/archive/AKWATERS/kshedstrom/SODA/'
 data_dir_year = data_dir + '/' + str(my_year) + '/soda3.3.1_5dy_ocean_reg_2010_12_26.nc'
 dst_dir='./'
 

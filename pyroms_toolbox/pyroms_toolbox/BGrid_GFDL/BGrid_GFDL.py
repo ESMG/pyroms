@@ -47,8 +47,20 @@ class BGrid_GFDL(object):
 
     def _calculate_grid_angle(self):
         geod = pyproj.Geod(ellps='WGS84')
-        az_forward, az_back, dx = geod.inv(self.lon_t_vert[:,:-1], self.lat_t_vert[:,:-1], \
-                                           self.lon_t_vert[:,1:], self.lat_t_vert[:,1:])
+        # This is how it used to be, but it fails for some reason.
+#       az_forward, az_back, dx = geod.inv(self.lon_t_vert[:,:-1], self.lat_t_vert[:,:-1], \
+#                                          self.lon_t_vert[:,1:], self.lat_t_vert[:,1:])
+#       angle = 0.5 * (az_forward[1:,:] + az_forward[:-1,:])
 
-        angle = 0.5 * (az_forward[1:,:] + az_forward[:-1,:])
+        # Seems to work...
+        sizey, sizex = self.lon_t_vert.shape
+        angle = np.zeros(self.h.shape)
+
+        for i in range(sizex-1):
+            az_forward, az_back, dx = geod.inv(self.lon_t_vert[:,i], self.lat_t_vert[:,i], \
+                                               self.lon_t_vert[:,i+1], self.lat_t_vert[:,i+1])
+
+            angle[:,i] = 0.5 * (az_forward[1:] + az_forward[:-1])
+
+        # part of original code
         self.angle = (90 - angle) * np.pi/180.
