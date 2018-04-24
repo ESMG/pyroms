@@ -39,7 +39,7 @@ def remap_bio_woa(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./
     # create clim file
     dst_file = tracer + '.nc'
     dst_file = dst_dir + dst_grd.name + '_ic_bio_' + dst_file
-    print(('Creating clim file', dst_file))
+    print('Creating clim file', dst_file)
     if os.path.exists(dst_file) is True:
         os.remove(dst_file)
     pyroms_toolbox.nc_create_roms_file(dst_file, dst_grd, nctime)
@@ -115,7 +115,7 @@ def remap_bio_woa(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./
 
 
     # create variable in file
-    print(('Creating variable', dst_varname))
+    print('Creating variable', dst_varname)
     nc.createVariable(dst_varname, 'f8', dimensions, fill_value=spval2)
     nc.variables[dst_varname].long_name = long_name
     nc.variables[dst_varname].units = units
@@ -124,8 +124,8 @@ def remap_bio_woa(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./
 
 
     # remapping
-    print(('remapping', dst_varname, 'from', src_grd.name, \
-              'to', dst_grd.name))
+    print('remapping', dst_varname, 'from', src_grd.name, \
+              'to', dst_grd.name)
 
     if ndim == 3:
         # flood the grid

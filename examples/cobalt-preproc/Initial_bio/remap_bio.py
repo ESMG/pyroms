@@ -17,7 +17,7 @@ class nctime(object):
     pass
 
 def remap_bio(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
-    
+
     # NWGOA3 grid sub-sample
     xrange=src_grd.xrange; yrange=src_grd.yrange
 
@@ -26,6 +26,7 @@ def remap_bio(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
     src_file = argdict['file']
     units = argdict['units']
     longname = argdict['longname']
+    nframe = argdict['nframe']
 
     # get time
     nctime.long_name = 'time'
@@ -43,19 +44,14 @@ def remap_bio(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
     nc = netCDF.Dataset(dst_file, 'a', format='NETCDF3_64BIT')
 
     #load var
-    cdf = netCDF.Dataset(src_file) 
+    cdf = netCDF.Dataset(src_file)
     src_var = cdf.variables[src_varname]
 
-    tmp = cdf.variables['time'][:]
-    if len(tmp) > 1:
-        print('error : multiple frames in input file') ; exit()
-    else:
-        time = tmp[0]
+    time = cdf.variables['time'][nframe]
 
     # to be in sync with physics, add +0.5 day
     #time = time + 0.5
     # time will be given by physics anyway
-    time = 0.
 
     #get missing value
     spval = src_var._FillValue
@@ -65,9 +61,9 @@ def remap_bio(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
 
     # NWGOA3 grid sub-sample
     if ndim == 3:
-        src_var = src_var[0,:, yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
+        src_var = src_var[nframe,:, yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
     elif ndim == 2:
-        src_var = src_var[0,yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
+        src_var = src_var[nframe,yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
 
 
     Bpos = 't'

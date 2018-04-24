@@ -27,6 +27,7 @@ def remap_bio(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
     src_file = argdict['file']
     units = argdict['units']
     longname = argdict['longname']
+    nframe = argdict['nframe']
 
     # get time
     nctime.long_name = 'time'
@@ -35,7 +36,7 @@ def remap_bio(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
     # create clim file
     dst_file = tracer + '.nc'
     dst_file = dst_dir + dst_grd.name + '_ic_bio_' + dst_file
-    print(('Creating clim file', dst_file))
+    print('Creating clim file', dst_file)
     if os.path.exists(dst_file) is True:
         os.remove(dst_file)
     pyroms_toolbox.nc_create_roms_file(dst_file, dst_grd, nctime)
@@ -47,17 +48,11 @@ def remap_bio(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
     cdf = netCDF.Dataset(src_file)
     src_var = cdf.variables[src_varname]
 
-    record = 3
-    time = cdf.variables['time'][record]
-#   if len(tmp) > 1:
-#       print('error : multiple frames in input file') ; exit()
-#   else:
-#       time = tmp[0]
+    time = cdf.variables['time'][nframe]
 
     # to be in sync with physics, add +0.5 day
     #time = time + 0.5
     # time will be given by physics anyway
-#   time = 0.
 
     #get missing value
     spval = src_var._FillValue
@@ -68,15 +63,15 @@ def remap_bio(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
 
     # ARCTIC4 grid sub-sample
     if ndim == 3:
-#       src_var = src_var[record,:, yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
-        src_var = src_var[record,:,:,:]
+#       src_var = src_var[nframe,:, yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
+        src_var = src_var[nframe,:,:,:]
         print('subgrid 3d', src_var.shape)
 #       src_var = np.squeeze(src_var, axis=(0,))
         src_var = src_var[:,np.r_[ystart:np.size(src_var,1),-1],:]
         print('subgrid 3d', src_var.shape)
     elif ndim == 2:
-#       src_var = src_var[record,yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
-        src_var = src_var[record,:,:]
+#       src_var = src_var[nframe,yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
+        src_var = src_var[nframe,:,:]
         print('subgrid 2d', src_var.shape)
 #       src_var = np.squeeze(src_var, axis=(0,))
         src_var = src_var[np.r_[ystart:np.size(src_var,0),-1],:]
@@ -103,7 +98,7 @@ def remap_bio(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
 
 
     # create variable in file
-    print(('Creating variable', dst_varname))
+    print('Creating variable', dst_varname)
     nc.createVariable(dst_varname, 'f8', dimensions, fill_value=spval)
     nc.variables[dst_varname].long_name = long_name
     nc.variables[dst_varname].units = units
@@ -112,8 +107,8 @@ def remap_bio(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
 
 
     # remapping
-    print(('remapping', dst_varname, 'from', src_grd.name, \
-              'to', dst_grd.name))
+    print('remapping', dst_varname, 'from', src_grd.name, \
+              'to', dst_grd.name)
 
     if ndim == 3:
         # flood the grid

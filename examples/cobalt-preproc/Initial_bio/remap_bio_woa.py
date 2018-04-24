@@ -52,10 +52,6 @@ def remap_bio_woa(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./
 
 
     tmp = cdf.variables['time'][nframe]
-    #if len(tmp) > 1:
-    #    print 'error : multiple frames in input file' ; exit()
-    #else:
-    #    time = tmp[0]
 
     # to be in sync with physics, add +0.5 day
     #time = time + 0.5
@@ -72,9 +68,9 @@ def remap_bio_woa(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./
 
     # NWGOA3 grid sub-sample
     if ndim == 3:
-        src_var = src_var[0,:, yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
+        src_var = src_var[nframe,:, yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
     elif ndim == 2:
-        src_var = src_var[0,yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
+        src_var = src_var[nframe,yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
 
 
     if tracer == 'no3':

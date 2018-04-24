@@ -35,7 +35,7 @@ tracer_longname_update_woa = []
 tracer_units_update_woa = []
 
 for idtra in id_tracer_update_woa:
-        print((list_tracer[idtra]))
+        print(list_tracer[idtra])
 
 for idtra in id_tracer_update_woa:
         # add to tracer update
@@ -62,7 +62,7 @@ tracer_longname_update_glodap = []
 tracer_units_update_glodap = []
 
 for idtra in id_tracer_update_glodap:
-        print((list_tracer[idtra]))
+        print(list_tracer[idtra])
 
 for idtra in id_tracer_update_glodap:
         # add to tracer update

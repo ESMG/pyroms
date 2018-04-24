@@ -30,18 +30,19 @@ tracer_units = ['mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol
 
 print('\nBuild IC file for time %s' %tag)
 for ktr in np.arange(len(list_tracer)):
-    mydict = {'tracer':list_tracer[ktr],'longname':tracer_longname[ktr],'units':tracer_units[ktr],'file':data_dir + 'ocean_cobalt_tracers.1988-2007.01.nc'}
+    mydict = {'tracer':list_tracer[ktr],'longname':tracer_longname[ktr],'units':tracer_units[ktr], \
+        'file':data_dir + 'ocean_cobalt_tracers.1988-2007.01_12.nc', 'nframe':0}
     remap_bio(mydict, src_grd, dst_grd, dst_dir=dst_dir)
 
 ## merge file
-ic_file = dst_dir + dst_grd.name + '_ic_bio_GFDL-JAN.nc' 
-out_file = dst_dir + dst_grd.name + '_ic_bio_' + list_tracer[0] + '.nc' 
+ic_file = dst_dir + dst_grd.name + '_ic_bio_GFDL-JAN.nc'
+out_file = dst_dir + dst_grd.name + '_ic_bio_' + list_tracer[0] + '.nc'
 command = ('ncks', '-a', '-O', out_file, ic_file)
 subprocess.check_call(command)
 os.remove(out_file)
 
 for ktr in np.arange(1,len(list_tracer)):
-    out_file = dst_dir + dst_grd.name + '_ic_bio_' + list_tracer[ktr] + '.nc' 
+    out_file = dst_dir + dst_grd.name + '_ic_bio_' + list_tracer[ktr] + '.nc'
     command = ('ncks', '-a', '-A', out_file, ic_file)
     subprocess.check_call(command)
     os.remove(out_file)
