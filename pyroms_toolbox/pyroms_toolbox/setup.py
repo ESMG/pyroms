@@ -6,6 +6,7 @@ def configuration(parent_package='',top_path=None):
     config.add_subpackage('BGrid_GFDL')
     config.add_subpackage('BGrid_POP')
     config.add_subpackage('BGrid_SODA')
+    config.add_subpackage('CGrid_GLORYS')
     config.add_subpackage('seawater')
     config.add_subpackage('Grid_HYCOM')
     config.add_library('_average', sources=['src/average.f90']),
