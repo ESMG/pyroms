@@ -5,13 +5,13 @@ import pyroms
 import pyroms_toolbox
 
 
-def TS_diagram(temp, salt, depth=None, dens_lev=None, marker_size=2, fmt='%2.2f', pal=cm.spectral, \
+def TS_diagram(temp, salt, depth=None, dens_lev=None, marker_size=2, fmt='%2.2f', pal=cm.Spectral, \
                tlim='None', slim='None', outfile=None):
 
     if dens_lev is None:
         dens_lev = np.arange(10,36,1)
 
-    if depth is None: 
+    if depth is None:
         diag = plt.scatter(salt.flatten(), temp.flatten(), s=marker_size, edgecolors='none')
     else:
         diag = plt.scatter(salt.flatten(), temp.flatten(), c=depth.flatten(), \
@@ -36,7 +36,7 @@ def TS_diagram(temp, salt, depth=None, dens_lev=None, marker_size=2, fmt='%2.2f'
     ax.set_xlim(slim)
     ax.set_ylim(tlim)
 
-    
+
     if outfile is not None:
         if outfile.find('.png') != -1 or outfile.find('.svg') != -1 or \
            outfile.find('.eps') != -1:
