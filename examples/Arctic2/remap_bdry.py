@@ -185,8 +185,8 @@ def remap_bdry(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, 
     if ndim == 3:
         # flood the grid
         print('flood the grid')
-	print(src_var.shape)
-	print(src_grd.z_t.shape)
+        print(src_var.shape)
+        print(src_grd.z_t.shape)
         src_varz = pyroms_toolbox.BGrid_SODA.flood(src_var, src_grd, Bpos=Bpos, spval=spval, \
                                 dmax=dmax, cdepth=cdepth, kk=kk)
     else:

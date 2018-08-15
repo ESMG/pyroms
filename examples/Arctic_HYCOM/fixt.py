@@ -41,13 +41,13 @@ for j in range(216,566):
    for i in range(706,898):
        if np.fabs(ubar[0,j,i]) > 10:
            if np.fabs(ubar[0,j,i+1]) > 10:
-	       ubar[0,j,i] = 2/3.0*ubar[0,j,i-1]+1/3.0*ubar[0,j,i+2]
-	       ubar[0,j,i+1] = 1/3.0*ubar[0,j,i-1]+2/3.0*ubar[0,j,i+2]
-	       u[0,:,j,i] = 2/3.0*u[0,:,j,i-1]+1/3.0*u[0,:,j,i+2]
-	       u[0,:,j,i+1] = 1/3.0*u[0,:,j,i-1]+2/3.0*u[0,:,j,i+2]
-	   else:
-	       ubar[0,j,i] = 0.5*(ubar[0,j,i-1]+ubar[0,j,i+1])
-	       u[0,:,j,i] = 0.5*(u[0,:,j,i-1]+u[0,:,j,i+1])
+               ubar[0,j,i] = 2/3.0*ubar[0,j,i-1]+1/3.0*ubar[0,j,i+2]
+               ubar[0,j,i+1] = 1/3.0*ubar[0,j,i-1]+2/3.0*ubar[0,j,i+2]
+               u[0,:,j,i] = 2/3.0*u[0,:,j,i-1]+1/3.0*u[0,:,j,i+2]
+               u[0,:,j,i+1] = 1/3.0*u[0,:,j,i-1]+2/3.0*u[0,:,j,i+2]
+           else:
+               ubar[0,j,i] = 0.5*(ubar[0,j,i-1]+ubar[0,j,i+1])
+               u[0,:,j,i] = 0.5*(u[0,:,j,i-1]+u[0,:,j,i+1])
          
 
 vbar = root.variables['vbar'][:]
@@ -66,13 +66,13 @@ for j in range(216,565):
    for i in range(708,900):
        if np.fabs(vbar[0,j,i]) > 10:
            if np.fabs(vbar[0,j,i+1]) > 10:
-	       vbar[0,j,i] = 2/3.0*vbar[0,j,i-1]+1/3.0*vbar[0,j,i+2]
-	       vbar[0,j,i+1] = 1/3.0*vbar[0,j,i-1]+2/3.0*vbar[0,j,i+2]
-	       v[0,:,j,i] = 2/3.0*v[0,:,j,i-1]+1/3.0*v[0,:,j,i+2]
-	       v[0,:,j,i+1] = 1/3.0*v[0,:,j,i-1]+2/3.0*v[0,:,j,i+2]
-	   else:
-	       vbar[0,j,i] = 0.5*(vbar[0,j,i-1]+vbar[0,j,i+1])
-	       v[0,:,j,i] = 0.5*(v[0,:,j,i-1]+v[0,:,j,i+1])
+               vbar[0,j,i] = 2/3.0*vbar[0,j,i-1]+1/3.0*vbar[0,j,i+2]
+               vbar[0,j,i+1] = 1/3.0*vbar[0,j,i-1]+2/3.0*vbar[0,j,i+2]
+               v[0,:,j,i] = 2/3.0*v[0,:,j,i-1]+1/3.0*v[0,:,j,i+2]
+               v[0,:,j,i+1] = 1/3.0*v[0,:,j,i-1]+2/3.0*v[0,:,j,i+2]
+           else:
+               vbar[0,j,i] = 0.5*(vbar[0,j,i-1]+vbar[0,j,i+1])
+               v[0,:,j,i] = 0.5*(v[0,:,j,i-1]+v[0,:,j,i+1])
      
 root.variables['ubar'][:] = ubar
 root.variables['u'][:] = u

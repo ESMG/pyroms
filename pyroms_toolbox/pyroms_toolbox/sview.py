@@ -174,9 +174,9 @@ def sview(var, tindex, sindex, grid, filename=None, \
             cf = plt.pcolor(lon, lat, sslice, cmap = pal, norm = pal_norm)
 
     if clb is True:
-    	clb = plt.colorbar(cf, fraction=0.075,format='%.2f')
-    	for t in clb.ax.get_yticklabels():
-    	    t.set_fontsize(fts)
+        clb = plt.colorbar(cf, fraction=0.075,format='%.2f')
+        for t in clb.ax.get_yticklabels():
+            t.set_fontsize(fts)
 
     if contour is True:
         if fill is not True:

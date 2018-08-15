@@ -72,7 +72,7 @@ def remap_clm(src_file, src_varname, src_grd, dst_grd, dxy=20, cdepth=0, kk=0, d
         long_name = 'free-surface'
         units = 'meter'
         field = 'free-surface, scalar, series'
-	vartime = 'ocean_time'
+        vartime = 'ocean_time'
     elif src_varname == 'temp':
         pos = 't'
         Cpos = 'rho'
@@ -84,7 +84,7 @@ def remap_clm(src_file, src_varname, src_grd, dst_grd, dxy=20, cdepth=0, kk=0, d
         long_name = 'potential temperature'
         units = 'Celsius'
         field = 'temperature, scalar, series'
-	vartime = 'ocean_time'
+        vartime = 'ocean_time'
     elif src_varname == 'salt':
         pos = 't'
         Cpos = 'rho'
@@ -96,7 +96,7 @@ def remap_clm(src_file, src_varname, src_grd, dst_grd, dxy=20, cdepth=0, kk=0, d
         long_name = 'salinity'
         units = 'PSU'
         field = 'salinity, scalar, series'
-	vartime = 'ocean_time'
+        vartime = 'ocean_time'
     else:
         raise ValueError('Undefined src_varname')
 

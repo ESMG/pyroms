@@ -101,9 +101,9 @@ def heatcap(S, T, P=0):
 
     CP2 = ((d0 + d1*T + d2*T**2 + d3*T**3 + d4*T**4)*S \
            + (e0 + e1*T + e2*T**2)*S3_2)*P  \
-	   + ((f0 + f1*T + f2*T**2 + f3*T**3)*S  \
-	   +   g0*S3_2)*P**2 \
-	   + ((h0 + h1*T + h2*T**2)*S + j1*T*S3_2)*P**3
+           + ((f0 + f1*T + f2*T**2 + f3*T**3)*S  \
+           +   g0*S3_2)*P**2 \
+           + ((h0 + h1*T + h2*T**2)*S + j1*T*S3_2)*P**3
      
 
     return CP0 + CP1 + CP2
@@ -150,7 +150,7 @@ def adtgrad(S, T, P=0):
 
     return  a0 + (a1 + (a2 + a3*T)*T)*T  \
          + (b0 + b1*T)*(S-35)  \
-	 + ( (c0 + (c1 + (c2 + c3*T)*T)*T) \
+         + ( (c0 + (c1 + (c2 + c3*T)*T)*T) \
          +   (d0 + d1*T)*(S-35) )*P \
          + (e0 + (e1 + e2*T)*T )*P*P
 
