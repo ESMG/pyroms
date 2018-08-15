@@ -32,7 +32,7 @@ map_method = 'bilinear'
 pyroms.remapping.compute_remap_weights(grid1_file, grid2_file, \
               interp_file1, interp_file2, map1_name, \
               map2_name, num_maps, map_method, \
-	      grid1_periodic='.true.', grid2_periodic='.true.')
+              grid1_periodic='.true.', grid2_periodic='.true.')
 
 
 # compute remap weights
@@ -49,7 +49,7 @@ map_method = 'bilinear'
 pyroms.remapping.compute_remap_weights(grid1_file, grid2_file, \
               interp_file1, interp_file2, map1_name, \
               map2_name, num_maps, map_method, \
-	      grid1_periodic='.true.', grid2_periodic='.true.')
+              grid1_periodic='.true.', grid2_periodic='.true.')
 
 
 # compute remap weights
@@ -66,7 +66,7 @@ map_method = 'bilinear'
 pyroms.remapping.compute_remap_weights(grid1_file, grid2_file, \
               interp_file1, interp_file2, map1_name, \
               map2_name, num_maps, map_method, \
-	      grid1_periodic='.true.', grid2_periodic='.true.')
+              grid1_periodic='.true.', grid2_periodic='.true.')
 
 
 # compute remap weights
@@ -83,7 +83,7 @@ map_method = 'bilinear'
 pyroms.remapping.compute_remap_weights(grid1_file, grid2_file, \
               interp_file1, interp_file2, map1_name, \
               map2_name, num_maps, map_method, \
-	      grid1_periodic='.true.', grid2_periodic='.true.')
+              grid1_periodic='.true.', grid2_periodic='.true.')
 
 
 # compute remap weights
@@ -100,5 +100,5 @@ map_method = 'bilinear'
 pyroms.remapping.compute_remap_weights(grid1_file, grid2_file, \
               interp_file1, interp_file2, map1_name, \
               map2_name, num_maps, map_method, \
-	      grid1_periodic='.true.', grid2_periodic='.true.')
+              grid1_periodic='.true.', grid2_periodic='.true.')
 
