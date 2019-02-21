@@ -412,7 +412,7 @@ if __name__ == "__main__" :
    deg = int(phi1)
    minn = int(abs( ( phi1 - deg) * 60.0 ))
    sec = abs(phi1 * 3600 - deg * 3600) - minn * 60
-   print(" Flinders Peak =   %3i\xF8%3i\' %6.3f\",  " % ( deg, minn, sec ), end=' ')
+   print(" Flinders Peak =   %3i\xF8%3i\' %6.3f\",  " % ( deg, minn, sec ))
    deg = int(lembda1)
    minn = int(abs( ( lembda1 - deg) * 60.0 ))
    sec = abs(lembda1 * 3600 - deg * 3600) - minn * 60
@@ -425,7 +425,7 @@ if __name__ == "__main__" :
    deg = int(phi2)
    minn = int(abs( ( phi2 - deg) * 60.0 ))
    sec = abs(phi2 * 3600 - deg * 3600) - minn * 60
-   print(" Buninyon      =   %3i\xF8%3i\' %6.3f\",  " % ( deg, minn, sec ), end=' ')
+   print(" Buninyon      =   %3i\xF8%3i\' %6.3f\",  " % ( deg, minn, sec ))
    deg = int(lembda2)
    minn = int(abs( ( lembda2 - deg) * 60.0 ))
    sec = abs(lembda2 * 3600 - deg * 3600) - minn * 60
@@ -466,7 +466,7 @@ if __name__ == "__main__" :
    deg = int(phi2)
    minn =int(abs( ( phi2 - deg) * 60.0 ))
    sec = abs( phi2 * 3600 - deg * 3600) - minn * 60
-   print(" Projected Point = %3i\xF8%3i\' %6.3f\", " % ( deg, minn, sec ), end=' ')
+   print(" Projected Point = %3i\xF8%3i\' %6.3f\", " % ( deg, minn, sec ))
    deg = int(lembda2)
    minn =int(abs( ( lembda2 - deg) * 60.0 ))
    sec = abs(lembda2 * 3600 - deg * 3600) - minn * 60
