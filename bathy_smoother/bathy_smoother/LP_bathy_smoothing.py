@@ -62,7 +62,7 @@ def LP_smoothing_rx0(MSK, Hobs, rx0max, SignConst, AmpConst):
     ValueFct, ValueVar, testfeasibility = LP_tools.SolveLinearProgram(iList, jList, sList, Constant, ObjectiveFct)
     if (testfeasibility == 0):
         NewBathy = NaN * np.ones((eta_rho,xi_rho))
-        raise ValueError, 'Feasibility test failed. testfeasibility = 0.'
+        raise ValueError('Feasibility test failed. testfeasibility = 0.')
 
     correctionBathy = np.zeros((eta_rho,xi_rho))
     nbVert = 0
@@ -75,7 +75,7 @@ def LP_smoothing_rx0(MSK, Hobs, rx0max, SignConst, AmpConst):
     NewBathy = Hobs + correctionBathy
     RMat = bathy_tools.RoughnessMatrix(NewBathy, MSK)
     MaxRx0 = RMat.max()
-    print 'rx0max = ', rx0max, '  MaxRx0 = ', MaxRx0
+    print('rx0max = ', rx0max, '  MaxRx0 = ', MaxRx0)
 
     return NewBathy
 
@@ -124,7 +124,7 @@ def LP_smoothing_rx0_heuristic(MSK, Hobs, rx0max, SignConst, AmpConst):
     Kbad = np.where(MSKbad == 1)
     nbKbad = np.size(Kbad,1)
     ListIdx = np.zeros((eta_rho,xi_rho), dtype=np.int)
-    ListIdx[Kbad] = range(nbKbad)
+    ListIdx[Kbad] = list(range(nbKbad))
 
     ListEdges = []
     nbEdge = 0
@@ -146,11 +146,11 @@ def LP_smoothing_rx0_heuristic(MSK, Hobs, rx0max, SignConst, AmpConst):
 
     NewBathy = Hobs.copy()
     for iColor in range(1,nbColor+1):
-        print '---------------------------------------------------------------'
+        print('---------------------------------------------------------------')
         MSKcolor = np.zeros((eta_rho, xi_rho))
         K = np.where(ListVertexStatus == iColor)
         nbK = np.size(K,1)
-        print 'iColor = ', iColor, '  nbK = ', nbK
+        print('iColor = ', iColor, '  nbK = ', nbK)
         for iVertex in range(nbKbad):
             if (ListVertexStatus[iVertex,0] == iColor):
                 iEta, iXi = Kbad[0][iVertex], Kbad[1][iVertex]
@@ -166,10 +166,10 @@ def LP_smoothing_rx0_heuristic(MSK, Hobs, rx0max, SignConst, AmpConst):
         TheNewBathy = LP_smoothing_rx0(MSKcolor, MSKHobs, rx0max, SignConst, AmpConst)
         NewBathy[K] = TheNewBathy[K].copy()
 
-    print 'Final obtained bathymetry'
+    print('Final obtained bathymetry')
     RMat = bathy_tools.RoughnessMatrix(NewBathy, MSK)
     MaxRx0 = RMat.max()
-    print 'rx0max = ', rx0max, '  MaxRx0 = ', MaxRx0
+    print('rx0max = ', rx0max, '  MaxRx0 = ', MaxRx0)
 
     return NewBathy
 

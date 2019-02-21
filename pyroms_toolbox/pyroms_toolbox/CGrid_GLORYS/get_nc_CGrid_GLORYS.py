@@ -45,7 +45,7 @@ def get_nc_CGrid_GLORYS(grdfile, name='GLORYS_CORAL', area='regional', \
     for i in range(mask_t[0,:].shape[1]):
         for j in range(mask_t[0,:].shape[0]):
             if mask_t[0,j,i] == 1:
-                h[j,i] = depth_bnds[bottom[j,i]]
+                h[j,i] = depth_bnds[int(bottom[j,i])]
 
     if area == 'global':
         #add rows in the north and the south, east and west

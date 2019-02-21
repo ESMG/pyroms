@@ -29,11 +29,11 @@ def remap_uv(src_fileuv, src_grd, dst_grd, dst_fileu, dst_filev, dmax=0, cdepth=
     Mp, Lp = dst_grd.hgrid.mask_rho.shape
 
     # create destination file
-    print '\nCreating destination file', dst_fileu
+    print('\nCreating destination file', dst_fileu)
     if os.path.exists(dst_fileu) is True:
         os.remove(dst_fileu)
     pyroms_toolbox.nc_create_roms_file(dst_fileu, dst_grd, nctime)
-    print 'Creating destination file', dst_filev
+    print('Creating destination file', dst_filev)
     if os.path.exists(dst_filev) is True:
         os.remove(dst_filev)
     pyroms_toolbox.nc_create_roms_file(dst_filev, dst_grd, nctime)
@@ -49,7 +49,7 @@ def remap_uv(src_fileuv, src_grd, dst_grd, dst_fileu, dst_filev, dmax=0, cdepth=
 
     tmp = cdfuv.variables['time'][:]
     if len(tmp) > 1:
-        print 'error : multiple frames in input file' ; exit()
+        print('error : multiple frames in input file') ; exit()
     else:
         time = tmp[0]
     
@@ -76,27 +76,27 @@ def remap_uv(src_fileuv, src_grd, dst_grd, dst_fileu, dst_filev, dmax=0, cdepth=
     dst_grdz = pyroms.grid.ROMS_Grid(dst_grd.name+'_Z', dst_grd.hgrid, dst_zcoord)
 
     # create variable in destination file
-    print 'Creating variable u'
+    print('Creating variable u')
     ncu.createVariable('u', 'f8', ('ocean_time', 's_rho', 'eta_u', 'xi_u'), fill_value=spval)
     ncu.variables['u'].long_name = '3D u-momentum component'
     ncu.variables['u'].units = 'meter second-1'
     ncu.variables['u'].field = 'u-velocity, scalar, series'
     #ncu.variables['u_north']._FillValue = spval
     # create variable in destination file
-    print 'Creating variable ubar'
+    print('Creating variable ubar')
     ncu.createVariable('ubar', 'f8', ('ocean_time', 'eta_u', 'xi_u'), fill_value=spval)
     ncu.variables['ubar'].long_name = '2D u-momentum component'
     ncu.variables['ubar'].units = 'meter second-1'
     ncu.variables['ubar'].field = 'ubar-velocity,, scalar, series'
     #ncu.variables['ubar_north']._FillValue = spval
 
-    print 'Creating variable v'
+    print('Creating variable v')
     ncv.createVariable('v', 'f8', ('ocean_time', 's_rho', 'eta_v', 'xi_v'), fill_value=spval)
     ncv.variables['v'].long_name = '3D v-momentum component'
     ncv.variables['v'].units = 'meter second-1'
     ncv.variables['v'].field = 'v-velocity, scalar, series'
     #ncv.variables['v_north']._FillValue = spval
-    print 'Creating variable vbar'
+    print('Creating variable vbar')
     ncv.createVariable('vbar', 'f8', ('ocean_time', 'eta_v', 'xi_v'), fill_value=spval)
     ncv.variables['vbar'].long_name = '2D v-momentum component'
     ncv.variables['vbar'].units = 'meter second-1'
@@ -105,25 +105,25 @@ def remap_uv(src_fileuv, src_grd, dst_grd, dst_fileu, dst_filev, dmax=0, cdepth=
 
 
     # remaping
-    print 'remapping and rotating u and v from', src_grd.name, \
-                      'to', dst_grd.name
+    print('remapping and rotating u and v from', src_grd.name, \
+                      'to', dst_grd.name)
 
     # flood the grid
-    print 'flood the grid'
+    print('flood the grid')
     src_uz = pyroms_toolbox.BGrid_SODA.flood(src_varu, src_grd, Bpos='uv', \
                 spval=spval, dmax=dmax, cdepth=cdepth, kk=kk)
     src_vz = pyroms_toolbox.BGrid_SODA.flood(src_varv, src_grd, Bpos='uv', \
                 spval=spval, dmax=dmax, cdepth=cdepth, kk=kk)
 
     # horizontal interpolation using scrip weights
-    print 'horizontal interpolation using scrip weights'
+    print('horizontal interpolation using scrip weights')
     dst_uz = pyroms.remapping.remap(src_uz, wts_file, \
                                       spval=spval)
     dst_vz = pyroms.remapping.remap(src_vz, wts_file, \
                                       spval=spval)
 
     # vertical interpolation from standard z level to sigma
-    print 'vertical interpolation from standard z level to sigma'
+    print('vertical interpolation from standard z level to sigma')
     dst_u = pyroms.remapping.z2roms(dst_uz[::-1,:,:], dst_grdz, \
                         dst_grd, Cpos='rho', spval=spval, flood=False)
     dst_v = pyroms.remapping.z2roms(dst_vz[::-1,:,:], dst_grdz,  \
@@ -175,7 +175,7 @@ def remap_uv(src_fileuv, src_grd, dst_grd, dst_fileu, dst_filev, dmax=0, cdepth=
     dst_vbar[idxv[0], idxv[1]] = spval
 
     # write data in destination file
-    print 'write data in destination file\n'
+    print('write data in destination file\n')
     ncu.variables['ocean_time'][0] = time
     ncu.variables['u'][0] = dst_u
     ncu.variables['ubar'][0] = dst_ubar

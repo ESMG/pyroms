@@ -7,10 +7,10 @@ import pyroms_toolbox
 #src_varname = ['u', 'v']
 src_varname = ['zeta', 'temp', 'salt', 'u', 'v', 'bac', 'c1', 'c2', 'c3', \
                'chl1', 'chl2', 'chl3', 'cldoc', 'csdoc', 'ddc', 'ddca', \
-	       'ddn', 'ddsi', 'ldoc', 'ldon', 'nh4', 'no3', 'ox', 'po4', \
+               'ddn', 'ddsi', 'ldoc', 'ldon', 'nh4', 'no3', 'ox', 'po4', \
                's1', 's2', 's3', 'sdoc', 'sdon', 'sio4', 'talk', 'tco2', \
-	       'zz1', 'zz2', 'zzc1', 'zzc2']
-print 'Number of variables', len(src_varname)
+               'zz1', 'zz2', 'zzc1', 'zzc2']
+print('Number of variables', len(src_varname))
 irange = None
 jrange = None
 

@@ -1,0 +1,10 @@
+Most of these are suitable for a mid-latitude domain with xrange,
+yrange. The Arctic had some issues with the tripole source grid, so I
+hacked in a tripole option, but there are still remnant pole problems,
+needing the fix_pole.py routine. It only matters for the initial
+file - the Arctic directory is a copy of Initial_bio.
+
+The climatology we were given did not contain the coastal diatom
+fields (medium phyto). I was told that to create appropriate files,
+split the large phyto into large and medium phyto. The scripts in
+the diatoms directory do just that.

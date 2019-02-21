@@ -66,9 +66,9 @@ for year in lst_year:
     lst = lst.split()
     lst_file = lst_file + lst
 
-print 'Build OBC file from the following file list:'
-print lst_file
-print ' '
+print('Build OBC file from the following file list:')
+print(lst_file)
+print(' ')
 
 src_grd_file = data_dir + '../HYCOM_GLBa0.08_PALAU_grid.nc'
 src_grd = pyroms_toolbox.Grid_HYCOM.get_nc_Grid_HYCOM(src_grd_file)

@@ -45,7 +45,7 @@ def get_nc_Grid_HYCOM(grdfile, name='GLBa0.08_NEP'):
     for i in range(mask_t[0,:].shape[1]):
         for j in range(mask_t[0,:].shape[0]):
             if mask_t[0,j,i] == 1:
-                h[j,i] = depth_bnds[bottom[j,i]+1]
+                h[j,i] = depth_bnds[int(bottom[j,i])+1]
 
 
     geod = pyproj.Geod(ellps='WGS84')

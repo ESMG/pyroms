@@ -13,7 +13,7 @@ def zslice(var, depth, grd, Cpos='rho', vert=False, mode='linear'):
 
     optional switch:
       - Cpos='rho', 'u', 'v' or 'w'  specify the C-grid position where
-				     the variable rely
+                                     the variable rely
       - vert=True/False              If True, return the position of
                                      the verticies
       - mode='linear' or 'spline'    specify the type of interpolation
@@ -30,7 +30,7 @@ def zslice(var, depth, grd, Cpos='rho', vert=False, mode='linear'):
         imode=1
     else:
         imode=0
-        raise Warning, '%s not supported, defaulting to linear' % mode
+        raise Warning('%s not supported, defaulting to linear' % mode)
 
 
     # compute the depth on Arakawa-C grid position
@@ -111,8 +111,8 @@ def zslice(var, depth, grd, Cpos='rho', vert=False, mode='linear'):
         mask = grd.hgrid.mask_rho[:]
 
     else:
-        raise Warning, '%s bad position. Valid Arakawa-C are \
-                           rho, u or v.' % Cpos
+        raise Warning('%s bad position. Valid Arakawa-C are \
+                           rho, u or v.' % Cpos)
 
     assert len(z.shape) == 3, 'z must be 3D'
     assert len(var.shape) == 3, 'var must be 3D'
@@ -136,8 +136,8 @@ def sslice(var, sindex, grd, Cpos='rho', vert=False):
     sslice, lon, lat = sslice(var, sindex, grd)
 
     optional switch:
-      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where
-				     the variable rely
+      - Cpos='rho', 'u' or 'v'       specify the C-grid position where
+                                     the variable rely
       - vert=True/False              If True, return the position of
                                      the verticies
       - mode='linear' or 'spline'    specify the type of interpolation
@@ -226,8 +226,8 @@ def sslice(var, sindex, grd, Cpos='rho', vert=False):
         mask = grd.hgrid.mask_rho[:]
 
     else:
-        raise Warning, '%s bad position. Valid Arakawa-C are \
-                           rho, u or v.' % Cpos
+        raise Warning('%s bad position. Valid Arakawa-C are \
+                           rho, u or v.' % Cpos)
 
     assert len(var.shape) == 3, 'var must be 3D'
 
@@ -246,7 +246,7 @@ def islice(var, iindex, grd, Cpos='rho', vert=False):
 
     optional switch:
       - Cpos='rho', 'u', 'v' or 'w'  specify the C-grid position where
-				     the variable rely
+                                     the variable rely
       - vert=True/False              If True, return the position of
                                      the verticies
 
@@ -352,8 +352,8 @@ def islice(var, iindex, grd, Cpos='rho', vert=False):
         mask = grd.hgrid.mask_rho[:]
 
     else:
-        raise Warning, '%s bad position. Valid Arakawa-C are \
-                           rho, u or v.' % Cpos
+        raise Warning('%s bad position. Valid Arakawa-C are \
+                           rho, u or v.' % Cpos)
 
     # get constant-i slice
     vari = var[:,:,iindex]
@@ -374,7 +374,7 @@ def jslice(var, jindex, grd, Cpos='rho', vert=False):
 
     optional switch:
       - Cpos='rho', 'u', 'v' or 'w'  specify the C-grid position where
-				     the variable rely
+                                     the variable rely
       - vert=True/False              If True, return the position of
                                      the verticies
 
@@ -479,8 +479,8 @@ def jslice(var, jindex, grd, Cpos='rho', vert=False):
         mask = grd.hgrid.mask_rho[:]
 
     else:
-        raise Warning, '%s bad position. Valid Arakawa-C are \
-                           rho, u or v.' % Cpos
+        raise Warning('%s bad position. Valid Arakawa-C are \
+                           rho, u or v.' % Cpos)
 
     # get constant-j slice
     varj = var[:,jindex,:]
@@ -501,8 +501,8 @@ def isoslice(var,prop,isoval, grd, Cpos='rho', masking=True, vert=False):
     isoslice, lon, lat = isoslice(variable,property, isoval, grd)
 
     optional switch:
-      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where
-				     the variable rely
+      - Cpos='rho', 'u' or 'v'       specify the C-grid position where
+                                     the variable rely
       - masking=True                 mask the output if True
       - vert=True/False              If True, return the position of
                                      the verticies
@@ -521,9 +521,9 @@ def isoslice(var,prop,isoval, grd, Cpos='rho', masking=True, vert=False):
     h_at_s30 = isoslice(z,s,30);        # z at s == 30
     """
     if (len(var.squeeze().shape)<=2):
-        raise ValueError, 'variable must have at least two dimensions'
+        raise ValueError('variable must have at least two dimensions')
     if not prop.shape == var.shape:
-        raise ValueError, 'dimension of var and prop must be identical'
+        raise ValueError('dimension of var and prop must be identical')
 
     # compute the depth on Arakawa-C grid position
 
@@ -603,8 +603,8 @@ def isoslice(var,prop,isoval, grd, Cpos='rho', masking=True, vert=False):
         mask = grd.hgrid.mask_rho[:]
 
     else:
-        raise Warning, '%s bad position. Valid Arakawa-C are \
-                           rho, u or v.' % Cpos
+        raise Warning('%s bad position. Valid Arakawa-C are \
+                           rho, u or v.' % Cpos)
 
     prop = prop-isoval
     sz = np.shape(var)
@@ -624,8 +624,8 @@ def isoslice(var,prop,isoval, grd, Cpos='rho', masking=True, vert=False):
     if masking:
         isoslice = np.ma.masked_where(zc.sum(axis=0)==0, isoslice)
         if all(isoslice.mask):
-            raise Warning, 'property==%f out of range (%f, %f)' % \
-                           (isoval, (prop+isoval).min(), (prop+isoval).max())
+            raise Warning('property==%f out of range (%f, %f)' % \
+                           (isoval, (prop+isoval).min(), (prop+isoval).max()))
     isoslice = isoslice.reshape(sz[1:])
 
     # mask land
@@ -641,8 +641,8 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
     transect, z, lon, lat = transect(var, istart, iend, jstart, jend, grd)
 
     optional switch:
-      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where
-				     the variable rely
+      - Cpos='rho', 'u' or 'v'       specify the C-grid position where
+                                     the variable rely
       - vert=True/False              If True, return the position of
                                      the verticies
       - spval                        special value
@@ -727,8 +727,8 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
         mask = grd.hgrid.mask_rho[:]
 
     else:
-        raise Warning, '%s bad position. Valid Arakawa-C are \
-                           rho, u or v.' % Cpos
+        raise Warning('%s bad position. Valid Arakawa-C are \
+                           rho, u or v.' % Cpos)
 
 
     # Find the nearest point between P1 (imin,jmin) and P2 (imax, jmax)
@@ -758,7 +758,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
     # Chose the strait line with the smallest slope
     if (abs(aj) <=  1 ):
         # Here, the best line is y(x)
-        print 'Here, the best line is y(x)'
+        print('Here, the best line is y(x)')
         # If i1 < i0 swap points and remember it has been swapped
         if (i1 <  i0 ):
             i  = i0 ; j  = j0
@@ -793,7 +793,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
 
     else:
         # Here, the best line is x(y)
-        print 'Here, the best line is x(y)'
+        print('Here, the best line is x(y)')
         # If j1 < j0 swap points and remember it has been swapped
         if (j1 <  j0 ):
             i  = i0 ; j  = j0
@@ -905,8 +905,8 @@ def lonslice(var, longitude, grd, Cpos='rho', vert=False, spval=1e37):
     lonslice, z, lon, lat = lonslice(var, longitude, grd)
 
     optional switch:
-      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where
-				     the variable rely
+      - Cpos='rho', 'u' or 'v'       specify the C-grid position where
+                                     the variable rely
       - vert=True/False              If True, return the position of
                                      the verticies
       - spval                        special value
@@ -930,17 +930,17 @@ def lonslice(var, longitude, grd, Cpos='rho', vert=False, spval=1e37):
         lon = grd.hgrid.lon_rho
         lat = grd.hgrid.lat_rho
     else:
-        raise Warning, '%s bad position. Valid Arakawa-C are \
-                           rho, u or v.' % Cpos
+        raise Warning('%s bad position. Valid Arakawa-C are \
+                           rho, u or v.' % Cpos)
 
     edge = np.concatenate((lon[1,1:-1], \
                            lon[1:-1,-2], \
                            lon[-2,-2:0:-1], \
                            lon[-2:0:-1,1]))
-    idx =  np.concatenate((range(1,lon[0,:].shape[0]-1), \
-                           range(1,lon[:,-1].shape[0]-1), \
-                           range(1,lon[-1,::-1].shape[0]-1)[::-1], \
-                           range(1,lon[::-1,0].shape[0]-1)[::-1]))
+    idx =  np.concatenate((list(range(1,lon[0,:].shape[0]-1)), \
+                           list(range(1,lon[:,-1].shape[0]-1)), \
+                           list(range(1,lon[-1,::-1].shape[0]-1))[::-1], \
+                           list(range(1,lon[::-1,0].shape[0]-1))[::-1]))
 
     d = np.zeros(edge.shape)
     for i in range (edge.shape[0]):
@@ -953,7 +953,7 @@ def lonslice(var, longitude, grd, Cpos='rho', vert=False, spval=1e37):
     Mp, Lp = lon.shape
 
     if len(pt_idx) != 2:
-        raise ValueError, 'this function only works for simple quadrangle'
+        raise ValueError('this function only works for simple quadrangle')
 
     # determine is latitude ligne is crossing a i or j edge
     side = np.zeros(2)
@@ -1008,8 +1008,8 @@ def latslice(var, latitude, grd, Cpos='rho', vert=False, spval=1e37):
     latslice, z, lon, lat = latslice(var, latitude, grd)
 
     optional switch:
-      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where
-				     the variable rely
+      - Cpos='rho', 'u' or 'v'       specify the C-grid position where
+                                     the variable rely
       - vert=True/False              If True, return the position of
                                      the verticies
       - spval                        special value
@@ -1033,17 +1033,17 @@ def latslice(var, latitude, grd, Cpos='rho', vert=False, spval=1e37):
         lon = grd.hgrid.lon_rho
         lat = grd.hgrid.lat_rho
     else:
-        raise Warning, '%s bad position. Valid Arakawa-C are \
-                           rho, u or v.' % Cpos
+        raise Warning('%s bad position. Valid Arakawa-C are \
+                           rho, u or v.' % Cpos)
 
     edge = np.concatenate((lat[1,1:-1], \
                            lat[1:-1,-2], \
                            lat[-2,-2:0:-1], \
                            lat[-2:0:-1,1]))
-    idx =  np.concatenate((range(1,lat[0,:].shape[0]-1), \
-                           range(1,lat[:,-1].shape[0]-1), \
-                           range(1,lat[-1,::-1].shape[0]-1)[::-1], \
-                           range(1,lat[::-1,0].shape[0]-1)[::-1]))
+    idx =  np.concatenate((list(range(1,lat[0,:].shape[0]-1)), \
+                           list(range(1,lat[:,-1].shape[0]-1)), \
+                           list(range(1,lat[-1,::-1].shape[0]-1))[::-1], \
+                           list(range(1,lat[::-1,0].shape[0]-1))[::-1]))
 
     d = np.zeros(edge.shape)
     for i in range (edge.shape[0]):
@@ -1056,7 +1056,7 @@ def latslice(var, latitude, grd, Cpos='rho', vert=False, spval=1e37):
     Mp, Lp = lon.shape
 
     if len(pt_idx) != 2:
-        raise ValueError, 'this function only works for simple quadrangle'
+        raise ValueError('this function only works for simple quadrangle')
 
     # determine is latitude ligne is crossing a i or j edge
     side = np.zeros(2)
@@ -1169,8 +1169,8 @@ def zlayer(var, grd, h1=None, h2=None, Cpos='rho', vert=False):
         mask = grd.hgrid.mask_rho[:]
 
     else:
-        raise Warning, '%s bad position. Valid Arakawa-C are \
-                           rho, u or v.' % Cpos
+        raise Warning('%s bad position. Valid Arakawa-C are \
+                           rho, u or v.' % Cpos)
 
 
 
@@ -1247,7 +1247,7 @@ def section_transport(u, v, grd, istart, iend, jstart, jend):
     # Chose the strait line with the smallest slope
     if (abs(aj) <=  1 ):
         # Here, the best line is y(x)
-        print 'Here, the best line is y(x)'
+        print('Here, the best line is y(x)')
         # If i1 < i0 swap points and remember it has been swapped
         if i1 <  i0:
             i  = i0 ; j  = j0
@@ -1272,7 +1272,7 @@ def section_transport(u, v, grd, istart, iend, jstart, jend):
 
     else:
         # Here, the best line is x(y)
-        print 'Here, the best line is x(y)'
+        print('Here, the best line is x(y)')
         # If j1 < j0 swap points and remember it has been swapped
         if j1 <  j0:
             i  = i0 ; j  = j0
@@ -1308,9 +1308,9 @@ def section_transport(u, v, grd, istart, iend, jstart, jend):
         # distance between 2 neighbour points
         d = abs(inear[k] - inear[k-1])
 
-	if ( d > 1 ):
+        if ( d > 1 ):
             # intermediate points required if d>1
-	    neari = interm_pt(inear, k, ai, bi, aj, bj)
+            neari = interm_pt(inear, k, ai, bi, aj, bj)
             near.insert(nn,neari)
             nn=nn+1
 
@@ -1395,7 +1395,7 @@ def section_transport_z(u, v, grd, istart, iend, jstart, jend, h1=None, h2=None)
     # Chose the strait line with the smallest slope
     if (abs(aj) <=  1 ):
         # Here, the best line is y(x)
-        print 'Here, the best line is y(x)'
+        print('Here, the best line is y(x)')
         # If i1 < i0 swap points and remember it has been swapped
         if i1 <  i0:
             i  = i0 ; j  = j0
@@ -1420,7 +1420,7 @@ def section_transport_z(u, v, grd, istart, iend, jstart, jend, h1=None, h2=None)
 
     else:
         # Here, the best line is x(y)
-        print 'Here, the best line is x(y)'
+        print('Here, the best line is x(y)')
         # If j1 < j0 swap points and remember it has been swapped
         if j1 <  j0:
             i  = i0 ; j  = j0
@@ -1456,9 +1456,9 @@ def section_transport_z(u, v, grd, istart, iend, jstart, jend, h1=None, h2=None)
         # distance between 2 neighbour points
         d = abs(inear[k] - inear[k-1])
 
-	if ( d > 1 ):
+        if ( d > 1 ):
             # intermediate points required if d>1
-	    neari = interm_pt(inear, k, ai, bi, aj, bj)
+            neari = interm_pt(inear, k, ai, bi, aj, bj)
             near.insert(nn,neari)
             nn=nn+1
 
@@ -1573,7 +1573,7 @@ def section_tracer_transport_z(u, v, tracer, grd, istart, iend, jstart, jend, h1
     # Chose the strait line with the smallest slope
     if (abs(aj) <=  1 ):
         # Here, the best line is y(x)
-        print 'Here, the best line is y(x)'
+        print('Here, the best line is y(x)')
         # If i1 < i0 swap points and remember it has been swapped
         if i1 <  i0:
             i  = i0 ; j  = j0
@@ -1598,7 +1598,7 @@ def section_tracer_transport_z(u, v, tracer, grd, istart, iend, jstart, jend, h1
 
     else:
         # Here, the best line is x(y)
-        print 'Here, the best line is x(y)'
+        print('Here, the best line is x(y)')
         # If j1 < j0 swap points and remember it has been swapped
         if j1 <  j0:
             i  = i0 ; j  = j0
@@ -1634,9 +1634,9 @@ def section_tracer_transport_z(u, v, tracer, grd, istart, iend, jstart, jend, h1
         # distance between 2 neighbour points
         d = abs(inear[k] - inear[k-1])
 
-	if ( d > 1 ):
+        if ( d > 1 ):
             # intermediate points required if d>1
-	    neari = interm_pt(inear, k, ai, bi, aj, bj)
+            neari = interm_pt(inear, k, ai, bi, aj, bj)
             near.insert(nn,neari)
             nn=nn+1
 
@@ -1724,88 +1724,88 @@ def section_tracer_transport_z(u, v, tracer, grd, istart, iend, jstart, jend, h1
 
 def interm_pt(pnear, pk, pai, pbi, paj, pbj):
     ### FIND THE BEST INTERMEDIATE POINT ON A PATHWAY
-    #		-----------------------------
-    #	pnear	: vector of the position of the nearest point
-    #	pk	: current working index
-    #	pai, pbi: slope and original ordinate of x(y)
-    #	paj, pbj: slope and original ordinate of y(x)
-    #	pneari	: vector holding the position of intermediate point
-    #		-----------------------------
+    # -----------------------------
+    # pnear   : vector of the position of the nearest point
+    # pk      : current working index
+    # pai, pbi: slope and original ordinate of x(y)
+    # paj, pbj: slope and original ordinate of y(x)
+    # pneari  : vector holding the position of intermediate point
+    # -----------------------------
 
     # 1 - Compute intermediate point
 
     # Determine whether we use y(x) or x(y):
     if (abs(paj) <= 1):
         # y(x)
-	# possible intermediate point
-	ylptmp1 = pnear[pk-1] + 1
-	ylptmp2 = pnear[pk-1] + (paj/abs(paj))*1j
-	# M is the candidate point:
-	zxm = np.real(ylptmp1)
-	zym = np.imag(ylptmp1)
-	za0 = paj
-	zb0 = pbj
-	#
-	za1 = -1./za0
-	zb1 = zym-za1*zxm
-	# P is the projection of M in the strait line
-	zxp = -(zb1-zb0)/(za1-za0)
-	zyp = za0*zxp+zb0
-	# zd1 is the distance MP
-	zd1 = (zxm-zxp) * (zxm-zxp) + (zym-zyp) * (zym-zyp)
+        # possible intermediate point
+        ylptmp1 = pnear[pk-1] + 1
+        ylptmp2 = pnear[pk-1] + (paj/abs(paj))*1j
+        # M is the candidate point:
+        zxm = np.real(ylptmp1)
+        zym = np.imag(ylptmp1)
+        za0 = paj
+        zb0 = pbj
         #
-	# M is the candidate point:
-	zxm = np.real(ylptmp2)
-	zym = np.imag(ylptmp2)
-	za1 = -1./za0
-	zb1 = zym-za1*zxm
-	# P is the projection of M in the strait line
-	zxp = -(zb1-zb0)/(za1-za0)
-	zyp = za0*zxp+zb0
-	# zd1 is the distance MP
-	zd2 = (zxm-zxp) * (zxm-zxp) + (zym-zyp) * (zym-zyp)
+        za1 = -1./za0
+        zb1 = zym-za1*zxm
+        # P is the projection of M in the strait line
+        zxp = -(zb1-zb0)/(za1-za0)
+        zyp = za0*zxp+zb0
+        # zd1 is the distance MP
+        zd1 = (zxm-zxp) * (zxm-zxp) + (zym-zyp) * (zym-zyp)
         #
-	# choose the smallest (zd1,zd2)
-	if (zd2 <= zd1):
-	    pneari = ylptmp2
-	else:
-	    pneari = ylptmp1
-	#	
+        # M is the candidate point:
+        zxm = np.real(ylptmp2)
+        zym = np.imag(ylptmp2)
+        za1 = -1./za0
+        zb1 = zym-za1*zxm
+        # P is the projection of M in the strait line
+        zxp = -(zb1-zb0)/(za1-za0)
+        zyp = za0*zxp+zb0
+        # zd1 is the distance MP
+        zd2 = (zxm-zxp) * (zxm-zxp) + (zym-zyp) * (zym-zyp)
+        #
+        # choose the smallest (zd1,zd2)
+        if (zd2 <= zd1):
+            pneari = ylptmp2
+        else:
+            pneari = ylptmp1
+        #
     else:
         # x(y)
-	ylptmp1 = pnear[pk-1] + (pai/abs(pai))
-	ylptmp2 = pnear[pk-1] + 1*1j
-	# M is the candidate point:
-	zxm = np.real(ylptmp1)
-	zym = np.imag(ylptmp1)
-	za0 = pai
-	zb0 = pbi
-	#
-	za1 = -1./za0
-	zb1 = zxm-za1*zym
-	# P is the projection of M in the strait line
-	zyp = -(zb1-zb0)/(za1-za0)
-	zxp = za0*zyp+zb0
-	# zd1 is the distance MP
-	zd1 = (zxm-zxp) * (zxm-zxp) + (zym-zyp) * (zym-zyp)
+        ylptmp1 = pnear[pk-1] + (pai/abs(pai))
+        ylptmp2 = pnear[pk-1] + 1*1j
+        # M is the candidate point:
+        zxm = np.real(ylptmp1)
+        zym = np.imag(ylptmp1)
+        za0 = pai
+        zb0 = pbi
         #
-	# M is the candidate point:
-	zxm = np.real(ylptmp2)
-	zym = np.imag(ylptmp2)
-	za1 = -1./za0
-	zb1 = zxm-za1*zym
-	# P is the projection of M in the strait line
-	zyp = -(zb1-zb0)/(za1-za0)
-	zxp = za0*zyp+zb0
-	# zd2 is the distance MP
-	zd2 = (zxm-zxp) * (zxm-zxp) + (zym-zyp) * (zym-zyp)
+        za1 = -1./za0
+        zb1 = zxm-za1*zym
+        # P is the projection of M in the strait line
+        zyp = -(zb1-zb0)/(za1-za0)
+        zxp = za0*zyp+zb0
+        # zd1 is the distance MP
+        zd1 = (zxm-zxp) * (zxm-zxp) + (zym-zyp) * (zym-zyp)
         #
-	# choose the smallest (zd1,zd2)
-	if (zd2 <= zd1):
-	    pneari = ylptmp2
-	else:
-	    pneari = ylptmp1
-	
+        # M is the candidate point:
+        zxm = np.real(ylptmp2)
+        zym = np.imag(ylptmp2)
+        za1 = -1./za0
+        zb1 = zxm-za1*zym
+        # P is the projection of M in the strait line
+        zyp = -(zb1-zb0)/(za1-za0)
+        zxp = za0*zyp+zb0
+        # zd2 is the distance MP
+        zd2 = (zxm-zxp) * (zxm-zxp) + (zym-zyp) * (zym-zyp)
+        #
+        # choose the smallest (zd1,zd2)
+        if (zd2 <= zd1):
+            pneari = ylptmp2
+        else:
+            pneari = ylptmp1
+
     return pneari
 
 
@@ -1828,8 +1828,8 @@ def hindices(lon, lat, grd, Cpos='rho', rectangular=0, spval=1e37):
             latg = grd.hgrid.lat_rho
             angle = grd.hgrid.angle_rho
         else:
-            raise Warning, '%s bad position. Valid Arakawa-C are \
-                               rho, u or v.' % Cpos
+            raise Warning('%s bad position. Valid Arakawa-C are \
+                               rho, u or v.' % Cpos)
 
     if type(grd).__name__ == 'CGrid_geo':
         spherical = grd.spherical
@@ -1846,8 +1846,8 @@ def hindices(lon, lat, grd, Cpos='rho', rectangular=0, spval=1e37):
             latg = grd.lat_rho
             angle = grd.angle_rho
         else:
-            raise Warning, '%s bad position. Valid Arakawa-C are \
-                               rho, u or v.' % Cpos
+            raise Warning('%s bad position. Valid Arakawa-C are \
+                               rho, u or v.' % Cpos)
 
 
     lon = np.matrix(lon)

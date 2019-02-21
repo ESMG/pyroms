@@ -66,7 +66,7 @@ def make_movie(filelst, varname, cmin, cmax, view, lev=0, istart=None, iend=None
         cmax = float(cmax)
 
     if imode is 'off':
-        print 'Turn interactive mode off'
+        print('Turn interactive mode off')
         plt.ioff()
 
     for tindex in range(istart, iend, 1):
@@ -83,7 +83,7 @@ def make_movie(filelst, varname, cmin, cmax, view, lev=0, istart=None, iend=None
                                     title=title, outfile='plot.png')
 
         else:
-            print 'Option not available. view must be set to sview, zview or view2D' 
+            print('Option not available. view must be set to sview, zview or view2D') 
 
 
         outfile = str('%05d' % tindex) + '.png'
@@ -103,13 +103,13 @@ def make_movie(filelst, varname, cmin, cmax, view, lev=0, istart=None, iend=None
                '-o',
                'output.avi')
 
-    print "\n\nabout to execute:\n%s\n\n" % ' '.join(command)
+    print("\n\nabout to execute:\n%s\n\n" % ' '.join(command))
     subprocess.check_call(command)
 
-    print "\n\n The movie was written to 'output.avi'"
+    print("\n\n The movie was written to 'output.avi'")
 
     if imode is 'off':
-        print 'Turn interactive mode on again'
+        print('Turn interactive mode on again')
         plt.ion()
 
     if clean is True:
@@ -146,7 +146,7 @@ def make_big_movie(filelst, varname, cmin, cmax, Cpos, view, lev=0, grd=None, \
     nfile = len(filelst)
 
     if imode is 'off':
-        print 'Turn interactive mode off'
+        print('Turn interactive mode off')
         plt.ioff()
 
     counter = 0
@@ -174,7 +174,7 @@ def make_big_movie(filelst, varname, cmin, cmax, Cpos, view, lev=0, grd=None, \
                                         title=title, outfile='plot.png')
 
             else:
-                print 'Option not available. view must be set to sview, zview or view2D' 
+                print('Option not available. view must be set to sview, zview or view2D') 
 
             Tindex = counter + tindex
 
@@ -199,13 +199,13 @@ def make_big_movie(filelst, varname, cmin, cmax, Cpos, view, lev=0, grd=None, \
                'output.avi')
 
     if imode is 'off':
-        print 'Turn interactive mode on again'
+        print('Turn interactive mode on again')
         plt.ion()
 
-    print "\n\nabout to execute:\n%s\n\n" % ' '.join(command)
+    print("\n\nabout to execute:\n%s\n\n" % ' '.join(command))
     subprocess.check_call(command)
  
-    print "\n\n The movie was written to 'output.avi'"
+    print("\n\n The movie was written to 'output.avi'")
 
     if clean is True:
         for tindex in range(counter):

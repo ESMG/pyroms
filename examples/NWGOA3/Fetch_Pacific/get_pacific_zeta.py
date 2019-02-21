@@ -13,7 +13,7 @@ year = int(sys.argv[1])
 
 def create_HYCOM_file(name):
     global nc
-    print 'Creating file %s' %name
+    print('Creating file %s' %name)
 
     #create netCDF file
     nc = netCDF4.Dataset(name, 'w', format='NETCDF3_64BIT')
@@ -71,7 +71,7 @@ def create_HYCOM_file(name):
     nc.variables[outvarname].coordinates = 'ocean_time lon_rho lat_rho'
 
 
-    print 'Done with header for file %s' %name
+    print('Done with header for file %s' %name)
 
 
 
@@ -113,15 +113,15 @@ outfile = 'data/Pacific_%s_%04d.nc' %(outvarname,year)
 create_HYCOM_file(outfile)
 day_out = 0
 for day in range(rec_start,rec_end):
-    print 'Processing file for %s, day %d, year %04d' %(invarname, day_out*3, year)
+    print('Processing file for %s, day %d, year %04d' %(invarname, day_out*3, year))
     #get data from server
     try:
         var = dataset.variables[invarname][day,170:215,195:265]
 #        spval = var.get_fill_value()
 #        dataset.close()
-        print 'Got %s from server...' %invarname
+        print('Got %s from server...' %invarname)
     except:
-        print 'No file on the server... We skip this day.'
+        print('No file on the server... We skip this day.')
         retry_day.append((day,day_out))
         continue
 
@@ -134,17 +134,17 @@ for day in range(rec_start,rec_end):
 
 if retry == 'True':
     if len(retry_day) != 0:
-        print "Some file have not been downloded... Let's try again"
+        print("Some file have not been downloded... Let's try again")
     while len(retry_day) != 0:
         for (day,day_out) in retry_day:
-            print 'Retry file for %s, day %03d, year %04d' %(invarname, day_out, year)
+            print('Retry file for %s, day %03d, year %04d' %(invarname, day_out, year))
             #get data from server
             try:
                 var = dataset.variables[invarname][day,170:215,195:265]
 #                spval = var.get_fill_value()
-                print 'Got %s from server...' %invarname
+                print('Got %s from server...' %invarname)
             except:
-                print 'No file on the server... We skip this day.'
+                print('No file on the server... We skip this day.')
                 continue
 
             #create netCDF file

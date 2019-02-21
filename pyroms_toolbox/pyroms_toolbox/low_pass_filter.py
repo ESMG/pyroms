@@ -20,7 +20,7 @@ def low_pass_filter(data, window_size=3):
     low_passed_data = np.zeros(data.shape)
 
     if np.abs(window_size) % 2 != 1:
-        raise ValueError, 'window_size must be odd.'
+        raise ValueError('window_size must be odd.')
 
     win2 = (window_size - 1) / 2
 

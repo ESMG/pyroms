@@ -12,7 +12,7 @@ import sys
 
 def create_HYCOM_file(name, time, lon, lat, z, var):
 
-    print 'Write with file %s' %name
+    print('Write with file %s' %name)
 
     #create netCDF file
     nc = netCDF4.Dataset(name, 'w', format='NETCDF3_64BIT')
@@ -57,7 +57,7 @@ def create_HYCOM_file(name, time, lon, lat, z, var):
 
     nc.close()
 
-    print 'Done with file %s' %name
+    print('Done with file %s' %name)
 
 
 
@@ -93,7 +93,7 @@ else:
 #    daysinyear = 365
     daysinyear = 32
 for day in range(1,daysinyear+1):
-    print 'Processing file for %s, day %03d, year %04d' %(invarname, day, year)
+    print('Processing file for %s, day %03d, year %04d' %(invarname, day, year))
     url='http://tds.hycom.org/thredds/dodsC/datasets/GLBa0.08/expt_91.1/2015/uvel/archv.%04d_%03d_00_3zu.nc' %(year,day)
     #get data from server
     try:
@@ -101,9 +101,9 @@ for day in range(1,daysinyear+1):
         var = dataset.variables[invarname][0,:,1500-9:1800,600:940]
         spval = var.get_fill_value()
         dataset.close()
-        print 'Got %s from server...' %invarname
+        print('Got %s from server...' %invarname)
     except:
-        print 'No file on the server... We skip this day.'
+        print('No file on the server... We skip this day.')
         retry_day.append(day)
         continue
 
@@ -115,10 +115,10 @@ for day in range(1,daysinyear+1):
 
 if retry == 'True':
     if len(retry_day) != 0:
-        print "Some file have not been downloded... Let's try again"
+        print("Some file have not been downloded... Let's try again")
     while len(retry_day) != 0:
         for day in retry_day:
-            print 'Retry file for %s, day %03d, year %04d' %(invarname, day, year)
+            print('Retry file for %s, day %03d, year %04d' %(invarname, day, year))
             url='http://tds.hycom.org/thredds/dodsC/datasets/GLBa0.08/expt_91.1/2015/uvel/archv.%04d_%03d_00_3zu.nc' %(year,day)
             #get data from server
             try:
@@ -126,9 +126,9 @@ if retry == 'True':
                 var = dataset.variables[invarname][0,:,1500-9:1800,600:940]
                 spval = var.get_fill_value()
                 dataset.close()
-                print 'Got %s from server...' %invarname
+                print('Got %s from server...' %invarname)
             except:
-                print 'No file on the server... We skip this day.'
+                print('No file on the server... We skip this day.')
                 continue
 
             #create netCDF file

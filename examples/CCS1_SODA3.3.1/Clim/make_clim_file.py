@@ -1,7 +1,7 @@
 import subprocess
 import os
 import sys
-import commands
+import subprocess
 import numpy as np
 
 #increase the maximum number of open files allowed
@@ -24,15 +24,15 @@ filelst = subprocess.check_output(['ls', data_dir_year]).replace('/n',' ').split
 
 filelstyear = []
 for ff in filelst:
-	if ff.find(str(my_year)) > 0:
-		filelstyear.append(ff)
+    if ff.find(str(my_year)) > 0:
+        filelstyear.append(ff)
 
 src_grd = pyroms_toolbox.BGrid_GFDL.get_nc_BGrid_GFDL(data_dir + 'grid/SODA3_0.5deg_grid.nc', name='SODA3.3.1', xrange=(400, 500), yrange=(180, 280) )
 dst_grd = pyroms.grid.get_ROMS_grid('CCS')
 
 for filein in filelstyear:
     tag=filein.replace('soda3.3.1_monthly_ocean_reg_','').replace('.nc','')
-    print '\nBuild OBC file for time %s' %filein
+    print('\nBuild OBC file for time %s' %filein)
     zeta_dst_file = dst_dir + dst_grd.name + '_clim_zeta_' + tag + '_' + src_grd.name + '.nc'
     temp_dst_file = dst_dir + dst_grd.name + '_clim_temp_' + tag + '_' + src_grd.name + '.nc'
     salt_dst_file = dst_dir + dst_grd.name + '_clim_salt_' + tag + '_' + src_grd.name + '.nc'

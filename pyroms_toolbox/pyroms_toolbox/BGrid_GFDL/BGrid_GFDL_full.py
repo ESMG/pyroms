@@ -59,7 +59,7 @@ class BGrid_GFDL(object):
         lat[-1,0] = self.lat_t[-1,0] - ( self.lat_uv[-2,0] - self.lat_t[-1,0] )
 
         self.lon_t_vert = lon
-	self.lat_t_vert = lat
+        self.lat_t_vert = lat
 
 
     def _calculate_uv_vert(self):
@@ -93,7 +93,7 @@ class BGrid_GFDL(object):
 
         angle = 0.5 * (az_forward[1:,:] + az_forward[:-1,:])
         self.angle = (90 - angle) * np.pi/180.
-        
+
 
 
 def get_nc_BGrid_GFDL(grdfile):
@@ -175,7 +175,7 @@ def make_remap_BGrid_GFDL_file(Bgrd, Bpos='t'):
         grid_imask = Bgrd.mask_uv[0,:].flatten()
         Mp, Lp = Bgrd.lon_uv.shape
     else:
-        raise ValueError, 'Bpos must be t or uv'
+        raise ValueError('Bpos must be t or uv')
 
     grid_size = Lp * Mp
 

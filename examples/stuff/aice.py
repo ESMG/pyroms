@@ -27,10 +27,10 @@ wks  = Ngl.open_wks("ncgm", "aice")            # open workstation
 #	  "(/1.,.42,.42/)", "(/1.,.30,.30/)", \
 #	  "(/1., 0., 0./)", "(/.85,0., 0./)"]
 cmap = ["white", "black", \
-	  "(/0., 0.,.85/)", "(/ 0., 0.,1./)", "(/.30,.30,1./)", \
-	  "(/.42,.42,1./)", "(/.55,.55,1./)", \
-	  "(/.64,.64,1./)", "(/.72,.72,1./)", "(/.80,.80,1./)", \
-	  "(/.88,.88,1./)", "(/.9, .9, .9/)", "burlywood"]
+          "(/0., 0.,.85/)", "(/ 0., 0.,1./)", "(/.30,.30,1./)", \
+          "(/.42,.42,1./)", "(/.55,.55,1./)", \
+          "(/.64,.64,1./)", "(/.72,.72,1./)", "(/.80,.80,1./)", \
+          "(/.88,.88,1./)", "(/.9, .9, .9/)", "burlywood"]
 
 rlist = Ngl.Resources()
 rlist.wkColorMap = cmap
@@ -116,13 +116,13 @@ txres             = Ngl.Resources()          # Text resources desired
 txres.txFontHeightF = 0.015
 
 for file in lst_file:
-    print "Plotting "+file
+    print("Plotting "+file)
     nc = netCDF4.Dataset(file, "r")
     aice = nc.variables["aice"][0,:,:]
     time = nc.variables["ocean_time"][0]
     myday = jday2date(time/86400.)
     date_tag = myday.strftime('%d %B %Y')
-    print date_tag
+    print(date_tag)
     plot = Ngl.contour_map(wks, aice, res)
     Ngl.text_ndc(wks, date_tag, 0.85, 0.94, txres)
     nc.close()

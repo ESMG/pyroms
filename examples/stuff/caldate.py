@@ -78,13 +78,13 @@ def caldate_1900(Julian):
     min = floor((sec%3600)/60)
     sec = round(sec%60)
 
-    print "Year: "+str(yr)
-    print "Year Day: "+str(yday)
-    print "Month: "+str(mo)
-    print "Day: "+str(d)
-    print "Hour: "+str(hour)
-    print "Min: "+str(min)
-    print "Sec: "+str(sec)
+    print("Year: "+str(yr))
+    print("Year Day: "+str(yday))
+    print("Month: "+str(mo))
+    print("Day: "+str(d))
+    print("Hour: "+str(hour))
+    print("Min: "+str(min))
+    print("Sec: "+str(sec))
 
     cal = {'year':yr,'yearday':yday,'month':mo,'day':d,\
            'hour':hour,'minute':min,'second':sec}

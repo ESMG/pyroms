@@ -7,7 +7,7 @@ def change(old,relation,flag,value):
 
     if relation != '==' and relation != '!=' and relation != '>' and relation != '<' and \
          relation != '!=' and relation != '>=' and relation != '<=':
-        raise ValueError, 'Relation {%s} not valid' % relation
+        raise ValueError('Relation {%s} not valid' % relation)
 
     if np.isnan(flag):
         if relation == '==':
@@ -15,7 +15,7 @@ def change(old,relation,flag,value):
         elif relation == '!=':
             replace = np.where(np.isnan(old) == False)
         else:
-            raise ValueError, 'Relation should be == or ~= to compare to NaN'
+            raise ValueError('Relation should be == or ~= to compare to NaN')
 
     else:
         if relation == '==':

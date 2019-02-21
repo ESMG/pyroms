@@ -124,10 +124,10 @@ def quiver(uvar, vvar, tindex, depth, gridid, \
     if outfile is not None:
         if outfile.find('.png') != -1 or outfile.find('.svg') != -1 or \
            outfile.find('.eps') != -1:
-            print 'Write figure to file', outfile
+            print('Write figure to file', outfile)
             plt.savefig(outfile, dpi=100, facecolor='w', edgecolor='w', \
                         orientation='portrait')
         else:
-            print 'Unrecognized file extension. Please use .png, .svg or .eps file extension.'
+            print('Unrecognized file extension. Please use .png, .svg or .eps file extension.')
 
     return

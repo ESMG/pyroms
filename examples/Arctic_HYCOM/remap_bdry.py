@@ -18,7 +18,7 @@ class nctime(object):
 
 def remap_bdry(src_file, src_varname, src_grd, dst_grd, dxy=20, cdepth=0, kk=2, dst_dir='./'):
 
-    print src_file
+    print(src_file)
     
     # get time
     nctime.long_name = 'time'
@@ -27,7 +27,7 @@ def remap_bdry(src_file, src_varname, src_grd, dst_grd, dxy=20, cdepth=0, kk=2, 
     # create boundary file
     dst_file = src_file.rsplit('/')[-1]
     dst_file = dst_dir + dst_file[:-3] + '_' + src_varname + '_bdry_' + dst_grd.name + '.nc'
-    print '\nCreating boundary file', dst_file
+    print('\nCreating boundary file', dst_file)
     if os.path.exists(dst_file) is True:
         os.remove(dst_file)
     pyroms_toolbox.nc_create_roms_bdry_file(dst_file, dst_grd, nctime)
@@ -39,7 +39,7 @@ def remap_bdry(src_file, src_varname, src_grd, dst_grd, dxy=20, cdepth=0, kk=2, 
     cdf = netCDF.Dataset(src_file) 
     src_var = cdf.variables[src_varname]
     time = cdf.variables['ocean_time'][0]
-    print time
+    print(time)
 
     #get missing value
     spval = src_var._FillValue
@@ -124,7 +124,7 @@ def remap_bdry(src_file, src_varname, src_grd, dst_grd, dxy=20, cdepth=0, kk=2, 
         field_west = 'salt_west, scalar, series'
         units = 'PSU'
     else:
-        raise ValueError, 'Undefined src_varname'
+        raise ValueError('Undefined src_varname')
 
 
     if ndim == 3:
@@ -136,25 +136,25 @@ def remap_bdry(src_file, src_varname, src_grd, dst_grd, dxy=20, cdepth=0, kk=2, 
 
 
     # create variable in boudary file
-    print 'Creating variable', dst_varname_north
+    print('Creating variable', dst_varname_north)
     nc.createVariable(dst_varname_north, 'f8', dimensions_north, fill_value=spval)
     nc.variables[dst_varname_north].long_name = long_name_north
     nc.variables[dst_varname_north].units = units
     nc.variables[dst_varname_north].field = field_north
 
-    print 'Creating variable', dst_varname_south
+    print('Creating variable', dst_varname_south)
     nc.createVariable(dst_varname_south, 'f8', dimensions_south, fill_value=spval)
     nc.variables[dst_varname_south].long_name = long_name_south
     nc.variables[dst_varname_south].units = units
     nc.variables[dst_varname_south].field = field_south
 
-    print 'Creating variable', dst_varname_east
+    print('Creating variable', dst_varname_east)
     nc.createVariable(dst_varname_east, 'f8', dimensions_east, fill_value=spval)
     nc.variables[dst_varname_east].long_name = long_name_east
     nc.variables[dst_varname_east].units = units
     nc.variables[dst_varname_east].field = field_east
 
-    print 'Creating variable', dst_varname_west
+    print('Creating variable', dst_varname_west)
     nc.createVariable(dst_varname_west, 'f8', dimensions_west, fill_value=spval)
     nc.variables[dst_varname_west].long_name = long_name_west
     nc.variables[dst_varname_west].units = units
@@ -162,26 +162,26 @@ def remap_bdry(src_file, src_varname, src_grd, dst_grd, dxy=20, cdepth=0, kk=2, 
 
 
     # remapping
-    print 'remapping', dst_varname, 'from', src_grd.name, \
-              'to', dst_grd.name
-    print 'time =', time
+    print('remapping', dst_varname, 'from', src_grd.name, \
+              'to', dst_grd.name)
+    print('time =', time)
 
 
     if ndim == 3:
         # flood the grid
-        print 'flood the grid'
+        print('flood the grid')
         src_varz = pyroms_toolbox.Grid_HYCOM.flood_fast(src_var, src_grd, pos=pos, spval=spval, \
                                 dxy=dxy, cdepth=cdepth, kk=kk)
     else:
         src_varz = src_var
 
     # horizontal interpolation using scrip weights
-    print 'horizontal interpolation using scrip weights'
+    print('horizontal interpolation using scrip weights')
     dst_varz = pyroms.remapping.remap(src_varz, wts_file, spval=spval)
 
     if ndim == 3:
         # vertical interpolation from standard z level to sigma
-        print 'vertical interpolation from standard z level to sigma'
+        print('vertical interpolation from standard z level to sigma')
         dst_var_north = pyroms.remapping.z2roms(dst_varz[::-1, Mp-1:Mp, :], \
                           dst_grdz, dst_grd, Cpos=Cpos, spval=spval, \
                           flood=False, irange=(0,Lp), jrange=(Mp-1,Mp))
@@ -201,7 +201,7 @@ def remap_bdry(src_file, src_varname, src_grd, dst_grd, dxy=20, cdepth=0, kk=2, 
         dst_var_west = dst_varz[:, 0]
 
     # write data in destination file
-    print 'write data in destination file'
+    print('write data in destination file')
     nc.variables['ocean_time'][0] = time
     nc.variables[dst_varname_north][0] = np.squeeze(dst_var_north)
     nc.variables[dst_varname_south][0] = np.squeeze(dst_var_south)

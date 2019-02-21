@@ -10,32 +10,32 @@ def add_to_lists(pairs, i, j, sign, dir):
     for it in range(1,len(pairs)):
         x2, y2 = pairs[it]
 
-	if x2 > x1:
-	# negative v-velocity
-	    i.append(x1)
-	    j.append(y1)
-	    sign.append(-1)
-	    dir.append(1)
-	elif x1 > x2:
-	# positive v-velocity
-	    i.append(x2)
-	    j.append(y1)
-	    sign.append(1)
-	    dir.append(1)
-	elif y2 > y1:
-	# positive u-velocity
-	    i.append(x1)
-	    j.append(y1)
-	    sign.append(1)
-	    dir.append(0)
-	elif y1 > y2:
-	# negative u-velocity
-	    i.append(x1)
-	    j.append(y2)
-	    sign.append(-1)
-	    dir.append(0)
-	x1 = x2
-	y1 = y2
+        if x2 > x1:
+        # negative v-velocity
+            i.append(x1)
+            j.append(y1)
+            sign.append(-1)
+            dir.append(1)
+        elif x1 > x2:
+        # positive v-velocity
+            i.append(x2)
+            j.append(y1)
+            sign.append(1)
+            dir.append(1)
+        elif y2 > y1:
+        # positive u-velocity
+            i.append(x1)
+            j.append(y1)
+            sign.append(1)
+            dir.append(0)
+        elif y1 > y2:
+        # negative u-velocity
+            i.append(x1)
+            j.append(y2)
+            sign.append(-1)
+            dir.append(0)
+        x1 = x2
+        y1 = y2
 
 outfile = sys.argv[1]
 
@@ -62,15 +62,15 @@ dir = []
 for line in f:
     a, b, c = re.split('\s+', line)
     if a=='-10':
-	# wrap up object
-	add_to_lists(pairs, i, j, sign, dir)
+        # wrap up object
+        add_to_lists(pairs, i, j, sign, dir)
     elif (a=='-1' or a=='-3'):
-	# wrap up object
-	add_to_lists(pairs, i, j, sign, dir)
-	# start new object
+        # wrap up object
+        add_to_lists(pairs, i, j, sign, dir)
+        # start new object
         pairs = []
     else:
-        pairs.append([int(a),int(b)]) 
+        pairs.append([int(a),int(b)])
 
 # create file with all the objects
 out = netCDF4.Dataset(outfile, 'w', format='NETCDF3_64BIT')
@@ -90,7 +90,7 @@ times.long_name = 'river runoff time'
 
 river = out.createVariable('river', 'i4', ('river'))
 river.long_name = 'river runoff identification number'
-out.variables['river'][:] = range(1,len(i)+1)
+out.variables['river'][:] = list(range(1,len(i)+1))
 
 flag = out.createVariable('river_sign', 'f8', ('river'))
 flag.long_name = 'river directional sign'

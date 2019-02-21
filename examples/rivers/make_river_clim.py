@@ -6,8 +6,8 @@ import pyroms
 import pyroms_toolbox
 
 
-# load 2-dimentional discharge data 
-print 'Load discharge data'
+# load 2-dimentional discharge data
+print('Load discharge data')
 nc_data = netCDF.Dataset('CI_runoff.nc', 'r')
 nc_rivers = netCDF.Dataset('Cook_Inlet_rivers.nc', 'a')
 data = nc_data.variables['Runoff'][:]
@@ -36,25 +36,25 @@ filler(rivers, rivers)
 for k in range(Nr):
     if (sign[k]==1):
         count[eta[k],xi[k]] += 1
-	rivers[eta[k],xi[k]].append(k)
+        rivers[eta[k],xi[k]].append(k)
     elif (sign[k]==-1 and dir[k]==0):
         count[eta[k],xi[k]-1] += 1
-	rivers[eta[k],xi[k]-1].append(k)
+        rivers[eta[k],xi[k]-1].append(k)
     elif (sign[k]==-1 and dir[k]==1):
         count[eta[k]-1,xi[k]] += 1
-	rivers[eta[k]-1,xi[k]].append(k)
+        rivers[eta[k]-1,xi[k]].append(k)
 
 
 nct=0
 for t in range(nt):
-    print 'Remapping runoff for time %f' %time[t]
+    print('Remapping runoff for time %f' %time[t])
     for j in range(Mp):
         for i in range(Lp):
-	    for n in range(count[j,i]):
-	        frac = 1.0/count[j,i]
-		k = rivers[j,i][n]
-		runoff[k] = frac*data[t,j,i]
-	        
+            for n in range(count[j,i]):
+                frac = 1.0/count[j,i]
+                k = rivers[j,i][n]
+                runoff[k] = frac*data[t,j,i]
+
 
     if t==180:
         sum180 = np.sum(runoff)
@@ -69,4 +69,4 @@ for t in range(nt):
 # close netcdf file
 nc_rivers.close()
 
-print 'sum 4', sum180
+print('sum 4', sum180)

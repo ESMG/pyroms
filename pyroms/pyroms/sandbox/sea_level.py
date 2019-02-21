@@ -2,7 +2,7 @@
 # sample url
 #http://tidesandcurrents.noaa.gov/data_listing.shtml?bdate=20080323&edate=20080423&datum=6&unit=0&shift=g&stn=8762075&type=Tide%20Data&format=View+Data&listing=1
 
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 from datetime import datetime
 
 import numpy as np
@@ -28,8 +28,8 @@ class sea_level(object):
         self.data_dict['stn'] = str(station_id)
         
         url = self.root + '&'.join([ '='.join(keyval) for (keyval) in 
-                                    self.data_dict.iteritems()])
-        lines = urllib2.urlopen(url).readlines()
+                                    self.data_dict.items()])
+        lines = urllib.request.urlopen(url).readlines()
         
         pr = False
         date = []
@@ -54,6 +54,6 @@ class sea_level(object):
 
 
 sl = sea_level('8762075', 'foo')
-print sl.date
-print sl.ssh
+print(sl.date)
+print(sl.ssh)
         

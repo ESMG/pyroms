@@ -1,7 +1,7 @@
 import subprocess
 import os
 import sys
-import commands
+import subprocess
 import numpy as np
 
 import pyroms
@@ -20,13 +20,13 @@ lst_file = []
 
 for year in lst_year:
     year = np.str(year)
-    lst = commands.getoutput('ls ' + data_dir + 'SODA_2.1.6_' + year + '*')
+    lst = subprocess.getoutput('ls ' + data_dir + 'SODA_2.1.6_' + year + '*')
     lst = lst.split()
     lst_file = lst_file + lst
 
-print 'Build OBC file from the following file list:'
-print lst_file
-print ' '
+print('Build OBC file from the following file list:')
+print(lst_file)
+print(' ')
 
 src_grd_file = data_dir + 'SODA_grid.cdf'
 src_grd = pyroms_toolbox.BGrid_SODA.get_nc_BGrid_SODA('/Volumes/R1/DATA/SODA_2.1.6/SODA_grid.cdf', name='SODA_2.1.6_YELLOW', xrange=(225, 275), yrange=(190, 240))

@@ -1,3 +1,6 @@
+# This file is designed to be cut and pasted into an ipython --pylab
+# session. Otherwise, you'll need to "import numpy as np" then
+# convert "array" to "np.array".
 import os
 from mpl_toolkits.basemap import Basemap, shiftgrid
 import matplotlib.colors as colors
@@ -6,7 +9,7 @@ import netCDF4
 
 import pyroms
 import pyroms_toolbox
-from ROMS_bathy_smoother import *
+from bathy_smoother import *
 
 
 #Grid dimension
@@ -55,7 +58,7 @@ hgrd = pyroms.grid.Gridgen(lonp, latp, beta, (Mp+3,Lp+3), proj=map)
 #hgrd = bry.grd
 
 
-lonv, latv = map(hgrd.x_vert, hgrd.y_vert, inverse=True)
+lonv, latv = list(map(hgrd.x_vert, hgrd.y_vert, inverse=True))
 hgrd = pyroms.grid.CGrid_geo(lonv, latv, map)
 
 # generate the mask
@@ -77,7 +80,7 @@ pyroms.grid.edit_mask_mesh(hgrd, proj=map)
 # read in topo data (on a regular lat/lon grid)
 # this topo come with basemap so you should have it on your laptop.
 # just update datadir with the appropriate path
-# you can get this data from matplolib svn with 
+# you can get this data from matplolib svn with
 # svn co https://matplotlib.svn.sourceforge.net/svnroot/matplotlib/trunk/htdocs/screenshots/data/"
 datadir = '/home/frederic/python/basemap-0.99.4/examples/'
 topo = np.loadtxt(os.path.join(datadir, 'etopo20data.gz'))
@@ -108,7 +111,7 @@ h = pyroms_toolbox.change(h, '<', hmin, hmin)
 
 # check bathymetry roughness
 RoughMat = bathy_tools.RoughnessMatrix(h, hgrd.mask_rho)
-print 'Max Roughness value is: ', RoughMat.max()
+print('Max Roughness value is: ', RoughMat.max())
 
 # smooth the raw bathy using the direct iterative method from Martinho and Batteen (2006)
 rx0_max = 0.35
@@ -116,7 +119,7 @@ h = bathy_smoothing.smoothing_Positive_rx0(hgrd.mask_rho, h, rx0_max)
 
 # check bathymetry roughness again
 RoughMat = bathy_tools.RoughnessMatrix(h, hgrd.mask_rho)
-print 'Max Roughness value is: ', RoughMat.max()
+print('Max Roughness value is: ', RoughMat.max())
 
 hgrd.h = h
 

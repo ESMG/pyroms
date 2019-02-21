@@ -19,9 +19,9 @@ def RoughnessMatrix(DEP, MSK):
     eta_rho, xi_rho = DEP.shape
 
     Umat = np.array([[0, 1],
-	            [1, 0],
-	            [0, -1],
-	            [-1, 0]])
+                    [1, 0],
+                    [0, -1],
+                    [-1, 0]])
 
     RoughMat = np.zeros(DEP.shape)
 

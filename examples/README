@@ -23,6 +23,8 @@ INTERPOLATING FROM SODA:
    conditions and climatology files - be sure to set the number of processes
    desired.
 
+   Added a couple of SODA3 examples, but the Arctic isn't working yet.
+
 INTERPOLATING FROM LARGER ROMS DOMAINS:
 
    For creating initial and boundary files from larger ROMS grids,

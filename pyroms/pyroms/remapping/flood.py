@@ -11,12 +11,12 @@ def flood(varz, grdz, Cpos='rho', irange=None, jrange=None, \
     var = flood(var, grdz)
 
     optional switch:
-      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where 
-				     the variable rely
+      - Cpos='rho', 'u' or 'v'	     specify the C-grid position where
+                                     the variable rely
       - irange                       specify grid sub-sample for i direction
       - jrange                       specify grid sub-sample for j direction
       - spval=1e37                   define spval value
-      - dmax=0                       if dmax>0, maximum horizontal 
+      - dmax=0                       if dmax>0, maximum horizontal
                                      flooding distance
       - cdepth=0                     critical depth for flooding
                                      if depth<cdepth => no flooding
@@ -59,7 +59,7 @@ def flood(varz, grdz, Cpos='rho', irange=None, jrange=None, \
         h = grdz.vgrid.h
         mask = grdz.hgrid.mask_rho
     else:
-        raise Warning, '%s bad position. Use depth at Arakawa-C rho points instead.' % Cpos
+        raise Warning('%s bad position. Use depth at Arakawa-C rho points instead.' % Cpos)
 
     nlev, Mm, Lm = varz.shape
 
@@ -118,7 +118,7 @@ def flood(varz, grdz, Cpos='rho', irange=None, jrange=None, \
     for i in range(Lm):
         for j in range(Mm):
             if mask[j,i] == 1:
-                varz[:bottom[j,i],j,i] = varz[bottom[j,i],j,i]
-                varz[surface[j,i]:,j,i] = varz[surface[j,i],j,i]
+                varz[:int(bottom[j,i]),j,i] = varz[int(bottom[j,i]),j,i]
+                varz[int(surface[j,i]):,j,i] = varz[int(surface[j,i]),j,i]
 
     return varz

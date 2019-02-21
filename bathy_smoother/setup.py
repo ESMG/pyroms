@@ -1,6 +1,6 @@
 """
 bathy_smoother is a suite of tools for working with ROMS bathymetry.
-(ripped from matlab script LP_bathymetry)    
+(ripped from matlab script LP_bathymetry)
 
 Requires:
     NumPy (http://numpy.scipy.org)
@@ -84,9 +84,7 @@ if __name__ == '__main__':
           version = '0.1',
           description = doclines[0],
           long_description = "\n".join(doclines[2:]),
-          author = "Frederic Castruccio",
-          author_email = "frederic@marine.rutgers.edu",
-          url = 'https://github.com/kshedstrom/pyroms',
+          url = 'https://github.com/ESMG/pyroms',
           license = 'BSD',
           platforms = ["any"],
           configuration=configuration,

@@ -14,7 +14,7 @@ nine = -9999.0*np.ones(coast_cells.shape)
 coast_cells = np.where(np.isnan(coast_cells),nine,coast_cells)
 
 numy, numx = coast_cells.shape
-print numy, numx
+print(numy, numx)
 ntime = 1
 
 out.createDimension('x', numx)

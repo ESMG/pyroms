@@ -52,7 +52,7 @@ def average(var, ncfiles, trange=None, avgfile=None, spval=1e37, timevar='ocean_
         var = [var]
         nvar = len(var)
     else:
-        raise ValueError, 'var must be a str or a list of str'
+        raise ValueError('var must be a str or a list of str')
 
     avg.ncfiles = pyroms.io.MFDataset(ncfiles)
 
@@ -67,9 +67,9 @@ def average(var, ncfiles, trange=None, avgfile=None, spval=1e37, timevar='ocean_
             start = trange[0]
             end = min(trange[1]+1, Nt)
         else:
-            raise ValueError, 'trange must be within interval [0, %s].' %Nt
+            raise ValueError('trange must be within interval [0, %s].' %Nt)
 
-    print range(start,end)
+    print(list(range(start,end)))
 
     for varname in var:
         name = varname
@@ -110,8 +110,8 @@ def average(var, ncfiles, trange=None, avgfile=None, spval=1e37, timevar='ocean_
             setattr(avg, varname, incavg[:])
 
         else:
-            raise ValueError, 'Variable must be 3D (time + 2 spacial dims) or \
-4D (time + 3 spacial dims)'
+            raise ValueError('Variable must be 3D (time + 2 spacial dims) or \
+4D (time + 3 spacial dims)')
 
 
     # if avgfile is defined, enter this conditional and begin creating a new netCDF file
@@ -129,10 +129,10 @@ def average(var, ncfiles, trange=None, avgfile=None, spval=1e37, timevar='ocean_
             nc.Created = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             nc.Files = ", ".join(avg.ncfiles._files)
 
-            print 'Writing '+str(avgfile)+'...'
+            print('Writing '+str(avgfile)+'...')
 
             # for each dimension in original netCDF files, recreate the dimensions in the new netCDF file
-            for newdim in avg.ncfiles.dimensions.keys():
+            for newdim in list(avg.ncfiles.dimensions.keys()):
                 if avg.ncfiles.dimensions[newdim].isunlimited():
                     nc.createDimension(newdim,None)
                 else:
@@ -152,7 +152,7 @@ def average(var, ncfiles, trange=None, avgfile=None, spval=1e37, timevar='ocean_
             # for each variable in var, create a new variable with all dimensions associated with that
             # variable except ocean_time
             for varname in var:
-                print '  writting %s...' %varname
+                print('  writting %s...' %varname)
 
                 vardims = avg.ncfiles.variables[varname].dimensions
 
@@ -172,9 +172,9 @@ def average(var, ncfiles, trange=None, avgfile=None, spval=1e37, timevar='ocean_
             avg.ncfiles.close()
             nc.close()
         else:
-            print "avgfile must be a string that equates to the path where this netCDF file is to be placed."
+            print("avgfile must be a string that equates to the path where this netCDF file is to be placed.")
         return
     else:
         avg.ncfiles.close()
-        print "Returning average object..."
+        print("Returning average object...")
         return avg

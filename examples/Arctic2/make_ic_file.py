@@ -2,7 +2,7 @@ import matplotlib
 matplotlib.use('Agg')
 import subprocess
 import os
-import commands
+import subprocess
 import numpy as np
 
 import pyroms
@@ -15,9 +15,9 @@ from remap_uv import remap_uv
 file = '/nfs/P1/Data/SODA/SODA_2.1.6/SODA_2.1.6_20031231-20040105.cdf'
 dst_dir='./'
 
-print 'Build IC file from the following file:'
-print file
-print ' '
+print('Build IC file from the following file:')
+print(file)
+print(' ')
 
 src_grd = pyroms_toolbox.BGrid_SODA.get_nc_BGrid_SODA('/nfs/P1/Data/SODA/SODA_2.1.6/SODA_grid.cdf', name='SODA_2.1.6', area='npolar', ystart=240)
 dst_grd = pyroms.grid.get_ROMS_grid('ARCTIC2')

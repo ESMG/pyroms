@@ -35,7 +35,7 @@ hgrd = pyroms.grid.Gridgen(lonp, latp, beta, (Mm+3, Lm+3), proj=map)
 #bry = pyroms.hgrid.BoundaryInteractor(xp, yp, beta, shp=(Mm+3,Lm+3), proj=map)
 #hgrd=bry.grd
 
-lonv, latv = map(hgrd.x_vert, hgrd.y_vert, inverse=True)
+lonv, latv = list(map(hgrd.x_vert, hgrd.y_vert, inverse=True))
 hgrd = pyroms.grid.CGrid_geo(lonv, latv, map)
 
 # generate the mask
@@ -94,7 +94,7 @@ hraw = h.copy()
 
 # check bathymetry roughness
 RoughMat = bathy_tools.RoughnessMatrix(h, hgrd.mask_rho)
-print 'Max Roughness value is: ', RoughMat.max()
+print('Max Roughness value is: ', RoughMat.max())
 
 # smooth the raw bathy using the direct iterative method from Martinho and Batteen (2006)
 rx0_max = 0.35
@@ -102,7 +102,7 @@ h = bathy_smoothing.smoothing_Positive_rx0(hgrd.mask_rho, h, rx0_max)
 
 # check bathymetry roughness again
 RoughMat = bathy_tools.RoughnessMatrix(h, hgrd.mask_rho)
-print 'Max Roughness value is: ', RoughMat.max()
+print('Max Roughness value is: ', RoughMat.max())
 
 # vertical coordinate
 theta_b = 2

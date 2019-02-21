@@ -9,8 +9,8 @@ def roms2z(var, grd, grdz, Cpos='rho', irange=None, jrange=None, \
     varz = roms2z(var, grd, grdz)
 
     optional switch:
-      - Cpos='rho', 'u' 'v' or 'w'   specify the C-grid position where 
-				     the variable rely
+      - Cpos='rho', 'u' 'v' or 'w'   specify the C-grid position where
+                                     the variable rely
       - irange                       specify grid sub-sample for i direction
       - jrange                       specify grid sub-sample for j direction
       - spval=1e37                   define spval value
@@ -29,7 +29,7 @@ def roms2z(var, grd, grdz, Cpos='rho', irange=None, jrange=None, \
         imode=1
     else:
         imode=0
-        raise Warning, '%s not supported, defaulting to linear' % mode
+        raise Warning('%s not supported, defaulting to linear' % mode)
 
 
     if Cpos is 'rho':
@@ -49,7 +49,7 @@ def roms2z(var, grd, grdz, Cpos='rho', irange=None, jrange=None, \
         depth = grdz.vgrid.z
         mask = grd.hgrid.mask_rho
     else:
-        raise Warning, '%s unknown position. Cpos must be rho, u, v or w.' % Cpos
+        raise Warning('%s unknown position. Cpos must be rho, u, v or w.' % Cpos)
 
     Nm, Mm, Lm = var.shape
     nlev = grdz.vgrid.N
@@ -82,5 +82,5 @@ def roms2z(var, grd, grdz, Cpos='rho', irange=None, jrange=None, \
     idx = np.where(abs((varz-spval)/spval)<=1e-5)
     varz[idx] = spval
     #varz = np.ma.masked_values(varz, spval, rtol=1e-5)
-    
+
     return varz

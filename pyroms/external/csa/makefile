@@ -6,11 +6,11 @@ SHELL = /bin/sh
 
 #### Start of system configuration section. ####
 
-prefix = /u1/uaf/kshedstrom/python
+prefix = /home/kshedstrom/python
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
-libdir = /u1/uaf/kshedstrom/python/lib
+libdir = /home/kshedstrom/python/lib
 includedir = ${prefix}/include
 
 INSTALLDIRS =\
@@ -27,8 +27,8 @@ INSTALL_DATA = ${INSTALL} -m 644
 #### End of system configuration section. ####
 
 CC = gcc
-CFLAGS = -I/u1/uaf/kshedstrom/python/include
-LDFLAGS = -L$DESTDIR/lib
+CFLAGS = -g -O2 -Wall -pedantic
+LDFLAGS = 
 
 AR = ar
 ARFLAGS = cru

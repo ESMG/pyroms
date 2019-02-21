@@ -4,7 +4,7 @@ matplotlib.use('Agg')
 import subprocess
 import os
 import sys
-import commands
+import subprocess
 import numpy as np
 from multiprocessing import Pool
 #import pdb
@@ -29,14 +29,14 @@ lst_file = []
 
 for year in lst_year:
 #    lst = commands.getoutput('ls ' + data_dir + 'HYCOM_GLBa0.08_' + year + '*')
-    lst = commands.getoutput('ls ' + data_dir + 'HYCOM_GLBa0.08_' + year + '_0*')
+    lst = subprocess.getoutput('ls ' + data_dir + 'HYCOM_GLBa0.08_' + year + '_0*')
 #    lst = commands.getoutput('ls ' + data_dir + 'HYCOM_GLBa0.08_' + year + '_0[4-9]*')
     lst = lst.split()
     lst_file = lst_file + lst
 
-print 'Build OBC file from the following file list:'
-print lst_file
-print ' '
+print('Build OBC file from the following file list:')
+print(lst_file)
+print(' ')
 
 src_grd_file = data_dir + '../HYCOM_GLBa0.08_North_grid2.nc'
 src_grd = pyroms_toolbox.Grid_HYCOM.get_nc_Grid_HYCOM(src_grd_file)

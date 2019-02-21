@@ -99,14 +99,14 @@ import pyroms_toolbox
 
 
 #  create CI remap file for scrip
-print 'Create remap grid file for CI grid'
+print('Create remap grid file for CI grid')
 dstgrd = pyroms.grid.get_ROMS_grid('COOK_INLET_LYON')
 dstgrd.hgrid.mask_rho = np.ones(dstgrd.hgrid.mask_rho.shape)
 pyroms.remapping.make_remap_grid_file(dstgrd, Cpos='rho')
 
 
 ## compute remap weights
-print 'compute remap weights using scrip'
+print('compute remap weights using scrip')
 # input namelist variables for conservative remapping at rho points
 grid1_file = '../version1/remap_grid_runoff.nc'
 grid2_file = 'remap_grid_COOK_INLET_LYON_rho.nc'

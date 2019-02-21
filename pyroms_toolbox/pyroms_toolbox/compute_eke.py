@@ -1,5 +1,4 @@
 import numpy as np
-import pyroms
 
 def compute_eke(u, v):
 

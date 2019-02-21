@@ -149,7 +149,7 @@ def cond(S, T, P):
     RT = (S/35.0)**0.5
     SI = _sal(RT,DT)
     # Iteration
-    for n in xrange(100):
+    for n in range(100):
         RT = RT + (S-SI)/_dsal(RT,DT)
         SI = _sal(RT,DT)
         try:

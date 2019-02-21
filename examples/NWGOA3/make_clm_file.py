@@ -9,17 +9,17 @@ import string
 
 import pyroms
 import pyroms_toolbox
-import commands
+import subprocess
 
 irange = None
 jrange = None
 
 def do_file(file):
-    print 'file is: ' + file
+    print('file is: ' + file)
     start = string.find(file,'_')
     end = string.find(file,'_',start+1)
     var = file[start+1:end]
-    print 'var is: ' + var
+    print('var is: ' + var)
     if var == 'uv':
         dst_var = pyroms_toolbox.remapping(['u', 'v'], file,\
                      wts_file,src_grd,dst_grd,rotate_uv=True,\
@@ -32,7 +32,7 @@ lst_file = []
 
 # Change src_filename to your directory for the file's containing variable data
 data_dir = '/archive/u1/uaf/kate/COSINE/months/'
-lst = commands.getoutput('ls ' + data_dir + 'Pac*_2008.nc')
+lst = subprocess.getoutput('ls ' + data_dir + 'Pac*_2008.nc')
 #lst = commands.getoutput('ls ' + data_dir + 'Pacific_z*2_1987.nc')
 #lst = commands.getoutput('ls ' + data_dir + 'Pacific_[tuvz]*_2008.nc')
 lst = lst.split()

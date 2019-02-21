@@ -1,8 +1,8 @@
-ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-c SUBROUTINE INTEGRATE
-ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+!cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+! SUBROUTINE INTEGRATE
+!cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       subroutine integrate(z_w,q,z_iso,iqu,iql,L,M,N)
-      
+
       implicit none
       integer L, M, N
       real*8 z_w(N+1,M,L)
@@ -10,12 +10,15 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       real*8 q(N,M,L)
       real*8 iqu(M,L)
       real*8 iql(M,L)
-cf2py intent(out) iqu
-cf2py intent(out) iql
+!f2py intent(out) iqu
+!f2py intent(out) iql
+!f2py intent(hide) :: L
+!f2py intent(hide) :: M
+!f2py intent(hide) :: N
       integer i, j, k
       real*8 dz(N)
       real*8 dzp
-      
+
       do i=1,L
         do j=1,M
           do k=1,N
@@ -37,27 +40,30 @@ cf2py intent(out) iql
           enddo
         enddo
       enddo
-      
+
       return
       end
 
 
-ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-c SUBROUTINE SURFACE
-ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+!cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+! SUBROUTINE SURFACE
+!cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       subroutine surface(z, q, q0, z_iso, L, M, N)
-c Assume q is sorted
-      
+! Assume q is sorted
+
       implicit none
       integer L, M, N
       real*8 z(N,M,L)
       real*8 q(N,M,L)
       real*8 q0(M,L)
       real*8 z_iso(M,L)
-cf2py intent(out) z_iso
+!f2py intent(out) z_iso
+!f2py intent(hide) :: L
+!f2py intent(hide) :: M
+!f2py intent(hide) :: N
       integer i, j, k
       real*8 dz, dq, dq0
-      
+
       do i=1,L
         do j=1,M
           z_iso(j,i)=1.0d20 ! default value - isoline not in profile
@@ -72,26 +78,29 @@ cf2py intent(out) z_iso
           enddo
         enddo
       enddo
-      
+
       return
       end
 
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-c SUBROUTINE ZSLICE
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+!ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+! SUBROUTINE ZSLICE
+!ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       subroutine zslice (z,f3d,depths,f2d,vinterp,L,M,N)
-      
+
       implicit none
       integer L, M, N, vinterp
       real*8 depths(M,L)
       real*8 f3d(N,M,L), z(N,M,L)
       real*8 f2d(M,L)
-cf2py intent(out) f2d
+!f2py intent(out) f2d
+!f2py intent(hide) :: L
+!f2py intent(hide) :: M
+!f2py intent(hide) :: N
       integer i, j, k
       real*8 zk(N), fk(N)
       real*8 wk(N), dfdz(N)
-      
-c  Linear Interpolation.
+
+!  Linear Interpolation.
       if (vinterp.eq.0) then
         do i=1,L
           do j=1,M
@@ -106,7 +115,7 @@ c  Linear Interpolation.
             endif
           enddo
         enddo
-c  Cubic spline interpolation.
+!  Cubic spline interpolation.
       else if (vinterp.eq.1) then
         do i=1,L
           do j=1,M
@@ -123,39 +132,42 @@ c  Cubic spline interpolation.
           enddo
         enddo
       endif
-      
+
       return
       end
-  
-  
-  
-  
+
+
+
+
       subroutine lintrp (n,x,y,ni,xi,yi)
-c
-c=======================================================================
-c  Copyright (c) 1996 Rutgers University                             ===
-c=======================================================================
-c                                                                    ===
-c  Given arrays X and Y of length N, which tabulate a function,      ===
-c  Y = F(X),  with the Xs  in ascending order, and given array       ===
-c  XI of lenght NI, this routine returns a linear interpolated       ===
-c  array YI.                                                         ===
-c                                                                    ===
-c=======================================================================
-c
-c-----------------------------------------------------------------------
-c  Define local variable.
-c-----------------------------------------------------------------------
-c
+!
+!=======================================================================
+!  Copyright (c) 1996 Rutgers University                             ===
+!=======================================================================
+!                                                                    ===
+!  Given arrays X and Y of length N, which tabulate a function,      ===
+!  Y = F(X),  with the Xs  in ascending order, and given array       ===
+!  XI of lenght NI, this routine returns a linear interpolated       ===
+!  array YI.                                                         ===
+!                                                                    ===
+!=======================================================================
+!
+!-----------------------------------------------------------------------
+!  Define local variable.
+!-----------------------------------------------------------------------
+!
       implicit none
       integer i, ii, j, n, ni
       real*8 d1, d2
       real*8 x(n), y(n), xi(ni), yi(ni)
-c
-c-----------------------------------------------------------------------
-c  Begin executable code.
-c-----------------------------------------------------------------------
-c
+!f2py intent(out) yi
+!f2py intent(hide) n
+!f2py intent(hide) ni
+!
+!-----------------------------------------------------------------------
+!  Begin executable code.
+!-----------------------------------------------------------------------
+!
       do 30 j=1,ni
         if (xi(j).le.x(1)) then
           ii=1
@@ -179,41 +191,41 @@ c
 
 
       subroutine spline (x,y,n,yp1,ypn,y2)
-c
-c=======================================================================
-c  Copyright (c) 1996 Rutgers University                             ===
-c=======================================================================
-c                                                                    ===
-c  Given X, Y of length N containing a tabulated function,  Y=f(X),  ===
-c  with the Xs  in ascending order,  and given values  Yp1 and  Ypn  ===
-c  for the first derivative of the interpolating function at points  ===
-c  1 and N, respectively this routine returns an array Y2 of length  ===
-c  N  which contains the  second  derivatives of the  interpolating  ===
-c  function at the tabulated points X.  If Yp1 and/or Ypn are equal  ===
-c  to  1.0E+30  or larger,  the routine  is  signalled  to  set the  ===
-c  corresponding boundary condition for a natural spline, with zero  ===
-c  second derivative on that boundary.                               ===
-c                                                                    ===
-c  Reference :                                                       ===
-c                                                                    ===
-c  Press, W.H, B.P. Flannery, S.A. Teukolsky, and W.T. Vetterling,   ===
-c        1986: Numerical Recipes, the art of scientific computing.   ===
-c        Cambridge University Press.                                 ===
-c                                                                    ===
-c=======================================================================
-c
-c-----------------------------------------------------------------------
-c  Define global data.
-c-----------------------------------------------------------------------
-c
-      real*8 cm1,cm3,c0,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c20,c25,c50, 
+!
+!=======================================================================
+!  Copyright (c) 1996 Rutgers University                             ===
+!=======================================================================
+!                                                                    ===
+!  Given X, Y of length N containing a tabulated function,  Y=f(X),  ===
+!  with the Xs  in ascending order,  and given values  Yp1 and  Ypn  ===
+!  for the first derivative of the interpolating function at points  ===
+!  1 and N, respectively this routine returns an array Y2 of length  ===
+!  N  which contains the  second  derivatives of the  interpolating  ===
+!  function at the tabulated points X.  If Yp1 and/or Ypn are equal  ===
+!  to  1.0E+30  or larger,  the routine  is  signalled  to  set the  ===
+!  corresponding boundary condition for a natural spline, with zero  ===
+!  second derivative on that boundary.                               ===
+!                                                                    ===
+!  Reference :                                                       ===
+!                                                                    ===
+!  Press, W.H, B.P. Flannery, S.A. Teukolsky, and W.T. Vetterling,   ===
+!        1986: Numerical Recipes, the art of scientific computing.   ===
+!        Cambridge University Press.                                 ===
+!                                                                    ===
+!=======================================================================
+!
+!-----------------------------------------------------------------------
+!  Define global data.
+!-----------------------------------------------------------------------
+!
+      real*8 cm1,cm3,c0,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c20,c25,c50,
      &     c90,c100,c180,c200,c255,c300,c360,c366,c500,c1000,c5000,
      &     c10000,c1em9,c1em10,c1em12,c1em20,c1ep30,p006,p009,p035,
      &     p015,p012,p08,p06,p5,p25,p75,p98,r3,r10,r20,r33,r35,r40,
      &     r50,r80,r100,r200,r250,r400,r1000
       real*8 day2sec,deg2rad,grav,cm2m,m2cm,m2km,pi,rad2deg,re,root2,
      &     sec2day,spval0,spval1,spval2,spvgeo
-c
+!
       parameter (cm1=-1.0,cm3=-3.0,c0=0.0,c1=1.0,c2=2.0,c3=3.0,c4=4.0,
      &           c5=5.0,c6=6.0,c7=7.0,c8=8.0,c9=9.0,c10=10,c11=11.0,
      &           c20=20.0,c25=25.0,c50=50.0,c90=90.0,c100=100.0,
@@ -233,30 +245,32 @@ c
      &           spval2=0.99e+30)
       parameter (deg2rad=pi/c180,rad2deg=c180/pi)
 
-c
-c-----------------------------------------------------------------------
-c  Define local data.  Change NMAX as desired to be the largest
-c  anticipated value of N.
-c-----------------------------------------------------------------------
-c
+!
+!-----------------------------------------------------------------------
+!  Define local data.  Change NMAX as desired to be the largest
+!  anticipated value of N.
+!-----------------------------------------------------------------------
+!
       integer i, k, n, nmax
       parameter (nmax=10000)
       real*8 p, qn, sig, un, ypn, yp1
       real*8 x(n), y(n), y2(n), u(nmax)
-c
-c-----------------------------------------------------------------------
-c  Begin excutable code.
-c-----------------------------------------------------------------------
-c
+!f2py intent(out) :: y2
+!f2py intent(hide) :: n
+!
+!-----------------------------------------------------------------------
+!  Begin excutable code.
+!-----------------------------------------------------------------------
+!
       if (n.gt.nmax) then
         print 10, n,nmax
  10     format(/' SPLINE: underdimensioned array, N, NMAX = ',2i5)
         call crash ('SPLINE',1)
       endif
-c
-c  The lower boundary condition is set either to be "natural" or else
-c  to have a specified first derivative.
-c
+!
+!  The lower boundary condition is set either to be "natural" or else
+!  to have a specified first derivative.
+!
       if (yp1.gt.spval2) then
         y2(1)=c0
         u(1)=c0
@@ -264,10 +278,10 @@ c
         y2(1)=-p5
         u(1)=(c3/(x(2)-x(1)))*((y(2)-y(1))/(x(2)-x(1))-yp1)
       endif
-c
-c  This is the decomposition loop of the tridiagonal algorithm. Y2 and
-c  U are used for temporary storage of the decomposition factors.
-c
+!
+!  This is the decomposition loop of the tridiagonal algorithm. Y2 and
+!  U are used for temporary storage of the decomposition factors.
+!
       do i=2,n-1
         sig=(x(i)-x(i-1))/(x(i+1)-x(i-1))
         p=sig*y2(i-1)+c2
@@ -276,10 +290,10 @@ c
      &           (y(i)-y(i-1))/(x(i)-x(i-1)))/
      &           (x(i+1)-x(i-1))-sig*u(i-1))/p
       enddo
-c
-c  The upper boundary condition is set either to be "natural" or else
-c  to have a specified first derivative.
-c
+!
+!  The upper boundary condition is set either to be "natural" or else
+!  to have a specified first derivative.
+!
       if (ypn.gt.spval2) then
         qn=c0
         un=c0
@@ -288,9 +302,9 @@ c
         un=(c3/(x(n)-x(n-1)))*(ypn-(y(n)-y(n-1))/(x(n)-x(n-1)))
       endif
       y2(n)=(un-qn*u(n-1))/(qn*y2(n-1)+c1)
-c
-c  This is the back-substitution loop of the tridiagonal algorithm.
-c
+!
+!  This is the back-substitution loop of the tridiagonal algorithm.
+!
       do k=n-1,1,-1
         y2(k)=y2(k)*y2(k+1)+u(k)
       enddo
@@ -298,33 +312,33 @@ c
       end
 
       subroutine splint (x,y,y2,n,xx,yy,dydx)
-c
-c=======================================================================
-c  Copyright (c) 1996 Rutgers University                             ===
-c=======================================================================
-c                                                                    ===
-c  Given arrays X and Y of length N, which tabulate a function,      ===
-c  Y=f(X), with the Xs  in ascending order, and given the array      ===
-c  Y2 which contains the second derivative of the interpolating      ===
-c  function  at the  tabulated points X as computed  by routine      ===
-c  SPLINE, and given a value  XX, this routine returns a cubic-      ===
-c  spline interpolated value YY.                                     ===
-c                                                                    ===
-c  Reference :                                                       ===
-c                                                                    ===
-c  Press, W.H, B.P. Flannery, S.A. Teukolsky, and W.T. Vetterling,   ===
-c         1986: Numerical Recipes, the art of scientific computing.  ===
-c         Cambridge University Press.                                ===
-c                                                                    ===
-c  Modified by H.G. Arango (1989) to output the first derivative     ===
-c  DYDX at a given value XX.                                         ===
-c                                                                    ===
-c=======================================================================
-c
-c-----------------------------------------------------------------------
-c  Define global data.
-c-----------------------------------------------------------------------
-c
+!
+!=======================================================================
+!  Copyright (c) 1996 Rutgers University                             ===
+!=======================================================================
+!                                                                    ===
+!  Given arrays X and Y of length N, which tabulate a function,      ===
+!  Y=f(X), with the Xs  in ascending order, and given the array      ===
+!  Y2 which contains the second derivative of the interpolating      ===
+!  function  at the  tabulated points X as computed  by routine      ===
+!  SPLINE, and given a value  XX, this routine returns a cubic-      ===
+!  spline interpolated value YY.                                     ===
+!                                                                    ===
+!  Reference :                                                       ===
+!                                                                    ===
+!  Press, W.H, B.P. Flannery, S.A. Teukolsky, and W.T. Vetterling,   ===
+!         1986: Numerical Recipes, the art of scientific computing.  ===
+!         Cambridge University Press.                                ===
+!                                                                    ===
+!  Modified by H.G. Arango (1989) to output the first derivative     ===
+!  DYDX at a given value XX.                                         ===
+!                                                                    ===
+!=======================================================================
+!
+!-----------------------------------------------------------------------
+!  Define global data.
+!-----------------------------------------------------------------------
+!
       implicit none
       real*8 cm1,cm3,c0,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c20,c25,c50,
      &     c90,c100,c180,c200,c255,c300,c360,c366,c500,c1000,c5000,
@@ -333,7 +347,7 @@ c
      &     r50,r80,r100,r200,r250,r400,r1000
       real*8 day2sec,deg2rad,grav,cm2m,m2cm,m2km,pi,rad2deg,re,root2,
      &     sec2day,spval0,spval1,spval2,spvgeo
-c
+!
       parameter (cm1=-1.0,cm3=-3.0,c0=0.0,c1=1.0,c2=2.0,c3=3.0,c4=4.0,
      &           c5=5.0,c6=6.0,c7=7.0,c8=8.0,c9=9.0,c10=10,c11=11.0,
      &           c20=20.0,c25=25.0,c50=50.0,c90=90.0,c100=100.0,
@@ -353,21 +367,23 @@ c
      &           spval2=0.99e+30)
       parameter (deg2rad=pi/c180,rad2deg=c180/pi)
 
-c
-c-----------------------------------------------------------------------
-c  Define local data.
-c-----------------------------------------------------------------------
-c
+!
+!-----------------------------------------------------------------------
+!  Define local data.
+!-----------------------------------------------------------------------
+!
       integer k, khi, klo, n
       real*8 a, b, c, d, dydx, e, f, h, xx, yy
       real*8 x(n), y(n), y2(n)
-c
-c-----------------------------------------------------------------------
-c  Begin executable code.
-c-----------------------------------------------------------------------
-c
-c  Found the right place of XX in the table by means of bisection.
-c
+!f2py intent(out) :: yy
+!f2py intent(hide) :: n
+!
+!-----------------------------------------------------------------------
+!  Begin executable code.
+!-----------------------------------------------------------------------
+!
+!  Found the right place of XX in the table by means of bisection.
+!
       klo=1
       khi=n
   10  if ((khi-klo).gt.1) then
@@ -379,17 +395,17 @@ c
         endif
         goto 10
       endif
-c
-c  KLO and KHI now bracket the input value XX.
-c
+!
+!  KLO and KHI now bracket the input value XX.
+!
       h=x(khi)-x(klo)
       if (h.eq.c0) then
         print *, ' SPLINT: bad X input, they must be distinct.'
         call crash ('SPLINT',1)
       endif
-c
-c  Evaluate cubic spline polynomial.
-c
+!
+!  Evaluate cubic spline polynomial.
+!
       a=(x(khi)-xx)/h
       b=(xx-x(klo))/h
       c=(a*a*a-a)*(h*h)/c6
@@ -400,7 +416,7 @@ c
       dydx=(y(khi)-y(klo))/h-e*y2(klo)+f*y2(khi)
       return
       end
-      
+
       subroutine crash (string,ierr)
       integer ierr
       character*(*) string

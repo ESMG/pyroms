@@ -73,7 +73,7 @@ class PCA(object):
         window_vector = get_window(window, blocks_length)
         PSD = np.zeros((nECs, blocks_length/2+1))
         freq = np.zeros((nECs, blocks_length/2+1))
-        for n in xrange(nECs):
+        for n in range(nECs):
             P, f = psd(self.ECs[n], NFFT=blocks_length, Fs=fs, window=window_vector, noverlap=overlap)
             PSD[n] = np.squeeze(P)
             freq[n] = f
@@ -87,7 +87,7 @@ class PCA(object):
         npt = np.sum(~mask)
         packedata = np.zeros((nt,npt))
 
-        for t in xrange(nt):
+        for t in range(nt):
             packedata[t] = np.ma.compressed(dataset[t])
 
         return packedata, mask
@@ -108,7 +108,7 @@ class PCA(object):
 
         eofs = np.ma.masked_all((neof,dims))
 
-        for n in xrange(neof):
+        for n in range(neof):
             eofs[n,~mask.flatten()] = packedeofs[:,n]
 
         if len(mask.shape) == 2:

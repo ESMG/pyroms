@@ -1,9 +1,9 @@
 SHELL = /bin/sh
 
-prefix = /u1/uaf/kshedstrom/python
+prefix = /home/kshedstrom/python
 exec_prefix = ${prefix}
 bindir = ${exec_prefix}/bin
-libdir = /u1/uaf/kshedstrom/python/lib
+libdir = /home/kshedstrom/python/lib
 includedir = ${prefix}/include
 
 INSTALLDIRS =\
@@ -18,10 +18,10 @@ INSTALL_PROGRAM = ${INSTALL}
 INSTALL_DATA = ${INSTALL} -m 644
 
 CC = gcc
-CFLAGS = -I/u1/uaf/kshedstrom/python/include
-CFLAGS_TRIANGLE = -I/u1/uaf/kshedstrom/python/include -w -ffloat-store
+CFLAGS = -g -O2 -Wall -pedantic
+CFLAGS_TRIANGLE = -g -O2 -Wall -pedantic -w -ffloat-store
 CFLAGS_VULNERABLE = -ffloat-store
-LDFLAGS = -L$DESTDIR/lib
+LDFLAGS = 
 
 AR = ar
 ARFLAGS = cru

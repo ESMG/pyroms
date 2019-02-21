@@ -37,7 +37,7 @@ def get_nc_BGrid_GFDL(grdfile, name='GFDL_CM2.1_North_Pacific', area='regional',
     for j in range(M_t):
         for i in range(L_t):
             try:
-                mask_t[0:kmt[j,i], j,i] = 1
+                mask_t[0:int(kmt[j,i]), j,i] = 1
             except:
                 mask_t[:, j,i] = 0
 
@@ -48,22 +48,86 @@ def get_nc_BGrid_GFDL(grdfile, name='GFDL_CM2.1_North_Pacific', area='regional',
     for j in range(M_uv):
         for i in range(L_uv):
             try:
-                mask_uv[0:kmu[j,i], j,i] = 1
+                mask_uv[0:int(kmu[j,i]), j,i] = 1
             except:
                 mask_uv[:, j,i] = 0
 
     if area == 'npolar':
-        #add one row in the north and the south
-        lon_t = lon_t[np.r_[0,:len(lon_t),-1]]
-        lon_t[0] = lon_t[1] - (lon_t[2]-lon_t[1])
-        lon_t[-1] = lon_t[-2] + (lon_t[-2]-lon_t[-3])
-        lat_t = lat_t[np.r_[0,0,:len(lat_t),-1,-1]]
-        lat_t[0] = -85
-        lat_t[1] = -80
-        lat_t[-2] = 90
-        lat_t[-1] = 91
-        lon_uv = lon_t
-        lat_uv = lat_t
+        #add two rows in the north and the south
+        lon_t = lon_t[np.r_[0,0,:np.size(lon_t,0),-1,-1]]
+        lon_t = lon_t[:,np.r_[0,:np.size(lon_t,1),-1]]
+        lon_t[:,0] = lon_t[:,1] - (lon_t[:,2]-lon_t[:,1])
+        lon_t[:,-1] = lon_t[:,-2] + (lon_t[:,-2]-lon_t[:,-3])
+        lat_t = lat_t[np.r_[0,0,:np.size(lat_t,0),-1,-1]]
+        lat_t = lat_t[:,np.r_[0,:np.size(lat_t,1),-1]]
+        lat_t[0,:] = -85
+        lat_t[1,:] = -80
+        lat_t[-2,:] = 90
+        lat_t[-1,:] = 91
+        lon_uv = lon_uv[np.r_[0,0,:np.size(lon_uv,0),-1,-1]]
+        lon_uv = lon_uv[:,np.r_[0,:np.size(lon_uv,1),-1]]
+        lon_uv[:,0] = lon_uv[:,1] - (lon_uv[:,2]-lon_t[:,1])
+        lon_uv[:,-1] = lon_uv[:,-2] + (lon_uv[:,-2]-lon_uv[:,-3])
+        lat_uv = lat_uv[np.r_[0,0,:np.size(lat_uv,0),-1,-1]]
+        lat_uv = lat_uv[:,np.r_[0,:np.size(lat_uv,1),-1]]
+        lat_uv[0,:] = -85
+        lat_uv[1,:] = -80
+        lat_uv[-2,:] = 90
+        lat_uv[-1,:] = 91
+        mask_t = mask_t[:,np.r_[0,0,:np.size(mask_t,1),-1,-1],:]
+        mask_t = mask_t[:,:,np.r_[0,:np.size(mask_t,2),-1]]
+        mask_t[:,:,0] = mask_t[:,:,-2]
+        mask_t[:,:,-1] = mask_t[:,:,1]
+        mask_uv = mask_uv[:,np.r_[0,0,:np.size(mask_uv,1),-1,-1],:]
+        mask_uv = mask_uv[:,:,np.r_[0,:np.size(mask_uv,2),-1]]
+        mask_uv[:,:,0] = mask_uv[:,:,-2]
+        mask_uv[:,:,-1] = mask_uv[:,:,1]
+        h = h[np.r_[0,0,:np.size(h,0),-1,-1]]
+        h = h[:,np.r_[0,:np.size(h,1),-1]]
+        h[:,0] = h[:,-2]
+        h[:,-1] = h[:,1]
+        f = f[np.r_[0,0,:np.size(f,0),-1,-1]]
+        f = f[:,np.r_[0,:np.size(f,1),-1]]
+        f[:,0] = f[:,-2]
+        f[:,-1] = f[:,1]
+        m,l = h.shape
+        xrange=(1,l-2)
+        yrange=(ystart+2,m-2)
+
+    if area == 'tripole':
+        #add two rows in the north and the south
+        fold1 = L_t//2
+        lon_t = lon_t[np.r_[0,0,:np.size(lon_t,0),-1,-1]]
+        lon_t[-2,:fold1] = lon_t[-3,L_t:fold1-1:-1]
+        lon_t[-2,L_t:fold1-1:-1] = lon_t[-3,:fold1]
+        lon_t[-1,:fold1] = lon_t[-4,L_t:fold1-1:-1]
+        lon_t[-1,L_t:fold1-1:-1] = lon_t[-4,:fold1]
+
+        lon_t = lon_t[:,np.r_[0,:np.size(lon_t,1),-1]]
+        lon_t[:,0] = lon_t[:,1] - (lon_t[:,2]-lon_t[:,1])
+        lon_t[:,-1] = lon_t[:,-2] + (lon_t[:,-2]-lon_t[:,-3])
+        lat_t = lat_t[np.r_[0,0,:np.size(lat_t,0),-1,-1]]
+        lat_t = lat_t[:,np.r_[0,:np.size(lat_t,1),-1]]
+        lat_t[0,:] = -85
+        lat_t[1,:] = -80
+        lat_t[-2,:] = lat_t[-3,:]
+        lat_t[-1,:] = lat_t[-4,:]
+        lon_uv = lon_uv[np.r_[0,0,:np.size(lon_uv,0),-1,-1]]
+
+        lon_uv[-2,:fold1] = lon_uv[-4,L_t:fold1-1:-1]
+        lon_uv[-2,L_t:fold1-1:-1] = lon_uv[-4,:fold1]
+        lon_uv[-1,:fold1] = lon_uv[-5,L_t:fold1-1:-1]
+        lon_uv[-1,L_t:fold1-1:-1] = lon_uv[-5,:fold1]
+
+        lon_uv = lon_uv[:,np.r_[0,:np.size(lon_uv,1),-1]]
+        lon_uv[:,0] = lon_uv[:,1] - (lon_uv[:,2]-lon_t[:,1])
+        lon_uv[:,-1] = lon_uv[:,-2] + (lon_uv[:,-2]-lon_uv[:,-3])
+        lat_uv = lat_uv[np.r_[0,0,:np.size(lat_uv,0),-1,-1]]
+        lat_uv = lat_uv[:,np.r_[0,:np.size(lat_uv,1),-1]]
+        lat_uv[0,:] = -85
+        lat_uv[1,:] = -80
+        lat_uv[-2,:] = lat_uv[-3,:]
+        lat_uv[-1,:] = lat_uv[-4,:]
         mask_t = mask_t[:,np.r_[0,0,:np.size(mask_t,1),-1,-1],:]
         mask_t = mask_t[:,:,np.r_[0,:np.size(mask_t,2),-1]]
         mask_t[:,:,0] = mask_t[:,:,-2]

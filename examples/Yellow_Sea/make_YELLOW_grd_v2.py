@@ -129,10 +129,10 @@ hraw = h.copy()
 
 # smooth the raw bathy using the direct iterative method from Martinho and Batteen (2006)
 RoughMat = bathy_tools.RoughnessMatrix(h, hgrd.mask_rho)
-print 'Max Roughness value is: ', RoughMat.max()
+print('Max Roughness value is: ', RoughMat.max())
 hsmooth = bathy_smoothing.smoothing_Positive_rx0(hgrd.mask_rho, h, 0.3)
 RoughMat = bathy_tools.RoughnessMatrix(hsmooth, hgrd.mask_rho)
-print 'Max Roughness value is: ', RoughMat.max()
+print('Max Roughness value is: ', RoughMat.max())
 
 # insure that depth is always deeper than hmin
 h = pyroms_toolbox.change(h, '<', hmin, hmin)

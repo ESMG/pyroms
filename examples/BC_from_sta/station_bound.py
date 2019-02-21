@@ -78,14 +78,14 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
         varname = [varname]
         nvar = len(varname)
     else:
-        raise ValueError, 'varname must be a str or a list of str'
+        raise ValueError('varname must be a str or a list of str')
 
     # if we're working on u and v, we'll compute ubar,vbar afterwards
     compute_ubar = False
     if (varname.__contains__('u') == 1 and varname.__contains__('v') == 1) or \
        (varname.__contains__('u_eastward') == 1 and varname.__contains__('v_northward') == 1):
         compute_ubar = True
-        print 'ubar/vbar to be computed from u/v'
+        print('ubar/vbar to be computed from u/v')
         if varname.__contains__('ubar'):
             varname.remove('ubar')
             nvar = nvar-1
@@ -96,8 +96,8 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
     # if rotate_uv=True, check that u and v are in varname
     if rotate_uv is True:
         if varname.__contains__(uvar) == 0 or varname.__contains__(vvar) == 0:
-            raise Warning, 'varname must include uvar and vvar in order to' \
-                   + ' rotate the velocity field'
+            raise Warning('varname must include uvar and vvar in order to' \
+                   + ' rotate the velocity field')
         else:
             varname.remove(uvar)
             varname.remove(vvar)
@@ -110,7 +110,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
         srcfile = sorted(glob.glob(srcfile))
         nfile = len(srcfile)
     else:
-        raise ValueError, 'src_srcfile must be a str or a list of str'
+        raise ValueError('src_srcfile must be a str or a list of str')
 
     sides = ['_west','_east','_north','_south']
     long = {'_west':'Western', '_east':'Eastern', \
@@ -121,7 +121,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
     nctidx = 0
     # loop over the srcfile
     for nf in range(nfile):
-        print 'Working with file', srcfile[nf], '...'
+        print('Working with file', srcfile[nf], '...')
 
         # get time
         ocean_time = pyroms.utility.get_nc_var('ocean_time', srcfile[nf])
@@ -129,14 +129,14 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
 
         # trange argument
         if trange is None:
-            trange = range(ntime)
+            trange = list(range(ntime))
 
         # create destination file
         if nctidx == 0:
             dstfile = dstdir + os.path.basename(srcfile[nf])[:-3] + '_' \
                    + dst_grd.name + '_bdry.nc'
             if os.path.exists(dstfile) is False:
-                print 'Creating destination file', dstfile
+                print('Creating destination file', dstfile)
                 pyroms_toolbox.nc_create_roms_file(dstfile, dst_grd, \
                     ocean_time, lgrid=False)
 
@@ -150,10 +150,10 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
 
             # loop over variable
             for nv in range(nvar):
-                print ' '
-                print 'extracting', varname[nv], 'from', srcgrd.name, \
-                      'to', dst_grd.name
-                print 'time =', ocean_time[nt]
+                print(' ')
+                print('extracting', varname[nv], 'from', srcgrd.name, \
+                      'to', dst_grd.name)
+                print('time =', ocean_time[nt])
                 Mp, Lp = dst_grd.hgrid.mask_rho.shape
                 if varname[nv] == uvar:
                     Lp = Lp-1
@@ -170,7 +170,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                 try:
                     spval = src_var._FillValue
                 except:
-                    print Warning, 'Did not find a _FillValue attribute.'
+                    print(Warning, 'Did not find a _FillValue attribute.')
 
                 # srange
                 if srange is None:
@@ -181,14 +181,14 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                 # determine where on the C-grid these variable lies
                 Cpos='rho'
 
-                print 'Arakawa C-grid position is', Cpos
+                print('Arakawa C-grid position is', Cpos)
 
                 # create variable in _destination file
                 if nctidx == 0:
                     for sid in sides:
                        varn = varname[nv]+str(sid)
                        dimens = [i for i in src_var.dimensions]
-                       print 'dimens', dimens, len(dimens)
+                       print('dimens', dimens, len(dimens))
                        if len(dimens) == 3:
                            dimens = ['ocean_time', 's_rho', \
                            dimincl[sid]]
@@ -200,15 +200,15 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                        if varname[nv] == vvar:
                            foo = dimens[-1].replace('rho', 'v')
                            dimens[-1] = foo
-                       print 'Creating variable', varn, dimens
+                       print('Creating variable', varn, dimens)
                        nc.createVariable(varn, 'f8', dimens, \
                            fill_value=spval)
                        nc.variables[varn].long_name = varname[nv] + \
-                            ' ' + long[sid] + ' boundary condition'
+                            ' ' + int[sid] + ' boundary condition'
                        try:
                            nc.variables[varn].units = src_var.units
                        except:
-                           print varn+' has no units'
+                           print(varn+' has no units')
                        nc.variables[varn].time = src_var.time
                        nc.variables[varn].coordinates = \
                            str(dimens.reverse())
@@ -216,7 +216,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
 
                 if ndim == 2:
                     # vertical interpolation from sigma to standard z level
-                    print 'vertical interpolation from sigma to standard z level'
+                    print('vertical interpolation from sigma to standard z level')
                     src_varz = pyroms.remapping.sta2z( \
                                  src_var[nt,:,ssrange[0]:ssrange[1]], \
                                  srcgrd, srcgrdz, Cpos=Cpos, spval=spval, \
@@ -273,7 +273,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                     dst_varz[44:79, 0] = src_varz[0:35]
                     dst_varz[0, 56:87] = src_varz[35:]
 
-                print datetime.datetime.now()
+                print(datetime.datetime.now())
                 # horizontal placement of stations into target grid.
 
                 if ndim == 2:
@@ -313,7 +313,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
 #                print datetime.datetime.now()
 
                 # write data in destination file
-                print 'write data in destination file'
+                print('write data in destination file')
                 sid = '_west'
                 varn = varname[nv]+str(sid)
                 nc.variables[varn][nctidx] = np.squeeze(dst_var_west)
@@ -332,9 +332,9 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
 
             # rotate the velocity field if requested
             if rotate_uv is True:
-                print ' '
-                print 'remapping and rotating u and v from', srcgrd.name, \
-                      'to', dst_grd.name
+                print(' ')
+                print('remapping and rotating u and v from', srcgrd.name, \
+                      'to', dst_grd.name)
 
                 # get source data
                 src_u = pyroms.utility.get_nc_var(uvar, srcfile[nf])
@@ -344,16 +344,16 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                 try:
                     spval = src_v._FillValue
                 except:
-                    print Warning, 'Did not find a _FillValue attribute.'
+                    print(Warning, 'Did not find a _FillValue attribute.')
 
                 if rotate_part:
                     ndim = len(src_u.dimensions)-1
                     ind = uvar.find('_eastward')
                     uvar_out = uvar[0:ind]
-                    print "Warning: renaming uvar to", uvar_out
+                    print("Warning: renaming uvar to", uvar_out)
                     ind = vvar.find('_northward')
                     vvar_out = vvar[0:ind]
-                    print "Warning: renaming vvar to", vvar_out
+                    print("Warning: renaming vvar to", vvar_out)
                     if ndim == 3:
                         dimens_u = ['ocean_time', 's_rho', 'eta_u', 'xi_u']
                         dimens_v = ['ocean_time', 's_rho', 'eta_v', 'xi_v']
@@ -369,10 +369,10 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
 
                 # create variable in destination file
                 if nctidx == 0:
-                    print 'Creating boundary variables for '+uvar
+                    print('Creating boundary variables for '+uvar)
                     for sid in sides:
                        varn = uvar_out+str(sid)
-                       print 'Creating variable', varn
+                       print('Creating variable', varn)
                        dimens = list(dimens_u)
 #                       for dim in dimens:
 #                           if re.match(dimexcl[sid],dim):
@@ -380,19 +380,19 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                        nc.createVariable(varn, 'f8', dimens, \
                          fill_value=spval)
                        nc.variables[varn].long_name = uvar_out + \
-                           ' ' + long[sid] + ' boundary condition'
+                           ' ' + int[sid] + ' boundary condition'
                        try:
                            nc.variables[varn].units = src_u.units
                        except:
-                           print varn+' has no units'
+                           print(varn+' has no units')
                        nc.variables[varn].time = src_u.time
                        nc.variables[varn].coordinates = \
                            str(dimens.reverse())
                        nc.variables[varn].field = src_u.field
-                    print 'Creating boundary variables for '+vvar
+                    print('Creating boundary variables for '+vvar)
                     for sid in sides:
                        varn = vvar_out+str(sid)
-                       print 'Creating variable', varn
+                       print('Creating variable', varn)
                        dimens = list(dimens_v)
                        for dim in dimens:
                            if re.match(dimexcl[sid],dim):
@@ -400,11 +400,11 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                        nc.createVariable(varn, 'f8', dimens, \
                          fill_value=spval)
                        nc.variables[varn].long_name = vvar_out + \
-                                ' ' + long[sid] + ' boundary condition'
+                                ' ' + int[sid] + ' boundary condition'
                        try:
                            nc.variables[varn].units = src_v.units
                        except:
-                           print varn+' has no units'
+                           print(varn+' has no units')
                        nc.variables[varn].time = src_v.time
                        nc.variables[varn].coordinates = \
                            str(dimens.reverse())
@@ -433,7 +433,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
 
                 ndim = len(src_v.dimensions)-1
                 if ndim == 3:
-                    print 'vertical interpolation from sigma to standard z level'
+                    print('vertical interpolation from sigma to standard z level')
                     src_uz = pyroms.remapping.sta2z( \
                             src_u[nt,:,ssrange[0]:ssrange[1]], \
                             srcgrd, srcgrdz, Cpos=Cpos_u, spval=spval, \
@@ -464,7 +464,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
 
                 if ndim == 3:
                     # vertical interpolation from standard z level to sigma
-                    print 'vertical interpolation from standard z level to sigma'
+                    print('vertical interpolation from standard z level to sigma')
                     dst_u_north = pyroms.remapping.z2roms(dst_uz[:, Mp-2:Mp, 0:Lp], \
                          dst_grdz, dst_grd, Cpos='rho', spval=spval, \
                          flood=False, irange=(0,Lp), jrange=(Mp-2,Mp))
@@ -610,7 +610,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                     dst_v_west[idxv_west[0]] = spval
 
                 # write data in destination file
-                print 'write data in destination file'
+                print('write data in destination file')
                 sid = '_west'
                 varn = uvar_out+str(sid)
                 nc.variables[varn][nctidx] = dst_u_west
@@ -637,7 +637,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
 
             if compute_ubar:
                 if nctidx == 0:
-                    print 'Creating variable ubar_north'
+                    print('Creating variable ubar_north')
                     nc.createVariable('ubar_north', 'f8', \
                          ('ocean_time', 'xi_u'), fill_value=spval)
                     nc.variables['ubar_north'].long_name = \
@@ -646,7 +646,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                     nc.variables['ubar_north'].time = 'ocean_time'
                     nc.variables['ubar_north'].coordinates = 'xi_u ocean_time'
                     nc.variables['ubar_north'].field = 'ubar_north, scalar, series'
-                    print 'Creating variable vbar_north'
+                    print('Creating variable vbar_north')
                     nc.createVariable('vbar_north', 'f8', \
                          ('ocean_time', 'xi_v'), fill_value=spval)
                     nc.variables['vbar_north'].long_name = \
@@ -656,7 +656,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                     nc.variables['vbar_north'].coordinates = 'xi_v ocean_time'
                     nc.variables['vbar_north'].field = 'vbar_north,, scalar, series'
 
-                    print 'Creating variable ubar_south'
+                    print('Creating variable ubar_south')
                     nc.createVariable('ubar_south', 'f8', \
                          ('ocean_time', 'xi_u'), fill_value=spval)
                     nc.variables['ubar_south'].long_name = \
@@ -665,7 +665,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                     nc.variables['ubar_south'].time = 'ocean_time'
                     nc.variables['ubar_south'].coordinates = 'xi_u ocean_time'
                     nc.variables['ubar_south'].field = 'ubar_south, scalar, series'
-                    print 'Creating variable vbar_south'
+                    print('Creating variable vbar_south')
                     nc.createVariable('vbar_south', 'f8', \
                          ('ocean_time', 'xi_v'), fill_value=spval)
                     nc.variables['vbar_south'].long_name = \
@@ -674,7 +674,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                     nc.variables['vbar_south'].time = 'ocean_time'
                     nc.variables['vbar_south'].coordinates = 'xi_v ocean_time'
 
-                    print 'Creating variable ubar_west'
+                    print('Creating variable ubar_west')
                     nc.createVariable('ubar_west', 'f8', \
                          ('ocean_time', 'eta_u'), fill_value=spval)
                     nc.variables['ubar_west'].long_name = \
@@ -683,7 +683,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                     nc.variables['ubar_west'].time = 'ocean_time'
                     nc.variables['ubar_west'].coordinates = 'eta_u ocean_time'
                     nc.variables['ubar_west'].field = 'ubar_west, scalar, series'
-                    print 'Creating variable vbar_west'
+                    print('Creating variable vbar_west')
                     nc.createVariable('vbar_west', 'f8', \
                          ('ocean_time', 'eta_v'), fill_value=spval)
                     nc.variables['vbar_west'].long_name = \
@@ -692,7 +692,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                     nc.variables['vbar_west'].time = 'ocean_time'
                     nc.variables['vbar_west'].coordinates = 'eta_v ocean_time'
 
-                    print 'Creating variable ubar_east'
+                    print('Creating variable ubar_east')
                     nc.createVariable('ubar_east', 'f8', \
                          ('ocean_time', 'eta_u'), fill_value=spval)
                     nc.variables['ubar_east'].long_name = \
@@ -701,7 +701,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                     nc.variables['ubar_east'].time = 'ocean_time'
                     nc.variables['ubar_east'].coordinates = 'eta_u ocean_time'
                     nc.variables['ubar_east'].field = 'ubar_east, scalar, series'
-                    print 'Creating variable vbar_east'
+                    print('Creating variable vbar_east')
                     nc.createVariable('vbar_east', 'f8', \
                          ('ocean_time', 'eta_v'), fill_value=spval)
                     nc.variables['vbar_east'].long_name = \
@@ -712,7 +712,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
 
                 # compute depth average velocity ubar and vbar
                 # get z at the right position
-                print 'Computing ubar/vbar from u/v'
+                print('Computing ubar/vbar from u/v')
                 z_u_north = 0.5 * (dst_grd.vgrid.z_w[0,:,-1,:-1] +
                         dst_grd.vgrid.z_w[0,:,-1, 1:])
                 z_v_north = 0.5 * (dst_grd.vgrid.z_w[0,:,-1,:] +
@@ -800,7 +800,7 @@ def station_bound(varname, srcfile, srcgrd, dst_grd, \
                 nc.variables['vbar_west'][nctidx] = dst_vbar_west
 
             nctidx = nctidx + 1
-            print 'ADDING to nctidx ', nctidx
+            print('ADDING to nctidx ', nctidx)
             nc.sync()
         # close files here? how?
 

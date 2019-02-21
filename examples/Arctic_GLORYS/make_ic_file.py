@@ -2,7 +2,7 @@ import matplotlib
 matplotlib.use('Agg')
 import subprocess
 import os
-import commands
+import subprocess
 import numpy as np
 
 import pyroms
@@ -15,9 +15,9 @@ file = '/archive/u1/uaf/kate/GLORYS/GLORYS2V3_1dAV_19980101_19980102.nc'
 
 dst_dir='./'
 
-print 'Build IC file from the following file:'
-print file
-print ' '
+print('Build IC file from the following file:')
+print(file)
+print(' ')
 
 src_grd = pyroms_toolbox.CGrid_GLORYS.get_nc_CGrid_GLORYS('/archive/u1/uaf/kate/GLORYS/GL2V1_mesh_mask_new.nc', name='GLORYS', area='npolar', ystart=690)
 dst_grd = pyroms.grid.get_ROMS_grid('ARCTIC2')

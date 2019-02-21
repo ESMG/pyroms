@@ -36,7 +36,7 @@ for it in np.arange(ntime):
     if it == 180:
         raw_180 = runoff[280:600,160:460]
 
-print 'Sum 1', np.sum(raw_180)
+print('Sum 1', np.sum(raw_180))
 
 nc.close()
 mc.close()

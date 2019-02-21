@@ -1,6 +1,6 @@
 import numpy as np
 import pyroms
-from CGrid_TPXO8 import CGrid_TPXO8
+from .CGrid_TPXO8 import CGrid_TPXO8
 
 
 def get_nc_CGrid_TPXO8(grdfile, name='TPXO8', \

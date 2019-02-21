@@ -28,7 +28,7 @@ def remap_bdry_uv(src_file, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='.
     ref = datetime(1900, 1, 1, 0, 0, 0)
     ref = date2num(ref)
     tag = src_file.rsplit('/')[-1].rsplit('_')[2]
-    print("tag:", tag)
+    print(("tag:", tag))
     year = int(tag[:4])
     month = int(tag[4:6])
     day = int(tag[6:])
@@ -43,12 +43,12 @@ def remap_bdry_uv(src_file, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='.
     # create destination file
     dst_file = src_file.rsplit('/')[-1]
     dst_fileu = dst_dir + dst_file[:-4] + '_u_bdry_' + dst_grd.name + '.nc'
-    print '\nCreating destination file', dst_fileu
+    print('\nCreating destination file', dst_fileu)
     if os.path.exists(dst_fileu) is True:
         os.remove(dst_fileu)
     pyroms_toolbox.nc_create_roms_file(dst_fileu, dst_grd, nctime)
     dst_filev = dst_dir + dst_file[:-4] + '_v_bdry_' + dst_grd.name + '.nc'
-    print 'Creating destination file', dst_filev
+    print('Creating destination file', dst_filev)
     if os.path.exists(dst_filev) is True:
         os.remove(dst_filev)
     pyroms_toolbox.nc_create_roms_file(dst_filev, dst_grd, nctime)
@@ -68,13 +68,13 @@ def remap_bdry_uv(src_file, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='.
     # ARCTIC2 grid sub-sample
     src_varu = src_varu[:]
     src_varv = src_varv[:]
-    print "shape 1", src_varu.shape, src_varv.shape
+    print("shape 1", src_varu.shape, src_varv.shape)
     src_varu = np.squeeze(src_varu)
     src_varv = np.squeeze(src_varv)
-    print "shape 2", src_varu.shape, src_varv.shape
+    print("shape 2", src_varu.shape, src_varv.shape)
     src_varu = src_varu[:,np.r_[ystart:np.size(src_varu,1),-1],:]
     src_varv = src_varv[:,np.r_[ystart:np.size(src_varv,1),-1],:]
-    print "shape 3", src_varu.shape, src_varv.shape
+    print("shape 3", src_varu.shape, src_varv.shape)
 
     # get weights file
     wts_file_a = 'remap_weights_GLORYS_to_ARCTIC2_bilinear_t_to_rho.nc'
@@ -88,87 +88,87 @@ def remap_bdry_uv(src_file, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='.
     dst_grdz = pyroms.grid.ROMS_Grid(dst_grd.name+'_Z', dst_grd.hgrid, dst_zcoord)
 
     # create variable in destination file
-    print 'Creating variable u_north'
+    print('Creating variable u_north')
     ncu.createVariable('u_north', 'f8', ('ocean_time', 's_rho', 'xi_u'), fill_value=spval)
     ncu.variables['u_north'].long_name = '3D u-momentum north boundary condition'
     ncu.variables['u_north'].units = 'meter second-1'
     ncu.variables['u_north'].field = 'u_north, scalar, series'
-    print 'Creating variable u_south'
+    print('Creating variable u_south')
     ncu.createVariable('u_south', 'f8', ('ocean_time', 's_rho', 'xi_u'), fill_value=spval)
     ncu.variables['u_south'].long_name = '3D u-momentum south boundary condition'
     ncu.variables['u_south'].units = 'meter second-1'
     ncu.variables['u_south'].field = 'u_south, scalar, series'
-    print 'Creating variable u_east'
+    print('Creating variable u_east')
     ncu.createVariable('u_east', 'f8', ('ocean_time', 's_rho', 'eta_u'), fill_value=spval)
     ncu.variables['u_east'].long_name = '3D u-momentum east boundary condition'
     ncu.variables['u_east'].units = 'meter second-1'
     ncu.variables['u_east'].field = 'u_east, scalar, series'
-    print 'Creating variable u_west'
+    print('Creating variable u_west')
     ncu.createVariable('u_west', 'f8', ('ocean_time', 's_rho', 'eta_u'), fill_value=spval)
     ncu.variables['u_west'].long_name = '3D u-momentum west boundary condition'
     ncu.variables['u_west'].units = 'meter second-1'
     ncu.variables['u_west'].field = 'u_east, scalar, series'
 
     # create variable in destination file
-    print 'Creating variable ubar_north'
+    print('Creating variable ubar_north')
     ncu.createVariable('ubar_north', 'f8', ('ocean_time', 'xi_u'), fill_value=spval)
     ncu.variables['ubar_north'].long_name = '2D u-momentum north boundary condition'
     ncu.variables['ubar_north'].units = 'meter second-1'
     ncu.variables['ubar_north'].field = 'ubar_north, scalar, series'
-    print 'Creating variable ubar_south'
+    print('Creating variable ubar_south')
     ncu.createVariable('ubar_south', 'f8', ('ocean_time', 'xi_u'), fill_value=spval)
     ncu.variables['ubar_south'].long_name = '2D u-momentum south boundary condition'
     ncu.variables['ubar_south'].units = 'meter second-1'
     ncu.variables['ubar_south'].field = 'ubar_south, scalar, series'
-    print 'Creating variable ubar_east'
+    print('Creating variable ubar_east')
     ncu.createVariable('ubar_east', 'f8', ('ocean_time', 'eta_u'), fill_value=spval)
     ncu.variables['ubar_east'].long_name = '2D u-momentum east boundary condition'
     ncu.variables['ubar_east'].units = 'meter second-1'
     ncu.variables['ubar_east'].field = 'ubar_east, scalar, series'
-    print 'Creating variable ubar_west'
+    print('Creating variable ubar_west')
     ncu.createVariable('ubar_west', 'f8', ('ocean_time', 'eta_u'), fill_value=spval)
     ncu.variables['ubar_west'].long_name = '2D u-momentum west boundary condition'
     ncu.variables['ubar_west'].units = 'meter second-1'
     ncu.variables['ubar_west'].field = 'ubar_east, scalar, series'
 
 
-    print 'Creating variable v_north'
+    print('Creating variable v_north')
     ncv.createVariable('v_north', 'f8', ('ocean_time', 's_rho', 'xi_v'), fill_value=spval)
     ncv.variables['v_north'].long_name = '3D v-momentum north boundary condition'
     ncv.variables['v_north'].units = 'meter second-1'
     ncv.variables['v_north'].field = 'v_north, scalar, series'
-    print 'Creating variable v_south'
+    print('Creating variable v_south')
     ncv.createVariable('v_south', 'f8', ('ocean_time', 's_rho', 'xi_v'), fill_value=spval)
     ncv.variables['v_south'].long_name = '3D v-momentum south boundary condition'
     ncv.variables['v_south'].units = 'meter second-1'
     ncv.variables['v_south'].field = 'v_south, scalar, series'
-    print 'Creating variable v_east'
+    print('Creating variable v_east')
     ncv.createVariable('v_east', 'f8', ('ocean_time', 's_rho', 'eta_v'), fill_value=spval)
     ncv.variables['v_east'].long_name = '3D v-momentum east boundary condition'
     ncv.variables['v_east'].units = 'meter second-1'
     ncv.variables['v_east'].field = 'v_east, scalar, series'
-    print 'Creating variable v_west'
+    print('Creating variable v_west')
     ncv.createVariable('v_west', 'f8', ('ocean_time', 's_rho', 'eta_v'), fill_value=spval)
     ncv.variables['v_west'].long_name = '3D v-momentum west boundary condition'
     ncv.variables['v_west'].units = 'meter second-1'
     ncv.variables['v_west'].field = 'v_east, scalar, series'
 
-    print 'Creating variable vbar_north'
+    print('Creating variable vbar_north')
     ncv.createVariable('vbar_north', 'f8', ('ocean_time', 'xi_v'), fill_value=spval)
     ncv.variables['vbar_north'].long_name = '2D v-momentum north boundary condition'
     ncv.variables['vbar_north'].units = 'meter second-1'
     ncv.variables['vbar_north'].field = 'vbar_north, scalar, series'
-    print 'Creating variable vbar_south'
+    print('Creating variable vbar_south')
     ncv.createVariable('vbar_south', 'f8', ('ocean_time', 'xi_v'), fill_value=spval)
     ncv.variables['vbar_south'].long_name = '2D v-momentum south boundary condition'
     ncv.variables['vbar_south'].units = 'meter second-1'
     ncv.variables['vbar_south'].field = 'vbar_south, scalar, series'
-    print 'Creating variable vbar_east'
+    print('Creating variable vbar_east')
     ncv.createVariable('vbar_east', 'f8', ('ocean_time', 'eta_v'), fill_value=spval)
     ncv.variables['vbar_east'].long_name = '2D v-momentum east boundary condition'
     ncv.variables['vbar_east'].units = 'meter second-1'
     ncv.variables['vbar_east'].field = 'vbar_east, scalar, series'
-    print 'Creating variable vbar_west'
+    print('Creating variable vbar_west')
     ncv.createVariable('vbar_west', 'f8', ('ocean_time', 'eta_v'), fill_value=spval)
     ncv.variables['vbar_west'].long_name = '2D v-momentum west boundary condition'
     ncv.variables['vbar_west'].units = 'meter second-1'
@@ -177,27 +177,27 @@ def remap_bdry_uv(src_file, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='.
  
 
     # remaping
-    print 'remapping and rotating u and v from', src_grd.name, \
-                      'to', dst_grd.name
-    print 'time =', time
+    print('remapping and rotating u and v from', src_grd.name, \
+                      'to', dst_grd.name)
+    print('time =', time)
 
 
     # flood the grid
-    print 'flood the grid'
+    print('flood the grid')
     src_uz = pyroms_toolbox.CGrid_GLORYS.flood(src_varu, src_grd, Cpos='u', \
                 spval=spval, dmax=dmax, cdepth=cdepth, kk=kk)
     src_vz = pyroms_toolbox.CGrid_GLORYS.flood(src_varv, src_grd, Cpos='v', \
                 spval=spval, dmax=dmax, cdepth=cdepth, kk=kk)
 
     # horizontal interpolation using scrip weights
-    print 'horizontal interpolation using scrip weights'
+    print('horizontal interpolation using scrip weights')
     dst_uz = pyroms.remapping.remap(src_uz, wts_file_u, \
                                       spval=spval)
     dst_vz = pyroms.remapping.remap(src_vz, wts_file_v, \
                                       spval=spval)
 
     # vertical interpolation from standard z level to sigma
-    print 'vertical interpolation from standard z level to sigma'
+    print('vertical interpolation from standard z level to sigma')
     dst_u_north = pyroms.remapping.z2roms(dst_uz[::-1, Mp-2:Mp, 0:Lp], \
                       dst_grdz, dst_grd, Cpos='rho', spval=spval, \
                       flood=False, irange=(0,Lp), jrange=(Mp-2,Mp))
@@ -329,7 +329,7 @@ def remap_bdry_uv(src_file, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='.
     dst_vbar_west = np.ma.masked_where(dst_grd.hgrid.mask_v[:,0] == 0, dst_vbar_west)   
 
     # write data in destination file
-    print 'write data in destination file'
+    print('write data in destination file')
     ncu.variables['ocean_time'][0] = time
     ncu.variables['u_north'][0] = dst_u_north
     ncu.variables['u_south'][0] = dst_u_south

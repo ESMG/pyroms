@@ -20,7 +20,7 @@ salt = nc_rivers.variables['river_salt'][:]
 time = nc_rivers.variables['river_time'][:]
 
 run_280 = np.abs(runoff[280,:])
-print 'Sum 5', np.sum(run_280)
+print('Sum 5', np.sum(run_280))
 
 Nr = sign.shape[0]
 Nt = time.shape[0]
@@ -28,7 +28,7 @@ count = 0
 
 year_sum = np.sum(runoff, axis=0)
 all_sum = np.sum(np.abs(year_sum))
-print year_sum.shape, all_sum
+print(year_sum.shape, all_sum)
 
 for i in range(Nr):
     if np.abs(year_sum[i]) > 0.:
@@ -44,7 +44,7 @@ temp2 = np.zeros((Nt))
 salt2 = np.zeros((Nt))
 temp2 = temp
 
-print 'Squeezing down to', count, 'rivers'
+print('Squeezing down to', count, 'rivers')
 it = 0
 for i in range(Nr):
     if np.abs(year_sum[i]) > 0.:
@@ -120,10 +120,10 @@ out.variables['river_salt'][:] = salt2
 out.variables['river_time'][:] = time
 
 run_280 = np.abs(runoff2[280,:])
-print 'Sum 6', np.sum(run_280)
+print('Sum 6', np.sum(run_280))
 
 year_sum = np.sum(runoff2, axis=0)
 all_sum = np.sum(np.abs(year_sum))
-print year_sum.shape, all_sum
+print(year_sum.shape, all_sum)
 
 out.close()

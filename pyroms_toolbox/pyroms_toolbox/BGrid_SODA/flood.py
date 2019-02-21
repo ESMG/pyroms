@@ -12,11 +12,11 @@ def flood(varz, Bgrd, Bpos='t', irange=None, jrange=None, \
 
     optional switch:
       - Bpos='t', 'uv'               specify the grid position where
-                                     the variable rely 
+                                     the variable rely
       - irange                       specify grid sub-sample for i direction
       - jrange                       specify grid sub-sample for j direction
       - spval=1e35                   define spval value
-      - dmax=0                       if dmax>0, maximum horizontal 
+      - dmax=0                       if dmax>0, maximum horizontal
                                      flooding distance
       - cdepth=0                     critical depth for flooding
                                      if depth<cdepth => no flooding
@@ -98,6 +98,6 @@ def flood(varz, Bgrd, Bpos='t', irange=None, jrange=None, \
     for i in range(Lm):
         for j in range(Mm):
             if mask[j,i] == 1:
-                varz[bottom[j,i]:,j,i] = varz[bottom[j,i],j,i]
+                varz[int(bottom[j,i]):,j,i] = varz[int(bottom[j,i]),j,i]
 
     return varz

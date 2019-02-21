@@ -28,7 +28,7 @@ def remap(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_d
     ref = date2num(ref)
 # For IC
     tag = src_file.rsplit('/')[-1].rsplit('_')[2]
-    print("date string:", tag)
+    print(("date string:", tag))
     year = int(tag[:4])
     month = int(tag[4:6])
     day = int(tag[6:])
@@ -40,7 +40,7 @@ def remap(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_d
     # create IC file
     dst_file = src_file.rsplit('/')[-1]
     dst_file = dst_dir + dst_file[:-4] + '_' + src_varname + '_ic_' + dst_grd.name + '.nc'
-    print '\nCreating file', dst_file
+    print('\nCreating file', dst_file)
     if os.path.exists(dst_file) is True:
         os.remove(dst_file)
     pyroms_toolbox.nc_create_roms_file(dst_file, dst_grd, nctime)
@@ -74,7 +74,7 @@ def remap(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_d
     elif ndim == 2:
         src_var = src_var[:]
         src_var = src_var[np.r_[ystart:np.size(src_var,0),-1],:]
-    print "dimensions:", src_var.shape, ndim
+    print("dimensions:", src_var.shape, ndim)
 
     if src_varname == 'sossheig':
         Bpos = 't'
@@ -143,7 +143,7 @@ def remap(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_d
         units = 'PSU'
         field = 'salinity, scalar, series'
     else:
-        raise ValueError, 'Undefined src_varname'
+        raise ValueError('Undefined src_varname')
 
 
     if ndim == 3:
@@ -155,7 +155,7 @@ def remap(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_d
 
 
     # create variable in file
-    print 'Creating variable', dst_varname
+    print('Creating variable', dst_varname)
     nc.createVariable(dst_varname, 'f8', dimensions, fill_value=spval)
     nc.variables[dst_varname].long_name = long_name
     nc.variables[dst_varname].units = units
@@ -163,36 +163,36 @@ def remap(src_file, src_varname, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_d
 
 
     # remapping
-    print 'remapping', dst_varname, 'from', src_grd.name, \
-              'to', dst_grd.name
-    print 'time =', time
+    print('remapping', dst_varname, 'from', src_grd.name, \
+              'to', dst_grd.name)
+    print('time =', time)
 
 
     if ndim == 3:
         # flood the grid
-        print 'flood the grid'
+        print('flood the grid')
         src_varz = pyroms_toolbox.CGrid_GLORYS.flood(src_var, src_grd, Cpos=Bpos, spval=spval, \
                                 dmax=dmax, cdepth=cdepth, kk=kk)
-        print 'flooded the grid', src_varz[:,-1,189]
-        print 'flooded the grid', src_varz[:,-1,277]
+        print('flooded the grid', src_varz[:,-1,189])
+        print('flooded the grid', src_varz[:,-1,277])
     else:
         src_varz = src_var
 
     # horizontal interpolation using scrip weights
-    print 'horizontal interpolation using scrip weights'
+    print('horizontal interpolation using scrip weights')
     dst_varz = pyroms.remapping.remap(src_varz, wts_file, \
                                           spval=spval)
 
     if ndim == 3:
         # vertical interpolation from standard z level to sigma
-        print 'vertical interpolation from standard z level to sigma'
+        print('vertical interpolation from standard z level to sigma')
         dst_var = pyroms.remapping.z2roms(dst_varz[::-1,:,:], dst_grdz, \
                           dst_grd, Cpos=Cpos, spval=spval, flood=False)
     else:
         dst_var = dst_varz
 
     # write data in destination file
-    print 'write data in destination file'
+    print('write data in destination file')
     nc.variables['ocean_time'][0] = time
     nc.variables[dst_varname][0] = dst_var
 

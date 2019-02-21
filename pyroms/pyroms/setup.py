@@ -33,14 +33,14 @@ Contains:
       get_ROMS_hgrid
       get_ROMS_vgrid
       get_ROMS_grid
-      write_ROMS_grid                         
+      write_ROMS_grid
 
     io  -  wrapper for netCDF4
       Dataset
       MFDataset
 
     cf  -  CF compliant files tools
-      time 
+      time
 
     tools  -  Tools specific to the Regional Ocean Modeling System
       roms2z
@@ -55,7 +55,7 @@ Contains:
       latslice
       section_transport
 
-    utility  -  Some basic tools 
+    utility  -  Some basic tools
       get_lonlat
       get_ij
       roms_varlist
@@ -95,14 +95,12 @@ if __name__ == '__main__':
           version = '0.1.0',
           description = doclines[0],
           long_description = "\n".join(doclines[2:]),
-          author = "Frederic Castruccio",
-          author_email = "frederic@marine.rutgers.edu",
-          url = "ftp://marine.rutgers.edu/pub/frederic/pyroms/",
+          url = "https://github.com/ESMG/pyroms",
           packages = ['pyroms',
                       'pyroms.remapping',
                       'pyroms.extern'],
           license = 'BSD',
           platforms = ["any"],
           ext_modules = [iso,interp,remapping],
-          classifiers = filter(None, classifiers.split("\n")),
+          classifiers = [_f for _f in classifiers.split("\n") if _f],
           )

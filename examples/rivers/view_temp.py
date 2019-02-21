@@ -25,7 +25,7 @@ for line in f:
     temp.append(float(b)) 
     salt.append(0.0) 
 
-print temp
+print(temp)
 
 # create file with all the objects
 out = netCDF4.Dataset(outfile, 'a', format='NETCDF3_64BIT')

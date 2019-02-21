@@ -16,9 +16,9 @@ def zview(var, tindex, depth, grid, filename=None, \
 
     optional switch:
       - filename         if defined, load the variable from file
-      - cmin		 set color minimum limit
-      - cmax		 set color maximum limit
-      - clev		 set the number of color step
+      - cmin             set color minimum limit
+      - cmax             set color maximum limit
+      - clev             set the number of color step
       - fill             use contourf instead of pcolor
       - contour          overlay contour (request fill=True)
       - range            set axis limit
@@ -34,8 +34,8 @@ def zview(var, tindex, depth, grid, filename=None, \
     var must be a string and the variable will be load from the file.
     grid can be a grid object or a gridid. In the later case, the grid
     object correponding to the provided gridid will be loaded.
-    If proj is not None, return a Basemap object to be used with quiver 
-    for example. 
+    If proj is not None, return a Basemap object to be used with quiver
+    for example.
     """
 
     # get grid
@@ -128,7 +128,7 @@ def zview(var, tindex, depth, grid, filename=None, \
         lon_max = lon.max()
         lon_0 = (lon_min + lon_max) / 2.
         lat_min = lat.min()
-        lat_max = lat.max()     
+        lat_max = lat.max()
         lat_0 = (lat_min + lat_max) / 2.
     else:
         lon_min = range[0]
@@ -146,49 +146,49 @@ def zview(var, tindex, depth, grid, filename=None, \
                  urcrnrlon=lon_max, urcrnrlat=lat_max, lat_0=lat_0, lon_0=lon_0, \
                  resolution='h', area_thresh=5.)
         #map = pyroms.utility.get_grid_proj(grd, type=proj)
-        x, y = map(lon,lat)
-    
+        x, y = list(map(lon,lat))
+
     if fill_land is True and proj is not None:
         # fill land and draw coastlines
         map.drawcoastlines()
         map.fillcontinents(color='grey')
     else:
-        if proj is not None: 
+        if proj is not None:
             Basemap.pcolor(map, x, y, mask, vmin=-2, cmap=cm.gray)
             pyroms_toolbox.plot_coast_line(grd, map)
-        else: 
+        else:
             plt.pcolor(lon, lat, mask, vmin=-2, cmap=cm.gray)
             pyroms_toolbox.plot_coast_line(grd)
-    
+
     if fill is True:
-        if proj is not None: 
+        if proj is not None:
             cf = Basemap.contourf(map, x, y, zslice, vc, cmap = pal, \
                                   norm = pal_norm)
-        else: 
+        else:
             cf = plt.contourf(lon, lat, zslice, vc, cmap = pal, \
                               norm = pal_norm)
     else:
-        if proj is not None: 
+        if proj is not None:
             cf = Basemap.pcolor(map, x, y, zslice, cmap = pal, norm = pal_norm)
-        else: 
+        else:
             cf = plt.pcolor(lon, lat, zslice, cmap = pal, norm = pal_norm)
 
     if clb is True:
-    	clb = plt.colorbar(cf, fraction=0.075,format=clb_format)
-    	for t in clb.ax.get_yticklabels():
-    	    t.set_fontsize(fts)
+        clb = plt.colorbar(cf, fraction=0.075,format=clb_format)
+        for t in clb.ax.get_yticklabels():
+            t.set_fontsize(fts)
 
     if contour is True:
         if fill is not True:
-            raise Warning, 'Please run again with fill=True to overlay contour.'
+            raise Warning('Please run again with fill=True to overlay contour.')
         else:
             if proj is not None:
                 Basemap.contour(map, x, y, zslice, vc[::d], colors='k', linewidths=0.5, linestyles='solid')
-            else: 
+            else:
                 plt.contour(lon, lat, zslice, vc[::d], colors='k', linewidths=0.5, linestyles='solid')
 
     if proj is None and range is not None:
-        plt.axis(range) 
+        plt.axis(range)
 
 
     if title is not None:
@@ -203,11 +203,11 @@ def zview(var, tindex, depth, grid, filename=None, \
     if outfile is not None:
         if outfile.find('.png') != -1 or outfile.find('.svg') != -1 or \
            outfile.find('.eps') != -1:
-            print 'Write figure to file', outfile
+            print('Write figure to file', outfile)
             plt.savefig(outfile, dpi=200, facecolor='w', edgecolor='w', \
                         orientation='portrait')
         else:
-            print 'Unrecognized file extension. Please use .png, .svg or .eps file extension.'	 
+            print('Unrecognized file extension. Please use .png, .svg or .eps file extension.')
 
 
     if proj is None:

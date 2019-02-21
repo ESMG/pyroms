@@ -15,6 +15,7 @@ from matplotlib.pyplot import *
 import pylab
 import zipfile
 import octant
+import pyroms
 import os
 
 kml_preamble = '''<?xml version="1.0" encoding="UTF-8"?>
@@ -68,15 +69,15 @@ kml_closing = '''  </Folder>
 def kmz_anim(lon, lat, time, prop, **kwargs):
         lon = asarray(lon)
         lat = asarray(lat)
-        
+
         jd = pylab.date2num(time)
-        jd_edges = hstack((1.5*jd[0]-0.5*jd[1], 
-                           0.5*(jd[1:]+jd[:-1]), 
+        jd_edges = hstack((1.5*jd[0]-0.5*jd[1],
+                           0.5*(jd[1:]+jd[:-1]),
                            1.5*jd[-1]-0.5*jd[-2]))
         time_edges = pylab.num2date(jd_edges)
         time_starts = time_edges[:-1]
         time_stops = time_edges[1:]
-        
+
         name = kwargs.pop('name', 'overlay')
         color = kwargs.pop('color', '9effffff')
         visibility = str( kwargs.pop('visibility', 1) )
@@ -87,29 +88,29 @@ def kmz_anim(lon, lat, time, prop, **kwargs):
         kwargs['vmax'] = vmax
         vmin = kwargs.pop('vmin', prop.min())
         kwargs['vmin'] = vmin
-        
+
         geo_aspect = cos(lat.mean()*pi/180.0)
         xsize = lon.ptp()*geo_aspect
         ysize = lat.ptp()
-        
+
         aspect = ysize/xsize
         if aspect > 1.0:
             figsize = (10.0/aspect, 10.0)
         else:
             figsize = (10.0, 10.0*aspect)
-        
+
         kml_text = kml_preamble
-        
+
         ioff()
         fig = figure(figsize=figsize, dpi=pixels//10, facecolor=None, frameon=False)
         ax = fig.add_axes([0, 0, 1, 1])
-        
+
         f = zipfile.ZipFile(kmzfile, 'w')
-        
+
         for frame in range(prop.shape[0]):
             tstart = time_starts[frame]
             tstop = time_stops[frame]
-            print 'Writing frame ', frame, tstart.isoformat(), tstop.isoformat()
+            print('Writing frame ', frame, tstart.isoformat(), tstop.isoformat())
             ax.cla()
             pc = ax.pcolor(lon, lat, prop[frame], **kwargs)
             ax.set_xlim(lon.min(), lon.max())
@@ -127,10 +128,10 @@ def kmz_anim(lon, lat, time, prop, **kwargs):
                                  .replace('__FRAME__', icon)\
                                  .replace('__TIMEBEGIN__', tstart.isoformat())\
                                  .replace('__TIMEEND__', tstop.isoformat())
-            
+
             f.write(icon)
             os.remove(icon)
-        
+
         # legend
         fig = figure(figsize=(1.0, 4.0), facecolor=None, frameon=False)
         cax = fig.add_axes([0.0, 0.05, 0.2, 0.90])
@@ -138,13 +139,13 @@ def kmz_anim(lon, lat, time, prop, **kwargs):
         cb.set_label(units, color='0.9')
         for lab in cb.ax.get_yticklabels():
             setp(lab, 'color', '0.9')
-        
+
         savefig('legend.png')
         f.write('legend.png')
         os.remove('legend.png')
-        
+
         kml_text += kml_legend
-        
+
         kml_text += kml_closing
         f.writestr('overlay.kml', kml_text)
         f.close()
@@ -153,21 +154,21 @@ def kmz_anim(lon, lat, time, prop, **kwargs):
 if __name__ == '__main__':
     ncll = octant.io.Dataset('/Users/rob/Archive/GWB/bodden/latlon.nc')
     nc = octant.io.Dataset('/Users/rob/Archive/GWB/bodden/bsh_elev_2001-10.nc')
-    
+
     lat = ncll.variables['lat'][:]
     lon = ncll.variables['lon'][:]
-    
+
     lon, lat = meshgrid(lon, lat)
-    
+
     time = octant.ocean_time(nc, name='time')[:200:4]
-    
+
     propname = 'elev'
-    
+
     prop = nc.variables[propname][:200:4]
     mask = prop == nc.variables[propname].missing_value
     prop = ma.masked_where(mask, prop)
-    
-    kmz_anim(lon, lat, time.dates, prop, kmzfile='bsh_anim.kmz', 
+
+    kmz_anim(lon, lat, time.dates, prop, kmzfile='bsh_anim.kmz',
              name='BSH model -- sea surface height', units='sea surface height [m]')
 
 
@@ -207,7 +208,7 @@ kml_groundoverlay = '''<?xml version="1.0" encoding="UTF-8"?>
 
 def geo_pcolor(lon, lat, prop, **kwargs):
     """docstring for geo_pcolor"""
-    
+
     name = kwargs.pop('name', 'overlay')
     color = kwargs.pop('color', '9effffff')
     visibility = str( kwargs.pop('visibility', 1) )
@@ -218,17 +219,17 @@ def geo_pcolor(lon, lat, prop, **kwargs):
     kwargs['vmax'] = vmax
     vmin = kwargs.pop('vmin', prop.min())
     kwargs['vmin'] = vmin
-    
+
     geo_aspect = cos(lat.mean()*pi/180.0)
     xsize = lon.ptp()*geo_aspect
     ysize = lat.ptp()
-    
+
     aspect = ysize/xsize
     if aspect > 1.0:
         figsize = (10.0/aspect, 10.0)
     else:
         figsize = (10.0, 10.0*aspect)
-    
+
     ioff()
     fig = figure(figsize=figsize, facecolor=None, frameon=False, dpi=pixels//10)
     ax = fig.add_axes([0, 0, 1, 1])
@@ -237,7 +238,7 @@ def geo_pcolor(lon, lat, prop, **kwargs):
     ax.set_ylim(lat.min(), lat.max())
     ax.set_axis_off()
     savefig('overlay.png')
-    
+
     f = zipfile.ZipFile(kmzfile, 'w')
     f.writestr('overlay.kml', kml_groundoverlay.replace('__NAME__', name)\
                                                .replace('__COLOR__', color)\
@@ -248,35 +249,35 @@ def geo_pcolor(lon, lat, prop, **kwargs):
                                                .replace('__WEST__', str(lon.min())))
     f.write('overlay.png')
     os.remove('overlay.png')
-    
+
     fig = figure(figsize=(1.0, 4.0), facecolor=None, frameon=False)
     ax = fig.add_axes([0.0, 0.05, 0.2, 0.9])
     cb = colorbar(pc, cax=ax)
     cb.set_label(units, color='0.9')
     for lab in cb.ax.get_yticklabels():
         setp(lab, 'color', '0.9')
-    
+
     savefig('legend.png')
     f.write('legend.png')
-    os.remove('legend.png')    
+    os.remove('legend.png')
     f.close()
 
 
 if __name__ == '__main__':
     ncll = pyroms.Dataset('/Users/rob/Archive/GWB/bodden/latlon.nc')
     nc = pyroms.Dataset('/Users/rob/Archive/GWB/bodden/bsh_elev_2001-10.nc')
-    
+
     lat = ncll.variables['lat'][:]
     lon = ncll.variables['lon'][:]
-    
+
     lon, lat = meshgrid(lon, lat)
-    
+
     propname = 'elev'
-    
+
     prop = nc.variables[propname][-1]
     mask = prop == nc.variables[propname].missing_value
     prop = ma.masked_where(mask, prop)
-    
+
     geo_pcolor(lon, lat, prop, kmzfile='bsh.kmz', \
                name='BSH model -- sea surface height',\
                units='sea surface height [m]')

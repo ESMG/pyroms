@@ -17,7 +17,7 @@ class nctime(object):
     pass
 
 def remap_bdry_bio_glodap(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
-    
+
     # NWGOA3 grid sub-sample
     xrange=src_grd.xrange; yrange=src_grd.yrange
     src_varname = argdict['tracer']
@@ -35,7 +35,7 @@ def remap_bdry_bio_glodap(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst
     # create boundary file
     dst_file = tracer + '.nc'
     dst_file = dst_dir + dst_grd.name + '_bdry_bio_' + dst_file
-    print 'Creating boundary file', dst_file
+    print('Creating boundary file', dst_file)
     if os.path.exists(dst_file) is True:
         os.remove(dst_file)
     pyroms_toolbox.nc_create_roms_bdry_file(dst_file, dst_grd, nctime)
@@ -44,7 +44,7 @@ def remap_bdry_bio_glodap(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst
     nc = netCDF.Dataset(dst_file, 'a', format='NETCDF3_64BIT')
 
     #load var
-    cdf = netCDF.Dataset(src_file) 
+    cdf = netCDF.Dataset(src_file)
     src_var = cdf.variables[src_varname]
 
     # correct time to some classic value
@@ -65,9 +65,9 @@ def remap_bdry_bio_glodap(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst
         src_var = src_var[0,yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
 
     if tracer == 'alk':
-       unit_conversion = 1. / 1e6 
+       unit_conversion = 1. / 1e6
     elif tracer == 'dic':
-       unit_conversion = 1. / 1e6 
+       unit_conversion = 1. / 1e6
 
     src_var = src_var * unit_conversion
 
@@ -105,25 +105,25 @@ def remap_bdry_bio_glodap(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst
 
 
     # create variable in boudary file
-    print 'Creating variable', dst_varname_north
+    print('Creating variable', dst_varname_north)
     nc.createVariable(dst_varname_north, 'f8', dimensions_north, fill_value=spval2)
     nc.variables[dst_varname_north].long_name = long_name_north
     nc.variables[dst_varname_north].units = units
     nc.variables[dst_varname_north].field = field_north
 
-    print 'Creating variable', dst_varname_south
+    print('Creating variable', dst_varname_south)
     nc.createVariable(dst_varname_south, 'f8', dimensions_south, fill_value=spval2)
     nc.variables[dst_varname_south].long_name = long_name_south
     nc.variables[dst_varname_south].units = units
     nc.variables[dst_varname_south].field = field_south
 
-    print 'Creating variable', dst_varname_west
+    print('Creating variable', dst_varname_west)
     nc.createVariable(dst_varname_west, 'f8', dimensions_west, fill_value=spval2)
     nc.variables[dst_varname_west].long_name = long_name_west
     nc.variables[dst_varname_west].units = units
     nc.variables[dst_varname_west].field = field_west
 
-    print 'Creating variable', dst_varname_east
+    print('Creating variable', dst_varname_east)
     nc.createVariable(dst_varname_east, 'f8', dimensions_east, fill_value=spval2)
     nc.variables[dst_varname_east].long_name = long_name_east
     nc.variables[dst_varname_east].units = units
@@ -131,31 +131,31 @@ def remap_bdry_bio_glodap(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst
 
 
     # remapping
-    print 'remapping', dst_varname, 'from', src_grd.name, \
-              'to', dst_grd.name
+    print('remapping', dst_varname, 'from', src_grd.name, \
+              'to', dst_grd.name)
 
     if ndim == 3:
         # flood the grid
-        print 'flood the grid'
+        print('flood the grid')
         src_varz = pyroms_toolbox.BGrid_GFDL.flood(src_var, src_grd, Bpos=Bpos, spval=spval, \
                                 dmax=dmax, cdepth=cdepth, kk=kk)
     else:
         src_varz = src_var
 
     # horizontal interpolation using scrip weights
-    print 'horizontal interpolation using scrip weights'
+    print('horizontal interpolation using scrip weights')
     dst_varz = pyroms.remapping.remap(src_varz, wts_file, spval=spval)
 
     if ndim == 3:
         # vertical interpolation from standard z level to sigma
-        print 'vertical interpolation from standard z level to sigma'
+        print('vertical interpolation from standard z level to sigma')
         dst_var_north = pyroms.remapping.z2roms(dst_varz[::-1, Mp-1:Mp, 0:Lp], \
                           dst_grdz, dst_grd, Cpos=Cpos, spval=spval, \
                           flood=False, irange=(0,Lp), jrange=(Mp-1,Mp))
         dst_var_south = pyroms.remapping.z2roms(dst_varz[::-1, 0:1, :], \
                           dst_grdz, dst_grd, Cpos=Cpos, spval=spval, \
                           flood=False, irange=(0,Lp), jrange=(0,1))
-	dst_var_east = pyroms.remapping.z2roms(dst_varz[::-1, :, Lp-1:Lp], \
+        dst_var_east = pyroms.remapping.z2roms(dst_varz[::-1, :, Lp-1:Lp], \
                           dst_grdz, dst_grd, Cpos=Cpos, spval=spval, \
                           flood=False, irange=(Lp-1,Lp), jrange=(0,Mp))
         dst_var_west = pyroms.remapping.z2roms(dst_varz[::-1, :, 0:1], \
@@ -164,7 +164,7 @@ def remap_bdry_bio_glodap(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst
     else:
         dst_var_north = dst_varz[-1, :]
         dst_var_south = dst_varz[0, :]
-	dst_var_east = dst_varz[:, -1]
+        dst_var_east = dst_varz[:, -1]
         dst_var_west = dst_varz[:, 0]
 
     dst_var_north[np.where(dst_var_north == spval)] = spval2
@@ -173,7 +173,7 @@ def remap_bdry_bio_glodap(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst
     dst_var_west[np.where(dst_var_west == spval)]   = spval2
 
     # write data in destination file
-    print 'write data in destination file\n'
+    print('write data in destination file\n')
     nc.variables['ocean_time'][0] = time
     nc.variables['ocean_time'].cycle_length = 365.25
     nc.variables[dst_varname_north][0] = np.squeeze(dst_var_north)

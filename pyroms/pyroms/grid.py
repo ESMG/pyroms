@@ -43,10 +43,10 @@ class ROMS_gridinfo(object):
 
     There are two ways to define the grid information.  If grid_file
     and hist_file are not passed to the object when it is created, the
-    information is retrieved from gridid.txt.  
-    To add new grid please edit your gridid.txt. You need to define 
-    an environment variable PYROMS_GRIDID_FILE pointing to your 
-    gridid.txt file. Just copy an existing grid and modify the 
+    information is retrieved from gridid.txt.
+    To add new grid please edit your gridid.txt. You need to define
+    an environment variable PYROMS_GRIDID_FILE pointing to your
+    gridid.txt file. Just copy an existing grid and modify the
     definition accordingly to your case (Be carefull with
     space and blank line).
 
@@ -62,14 +62,14 @@ class ROMS_gridinfo(object):
       if gridid in gridid_dictionary:
         #print 'CJMP> gridid found in gridid_dictionary, grid retrieved from dictionary'
         saved_self=gridid_dictionary[gridid]
-        for attrib in saved_self.__dict__.keys():
+        for attrib in list(saved_self.__dict__.keys()):
           setattr(self,attrib,getattr(saved_self,attrib))
       else:
         #nope, we need to get the information from gridid.txt or from
         #the grid and history files from the model
         self.id = gridid
         self._get_grid_info(grid_file,hist_file)
-        
+
         #now save the data in the dictionary, so we don't need to get it again
         gridid_dictionary[gridid]=self
 
@@ -107,7 +107,7 @@ class ROMS_gridinfo(object):
             line_nb = line_nb + 1
 
         if info == []:
-            raise ValueError, 'Unknow gridid. Please check your gridid.txt file'
+            raise ValueError('Unknown gridid. Please check your gridid.txt file')
 
         if info[4] == 'roms':
             self.name     =          info[1]
@@ -119,7 +119,7 @@ class ROMS_gridinfo(object):
             self.theta_b  = np.float(info[7])
             self.Tcline   = np.float(info[8])
 
-        elif info[4] == 'z':  
+        elif info[4] == 'z':
             nline = len(info)
             dep = info[5]
             for line in range(6,nline):
@@ -133,14 +133,14 @@ class ROMS_gridinfo(object):
             self.depth   = dep
 
         else:
-            raise ValueError, 'Unknow grid type. Please check your gridid.txt file'
+            raise ValueError('Unknown grid type. Please check your gridid.txt file')
 
       else: #lets get the grid information from the history and grid files
         #print 'CJMP> getting grid info from ROMS history and grid files'
         assert type(grid_file)!=type(None), 'if specify history file you must specify grid file'
         assert type(hist_file)!=type(None), 'if specify grid file you must specify history file'
 
-        #open history file and get necessary grid information from it. 
+        #open history file and get necessary grid information from it.
         hist=netCDF.Dataset(hist_file,'r')
 
         #put data into ROMS_gridinfo object
@@ -159,12 +159,12 @@ class ROMS_gridinfo(object):
           try:
             self.Vtrans=np.float(hist.variables['Vstretching'][:])
           except:
-            print 'variable Vtransform not found in history file. Defaulting to Vtrans=1'
+            print('variable Vtransform not found in history file. Defaulting to Vtrans=1')
             self.Vtrans=1
           self.theta_s=np.float(hist.variables['theta_s'][:])
           self.theta_b=np.float(hist.variables['theta_b'][:])
           self.Tcline=np.float(hist.variables['Tcline'][:])
-          
+
 
 def print_ROMS_gridinfo(gridid):
     """
@@ -175,20 +175,20 @@ def print_ROMS_gridinfo(gridid):
 
     gridinfo = ROMS_gridinfo(gridid)
 
-    print ' '
-    print 'grid information for gridid ', gridinfo.id, ':'
-    print ' '
-    print 'grid name : ', gridinfo.name
-    print 'grid file path : ', gridinfo.grdfile
-    print 'number of vertical level : ', gridinfo.N
-    print 'grid type : ', gridinfo.grdtype
+    print(' ')
+    print('grid information for gridid ', gridinfo.id, ':')
+    print(' ')
+    print('grid name : ', gridinfo.name)
+    print('grid file path : ', gridinfo.grdfile)
+    print('number of vertical level : ', gridinfo.N)
+    print('grid type : ', gridinfo.grdtype)
     if gridinfo.grdtype == 'roms':
-        print 'theta_s = ', gridinfo.theta_s
-        print 'theta_b = ', gridinfo.theta_b
-        print 'Tcline  = ', gridinfo.Tcline
+        print('theta_s = ', gridinfo.theta_s)
+        print('theta_b = ', gridinfo.theta_b)
+        print('Tcline  = ', gridinfo.Tcline)
         #print 'hc      = ', gridinfo.hc
     elif gridinfo.grdtype == 'z':
-        print 'depth = ', gridinfo.depth
+        print('depth = ', gridinfo.depth)
 
 
 def list_ROMS_gridid():
@@ -202,14 +202,14 @@ def list_ROMS_gridid():
     data = open(gridid_file,'r')
     lines = data.readlines()
     data.close()
-    
+
     gridid_list = []
     for line in lines:
         s = line.split()
         if s[0] == 'id':
             gridid_list.append(s[2])
 
-    print 'List of defined gridid : ', gridid_list
+    print('List of defined gridid : ', gridid_list)
 
 
 def get_ROMS_hgrid(gridid):
@@ -225,17 +225,23 @@ def get_ROMS_hgrid(gridid):
     nc = io.Dataset(grdfile)
 
     #Check for cartesian or geographical grid
-    spherical = nc.variables['spherical'][:]
+    spherical = nc.variables['spherical'][0]
 
-    #Get horizontal grid 
+    #if it is type byte, then convert to string
+    try:
+      spherical=spherical.decode('utf8')
+    except:
+      print('Assuming spherical is integer',spherical, type(spherical))
+
+    #Get horizontal grid
     if ((spherical == 0) or (spherical == 'F')):
         #cartesian grid
-        print 'Load cartesian grid from file'
-        if 'x_vert' in nc.variables.keys() and 'y_vert' in nc.variables.keys():
+        print('Load cartesian grid from file')
+        if 'x_vert' in list(nc.variables.keys()) and 'y_vert' in list(nc.variables.keys()):
             x_vert = nc.variables['x_vert'][:]
             y_vert = nc.variables['y_vert'][:]
-        elif 'x_rho' in nc.variables.keys() and 'y_rho' in nc.variables.keys() \
-                 and 'pm' in nc.variables.keys() and 'pn' in nc.variables.keys():
+        elif 'x_rho' in list(nc.variables.keys()) and 'y_rho' in list(nc.variables.keys()) \
+                 and 'pm' in list(nc.variables.keys()) and 'pn' in list(nc.variables.keys()):
             x_rho = nc.variables['x_rho'][:]
             y_rho = nc.variables['y_rho'][:]
             pm = nc.variables['pm'][:]
@@ -245,13 +251,13 @@ def get_ROMS_hgrid(gridid):
             #compute verts from rho point, pm, pn, angle
             x_vert, y_vert = rho_to_vert(x_rho, y_rho, pm, pn, angle)
         else:
-            raise ValueError, 'NetCDF file must contain x_vert and y_vert \
-                     or x_rho, y_rho, pm, pn and angle for a cartesian grid'
+            raise ValueError('NetCDF file must contain x_vert and y_vert \
+                     or x_rho, y_rho, pm, pn and angle for a cartesian grid')
 
-        if 'x_rho' in nc.variables.keys() and 'y_rho' in nc.variables.keys() and \
-             'x_u' in nc.variables.keys() and 'y_u' in nc.variables.keys() and \
-             'x_v' in nc.variables.keys() and 'y_v' in nc.variables.keys() and \
-             'x_psi' in nc.variables.keys() and 'y_psi' in nc.variables.keys():
+        if 'x_rho' in list(nc.variables.keys()) and 'y_rho' in list(nc.variables.keys()) and \
+             'x_u' in list(nc.variables.keys()) and 'y_u' in list(nc.variables.keys()) and \
+             'x_v' in list(nc.variables.keys()) and 'y_v' in list(nc.variables.keys()) and \
+             'x_psi' in list(nc.variables.keys()) and 'y_psi' in list(nc.variables.keys()):
             x_rho = nc.variables['x_rho'][:]
             y_rho = nc.variables['y_rho'][:]
             x_u = nc.variables['x_u'][:]
@@ -270,7 +276,7 @@ def get_ROMS_hgrid(gridid):
             x_psi = None
             y_psi = None
 
-        if 'pm' in nc.variables.keys() and 'pn' in nc.variables.keys():
+        if 'pm' in list(nc.variables.keys()) and 'pn' in list(nc.variables.keys()):
             pm = nc.variables['pm'][:]
             dx = 1. / pm
             pn = nc.variables['pn'][:]
@@ -279,14 +285,14 @@ def get_ROMS_hgrid(gridid):
             dx = None
             dy = None
 
-        if 'dndx' in nc.variables.keys() and 'dmde' in nc.variables.keys():
+        if 'dndx' in list(nc.variables.keys()) and 'dmde' in list(nc.variables.keys()):
             dndx = nc.variables['dndx'][:]
             dmde = nc.variables['dmde'][:]
         else:
             dndx = None
             dmde = None
 
-        if 'angle' in nc.variables.keys():
+        if 'angle' in list(nc.variables.keys()):
             angle = nc.variables['angle'][:]
         else:
             angle = None
@@ -297,15 +303,21 @@ def get_ROMS_hgrid(gridid):
                      x_psi=x_psi, y_psi=y_psi, dx=dx, dy=dy, \
                      dndx=dndx, dmde=dmde, angle_rho=angle)
 
+        #load the mask
+        try:
+            hgrd.mask_rho = np.array(nc.variables['mask_rho'][:])
+        except:
+            hgrd.mask_rho = np.ones(hgrd.x_rho.shape)
+
     else:
         #geographical grid
-        print 'Load geographical grid from file'
+        print('Load geographical grid from file')
         proj = Basemap(projection='merc', resolution=None, lat_0=0, lon_0=0)
-        if 'lon_vert' in nc.variables.keys() and 'lat_vert' in nc.variables.keys():
+        if 'lon_vert' in list(nc.variables.keys()) and 'lat_vert' in list(nc.variables.keys()):
             lon_vert = nc.variables['lon_vert'][:]
             lat_vert = nc.variables['lat_vert'][:]
-        elif 'lon_rho' in nc.variables.keys() and 'lat_rho' in nc.variables.keys() \
-                and 'lon_psi' in nc.variables.keys() and 'lat_psi' in nc.variables.keys():
+        elif 'lon_rho' in list(nc.variables.keys()) and 'lat_rho' in list(nc.variables.keys()) \
+                and 'lon_psi' in list(nc.variables.keys()) and 'lat_psi' in list(nc.variables.keys()):
             lon_rho = nc.variables['lon_rho'][:]
             lat_rho = nc.variables['lat_rho'][:]
             lon_psi = nc.variables['lon_psi'][:]
@@ -313,13 +325,13 @@ def get_ROMS_hgrid(gridid):
             #compute verts from rho and psi point
             lon_vert, lat_vert = rho_to_vert_geo(lon_rho, lat_rho, lon_psi, lat_psi)
         else:
-            raise ValueError, 'NetCDF file must contain lon_vert and lat_vert \
-                  or lon_rho, lat_rho, lon_psi, lat_psi for a geographical grid'
+            raise ValueError('NetCDF file must contain lon_vert and lat_vert \
+                  or lon_rho, lat_rho, lon_psi, lat_psi for a geographical grid')
 
-        if 'lon_rho' in nc.variables.keys() and 'lat_rho' in nc.variables.keys() and \
-              'lon_u' in nc.variables.keys() and 'lat_u' in nc.variables.keys() and \
-              'lon_v' in nc.variables.keys() and 'lat_v' in nc.variables.keys() and \
-              'lon_psi' in nc.variables.keys() and 'lat_psi' in nc.variables.keys():
+        if 'lon_rho' in list(nc.variables.keys()) and 'lat_rho' in list(nc.variables.keys()) and \
+              'lon_u' in list(nc.variables.keys()) and 'lat_u' in list(nc.variables.keys()) and \
+              'lon_v' in list(nc.variables.keys()) and 'lat_v' in list(nc.variables.keys()) and \
+              'lon_psi' in list(nc.variables.keys()) and 'lat_psi' in list(nc.variables.keys()):
             lon_rho = nc.variables['lon_rho'][:]
             lat_rho = nc.variables['lat_rho'][:]
             lon_u = nc.variables['lon_u'][:]
@@ -338,7 +350,7 @@ def get_ROMS_hgrid(gridid):
             lon_psi = None
             lat_psi = None
 
-        if 'pm' in nc.variables.keys() and 'pn' in nc.variables.keys():
+        if 'pm' in list(nc.variables.keys()) and 'pn' in list(nc.variables.keys()):
             pm = nc.variables['pm'][:]
             dx = 1. / pm
             pn = nc.variables['pn'][:]
@@ -347,30 +359,30 @@ def get_ROMS_hgrid(gridid):
             dx = None
             dy = None
 
-        if 'dndx' in nc.variables.keys() and 'dmde' in nc.variables.keys():
+        if 'dndx' in list(nc.variables.keys()) and 'dmde' in list(nc.variables.keys()):
             dndx = nc.variables['dndx'][:]
             dmde = nc.variables['dmde'][:]
         else:
             dndx = None
             dmde = None
 
-        if 'angle' in nc.variables.keys():
+        if 'angle' in list(nc.variables.keys()):
             angle = nc.variables['angle'][:]
         else:
             angle = None
 
-        #Get geographical grid   
+        #Get geographical grid
         hgrd = CGrid_geo(lon_vert, lat_vert, proj, \
                          lon_rho=lon_rho, lat_rho=lat_rho, \
                          lon_u=lon_u, lat_u=lat_u, lon_v=lon_v, lat_v=lat_v, \
                          lon_psi=lon_psi, lat_psi=lat_psi, dx=dx, dy=dy, \
                          dndx=dndx, dmde=dmde, angle_rho=angle)
 
-    #load the mask
-    try: 
-        hgrd.mask_rho = np.array(nc.variables['mask_rho'][:])
-    except: 
-        hgrd.mask_rho = np.ones(hgrd.lat_rho.shape)
+        #load the mask
+        try:
+            hgrd.mask_rho = np.array(nc.variables['mask_rho'][:])
+        except:
+            hgrd.mask_rho = np.ones(hgrd.lat_rho.shape)
 
     return hgrd
 
@@ -382,11 +394,11 @@ def get_ROMS_vgrid(gridid, zeta=None):
     Load ROMS vertical grid object. vgrid is a s_coordinate or
     a z_coordinate object, depending on gridid.grdtype.
     vgrid.z_r and vgrid.z_w (vgrid.z for a z_coordinate object)
-    can be indexed in order to retreive the actual depths. The 
-    free surface time serie zeta can be provided as an optional 
-    argument. Note that the values of zeta are not calculated 
-    until z is indexed, so a netCDF variable for zeta may be passed, 
-    even if the file is large, as only the values that are required 
+    can be indexed in order to retreive the actual depths. The
+    free surface time serie zeta can be provided as an optional
+    argument. Note that the values of zeta are not calculated
+    until z is indexed, so a netCDF variable for zeta may be passed,
+    even if the file is large, as only the values that are required
     will be retrieved from the file.
     """
 
@@ -399,7 +411,7 @@ def get_ROMS_vgrid(gridid, zeta=None):
     try:
         h = nc.variables['h'][:]
     except:
-        raise ValueError, 'NetCDF file must contain the bathymetry h'
+        raise ValueError('NetCDF file must contain the bathymetry h')
 
     try:
         hraw = nc.variables['hraw'][:]
@@ -418,8 +430,10 @@ def get_ROMS_vgrid(gridid, zeta=None):
             vgrid = s_coordinate_2(h, theta_b, theta_s, Tcline, N, hraw=hraw, zeta=zeta)
         elif Vtrans == 4:
             vgrid = s_coordinate_4(h, theta_b, theta_s, Tcline, N, hraw=hraw, zeta=zeta)
+        elif Vtrans == 5:
+            vgrid = s_coordinate_5(h, theta_b, theta_s, Tcline, N, hraw=hraw, zeta=zeta)
         else:
-            raise Warning, 'Unknow vertical transformation Vtrans'
+            raise Warning('Unknown vertical transformation Vtrans')
 
     elif  gridinfo.grdtype == 'z':
         N = gridinfo.N
@@ -427,7 +441,7 @@ def get_ROMS_vgrid(gridid, zeta=None):
         vgrid = z_coordinate(h, depth, N)
 
     else:
-        raise ValueError, 'Unknow grid type'
+        raise ValueError('Unknown grid type')
 
     return vgrid
 
@@ -448,15 +462,15 @@ def get_ROMS_grid(gridid, zeta=None, hist_file=None,grid_file=None):
        grid information will be extracted from those files, and gridid
        will be used to name that grid for the rest of the python
        session.
- 
+
     grd.vgrid is a s_coordinate or
     a z_coordinate object, depending on gridid.grdtype.
-    grd.vgrid.z_r and grd.vgrid.z_w (grd.vgrid.z for a 
-    z_coordinate object) can be indexed in order to retreive the 
-    actual depths. The free surface time serie zeta can be provided 
-    as an optional argument. Note that the values of zeta are not 
-    calculated until z is indexed, so a netCDF variable for zeta may 
-    be passed, even if the file is large, as only the values that 
+    grd.vgrid.z_r and grd.vgrid.z_w (grd.vgrid.z for a
+    z_coordinate object) can be indexed in order to retreive the
+    actual depths. The free surface time serie zeta can be provided
+    as an optional argument. Note that the values of zeta are not
+    calculated until z is indexed, so a netCDF variable for zeta may
+    be passed, even if the file is large, as only the values that
     are required will be retrieved from the file.
     """
 
@@ -486,7 +500,7 @@ def write_ROMS_grid(grd, filename='roms_grd.nc'):
 
     Mm, Lm = grd.hgrid.x_rho.shape
 
-    
+
     # Write ROMS grid to file
     nc = netCDF.Dataset(filename, 'w', format='NETCDF3_64BIT')
     nc.Description = 'ROMS grid'
@@ -498,7 +512,7 @@ def write_ROMS_grid(grd, filename='roms_grd.nc'):
     nc.createDimension('xi_u', Lm-1)
     nc.createDimension('xi_v', Lm)
     nc.createDimension('xi_psi', Lm-1)
-    
+
     nc.createDimension('eta_rho', Mm)
     nc.createDimension('eta_u', Mm)
     nc.createDimension('eta_v', Mm-1)
@@ -521,7 +535,7 @@ def write_ROMS_grid(grd, filename='roms_grd.nc'):
         if units is not None:
             nc.variables[name].units = units
         nc.variables[name][:] = var
-        print ' ... wrote ', name
+        print(' ... wrote ', name)
 
     if hasattr(grd.vgrid, 's_rho') is True and grd.vgrid.s_rho is not None:
         write_nc_var(grd.vgrid.theta_s, 'theta_s', (), 'S-coordinate surface control parameter')
@@ -575,7 +589,7 @@ def write_ROMS_grid(grd, filename='roms_grd.nc'):
     nc.createVariable('spherical', 'c')
     nc.variables['spherical'].long_name = 'Grid type logical switch'
     nc.variables['spherical'][:] = grd.hgrid.spherical
-    print ' ... wrote ', 'spherical'
+    print(' ... wrote ', 'spherical')
 
     write_nc_var(grd.hgrid.angle_rho, 'angle', ('eta_rho', 'xi_rho'), 'angle between XI-axis and EAST', 'radians')
 

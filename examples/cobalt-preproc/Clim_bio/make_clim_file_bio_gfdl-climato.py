@@ -1,7 +1,7 @@
 import subprocess
 import os
 import sys
-import commands
+import subprocess
 import numpy as np
 
 import pyroms
@@ -23,7 +23,7 @@ tracer_longname = ['Alkalinity', 'Detrital CaCO3', 'Detrital CaCO3', 'Dissolved 
 tracer_units = ['mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'g/kg', 'g/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg', 'mol/kg']
 
 for mm in np.arange(12):
-    print '\nBuild clim file for month ', mm
+    print('\nBuild clim file for month ', mm)
     for ktr in np.arange(len(list_tracer)):
         mydict = {'tracer':list_tracer[ktr],'longname':tracer_longname[ktr],'units':tracer_units[ktr],'file':data_dir + 'ocean_cobalt_tracers.1988-2007.01_12.nc','frame':mm}
         remap_bio(mydict, src_grd, dst_grd, dst_dir=dst_dir)

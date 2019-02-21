@@ -1,4 +1,5 @@
 build
+html
 *.so
 *.o
 *.pyc
@@ -7,6 +8,8 @@ build
 *.a
 *.log
 *.status
+*.dSYM
+*.nc
 bathy_smoother/Python/
 examples/Yellow_Sea/Inputs/Initial/compute_remap_weights_in
 examples/Yellow_Sea/YELLOW_grd_v1.nc
@@ -36,3 +39,4 @@ pyroms/external/scrip/source/makefile2
 pyroms/external/scrip/source/scrip
 pyroms/external/scrip/source/scrip_test
 pyroms_toolbox/Python/
+mask_change.txt
