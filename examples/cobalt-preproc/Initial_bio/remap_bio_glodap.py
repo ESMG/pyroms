@@ -11,13 +11,13 @@ from matplotlib.dates import date2num, num2date
 
 import pyroms
 import pyroms_toolbox
-import _remapping
+from pyroms import _remapping
 
 class nctime(object):
     pass
 
 def remap_bio_glodap(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir='./'):
-    
+
     # NWGOA3 grid sub-sample
     xrange=src_grd.xrange; yrange=src_grd.yrange
 
@@ -44,7 +44,7 @@ def remap_bio_glodap(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir=
     nc = netCDF.Dataset(dst_file, 'a', format='NETCDF3_64BIT')
 
     #load var
-    cdf = netCDF.Dataset(src_file) 
+    cdf = netCDF.Dataset(src_file)
     src_var = cdf.variables[src_varname]
 
     tmp = cdf.variables['time'][nframe]
@@ -73,9 +73,9 @@ def remap_bio_glodap(argdict, src_grd, dst_grd, dmax=0, cdepth=0, kk=0, dst_dir=
         src_var = src_var[0,yrange[0]:yrange[1]+1, xrange[0]:xrange[1]+1]
 
     if tracer == 'alk':
-       unit_conversion = 1. / 1e6 
+       unit_conversion = 1. / 1e6
     elif tracer == 'dic':
-       unit_conversion = 1. / 1e6 
+       unit_conversion = 1. / 1e6
 
     src_var = src_var * unit_conversion
 

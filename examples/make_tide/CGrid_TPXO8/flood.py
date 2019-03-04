@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import numpy as np
-import _remapping
+from pyroms import _remapping
 
 import pyroms
 
@@ -16,7 +16,7 @@ def flood(varz, Cgrd, Cpos='t', irange=None, jrange=None, \
       - irange                       specify grid sub-sample for i direction
       - jrange                       specify grid sub-sample for j direction
       - spval=1e35                   define spval value
-      - dmax=0                       if dmax>0, maximum horizontal 
+      - dmax=0                       if dmax>0, maximum horizontal
                                      flooding distance
       - cdepth=0                     critical depth for flooding
                                      if depth<cdepth => no flooding

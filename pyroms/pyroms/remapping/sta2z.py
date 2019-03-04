@@ -1,8 +1,7 @@
 # encoding: utf-8
 
 import numpy as np
-import _interp
-import pdb
+from pyroms import _interp
 
 def sta2z(var, grd, grdz, Cpos='rho', srange=None, \
            spval=1e37, mode='linear'):
@@ -77,5 +76,5 @@ def sta2z(var, grd, grdz, Cpos='rho', srange=None, \
     idx = np.where(abs((varz-spval)/spval)<=1e-5)
     varz[idx] = spval
     #varz = np.ma.masked_values(varz, spval, rtol=1e-5)
-    
+
     return varz

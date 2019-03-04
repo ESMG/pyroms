@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import numpy as np
-import _remapping
+from pyroms import _remapping
 
 def flood2d(varz, grdz, Cpos='rho', irange=None, jrange=None, \
           spval=1e37, dmax=0, cdepth=0, kk=0):
