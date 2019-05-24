@@ -41,11 +41,29 @@ Planning to move to ESMF. Download it with:
 
      conda install --channel https://conda.anaconda.org/conda-forge esmf
 
-We may also add pyngl and pynio from NCAR to this list.
-Or jupyter.
+Note that this recently failed for me...
 
-Installing
-----------
+We may also add jupyter to this list.
+
+Installing Python
+-----------------
+
+Assumes you have already fetched Anaconda and have 'conda' in your path.
+To make your own Anaconda environment named myenv (or most anything else):
+
+  conda create --name myenv
+  conda activate myenv
+  conda install -n myenv netCDF4
+  conda install -n myenv scipy
+  conda install -n myenv basemap
+  conda install -n myenv ipython
+
+You shouldn't need your own environment if you control the whole system,
+but I need to make an environment on the supercomputer since their default
+does not include netCDF4 (and more).
+
+Installing Pyroms
+-----------------
 
 Pyroms is currently in three different packages, pyroms itself,
 pyroms_toolbox, and bathy_smoother. We are in the process of creating

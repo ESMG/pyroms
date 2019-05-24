@@ -9,7 +9,7 @@ from .test_remap_weights import test_remap_weights
 from .remap import remap
 from .remap2 import remap2
 try:
-    import scrip
+    from pyroms import scrip
 except:
     print('scrip.so not found. Remapping function will not be available')
 from .roms2z import roms2z
