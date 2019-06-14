@@ -14,7 +14,7 @@ from bathy_smoother import *
 import creep
 
 fname = "geo_em.d01.nc"
-bathyfile = '/archive/u1/uaf/kate/bathy/ARDEM_1.05.nc'
+bathyfile = '/import/AKWATERS/kshedstrom/bathy/ARDEMv2.0.nc'
 f2name = "Bering_WRF_grid.nc"
 ncid = netCDF4.Dataset(fname, "r")
 
@@ -63,7 +63,7 @@ latp=np.array([lat0, lat1, lat2, lat3])
 # shift data so lons go from 0 to 360 instead of -180 to 180.
 lonp = np.where(lonp < 0, lonp+360, lonp)
 
-beta = np.array([1, 1, 1, 1]) 
+beta = np.array([1, 1, 1, 1])
 
 Mp, Lp  = rlon.shape
 hgrd = pyroms.grid.Gridgen(lonp, latp, beta, (Mp+1,Lp+1), proj=map)
