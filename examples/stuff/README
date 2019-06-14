@@ -19,7 +19,7 @@ Day: 3.0
 Hour: 12.0
 Min: 0.0
 Sec: 0.0
-Out[2]: 
+Out[2]:
 {'day': 3.0,
  'hour': 12.0,
  'minute': 0.0,
@@ -44,6 +44,9 @@ Used at ARSC to move files prior to restart.
 
 * settime.py
 Change a time in a NetCDF file.
+
+* wrf_to_roms.py
+Copy a WRF grid to a ROMS grid for coupled modeling with the same grids.
 
 * slice.py
 * use_zview.py
