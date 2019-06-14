@@ -1,4 +1,8 @@
-# first run make_ic_file_bio.py to create initial conditions from COBALT results
-
-# second run make_ic_file_bio_addons.py to create the WOA and GLODAP fields and merge with original file
+# First, run make_remap_weights_file.py to create the weights files.
+#
+# Second, run make_ic_file_bio.py to create initial conditions from COBALT results.
+#
+# Third, run make_ic_file_bio_addons.py to create the WOA and GLODAP fields and merge with original file.
+#
+# Fourth, if running with coastal diatoms, run the split_diatom scripts.
 

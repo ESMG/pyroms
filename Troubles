@@ -1,0 +1,9 @@
+For the future:
+
+/import/home/kshedstrom/python/lib/python3.6/site-packages/pyroms_toolbox/BGrid_GFDL/get_nc_BGrid_GFDL.py:141: MaskedArrayFutureWarning: setting an item on a masked array which has a shared mask will not copy the mask and also change the original mask array in the future.
+Check the NumPy 1.11 release notes for more information.
+  h[:,0] = h[:,-2]
+/import/home/kshedstrom/python/lib/python3.6/site-packages/pyroms_toolbox/BGrid_GFDL/get_nc_BGrid_GFDL.py:145: MaskedArrayFutureWarning: setting an item on a masked array which has a shared mask will not copy the mask and also change the original mask array in the future.
+Check the NumPy 1.11 release notes for more information.
+    f[:,0] = f[:,-2]
+
