@@ -7,6 +7,8 @@ import sys
 # Copy the original file before running this, then operate on the copy.
 # Could probably do this with ncap2 instead.
 #
+# The lines with the 'two' dimension are for restart files.
+#
 ncfile = sys.argv[1]
 nc = netCDF4.Dataset(ncfile, 'a', format='NETCDF3_CLASSIC')
 spval = 1.e+37
