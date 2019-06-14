@@ -13,6 +13,14 @@ import pyroms_toolbox
 from bathy_smoother import *
 import creep
 
+# For converting a WRF grid to a ROMS grid.
+# WRF is more restrictive in the grids it can handle, plus
+# has a nice grid generation tool. This way, you can have
+# grids that match for both models.
+#
+# Only supports lcc grids so far - I'd welcome a pull request
+# for more options.
+#
 fname = "geo_em.d01.nc"
 bathyfile = '/import/AKWATERS/kshedstrom/bathy/ARDEMv2.0.nc'
 f2name = "Bering_WRF_grid.nc"
