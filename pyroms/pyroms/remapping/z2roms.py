@@ -1,8 +1,8 @@
 # encoding: utf-8
 
 import numpy as np
-import _interp
-import _remapping
+from pyroms import _interp
+from pyroms import _remapping
 
 import pyroms
 

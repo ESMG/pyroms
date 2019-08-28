@@ -11,13 +11,13 @@ from matplotlib.dates import date2num, num2date
 
 import pyroms
 import pyroms_toolbox
-import _remapping
+from pyroms import _remapping
 
 class nctime(object):
     pass
 
 def remap_bdry(src_varname, src_file, src_grd, dst_grd, dst_file, dmax=0, cdepth=0, kk=0, dst_dir='./'):
-    
+
     # CCS grid sub-sample
     xrange=src_grd.xrange; yrange=src_grd.yrange
 
@@ -87,7 +87,7 @@ def remap_bdry(src_varname, src_file, src_grd, dst_grd, dst_file, dmax=0, cdepth
         field_west = 'zeta_west, scalar, series'
         units = 'meter'
     elif src_varname == 'temp':
-        src_var = src_var 
+        src_var = src_var
         Bpos = 't'
         Cpos = 'rho'
         z = src_grd.z_t

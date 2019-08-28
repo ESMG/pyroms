@@ -11,7 +11,7 @@ except:
 
 import pyroms
 import pyroms_toolbox
-import _remapping
+from pyroms import _remapping
 
 import matplotlib.pyplot as plt
 

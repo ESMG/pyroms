@@ -11,7 +11,7 @@ from matplotlib.dates import date2num, num2date
 
 import pyroms
 import pyroms_toolbox
-import _remapping
+from pyroms import _remapping
 
 class nctime(object):
     pass
@@ -19,7 +19,7 @@ class nctime(object):
 def remap_bdry(src_file, src_varname, src_grd, dst_grd, dxy=20, cdepth=0, kk=2, dst_dir='./'):
 
     print(src_file)
-    
+
     # get time
     nctime.long_name = 'time'
     nctime.units = 'days since 1900-01-01 00:00:00'
@@ -36,7 +36,7 @@ def remap_bdry(src_file, src_varname, src_grd, dst_grd, dxy=20, cdepth=0, kk=2, 
     nc = netCDF.Dataset(dst_file, 'a', format='NETCDF3_64BIT')
 
     #load var
-    cdf = netCDF.Dataset(src_file) 
+    cdf = netCDF.Dataset(src_file)
     src_var = cdf.variables[src_varname]
     time = cdf.variables['ocean_time'][0]
     print(time)

@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import numpy as np
-import _interp
+from pyroms import _interp
 
 def roms2z(var, grd, grdz, Cpos='rho', irange=None, jrange=None, \
            spval=1e37, mode='linear'):

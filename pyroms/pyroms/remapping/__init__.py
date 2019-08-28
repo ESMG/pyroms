@@ -1,5 +1,5 @@
 # encoding: utf-8
-''' 
+'''
 A set of tools for remapping
 '''
 
