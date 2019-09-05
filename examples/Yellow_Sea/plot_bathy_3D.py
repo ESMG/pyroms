@@ -21,7 +21,7 @@ h[idx] = 0
 
 fig = plt.figure(figsize=(10, 5))
 ax = fig.gca(projection='3d', azim=-50, elev=70)
-pal = cm.spectral
+pal = cm.Spectral
 pal.set_over('#666666', 1.0)
 vc = np.arange(-80,-5+0.1,0.1)
 pal_norm = colors.BoundaryNorm(vc,ncolors=256, clip = False)

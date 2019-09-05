@@ -2,7 +2,7 @@
 
 #DESTDIR=/usr/local
 DESTDIR=$HOME/python
-PYROMS_PATH=$DESTDIR/lib/python3.6/site-packages/pyroms
+PYROMS_PATH=$DESTDIR/lib/python3.7/site-packages/pyroms
 CURDIR=`pwd`
 
 echo

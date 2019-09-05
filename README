@@ -32,7 +32,7 @@ Now using Anaconda python to download python 3.x and a bunch of other stuff:
 
    * ipython. Fred Castruccio recommends using "ipython --pylab" for
      interactive fun. It preloads both numpy and the matplotlib
-     pylab package.
+     pylab package. (Or just run jupyter notebook)
 
    * natgrid from http://github.com/matplotlib/natgrid for at least
      one of the examples.
@@ -41,22 +41,39 @@ Planning to move to ESMF. Download it with:
 
      conda install --channel https://conda.anaconda.org/conda-forge esmf
 
-Note that this recently failed for me...
-
-We may also add jupyter to this list.
-
 Installing Python
 -----------------
 
 Assumes you have already fetched Anaconda and have 'conda' in your path.
+To make conda-forge the default channel, put this in your $HOME/.condarc:
+
+channels:
+  - conda-forge
+
 To make your own Anaconda environment named myenv (or most anything else):
 
   conda create --name myenv
   conda activate myenv
   conda install -n myenv netCDF4
-  conda install -n myenv scipy
-  conda install -n myenv basemap
-  conda install -n myenv ipython
+  conda install scipy
+  conda install basemap
+  conda install jupyter
+
+If you want high-res coastlines, get:
+
+  conda install -c conda-forge basemap-data-hires
+
+If get this error:
+
+   KeyError: 'PROJ_LIB'
+
+from:
+
+  pyproj_datadir = os.environ['PROJ_LIB']
+
+You need to set the PROJ_LIB environment variable:
+
+  export PROJ_LIB=$CONDA_PREFIX/share/proj
 
 You shouldn't need your own environment if you control the whole system,
 but I need to make an environment on the supercomputer since their default
@@ -90,14 +107,15 @@ A note on the .so files from fortran: They might now end up with names like:
     scrip.cpython-35m-x86_64-linux-gnu.so
 
 It's OK - they'll load as long as they are in your PYTHONPATH. You might
-also need libgu.so to be in your LD_LIBRARY_PATH. I'm getting inconsistent
-results with where the .so files need to be. Best results for me are if I go
-to the site-packages directory where pyroms got installed and copy all the
-.so files:
+also need libgu.so to be in your LD_LIBRARY_PATH.
 
-    cp pyroms/*.so .
-    cp pyroms_toolbox/*.so .
-    cp bathy_smoother/*.so .
+There has been a change in how Python looks for these things. I now need:
+
+   from pyroms import _iso
+
+which used to be:
+
+   import _iso
 
 Make sure this site-packages directory is in your PYTHONPATH. As for
 libgu.so, it went into $DESTDIR/lib, for me $HOME/python/lib - that's

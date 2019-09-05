@@ -10,7 +10,7 @@ except:
 
 import pyroms
 import pyroms_toolbox
-import _remapping
+from pyroms import _remapping
 
 import matplotlib.pyplot as plt
 
@@ -56,12 +56,12 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
     # get wts_file
     if type(wts_files).__name__ == 'str':
         wts_files = sorted(glob.glob(wts_files))
- 
+
     # loop over the srcfile
     for nf in range(nfile):
         print('Working with file', srcfile[nf], '...')
 
-        # get time 
+        # get time
         ocean_time = pyroms.utility.get_nc_var('ocean_time', srcfile[nf])
         ntime = len(ocean_time[:])
 
@@ -89,7 +89,7 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 print(' ')
                 print('remapping', varname[nv], 'from', srcgrd.name, \
                       'to', dstgrd.name)
-                print('time =', ocean_time[nt])   
+                print('time =', ocean_time[nt])
 
                 # get source data
                 src_var = pyroms.utility.get_nc_var(varname[nv], srcfile[nf])
@@ -98,7 +98,7 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
                 try:
                     spval = src_var._FillValue
                 except:
-                    raise Warning('Did not find a _FillValue attribute.') 
+                    raise Warning('Did not find a _FillValue attribute.')
 
                 # irange
                 if irange is None:
@@ -151,7 +151,7 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
 
             # rotate the velocity field if requested
 #            print datetime.datetime.now()
-            print(' ') 
+            print(' ')
             print('remapping and rotating sigma from', srcgrd.name, \
                   'to', dstgrd.name)
 
@@ -161,7 +161,7 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
             try:
                 spval = src_11._FillValue
             except:
-                raise Warning('Did not find a _FillValue attribute.') 
+                raise Warning('Did not find a _FillValue attribute.')
 
             src_11 = src_11[nt,jjrange[0]:jjrange[1],iirange[0]:iirange[1]]
 
@@ -233,7 +233,7 @@ def remapping_tensor(varname, srcfile, wts_files, srcgrd, dstgrd, \
 
         nctidx = nctidx + 1
         nc.sync()
- 
+
     # close destination file
     nc.close()
 

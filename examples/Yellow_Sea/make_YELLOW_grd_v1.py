@@ -1,8 +1,8 @@
 import os
-import _iso
+from pyroms import _iso
 import numpy as np
 from mpl_toolkits.basemap import Basemap, shiftgrid
-from matplotlib.mlab import griddata
+from scipy.interpolate import griddata
 import matplotlib.colors as colors
 from scipy.signal import medfilt2d
 import netCDF4
@@ -63,7 +63,7 @@ pyroms.grid.edit_mask_mesh_ij(hgrd, coast=coast)
 # read in topo data (on a regular lat/lon grid)
 # this topo come with basemap so you should have it on your laptop.
 # just update datadir with the appropriate path
-# you can get this data from matplolib svn with 
+# you can get this data from matplolib svn with
 # svn co https://matplotlib.svn.sourceforge.net/svnroot/matplotlib/trunk/htdocs/screenshots/data/"
 
 datadir = 'data/'
@@ -80,7 +80,7 @@ topo = pyroms_toolbox.change(topo, '<', hmin, hmin)
 
 # interpolate new bathymetry
 lon, lat = np.meshgrid(lons, lats)
-h = griddata(lon.flat,lat.flat,topo.flat,hgrd.lon_rho,hgrd.lat_rho)
+h = griddata((lon.flat,lat.flat),topo.flat,(hgrd.lon_rho,hgrd.lat_rho), method='linear')
 
 # insure that depth is always deeper than hmin
 h = pyroms_toolbox.change(h, '<', hmin, hmin)

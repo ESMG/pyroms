@@ -34,7 +34,7 @@ mask = np.ones(lon.shape)
 
 # create SRTM remap file for scrip
 remap_filename = 'remap_grid_SRTM.nc'
-nc = netCDF.Dataset(remap_filename, 'w', format='NETCDF3_CLASSIC')
+nc = netCDF.Dataset(remap_filename, 'w', format='NETCDF3_64BIT')
 nc.Description = 'remap grid file for SRTM 30s bathymetry'
 nc.Author = 'make_YELLOW_grd_v2.py'
 nc.Created = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
