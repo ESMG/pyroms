@@ -23,7 +23,6 @@ from . import seawater
 from .N2 import N2
 from .O2_saturation import O2_saturation
 from . import shapiro_filter
-from .change import change
 from .rx0 import rx0
 from .rx1 import rx1
 from .rvalue import rvalue

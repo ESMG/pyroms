@@ -122,7 +122,7 @@ h = pyroms.remapping.remap(z, 'remap_weights_SRTM_to_YELLOW_bilinear.nc', \
                            spval=1e37)
 h = -h
 hmin = 5
-h = pyroms_toolbox.change(h, '<', hmin, hmin)
+h = np.where(h < hmin, hmin, h)
 
 # save raw bathymetry
 hraw = h.copy()
@@ -135,7 +135,7 @@ RoughMat = bathy_tools.RoughnessMatrix(hsmooth, hgrd.mask_rho)
 print('Max Roughness value is: ', RoughMat.max())
 
 # insure that depth is always deeper than hmin
-h = pyroms_toolbox.change(h, '<', hmin, hmin)
+h = np.where(h < hmin, hmin, h)
 
 # set depth to hmin where masked
 idx = np.where(hgrd.mask_rho == 0)
