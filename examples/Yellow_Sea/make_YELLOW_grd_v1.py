@@ -8,7 +8,6 @@ from scipy.signal import medfilt2d
 import netCDF4
 
 import pyroms
-import pyroms_toolbox
 from bathy_smoother import *
 
 # Grid dimension
