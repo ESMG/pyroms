@@ -9,17 +9,12 @@ between units afterwards.
 Dependencies:
 =============
 numpy
-netcdftime (packaged in netcdf4-python)
+cftime
 """
 __docformat__ = "restructuredtext en"
 
 import numpy as np
-
-try:
-  import cftime
-except:
-  import netcdftime
-
+import cftime
 import pyroms.io
 
 class time (np.ndarray):
@@ -34,7 +29,7 @@ class time (np.ndarray):
     units : string, optional
         The name of the variable units.
     calendar : string, optional
-        A string representing the calandar to use. See netcdftime
+        A string representing the calandar to use. See cftime
         documentation for possible values.
 
     Returns
@@ -63,7 +58,7 @@ class time (np.ndarray):
         data = data.view(time)
         if units == None:
             units = self._nc.variables[name].units
-        data.utime = netcdftime.utime(units, calendar=calendar)
+        data.utime = cftime.utime(units, calendar=calendar)
         return data
 
     def __array_finalize__(self, obj):
@@ -171,8 +166,8 @@ class time (np.ndarray):
         return np.asarray(self,dtype='float64')*fac
 
     def get_jd(self):
-        utime = netcdftime.utime('days since 0001-01-01 00:00:00', \
-                                 calendar='proleptic_gregorian')
+        utime = cftime.utime('days since 0001-01-01 00:00:00', \
+                             calendar='proleptic_gregorian')
         return utime.date2num(self.dates)
 
     def get_dates(self):
