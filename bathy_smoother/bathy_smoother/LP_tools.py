@@ -2,12 +2,11 @@ import numpy as np
 from numpy.random import random
 from time import localtime
 import os
+import logging
 try:
     from lpsolve55 import *
-except:
-    print('lpsolve55.so not found.')
-    print('Linear programming method will not be available.')
-
+except ImportError:
+    logging.warning(' lpsolve55 could not be imported. The linear programming method will not be available')
 
 # This code is adapted from the matlab code
 # "LP Bathymetry" by Mathieu Dutour Sikiric

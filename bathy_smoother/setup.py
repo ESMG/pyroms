@@ -81,7 +81,7 @@ def configuration(parent_package='',top_path=None):
 if __name__ == '__main__':
     from numpy.distutils.core import setup
     setup(name = '',
-          version = '0.1',
+          version = '0.2.0',
           description = doclines[0],
           long_description = "\n".join(doclines[2:]),
           url = 'https://github.com/ESMG/pyroms',
