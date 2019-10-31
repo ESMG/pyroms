@@ -37,6 +37,11 @@ Now using Anaconda python to download python 3.x and a bunch of other stuff:
    * natgrid from http://github.com/matplotlib/natgrid for at least
      one of the examples.
 
+   * lpsolve, if you need it:
+#Installing lp-solve (from asantana on the ROMS forum)
+apt-get install lp-solve liblpsolve55-dev -y \
+        && conda install -c conda-forge lpsolve55
+
 Planning to move to ESMF. Download it with:
 
      conda install --channel https://conda.anaconda.org/conda-forge esmf
