@@ -66,9 +66,10 @@ An [editable-mode](https://pip.pypa.io/en/stable/reference/pip_install/#editable
 
 The "pip install" command runs "python setup.py install" (or "python setup.py develop" with the "-e" switch) in each of the subdirectories listed. The "pip install" form is recommended because it allow easy removal (see below)
 
-The above should work on Linux and OSX with the system gcc and gfortran compilers. 
-They *should* also work in a Conda environment on Windows, provided you install the
-[m2w64-gcc](https://anaconda.org/msys2/m2w64-gcc) and [m2w64-gfortran](https://anaconda.org/msys2/m2w64-gcc-fortran) compilers. However the last time we tried this we got a linker error related to lpsolve55: we're still looking into it.
+The above should work on most Linuces and on OSX with the system gcc and gfortran compilers. 
+They have also been verified to work in a Conda environment on Windows,
+provided you install the
+[m2w64-gcc](https://anaconda.org/msys2/m2w64-gcc) and [m2w64-gfortran](https://anaconda.org/msys2/m2w64-gcc-fortran) compilers.
 
 ## Install scrip
 
