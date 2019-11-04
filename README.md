@@ -15,10 +15,10 @@ Pyroms is now hosted on GitHub.com in the [ESMG/pyroms](https://github.com/ESMG/
 Pyroms is still a bit rough around the edges, particularly with regard to installation. Recent development has been done in Python environments managed by [Conda](https://docs.conda.io/en/latest/). However Pyroms itself cannot yet be installed with Conda.
 
 If you are starting from scratch, we recommend that you install
-[Anaconda](https://www.anaconda.com/) or 
+[Anaconda](https://www.anaconda.com/) or
 [Miniconda](https://docs.conda.io/en/latest/miniconda.html) and create a Python 3 environment (as of November 2019, version 3.7 is your best bet) for Pyroms and your other scientific software. You should also consider making conda-forge your default channel. See the [conda-forge tips and tricks page](https://conda-forge.org/docs/user/tipsandtricks.html).
 
-If you don't want to use, Conda, that's fine, but you will have to do more of the work yourself
+If you don't want to use Conda, that's fine, but you will have to do more of the work yourself.
 
 ## Prerequisites
 
@@ -32,10 +32,11 @@ The following are required and are all available from [Conda-Forge](https://cond
    * [netcdf4](https://unidata.github.io/netcdf4-python/netCDF4/index.html)
    * [cftime](https://unidata.github.io/cftime/)
    * [lpsolve55](https://github.com/chandu-atina/lp_solve_python_3x)
+   * [pip](https://pypi.org/project/pip/)
 
 The following is optional: Pyroms can be built and run without it but some of the functionality will be missing.
 
-   * scrip, a Python implementation of [SCRIP](https://github.com/SCRIP-Project/SCRIP), 
+   * scrip, a Python implementation of [SCRIP](https://github.com/SCRIP-Project/SCRIP),
      the Spherical Coordinate Remapping and Interpolation Package. This is used by the pyroms
      module. The Python scrip code (a rather old version) is
      [bundled in pyroms](https://github.com/ESMG/pyroms/tree/python3/pyroms/external/scrip)
@@ -59,14 +60,14 @@ $ pip install -e pyroms/pyroms_toolbox
 $ pip install -e pyroms/bathy_smoother
 ```
 
-This installs three PIP packages with the names pyroms, pyroms_toolbox and bathy_smoother,
+This installs three PIP packages with the names pyroms, pyroms\_toolbox and bathy\_smoother,
 each with an [eponymous](https://en.wiktionary.org/wiki/eponymous) module.
 
 An [editable-mode](https://pip.pypa.io/en/stable/reference/pip_install/#editable-installs) installation is recommended becauses it means changes you make to your copy of the source code will take effect when you import the modules. If you don't want this you can omit the "-e" option
 
 The "pip install" command runs "python setup.py install" (or "python setup.py develop" with the "-e" switch) in each of the subdirectories listed. The "pip install" form is recommended because it allow easy removal (see below)
 
-The above should work on most Linuces and on OSX with the system gcc and gfortran compilers. 
+The above should work on most Linuces and on OSX with the system gcc and gfortran compilers.
 They have also been verified to work in a Conda environment on Windows,
 provided you install the
 [m2w64-gcc](https://anaconda.org/msys2/m2w64-gcc) and [m2w64-gfortran](https://anaconda.org/msys2/m2w64-gcc-fortran) compilers.
@@ -78,7 +79,7 @@ scrip you will get a warning like this:
 
 ```
 $ python
-Python 3.7.3 | packaged by conda-forge | (default, Jul  1 2019, 21:52:21) 
+Python 3.7.3 | packaged by conda-forge | (default, Jul  1 2019, 21:52:21)
 [GCC 7.3.0] :: Anaconda, Inc. on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> import pyroms
