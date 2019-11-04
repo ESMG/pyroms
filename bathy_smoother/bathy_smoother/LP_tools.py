@@ -3,10 +3,8 @@ from numpy.random import random
 from time import localtime
 import os
 import logging
-try:
-    from lpsolve55 import *
-except ImportError:
-    logging.warning(' lpsolve55 could not be imported. The linear programming method will not be available')
+
+from lpsolve55 import *
 
 # This code is adapted from the matlab code
 # "LP Bathymetry" by Mathieu Dutour Sikiric
