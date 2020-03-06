@@ -136,7 +136,7 @@ $ make DEVELOP=1 uninstall
 
 ## Running Pyroms
 
-We have a gridid.txt file that's pointed to by the PYROMS_GRIDID_FILE
+We have a gridid.txt file that's pointed to by the PYROMS\_GRIDID\_FILE
 environment variable. If you are operating on files containing
 sufficient grid information already, you won't need to use this.
 An example is provided in the examples directory.
@@ -144,6 +144,6 @@ An example is provided in the examples directory.
 
 ## Doxygen
 
-Running "doxygen .doxygen" in any of pyroms, pyroms_toolbox or
-bathy_smoother will generate doxygen files. Edit the .doxygen files to
+Running "doxygen .doxygen" in any of pyroms, pyroms\_toolbox or
+bathy\_smoother will generate doxygen files. Edit the .doxygen files to
 specify html vs. some other output format.
