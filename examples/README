@@ -47,6 +47,9 @@ INTERPOLATING FROM GLOBAL HYCOM:
     Also Palau_HYCOM shows how to do a non-polar subset of the HYCOM
     files.
 
+    Now Arctic_HYCOM_GLBy shows how to get files from the new GLBy domain
+    and also how to interpolate with xesmf instead of scrip.
+
 INTERPOLATING FROM GLOBAL RUNOFF:
 
     Scripts in Arctic_runoff were used to convert from Dai and Trenberth
