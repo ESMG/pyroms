@@ -5,7 +5,6 @@ from pyroms import _remapping_fast
 
 import pyroms
 
-#RD:
 import creep
 
 def flood_fast(varz, grd, pos='t', irange=None, jrange=None, \
@@ -90,11 +89,9 @@ def flood_fast(varz, grd, pos='t', irange=None, jrange=None, \
 
             idx = np.where(np.isnan(varz[k]) == 1)
             varz[k][idx] = spval
-            # RD:
             #varz[k,:] = _remapping_fast.flood(varz[k,:], dry, wet_mask, dxy)
-            print('RD new flooding')
             varz[k,:] = creep.cslf(varz[k,:],spval,-200.,200.)
-            print(varz[k,:].min() , varz[k,:].max())
+            print(k, varz[k,:].min() , varz[k,:].max())
 
     # drop the deepest values down
     idx = np.where(np.isnan(varz) == 1)

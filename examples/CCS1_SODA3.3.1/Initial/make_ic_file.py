@@ -10,7 +10,7 @@ from remap import remap
 from remap_uv import remap_uv
 
 #date to remap
-data_dir = '/import/archive/u1/uaf/AKWATERS/kshedstrom/SODA/'
+data_dir = '/import/AKWATERS/kshedstrom/SODA/'
 dst_dir='./'
 
 tag='2010_12_26'

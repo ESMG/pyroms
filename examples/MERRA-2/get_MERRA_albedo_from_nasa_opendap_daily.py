@@ -140,7 +140,6 @@ for month in range(12):
     nc.variables[outtimename][:] = roms_time
 
     nc.createVariable(outvarname, 'f', (outtimename, 'lat', 'lon'), fill_value=spval)
-    nc.variables[outvarname].missing_value = spval
     nc.variables[outvarname].long_name = long_name
     nc.variables[outvarname].units = units
     nc.variables[outvarname].coordinates = 'lon lat'
