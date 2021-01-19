@@ -39,7 +39,7 @@ def flood_fast(varz, grd, pos='t', irange=None, jrange=None, \
     x = grd.lon_t
     y = grd.lat_t
     h = grd.h
-    if pos is 't':
+    if pos == 't':
         mask = grd.mask_t[0,:,:]
 
     nlev, Mm, Lm = varz.shape

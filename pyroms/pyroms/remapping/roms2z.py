@@ -32,19 +32,19 @@ def roms2z(var, grd, grdz, Cpos='rho', irange=None, jrange=None, \
         raise Warning('%s not supported, defaulting to linear' % mode)
 
 
-    if Cpos is 'rho':
+    if Cpos == 'rho':
         z = grd.vgrid.z_r[0,:]
         depth = grdz.vgrid.z
         mask = grd.hgrid.mask_rho
-    elif Cpos is 'u':
+    elif Cpos == 'u':
         z = 0.5 * (grd.vgrid.z_r[0,:,:,:-1] + grd.vgrid.z_r[0,:,:,1:])
         depth = 0.5 * (grdz.vgrid.z[:,:,:-1] + grdz.vgrid.z[:,:,1:])
         mask = grd.hgrid.mask_u
-    elif Cpos is 'v':
+    elif Cpos == 'v':
         z = 0.5 * (grd.vgrid.z_r[0,:,:-1,:] + grd.vgrid.z_r[0,:,1:,:])
         depth = 0.5 * (grdz.vgrid.z[:,:-1,:] + grdz.vgrid.z[:,1:,:])
         mask = grd.hgrid.mask_v
-    elif Cpos is 'w':
+    elif Cpos == 'w':
         z = grd.vgrid.z_w[0,:]
         depth = grdz.vgrid.z
         mask = grd.hgrid.mask_rho

@@ -57,12 +57,12 @@ def transectview(var, tindex, istart, iend, jstart, jend, gridid, \
 
     Np, Mp, Lp = grd.vgrid.z_r[0,:].shape
 
-    if tindex is not -1:
-        assert len(var.shape) == 4, 'var must be 4D (time plus space).'
-        K, N, M, L = var.shape
-    else:
+    if tindex == -1:
         assert len(var.shape) == 3, 'var must be 3D (no time dependency).'
         N, M, L = var.shape
+    else:
+        assert len(var.shape) == 4, 'var must be 4D (time plus space).'
+        K, N, M, L = var.shape
 
     # determine where on the C-grid these variable lies
     if N == Np and M == Mp and L == Lp:
@@ -138,7 +138,7 @@ def transectview(var, tindex, istart, iend, jstart, jend, gridid, \
     # clear figure
     #plt.clf()
 
-    if map is True:
+    if map:
         # set axes for the main plot in order to keep space for the map
         if fts < 12:
             ax=None
@@ -151,20 +151,20 @@ def transectview(var, tindex, istart, iend, jstart, jend, gridid, \
             ax=plt.axes([0.15, 0.1, 0.8, 0.8])
 
 
-    if fill is True:
+    if fill:
         cf = plt.contourf(xt, zt, transect, vc, cmap = pal, norm = pal_norm, axes=ax)
     else:
         cf = plt.pcolor(xt, zt, transect, cmap = pal, norm = pal_norm, axes=ax)
 
-    if clb is True:
+    if clb:
         clb = plt.colorbar(cf, fraction=0.075,format='%.2f')
         for t in clb.ax.get_yticklabels():
             t.set_fontsize(fts)
 
-    if contour is True:
+    if contour:
         if c is None:
             c = vc[::10]
-        if fill is True:
+        if fill:
             plt.contour(xt, zt, transect, c, colors='k', linewidths=0.5, linestyles='solid', axes=ax)
         else:
             xc = 0.5*(xt[1:,:]+xt[:-1,:])
@@ -180,7 +180,7 @@ def transectview(var, tindex, istart, iend, jstart, jend, gridid, \
         plt.ylim(hrange)
 
     if title is not None:
-        if map is True:
+        if map:
             # move the title on the right
             xmin, xmax = ax.get_xlim()
             ymin, ymax = ax.get_ylim()
@@ -193,7 +193,7 @@ def transectview(var, tindex, istart, iend, jstart, jend, gridid, \
     plt.xlabel('Latitude', fontsize=fts)
     plt.ylabel('Depth', fontsize=fts)
 
-    if map is True:
+    if map:
         # draw a map with constant-i slice location
         ax_map = plt.axes([0.4, 0.76, 0.2, 0.23])
         varm = np.ma.masked_where(mask[:,:] == 0, var[var.shape[0]-1,:,:])

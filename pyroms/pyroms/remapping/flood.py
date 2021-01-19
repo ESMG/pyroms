@@ -34,25 +34,25 @@ def flood(varz, grdz, Cpos='rho', irange=None, jrange=None, \
     idx = np.where(abs((varz-spval)/spval)<=1e-5)
     varz[idx] = np.nan
 
-    if Cpos is 'rho':
+    if Cpos == 'rho':
         x = grdz.hgrid.lon_rho
         y = grdz.hgrid.lat_rho
         z = grdz.vgrid.z[:]
         h = grdz.vgrid.h
         mask = grdz.hgrid.mask_rho
-    elif Cpos is 'u':
+    elif Cpos == 'u':
         x = grdz.hgrid.lon_u
         y = grdz.hgrid.lat_u
         z = 0.5 * (grdz.vgrid.z[:,:,:-1] + grdz.vgrid.z[:,:,1:])
         h = 0.5 * (grdz.vgrid.h[:,:-1] + grdz.vgrid.h[:,1:])
         mask = grdz.hgrid.mask_u
-    elif Cpos is 'v':
+    elif Cpos == 'v':
         x = grdz.hgrid.lon_v
         y = grdz.hgrid.lat_v
         z = 0.5 * (grdz.vgrid.z[:,:-1,:] + grdz.vgrid.z[:,1:,:])
         h = 0.5 * (grdz.vgrid.h[:-1,:] + grdz.vgrid.h[1:,:])
         mask = grdz.hgrid.mask_v
-    elif Cpos is 'w':
+    elif Cpos == 'w':
         x = grdz.hgrid.lon_rho
         y = grdz.hgrid.lat_rho
         z = grdz.vgrid.z[:]
