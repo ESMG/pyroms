@@ -98,7 +98,7 @@
 !f2py intent(hide) :: N
       integer i, j, k
       real*8 zk(N), fk(N)
-      real*8 wk(N), dfdz(N)
+      real*8 wk(N), dfdz
 
 !  Linear Interpolation.
       if (vinterp.eq.0) then
