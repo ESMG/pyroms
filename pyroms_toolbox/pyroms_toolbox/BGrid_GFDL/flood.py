@@ -34,12 +34,12 @@ def flood(varz, Bgrdz, Bpos='t', irange=None, jrange=None, \
     idx = np.where(abs((varz-spval)/spval)<=1e-5)
     varz[idx] = np.nan
 
-    if Bpos is 't':
+    if Bpos == 't':
         x = Bgrdz.lon_t
         y = Bgrdz.lat_t
         h = Bgrdz.h
         mask = Bgrdz.mask_t[0,:,:]
-    elif Bpos is 'uv':
+    elif Bpos == 'uv':
         x = Bgrdz.lon_uv
         y = Bgrdz.lat_uv
         h = Bgrdz.h

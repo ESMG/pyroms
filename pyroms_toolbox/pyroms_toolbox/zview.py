@@ -55,12 +55,12 @@ def zview(var, tindex, depth, grid, filename=None, \
 
     Np, Mp, Lp = grd.vgrid.z_r[0,:].shape
 
-    if tindex is not -1:
-        assert len(var.shape) == 4, 'var must be 4D (time plus space).'
-        K, N, M, L = var.shape
-    else:
+    if tindex == -1:
         assert len(var.shape) == 3, 'var must be 3D (no time dependency).'
         N, M, L = var.shape
+    else:
+        assert len(var.shape) == 4, 'var must be 4D (time plus space).'
+        K, N, M, L = var.shape
 
     # determine where on the C-grid these variable lies
     if N == Np and M == Mp and L == Lp:
@@ -148,7 +148,7 @@ def zview(var, tindex, depth, grid, filename=None, \
         #map = pyroms.utility.get_grid_proj(grd, type=proj)
         x, y = list(map(lon,lat))
 
-    if fill_land is True and proj is not None:
+    if fill_land and proj is not None:
         # fill land and draw coastlines
         map.drawcoastlines()
         map.fillcontinents(color='grey')
@@ -160,7 +160,7 @@ def zview(var, tindex, depth, grid, filename=None, \
             plt.pcolor(lon, lat, mask, vmin=-2, cmap=cm.gray)
             pyroms_toolbox.plot_coast_line(grd)
 
-    if fill is True:
+    if fill:
         if proj is not None:
             cf = Basemap.contourf(map, x, y, zslice, vc, cmap = pal, \
                                   norm = pal_norm)
@@ -173,13 +173,13 @@ def zview(var, tindex, depth, grid, filename=None, \
         else:
             cf = plt.pcolor(lon, lat, zslice, cmap = pal, norm = pal_norm)
 
-    if clb is True:
+    if clb:
         clb = plt.colorbar(cf, fraction=0.075,format=clb_format)
         for t in clb.ax.get_yticklabels():
             t.set_fontsize(fts)
 
-    if contour is True:
-        if fill is not True:
+    if contour:
+        if not fill:
             raise Warning('Please run again with fill=True to overlay contour.')
         else:
             if proj is not None:

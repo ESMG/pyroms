@@ -16,7 +16,7 @@ Pyroms is still a bit rough around the edges, particularly with regard to instal
 
 If you are starting from scratch, we recommend that you install
 [Anaconda](https://www.anaconda.com/) or
-[Miniconda](https://docs.conda.io/en/latest/miniconda.html) and create a Python 3 environment (as of November 2019, version 3.7 is your best bet) for Pyroms and your other scientific software. You should also consider making conda-forge your default channel. See the [conda-forge tips and tricks page](https://conda-forge.org/docs/user/tipsandtricks.html).
+[Miniconda](https://docs.conda.io/en/latest/miniconda.html) and create a Python 3 environment (as of December 2020, version 3.8 is your best bet) for Pyroms and your other scientific software. You should also consider making conda-forge your default channel. See the [conda-forge tips and tricks page](https://conda-forge.org/docs/user/tipsandtricks.html).
 
 If you don't want to use Conda, that's fine, but you will have to do more of the work yourself.
 
@@ -24,7 +24,7 @@ If you don't want to use Conda, that's fine, but you will have to do more of the
 
 The following are required and are all available from [Conda-Forge](https://conda-forge.org/).
 
-   * Python >= 3.4 (Python 3.7 currently recommended for new environments)
+   * Python >= 3.4 (Python 3.8 currently recommended for new environments)
    * [numpy](https://numpy.org/)
    * [scipy](https://www.scipy.org/)
    * [matplotlib](https://matplotlib.org/)
@@ -79,8 +79,8 @@ scrip you will get a warning like this:
 
 ```
 $ python
-Python 3.7.3 | packaged by conda-forge | (default, Jul  1 2019, 21:52:21)
-[GCC 7.3.0] :: Anaconda, Inc. on linux
+Python 3.8.5 | packaged by conda-forge | (default, Aug 29 2020, 01:22:49)
+[GCC 7.5.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> import pyroms
 WARNING:root: scrip could not be imported. Remapping functions will not be available
@@ -95,20 +95,20 @@ The scrip module is not available via Conda or any other package repository and 
 # source directory
 $ cd pyroms/pyroms/external/scrip/source/
 
-# Print the location of the active Conda environment (which is called "python37"
+# Print the location of the active Conda environment (which is called "python38"
 # in this case). The active environment location is used to find the netCDF and
 # other libraries.
 $ conda info | grep "active env location"
-    active env location : /home/hadfield/miniconda3/envs/python37
+    active env location : /home/hadfield/miniconda3/envs/python38
 
 # Run make to build the scrip Python extension and install it into the Conda
 # environment. The makefile calculates a variable called SCRIP_EXT_DIR, into
 # which it installs the scrip Python extension. If pyroms has been installed
 # in editable (development) mode, set the DEVELOP variable to a non-empty value.
-$ export PREFIX=/home/hadfield/miniconda3/envs/python37
+$ export PREFIX=/home/hadfield/miniconda3/envs/python38
 $ make DEVELOP=1 PREFIX=$PREFIX install
 $ mv -vf scrip*.so ../../../pyroms
-‘scrip.cpython-37m-x86_64-linux-gnu.so’ -> ‘../../../pyroms/scrip.cpython-37m-x86_64-linux-gnu.so’
+‘scrip.cpython-38-x86_64-linux-gnu.so’ -> ‘../../../pyroms/scrip.cpython-38-x86_64-linux-gnu.so’
 ```
 
 ## Removal

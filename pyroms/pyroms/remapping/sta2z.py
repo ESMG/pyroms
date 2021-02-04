@@ -30,10 +30,10 @@ def sta2z(var, grd, grdz, Cpos='rho', srange=None, \
         imode=0
         raise Warning('%s not supported, defaulting to linear' % mode)
 
-    if Cpos is 'rho':
+    if Cpos == 'rho':
         z = grd.vgrid.z_r[0,:]
         depth = grdz.vgrid.z
-    elif Cpos is 'w':
+    elif Cpos == 'w':
         z = grd.vgrid.z_w[0,:]
         depth = grdz.vgrid.z
     else:

@@ -22,12 +22,12 @@ def quiver(uvar, vvar, tindex, depth, gridid, \
       - outfile          if defined, write figure to file
 
 
-    overlay a 2-D field of arrows for velocity (uvar, vvar) above an 
-    existing horizontal 2D plot. If filename is provided, uvar and vvar 
-    must be strings and the variables will be load from the file. 
-    grid can be a grid object or a gridid. In the later case, the grid 
-    object correponding to the provided gridid will be loaded. 
-    For projection, use proj=map, map being the Basemap object returned 
+    overlay a 2-D field of arrows for velocity (uvar, vvar) above an
+    existing horizontal 2D plot. If filename is provided, uvar and vvar
+    must be strings and the variables will be load from the file.
+    grid can be a grid object or a gridid. In the later case, the grid
+    object correponding to the provided gridid will be loaded.
+    For projection, use proj=map, map being the Basemap object returned
     by sview, zview, ...
 
     Note: if quiver is called before any other part of the plot has been
@@ -44,17 +44,17 @@ def quiver(uvar, vvar, tindex, depth, gridid, \
         grd = pyroms.grid.get_ROMS_grid(gridid)
     lon = grd.hgrid.lon_rho
     lat = grd.hgrid.lat_rho
-    mask = grd.hgrid.mask_rho    
+    mask = grd.hgrid.mask_rho
 
     # get u and v
     if filename == None:
 
-        if tindex is not -1:
-            assert len(uvar.shape) == 4, 'uvar must be 4D (time plus space).'
-            assert len(vvar.shape) == 4, 'vvar must be 4D (time plus space).'
-        else:
+        if tindex == -1:
             assert len(uvar.shape) == 3, 'uvar must be 3D (no time dependency).'
             assert len(vvar.shape) == 3, 'vvar must be 3D (no time dependency).'
+        else:
+            assert len(uvar.shape) == 4, 'uvar must be 4D (time plus space).'
+            assert len(vvar.shape) == 4, 'vvar must be 4D (time plus space).'
 
         if tindex == -1:
             u = uvar[:,:,:]
@@ -70,13 +70,13 @@ def quiver(uvar, vvar, tindex, depth, gridid, \
     # get u and v slice at requested depth
     zsliceu, lonu, latu = pyroms.tools.zslice(u, depth, grd, Cpos='u')
     zslicev, lonv, latv = pyroms.tools.zslice(v, depth, grd, Cpos='v')
- 
+
     # average field at rho point position
-    zsliceu = 0.5 * (zsliceu[:,:-1] + zsliceu[:,1:])    
+    zsliceu = 0.5 * (zsliceu[:,:-1] + zsliceu[:,1:])
     zsliceu = zsliceu[:,r_[0,:size(zsliceu,1),-1]]
     zsliceu = ma.masked_where(mask == 0, zsliceu)
     zsliceu = ma.masked_where(zsliceu >= 1000, zsliceu)
-    zslicev = 0.5 * (zslicev[:-1,:] + zslicev[1:,:])       
+    zslicev = 0.5 * (zslicev[:-1,:] + zslicev[1:,:])
     zslicev = zslicev[r_[0,:size(zslicev,0),-1],:]
     zslicev = ma.masked_where(mask == 0, zslicev)
     zslicev = ma.masked_where(zslicev >= 1000, zslicev)
@@ -98,11 +98,11 @@ def quiver(uvar, vvar, tindex, depth, gridid, \
         range = plt.axis()
 
     if uscale is None:
-        if proj is not None: 
+        if proj is not None:
             qv = Basemap.quiver(proj, x[::d,::d], y[::d,::d], \
                                 real(U[::d,::d]), imag(U[::d,::d]), \
                                 linewidths=0.01)
-        else: 
+        else:
             qv = plt.quiver(lon[::d,::d], lat[::d,::d], \
                             real(U[::d,::d]), imag(U[::d,::d]), \
                             linewidths=0.01)
