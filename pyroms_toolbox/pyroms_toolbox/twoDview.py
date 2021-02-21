@@ -57,17 +57,17 @@ def twoDview(var, tindex, grid, filename=None, \
 
     Np, Mp, Lp = grd.vgrid.z_r[0,:].shape
 
-    if tindex is not -1:
-        assert len(var.shape) == 3, 'var must be 3D (time plus space).'
-        K, M, L = var.shape
-    else:
+    if tindex == -1:
         assert len(var.shape) == 2, 'var must be 2D (no time dependency).'
         M, L = var.shape
+    else:
+        assert len(var.shape) == 3, 'var must be 3D (time plus space).'
+        K, M, L = var.shape
 
     # determine where on the C-grid these variable lies
     if M == Mp and L == Lp:
         Cpos='rho'
-        if fill == True:
+        if fill:
             lon = grd.hgrid.lon_rho
             lat = grd.hgrid.lat_rho
         else:
@@ -77,7 +77,7 @@ def twoDview(var, tindex, grid, filename=None, \
 
     if M == Mp and L == Lp-1:
         Cpos='u'
-        if fill == True:
+        if fill:
             lon = grd.hgrid.lon_u
             lat = grd.hgrid.lat_u
         else:
@@ -87,7 +87,7 @@ def twoDview(var, tindex, grid, filename=None, \
 
     if M == Mp-1 and L == Lp:
         Cpos='v'
-        if fill == True:
+        if fill:
             lon = grd.hgrid.lon_v
             lat = grd.hgrid.lat_v
         else:
@@ -97,7 +97,7 @@ def twoDview(var, tindex, grid, filename=None, \
 
     if M == Mp-1 and L == Lp-1:
         Cpos='psi'
-        if fill == True:
+        if fill:
             lon = grd.hgrid.lon_psi
             lat = grd.hgrid.lat_psi
         else:
@@ -173,7 +173,7 @@ def twoDview(var, tindex, grid, filename=None, \
         #map = pyroms.utility.get_grid_proj(grd, type=proj)
         x, y = list(map(lon,lat))
 
-    if fill_land is True and proj is not None:
+    if fill_land and proj is not None:
         # fill land and draw coastlines
         map.drawcoastlines()
         map.fillcontinents(color='grey')
@@ -185,7 +185,7 @@ def twoDview(var, tindex, grid, filename=None, \
             plt.pcolor(lon, lat, mask, vmin=-2, cmap=cm.gray, edgecolors='face')
             pyroms_toolbox.plot_coast_line(grd)
 
-    if fill is True:
+    if fill:
         if proj is not None:
             cf = Basemap.contourf(map, x, y, var, vc, cmap = pal, \
                                   norm = pal_norm)
@@ -198,13 +198,13 @@ def twoDview(var, tindex, grid, filename=None, \
         else:
             cf = plt.pcolor(lon, lat, var, cmap = pal, norm = pal_norm, edgecolors='face')
 
-    if clb is True:
+    if clb:
         clb = plt.colorbar(cf, fraction=0.075,format='%.2f')
         for t in clb.ax.get_yticklabels():
             t.set_fontsize(fts)
 
-    if contour is True:
-        if fill is not True:
+    if contour:
+        if not fill:
             raise Warning('Please run again with fill=True to overlay contour.')
         else:
             if proj is not None:

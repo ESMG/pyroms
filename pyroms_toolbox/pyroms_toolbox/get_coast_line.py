@@ -4,22 +4,22 @@ def get_coast_line(grd, Cpos='rho'):
     '''
     coast = get_coast_line(grd)
 
-    return the coastline from the grid object grid 
+    return the coastline from the grid object grid
     '''
 
-    if Cpos is 'rho':
+    if Cpos == 'rho':
         lon = grd.hgrid.lon_vert
         lat = grd.hgrid.lat_vert
         mask = grd.hgrid.mask_rho
-    elif Cpos is 'u':
+    elif Cpos == 'u':
         lon = 0.5 * (grd.hgrid.lon_vert[:,:-1] + grd.hgrid.lon_vert[:,1:])
         lat = 0.5 * (grd.hgrid.lat_vert[:,:-1] + grd.hgrid.lat_vert[:,1:])
         mask = grd.hgrid.mask_u
-    elif Cpos is 'v':
+    elif Cpos == 'v':
         lon = 0.5 * (grd.hgrid.lon_vert[:-1,:] + grd.hgrid.lon_vert[1:,:])
         lat = 0.5 * (grd.hgrid.lat_vert[:-1,:] + grd.hgrid.lat_vert[1:,:])
         mask = grd.hgrid.mask_v
-    elif Cpos is 'psi':
+    elif Cpos == 'psi':
         lon = grd.hgrid.lon_rho
         lat = grd.hgrid.lat_rho
         mask = grd.hgrid.mask_psi

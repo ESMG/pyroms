@@ -37,11 +37,11 @@ def flood(varz, Cgrd, Cpos='t', irange=None, jrange=None, \
     x = Cgrd.lon_t
     y = Cgrd.lat_t
     h = Cgrd.h
-    if Cpos is 't':
+    if Cpos == 't':
         mask = Cgrd.mask_t[0,:,:]
-    elif Cpos is 'u':
+    elif Cpos == 'u':
         mask = Cgrd.mask_u[0,:,:]
-    elif Cpos is 'v':
+    elif Cpos == 'v':
         mask = Cgrd.mask_v[0,:,:]
 
     nlev, Mm, Lm = varz.shape

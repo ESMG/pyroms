@@ -21,16 +21,16 @@ def get_lonlat(iindex, jindex, grd, Cpos='rho'):
     for grid point (iindex, jindex)
     """
 
-    if Cpos is 'u':
+    if Cpos == 'u':
         lon = grd.hgrid.lon_u[:,:]
         lat = grd.hgrid.lat_u[:,:]
-    elif Cpos is 'v':
+    elif Cpos == 'v':
         lon = grd.hgrid.lon_v[:,:]
         lat = grd.hgrid.lat_v[:,:]
-    elif Cpos is 'rho':
+    elif Cpos == 'rho':
         lon = grd.hgrid.lon_rho[:,:]
         lat = grd.hgrid.lat_rho[:,:]
-    elif Cpos is 'psi':
+    elif Cpos == 'psi':
         lon = grd.hgrid.lon_psi[:,:]
         lat = grd.hgrid.lat_psi[:,:]
     else:
@@ -47,16 +47,16 @@ def get_ij(longitude, latitude, grd, Cpos='rho'):
     point (longitude,latitude) in degree
     """
 
-    if Cpos is 'u':
+    if Cpos == 'u':
         lon = grd.hgrid.lon_u[:,:]
         lat = grd.hgrid.lat_u[:,:]
-    elif Cpos is 'v':
+    elif Cpos == 'v':
         lon = grd.hgrid.lon_v[:,:]
         lat = grd.hgrid.lat_v[:,:]
-    elif Cpos is 'rho':
+    elif Cpos == 'rho':
         lon = grd.hgrid.lon_rho[:,:]
         lat = grd.hgrid.lat_rho[:,:]
-    elif Cpos is 'psi':
+    elif Cpos == 'psi':
         lon = grd.hgrid.lon_psi[:,:]
         lat = grd.hgrid.lat_psi[:,:]
     else:
@@ -78,16 +78,16 @@ def find_nearestgridpoints(longitude, latitude, grd, Cpos='rho'):
 
     if type(grd).__name__ == 'ROMS_Grid':
 
-        if Cpos is 'u':
+        if Cpos == 'u':
             lon = grd.hgrid.lon_u[:,:]
             lat = grd.hgrid.lat_u[:,:]
-        elif Cpos is 'v':
+        elif Cpos == 'v':
             lon = grd.hgrid.lon_v[:,:]
             lat = grd.hgrid.lat_v[:,:]
-        elif Cpos is 'rho':
+        elif Cpos == 'rho':
             lon = grd.hgrid.lon_rho[:,:]
             lat = grd.hgrid.lat_rho[:,:]
-        elif Cpos is 'vert':
+        elif Cpos == 'vert':
             lon = grd.hgrid.lon_vert[:,:]
             lat = grd.hgrid.lat_vert[:,:]
         else:
@@ -96,16 +96,16 @@ def find_nearestgridpoints(longitude, latitude, grd, Cpos='rho'):
 
     if type(grd).__name__ == 'CGrid_geo':
 
-        if Cpos is 'u':
+        if Cpos == 'u':
             lon = grd.lon_u[:,:]
             lat = grd.lat_u[:,:]
-        elif Cpos is 'v':
+        elif Cpos == 'v':
             lon = grd.lon_v[:,:]
             lat = grd.lat_v[:,:]
-        elif Cpos is 'rho':
+        elif Cpos == 'rho':
             lon = grd.lon_rho[:,:]
             lat = grd.lat_rho[:,:]
-        elif Cpos is 'vert':
+        elif Cpos == 'vert':
             lon = grd.lon_vert[:,:]
             lat = grd.lat_vert[:,:]
         else:

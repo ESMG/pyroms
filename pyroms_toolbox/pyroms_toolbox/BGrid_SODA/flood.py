@@ -37,9 +37,9 @@ def flood(varz, Bgrd, Bpos='t', irange=None, jrange=None, \
     x = Bgrd.lon_t
     y = Bgrd.lat_t
     h = Bgrd.h
-    if Bpos is 't':
+    if Bpos == 't':
         mask = Bgrd.mask_t[0,:,:]
-    elif Bpos is 'uv':
+    elif Bpos == 'uv':
         mask = Bgrd.mask_uv[0,:,:]
 
     nlev, Mm, Lm = varz.shape

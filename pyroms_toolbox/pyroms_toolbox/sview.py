@@ -21,7 +21,7 @@ def sview(var, tindex, sindex, grid, filename=None, \
       - clev		 set the number of color step
       - fill             use contourf instead of pcolor
       - contour          overlay contour (request fill=True)
-      - d                contour density (default d=4) 
+      - d                contour density (default d=4)
       - range            set axis limit
       - fts              set font size (default: 12)
       - title            add title to the plot
@@ -35,8 +35,8 @@ def sview(var, tindex, sindex, grid, filename=None, \
     var must be a string and the variable will be load from the file.
     grid can be a grid object or a gridid. In the later case, the grid
     object correponding to the provided gridid will be loaded.
-    If proj is not None, return a Basemap object to be used with quiver 
-    for example. 
+    If proj is not None, return a Basemap object to be used with quiver
+    for example.
     """
 
     # get grid
@@ -56,12 +56,12 @@ def sview(var, tindex, sindex, grid, filename=None, \
 
     Np, Mp, Lp = grd.vgrid.z_r[0,:].shape
 
-    if tindex is not -1:
-        assert len(var.shape) == 4, 'var must be 4D (time plus space).'
-        K, N, M, L = var.shape
-    else:
+    if tindex == -1:
         assert len(var.shape) == 3, 'var must be 3D (no time dependency).'
         N, M, L = var.shape
+    else:
+        assert len(var.shape) == 4, 'var must be 4D (time plus space).'
+        K, N, M, L = var.shape
 
     # determine where on the C-grid these variable lies
     if N == Np and M == Mp and L == Lp:
@@ -128,7 +128,7 @@ def sview(var, tindex, sindex, grid, filename=None, \
         lon_max = lon.max()
         lon_0 = (lon_min + lon_max) / 2.
         lat_min = lat.min()
-        lat_max = lat.max()     
+        lat_max = lat.max()
         lat_0 = (lat_min + lat_max) / 2.
     else:
         lon_min = range[0]
@@ -147,53 +147,53 @@ def sview(var, tindex, sindex, grid, filename=None, \
                  resolution='h', area_thresh=5.)
         #map = pyroms.utility.get_grid_proj(grd, type=proj)
         x, y = list(map(lon,lat))
-    
-    if fill_land is True and proj is not None:
+
+    if fill_land and proj is not None:
         # fill land and draw coastlines
         map.drawcoastlines()
         map.fillcontinents(color='grey')
     else:
-        if proj is not None: 
+        if proj is not None:
             Basemap.pcolor(map, x, y, mask, vmin=-2, cmap=cm.gray)
             pyroms_toolbox.plot_coast_line(grd, map)
-        else: 
+        else:
             plt.pcolor(lon, lat, mask, vmin=-2, cmap=cm.gray)
             pyroms_toolbox.plot_coast_line(grd)
-    
-    if fill is True:
-        if proj is not None: 
+
+    if fill:
+        if proj is not None:
             cf = Basemap.contourf(map, x, y, sslice, vc, cmap = pal, \
                                   norm = pal_norm)
-        else: 
+        else:
             cf = plt.contourf(lon, lat, sslice, vc, cmap = pal, \
                               norm = pal_norm)
     else:
-        if proj is not None: 
+        if proj is not None:
             cf = Basemap.pcolor(map, x, y, sslice, cmap = pal, norm = pal_norm)
-        else: 
+        else:
             cf = plt.pcolor(lon, lat, sslice, cmap = pal, norm = pal_norm)
 
-    if clb is True:
+    if clb:
         clb = plt.colorbar(cf, fraction=0.075,format='%.2f')
         for t in clb.ax.get_yticklabels():
             t.set_fontsize(fts)
 
-    if contour is True:
-        if fill is not True:
-            xc = 0.5*(x[:,1:]+x[:,1:]) 
-            xc = 0.5*(xc[1:,:]+xc[:-1,:]) 
-            yc = 0.5*(y[:,1:]+y[:,1:]) 
-            yc = 0.5*(yc[1:,:]+yc[:-1,:]) 
+    if contour:
+        if not fill:
+            xc = 0.5*(x[:,1:]+x[:,1:])
+            xc = 0.5*(xc[1:,:]+xc[:-1,:])
+            yc = 0.5*(y[:,1:]+y[:,1:])
+            yc = 0.5*(yc[1:,:]+yc[:-1,:])
         else:
             xc = x
             yc = y
         if proj is not None:
             Basemap.contour(map, xc, yc, sslice, vc[::d], colors='k', linewidths=0.5, linestyles='solid')
-        else: 
+        else:
             plt.contour(lon, lat, sslice, vc[::d], colors='k', linewidths=0.5, linestyles='solid')
 
     if proj is None and range is not None:
-        plt.axis(range) 
+        plt.axis(range)
 
 
     if title is not None:
@@ -212,7 +212,7 @@ def sview(var, tindex, sindex, grid, filename=None, \
             plt.savefig(outfile, dpi=200, facecolor='w', edgecolor='w', \
                         orientation='portrait')
         else:
-            print('Unrecognized file extension. Please use .png, .svg or .eps file extension.')	 
+            print('Unrecognized file extension. Please use .png, .svg or .eps file extension.')
 
 
     if proj is None:

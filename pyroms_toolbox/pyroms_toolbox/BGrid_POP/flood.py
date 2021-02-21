@@ -34,12 +34,12 @@ def flood(varz, Bgrd, Bpos='t', irange=None, jrange=None, \
     idx = np.where(abs((varz-spval)/spval)<=1e-5)
     varz[idx] = np.nan
 
-    if Bpos is 't':
+    if Bpos == 't':
         x = Bgrd.lon_t
         y = Bgrd.lat_t
         h = Bgrd.h_t
         mask = Bgrd.mask_t[0,:,:]
-    elif Bpos is 'u':
+    elif Bpos == 'u':
         x = Bgrd.lon_u
         y = Bgrd.lat_u
         h = Bgrd.h_u
@@ -65,7 +65,7 @@ def flood(varz, Bgrd, Bpos='t', irange=None, jrange=None, \
     mask = mask[jrange[0]:jrange[1], irange[0]:irange[1]]
 
     # Finding nearest values in horizontal
-    # critical deph => no change if depth is less than specified value
+    # critical depth => no change if depth is less than specified value
     cdepth = abs(cdepth)
     if cdepth != 0:
         idx = np.where(h >= cdepth)
