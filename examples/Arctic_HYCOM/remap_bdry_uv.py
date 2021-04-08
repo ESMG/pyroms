@@ -11,7 +11,7 @@ from matplotlib.dates import date2num, num2date
 
 import pyroms
 import pyroms_toolbox
-import _remapping
+from pyroms import _remapping
 
 class nctime(object):
     pass
@@ -158,7 +158,7 @@ def remap_bdry_uv(src_file, src_grd, dst_grd, dxy=20, cdepth=0, kk=2, dst_dir='.
     ncv.variables['vbar_west'].units = 'meter second-1'
     ncv.variables['vbar_west'].field = 'vbar_east, scalar, series'
 
- 
+
 
     # remaping
     print('remapping and rotating u and v from', src_grd.name, \
@@ -269,7 +269,7 @@ def remap_bdry_uv(src_file, src_grd, dst_grd, dxy=20, cdepth=0, kk=2, dst_dir='.
     idxv_east = np.where(dst_grd.hgrid.mask_v[:,-1] == 0)
     idxu_west = np.where(dst_grd.hgrid.mask_u[:,0] == 0)
     idxv_west = np.where(dst_grd.hgrid.mask_v[:,0] == 0)
-    for n in range(dst_grd.vgrid.N): 
+    for n in range(dst_grd.vgrid.N):
         dst_u_north[n, idxu_north[0]] = spval
         dst_v_north[n, idxv_north[0]] = spval
         dst_u_south[n, idxu_south[0]] = spval
@@ -313,16 +313,16 @@ def remap_bdry_uv(src_file, src_grd, dst_grd, dxy=20, cdepth=0, kk=2, dst_dir='.
     for j in range(dst_v_east.shape[1]):
         dst_vbar_east[j] = (dst_v_east[:,j] * np.diff(z_v_east[:,j])).sum() / -z_v_east[0,j]
         dst_vbar_west[j] = (dst_v_west[:,j] * np.diff(z_v_west[:,j])).sum() / -z_v_west[0,j]
-        
+
     #mask
-    dst_ubar_north = np.ma.masked_where(dst_grd.hgrid.mask_u[-1,:] == 0, dst_ubar_north)   
-    dst_ubar_south = np.ma.masked_where(dst_grd.hgrid.mask_u[0,:] == 0, dst_ubar_south)   
-    dst_ubar_east = np.ma.masked_where(dst_grd.hgrid.mask_u[:,-1] == 0, dst_ubar_east)   
-    dst_ubar_west = np.ma.masked_where(dst_grd.hgrid.mask_u[:,0] == 0, dst_ubar_west)   
-    dst_vbar_north = np.ma.masked_where(dst_grd.hgrid.mask_v[-1,:] == 0, dst_vbar_north)   
-    dst_vbar_south = np.ma.masked_where(dst_grd.hgrid.mask_v[0,:] == 0, dst_vbar_south)   
-    dst_vbar_east = np.ma.masked_where(dst_grd.hgrid.mask_v[:,-1] == 0, dst_vbar_east)   
-    dst_vbar_west = np.ma.masked_where(dst_grd.hgrid.mask_v[:,0] == 0, dst_vbar_west)   
+    dst_ubar_north = np.ma.masked_where(dst_grd.hgrid.mask_u[-1,:] == 0, dst_ubar_north)
+    dst_ubar_south = np.ma.masked_where(dst_grd.hgrid.mask_u[0,:] == 0, dst_ubar_south)
+    dst_ubar_east = np.ma.masked_where(dst_grd.hgrid.mask_u[:,-1] == 0, dst_ubar_east)
+    dst_ubar_west = np.ma.masked_where(dst_grd.hgrid.mask_u[:,0] == 0, dst_ubar_west)
+    dst_vbar_north = np.ma.masked_where(dst_grd.hgrid.mask_v[-1,:] == 0, dst_vbar_north)
+    dst_vbar_south = np.ma.masked_where(dst_grd.hgrid.mask_v[0,:] == 0, dst_vbar_south)
+    dst_vbar_east = np.ma.masked_where(dst_grd.hgrid.mask_v[:,-1] == 0, dst_vbar_east)
+    dst_vbar_west = np.ma.masked_where(dst_grd.hgrid.mask_v[:,0] == 0, dst_vbar_west)
 
     # write data in destination file
     print('write data in destination file')
