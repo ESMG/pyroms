@@ -3,7 +3,7 @@ import pyroms
 from pyroms_toolbox.BGrid_SODA import BGrid_SODA
 
 
-def get_nc_BGrid_SODA(grdfile, name='SODA_2.1.6_CORAL', area='regional', \
+def get_nc_BGrid_SODA(grdfile, name='SODA_2.1.6_CORAL', area='global', \
                          xrange=(185,340), yrange=(100, 210), ystart=245):
     """
     grd = get_nc_BGrid_SODA(grdfile)
@@ -13,8 +13,8 @@ def get_nc_BGrid_SODA(grdfile, name='SODA_2.1.6_CORAL', area='regional', \
 
     nc = pyroms.io.Dataset(grdfile)
 
-    lon_t = nc.variables['LON'][:]
-    lat_t = nc.variables['LAT'][:]
+    lon_t = nc.variables['x_C'][:]
+    lat_t = nc.variables['y_C'][:]
 
     # All the data have been interpolated at the t-point
     # lon_t = lon_uv, lat_t = lat_uv

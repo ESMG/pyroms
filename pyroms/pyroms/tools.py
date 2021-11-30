@@ -767,7 +767,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
 
         # compute the nearest j point on the line crossing at i
         n=0
-        near = np.zeros(((i1-i0+1),4))
+        near = np.zeros(((i1-i0+1),4), dtype=int)
         for i in range(i0,i1+1):
             jj = aj*i + bj
             near[n,0] = i
@@ -777,12 +777,12 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
             n = n + 1
 
         if vert == False:
-            nearp = np.zeros(((i1-i0+1),4))
+            nearp = np.zeros(((i1-i0+1),4), dtype=int)
             nearp = near
         else:
             # compute the nearest j vert point on the line crossing at i
             n=0
-            nearp = np.zeros(((i1-i0+2),4))
+            nearp = np.zeros(((i1-i0+2),4), dtype=int)
             for i in range(i0,i1+2):
                 jj = aj*(i-0.5) + bj
                 nearp[n,0] = i
@@ -802,7 +802,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
 
         # compute the nearest i point on the line crossing at j
         n=0
-        near = np.zeros(((j1-j0+1),4))
+        near = np.zeros(((j1-j0+1),4), dtype=int)
         for j in range(j0,j1+1):
             ii = ai*j + bi
             near[n,0] = j
@@ -812,12 +812,12 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
             n = n + 1
 
         if vert == False:
-            nearp = np.zeros(((j1-j0+1),4))
+            nearp = np.zeros(((j1-j0+1),4), dtype=int)
             nearp = near
         else:
             # compute the nearest i vert point on the line crossing at j
             n=0
-            nearp = np.zeros(((j1-j0+2),4))
+            nearp = np.zeros(((j1-j0+2),4), dtype=int)
             for j in range(j0,j1+2):
                 ii = ai*(j-0.5) + bi
                 nearp[n,0] = j
@@ -843,7 +843,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
 
     for n in range(near.shape[0]):
         if (abs(aj) <=  1 ):
-            # check if our position match a grid cell
+            # check if our position matches a grid cell
             if (near[n,2] == near[n,3]):
                 transect[:,n] = var[:, near[n,2], near[n,0]]
             else:
@@ -853,7 +853,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
                     transect[:,n] = (near[n,1] - near[n,2]) * var[:, near[n,3], near[n,0]] + \
                                    (near[n,3] - near[n,1]) * var[:, near[n,2], near[n,0]]
         else:
-            # check if our position match a grid cell
+            # check if our position matches a grid cell
             if (near[n,2] == near[n,3]):
                 transect[:,n] = var[:, near[n,0], near[n,2]]
             else:
@@ -865,7 +865,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
 
     for n in range(nearp.shape[0]):
         if (abs(aj) <=  1 ):
-            # check if our position match a grid cell
+            # check if our position matches a grid cell
             if (nearp[n,2] == nearp[n,3]):
                 zs[:,n] = z[:, nearp[n,2], nearp[n,0]]
                 xs[:,n] = x[nearp[n,2], nearp[n,0]]
@@ -878,7 +878,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
                 ys[:,n] = (nearp[n,1] - nearp[n,2]) * y[nearp[n,3], nearp[n,0]] + \
                             (nearp[n,3] - nearp[n,1]) * y[nearp[n,2], nearp[n,0]]
         else:
-            # check if our position match a grid cell
+            # check if our position matches a grid cell
             if (nearp[n,2] == nearp[n,3]):
                 zs[:,n] = z[:, nearp[n,0], nearp[n,2]]
                 xs[:,n] = x[nearp[n,0], nearp[n,2]]

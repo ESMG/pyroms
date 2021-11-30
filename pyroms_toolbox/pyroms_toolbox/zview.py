@@ -141,7 +141,12 @@ def zview(var, tindex, depth, grid, filename=None, \
     # clear figure
     #plt.clf()
 
-    if proj is not None:
+    # Arctic 4
+    if proj is 'stere':
+        map = Basemap(projection='stere', lat_0=90, lon_0=180, llcrnrlon=-210,
+	        llcrnrlat=40, urcrnrlon=-50, urcrnrlat=50, resolution='h')
+        x, y = list(map(lon,lat))
+    elif proj is not None:
         map = Basemap(projection=proj, llcrnrlon=lon_min, llcrnrlat=lat_min, \
                  urcrnrlon=lon_max, urcrnrlat=lat_max, lat_0=lat_0, lon_0=lon_0, \
                  resolution='h', area_thresh=5.)

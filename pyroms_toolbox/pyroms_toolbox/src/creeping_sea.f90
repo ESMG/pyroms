@@ -16,7 +16,7 @@ SUBROUTINE cslf(varin,spval,validmin,validmax,nx,ny,varout)
   INTEGER                              :: jj, ji    ! loop index
   INTEGER                              :: jjp1, jjm1, jip1, jim1 ! neighbors
   INTEGER                              :: ctot, c1, c2, c3, c4, c5, c6, c7, c8, ct
-  INTEGER                              :: nt, nmax=3000 ! customizable
+  INTEGER                              :: nt, nmax=3500 ! customizable
 
   ztmp(:,:)  = varin(:,:)
   minvarin   = MINVAL(varin(:,:))
