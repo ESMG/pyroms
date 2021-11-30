@@ -89,6 +89,7 @@ pyroms_toolbox/Grid_HYCOM/flood.py
 pyroms_toolbox/Grid_HYCOM/flood_fast.py
 pyroms_toolbox/Grid_HYCOM/flood_fast_weighted.py
 pyroms_toolbox/Grid_HYCOM/get_nc_Grid_HYCOM.py
+pyroms_toolbox/Grid_HYCOM/get_nc_Grid_HYCOM2.py
 pyroms_toolbox/Grid_HYCOM/make_remap_grid_file.py
 pyroms_toolbox/seawater/__init__.py
 pyroms_toolbox/seawater/density.py

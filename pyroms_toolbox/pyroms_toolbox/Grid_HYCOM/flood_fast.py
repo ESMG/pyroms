@@ -48,13 +48,13 @@ def flood_fast(varz, grd, pos='t', irange=None, jrange=None, \
         irange = (0,Lm)
     else:
         assert varz.shape[2] == irange[1]-irange[0], \
-               'var shape and irange must agreed'
+               'var shape and irange must agree'
 
     if jrange is None:
         jrange = (0,Mm)
     else:
         assert varz.shape[1] == jrange[1]-jrange[0], \
-               'var shape and jrange must agreed'
+               'var shape and jrange must agree'
 
     x = x[jrange[0]:jrange[1], irange[0]:irange[1]]
     y = y[jrange[0]:jrange[1], irange[0]:irange[1]]
@@ -70,7 +70,7 @@ def flood_fast(varz, grd, pos='t', irange=None, jrange=None, \
         msk[idx] = 1
     else:
         msk = mask.copy()
-    for k in range(nlev-1,0,-1):
+    for k in range(nlev-1,-1,-1):
         c1 = np.array(msk, dtype=bool)
         c2 = np.isnan(varz[k,:,:]) == 1
         if kk == 0:
