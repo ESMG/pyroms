@@ -11,7 +11,7 @@ from matplotlib.dates import date2num, num2date
 
 import pyroms
 import pyroms_toolbox
-import _remapping
+from pyroms import _remapping
 
 class nctime(object):
     pass

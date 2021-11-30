@@ -11,7 +11,7 @@ from matplotlib.dates import date2num, num2date
 
 import pyroms
 import pyroms_toolbox
-import _remapping
+from pyroms import _remapping
 
 class nctime(object):
     pass
@@ -32,7 +32,7 @@ def remap_clm_uv(src_file, src_grd, dst_grd, dxy=20, cdepth=0, kk=0, dst_dir='./
 #    time = date2num(time)
 #    time = time - ref
 #    time = time + 2.5 # 5-day average
-    cdf = netCDF.Dataset(src_file) 
+    cdf = netCDF.Dataset(src_file)
     src_varu = cdf.variables['u'][0]
     src_varv = cdf.variables['v'][0]
     time = cdf.variables['ocean_time'][0]
@@ -103,7 +103,7 @@ def remap_clm_uv(src_file, src_grd, dst_grd, dxy=20, cdepth=0, kk=0, dst_dir='./
     ncv.variables['vbar'].units = 'meter second-1'
     ncv.variables['vbar'].field = 'vbar-velocity,, scalar, series'
     ncv.variables['vbar'].time = 'ocean_time'
- 
+
 
     # remaping
     print('remapping and rotating u and v from', src_grd.name, \
@@ -175,7 +175,7 @@ def remap_clm_uv(src_file, src_grd, dst_grd, dxy=20, cdepth=0, kk=0, dst_dir='./
     for i in range(dst_vbar.shape[1]):
         for j in range(dst_vbar.shape[0]):
             dst_vbar[j,i] = (dst_v[:,j,i] * np.diff(z_v[:,j,i])).sum() / -z_v[0,j,i]
-        
+
     # spval
     dst_ubar[idxu[0], idxu[1]] = spval
     dst_vbar[idxv[0], idxv[1]] = spval

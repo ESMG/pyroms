@@ -11,7 +11,7 @@ from matplotlib.dates import date2num, num2date
 
 import pyroms
 import pyroms_toolbox
-import _remapping
+from pyroms import _remapping
 
 class nctime(object):
     pass
@@ -52,12 +52,12 @@ def remap_uv(src_fileuv, src_grd, dst_grd, dst_fileu, dst_filev, dmax=0, cdepth=
         print('error : multiple frames in input file') ; exit()
     else:
         time = tmp[0]
-    
+
     # we need to correct the time axis
     ref_soda = dt.datetime(1980,1,1,0,0)
     ref_roms = dt.datetime(1900,1,1,0,0)
     ndays = (ref_soda - ref_roms).days
-    time = time + ndays 
+    time = time + ndays
 
     #get missing value
     spval = src_varu.missing_value
