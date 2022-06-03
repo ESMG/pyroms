@@ -175,11 +175,11 @@ for cst in consts:
         vIm = pyroms.remapping.remap(vIm, wts_file_v_lr, spval=missing_value)
 
     hamp[k, :, :] = (hRe**2+hIm**2)**0.5  # mm
-    hpha[k, :, :] = np.arctan(-hIm/hRe)/np.pi*180.  # deg
+    hpha[k, :, :] = np.arctan2(-hIm,hRe)/np.pi*180.  # deg
     uamp = (uRe**2+uIm**2)**0.5  # mm
-    upha = np.arctan(-uIm/uRe)/np.pi*180.  # deg
+    upha = np.arctan2(-uIm,uRe)/np.pi*180.  # deg
     vamp = (vRe**2+vIm**2)**0.5  # mm
-    vpha = np.arctan(-vIm/vRe)/np.pi*180.  # deg
+    vpha = np.arctan2(-vIm,vRe)/np.pi*180.  # deg
 
 
     # convert ap to ep

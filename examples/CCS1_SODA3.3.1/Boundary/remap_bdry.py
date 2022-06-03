@@ -145,21 +145,18 @@ def remap_bdry(src_varname, src_file, src_grd, dst_grd, dst_file, dmax=0, cdepth
     nc.variables[dst_varname_north].long_name = long_name_north
     nc.variables[dst_varname_north].units = units
     nc.variables[dst_varname_north].field = field_north
-    #nc.variables[dst_varname_north]._FillValue = spval
 
     print('Creating variable', dst_varname_south)
     nc.createVariable(dst_varname_south, 'f8', dimensions_south, fill_value=spval)
     nc.variables[dst_varname_south].long_name = long_name_south
     nc.variables[dst_varname_south].units = units
     nc.variables[dst_varname_south].field = field_south
-    #nc.variables[dst_varname_south]._FillValue = spval
 
     print('Creating variable', dst_varname_west)
     nc.createVariable(dst_varname_west, 'f8', dimensions_west, fill_value=spval)
     nc.variables[dst_varname_west].long_name = long_name_west
     nc.variables[dst_varname_west].units = units
     nc.variables[dst_varname_west].field = field_west
-    #nc.variables[dst_varname_west]._FillValue = spval
 
     # remapping
     print('remapping', dst_varname, 'from', src_grd.name, \
