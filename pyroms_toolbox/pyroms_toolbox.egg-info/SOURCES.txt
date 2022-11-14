@@ -81,6 +81,7 @@ pyroms_toolbox/BGrid_SODA/make_remap_grid_file.py
 pyroms_toolbox/CGrid_GLORYS/CGrid_GLORYS.py
 pyroms_toolbox/CGrid_GLORYS/__init__.py
 pyroms_toolbox/CGrid_GLORYS/flood.py
+pyroms_toolbox/CGrid_GLORYS/flood2d.py
 pyroms_toolbox/CGrid_GLORYS/get_nc_CGrid_GLORYS.py
 pyroms_toolbox/CGrid_GLORYS/make_remap_grid_file.py
 pyroms_toolbox/Grid_HYCOM/Grid_HYCOM.py

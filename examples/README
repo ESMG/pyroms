@@ -50,6 +50,17 @@ INTERPOLATING FROM GLOBAL HYCOM:
     Now Arctic_HYCOM_GLBy shows how to get files from the new GLBy domain
     and also how to interpolate with xesmf instead of scrip.
 
+INTERPOLATING FROM GLORYS:
+
+    First, you will need to download files from the Copernicus server
+    for the GLORYS files.
+
+    Scripts in NWGOA_GLORYS show how to regrid these with esmpy.
+
+    The files in Arctic_GLORYS are for processing a prior version of the
+    GLORYS files on their native C-grid. The new files from Copernicus
+    are on a regular lat, lon grid.
+
 INTERPOLATING FROM GLOBAL RUNOFF:
 
     Scripts in Arctic_runoff were used to convert from Dai and Trenberth

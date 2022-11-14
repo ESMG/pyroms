@@ -48,29 +48,29 @@ def nc_create_roms_bdry_file(filename, grd, ocean_time):
 
     nc.createVariable('s_rho', 'f8', ('s_rho'))
     nc.variables['s_rho'].long_name = 'S-coordinate at RHO-points'
-    nc.variables['s_rho'].valid_min = '-1'
-    nc.variables['s_rho'].valid_max = '0'
+    nc.variables['s_rho'].valid_min = '-1.0'
+    nc.variables['s_rho'].valid_max = '0.0'
     nc.variables['s_rho'].field = 's_rho,scalar'
     nc.variables['s_rho'][:] = grd.vgrid.s_rho
 
     nc.createVariable('s_w', 'f8', ('s_w'))
     nc.variables['s_w'].long_name = 'S-coordinate at W-points'
-    nc.variables['s_w'].valid_min = '-1'
-    nc.variables['s_w'].valid_max = '0'
+    nc.variables['s_w'].valid_min = '-1.0'
+    nc.variables['s_w'].valid_max = '0.0'
     nc.variables['s_w'].field = 's_w,scalar'
     nc.variables['s_w'][:] = grd.vgrid.s_w
 
     nc.createVariable('Cs_r', 'f8', ('s_rho'))
     nc.variables['Cs_r'].long_name = 'S-coordinate stretching curves at RHO-points'
-    nc.variables['Cs_r'].valid_min = '-1'
-    nc.variables['Cs_r'].valid_max = '0'
+    nc.variables['Cs_r'].valid_min = '-1.0'
+    nc.variables['Cs_r'].valid_max = '0.0'
     nc.variables['Cs_r'].field = 'Cs_r,scalar'
     nc.variables['Cs_r'][:] = grd.vgrid.Cs_r
 
     nc.createVariable('Cs_w', 'f8', ('s_w'))
     nc.variables['Cs_w'].long_name = 'S-coordinate stretching curves at W-points'
-    nc.variables['Cs_w'].valid_min = '-1'
-    nc.variables['Cs_w'].valid_max = '0'
+    nc.variables['Cs_w'].valid_min = '-1.0'
+    nc.variables['Cs_w'].valid_max = '0.0'
     nc.variables['Cs_w'].field = 'Cs_w,scalar'
     nc.variables['Cs_w'][:] = grd.vgrid.Cs_w
 
