@@ -79,7 +79,7 @@ Topic :: Software Development :: Libraries :: Python Modules
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
     config = Configuration('pyroms', parent_package, top_path)
-    config.add_extension('_interp', sources = ['pyroms/src/interp.f'])
+    config.add_extension('_interp', sources = ['pyroms/src/interp.f90'])
     config.add_extension('_obs_interp', sources = ['pyroms/src/obs_interp.f'])
     config.add_extension('_remapping', sources = ['pyroms/src/remapping.f'])
     config.add_extension('_remapping_fast', sources = ['pyroms/src/remapping_fast.f'])

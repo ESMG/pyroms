@@ -456,20 +456,21 @@
 !=============================================== Frederic Castruccio ===
 
       integer i, im, j, jm, k, km
-      real*8 spval, bot
+      real*8 spval, spval2, bot
       real*8 var(km,jm,im)
       real*8 mask(jm,im), bottom(jm,im)
 !f2py intent(out) bottom
 !f2py intent(hide) :: jm
 !f2py intent(hide) :: im
+      spval2 = km
 
       DO j=1,jm
         DO i=1,im
           k=1
-          bot=spval
+          bot=spval2
           IF (mask(j,i).eq.1) THEN
-            DO WHILE ((bot.eq.spval).and.(k.le.km))
-              IF (var(k,j,i).ne.spval) THEN
+            DO WHILE ((bot.eq.spval2) .and. (k.le.km))
+              IF ((var(k,j,i).ne.spval) .and. .not. isnan(var(k,j,i))) THEN
                 bot=k
               ELSE
                 k=k+1

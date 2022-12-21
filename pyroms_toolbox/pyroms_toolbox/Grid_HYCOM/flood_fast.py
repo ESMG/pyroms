@@ -2,6 +2,7 @@
 
 import numpy as np
 from pyroms import _remapping_fast
+import xarray as xr
 
 import pyroms
 
@@ -10,7 +11,7 @@ import creep
 def flood_fast(varz, grd, pos='t', irange=None, jrange=None, \
           spval=1.2676506e+30, dxy=5, cdepth=0, kk=0):
     """
-    var = flood(var, Bgrd)
+    var = flood_fast(var, Bgrd)
 
     optional switch:
       - Bpos='t'                     specify the grid position where
@@ -62,7 +63,7 @@ def flood_fast(varz, grd, pos='t', irange=None, jrange=None, \
     mask = mask[jrange[0]:jrange[1], irange[0]:irange[1]]
 
     # Finding nearest values in horizontal
-    # critical deph => no change if depth is less than specified value
+    # critical depth => no change if depth is less than specified value
     cdepth = abs(cdepth)
     if cdepth != 0:
         idx = np.where(h >= cdepth)
@@ -70,6 +71,7 @@ def flood_fast(varz, grd, pos='t', irange=None, jrange=None, \
         msk[idx] = 1
     else:
         msk = mask.copy()
+
     for k in range(nlev-1,-1,-1):
         c1 = np.array(msk, dtype=bool)
         c2 = np.isnan(varz[k,:,:]) == 1
@@ -89,9 +91,13 @@ def flood_fast(varz, grd, pos='t', irange=None, jrange=None, \
 
             idx = np.where(np.isnan(varz[k]) == 1)
             varz[k][idx] = spval
-            #varz[k,:] = _remapping_fast.flood(varz[k,:], dry, wet_mask, dxy)
+#           varz[k,:] = _remapping_fast.flood(varz[k,:], dry, wet_mask, dxy)
             varz[k,:] = creep.cslf(varz[k,:],spval,-200.,200.)
             print(k, varz[k,:].min() , varz[k,:].max())
+
+    # Debugging output
+    flooded = xr.DataArray(varz)
+    flooded.to_netcdf("flooded_before_bot.nc")
 
     # drop the deepest values down
     idx = np.where(np.isnan(varz) == 1)

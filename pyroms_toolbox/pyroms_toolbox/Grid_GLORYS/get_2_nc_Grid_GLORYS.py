@@ -2,34 +2,33 @@ import numpy as np
 import pyroms
 from pyroms_toolbox.Grid_GLORYS import Grid_GLORYS
 import pdb
+import xarray as xr
 
 
-def get_nc_Grid_GLORYS(grdfile, name='GLORYS_NWGOA', area='regional', \
-                         irange=(270,460), jrange=(150, 328), ystart=245):
+def get_2_nc_Grid_GLORYS(grdfile1, grdfile2, name='GLORYS_NWGOA', area='npolar'):
     """
-    grd = get_nc_Grid_GLORYS(grdfile)
+    grd = get_2_nc_Grid_GLORYS(grdfile1, grdfile2, name='GLORYS_NWGOA', area='npolar')
 
     Load A-grid object for GLORYS from netCDF file
     """
 
-    nc = pyroms.io.Dataset(grdfile)
+    nc1 = xr.open_dataset(grdfile1)
+    nc2 = xr.open_dataset(grdfile2)
+    nc = xr.merge([nc1, nc2])
 
-    lon_t = nc.variables['longitude'][:]
-    lat_t = nc.variables['latitude'][:]
+    lon_t = nc['longitude'].data
+    lat_t = nc['latitude'].data
 
-    depth = nc.variables['depth'][:]
-#   depth_w = nc.variables['gdepw_0'][:]
+    depth = nc['depth']
     depth_bnds = np.zeros(depth.shape[0]+1)
-#   depth_bnds[:-1] = depth_w[:]
     depth_bnds[-1] = 6000.
 
-    nc_mask_t = nc.variables['zos']
-#    mask_t = np.array(~nc_mask_t[:].mask, dtype='int')
-    mask_t = np.where(np.array(nc_mask_t[:], dtype='int')==nc_mask_t._FillValue, 0, 1)
+    nc_mask_t = nc['zos']
 #   pdb.set_trace()
-    nc_mask_t = nc.variables['thetao']
+    mask_t = np.where(np.isnan(np.array(nc_mask_t[:], dtype='int')), 0, 1)
+    nc_mask_t = nc['thetao']
 
-    bottom = pyroms.utility.get_bottom(nc_mask_t[0,::-1,:,:], mask_t[0,:], spval=nc_mask_t._FillValue)
+    bottom = pyroms.utility.get_bottom(nc_mask_t[0,::-1,:,:], mask_t[0,:], spval=np.nan)
     nlev = mask_t.shape[0]
     bottom = (nlev-1) - bottom
     h = np.zeros(mask_t[0,:].shape)
@@ -40,17 +39,13 @@ def get_nc_Grid_GLORYS(grdfile, name='GLORYS_NWGOA', area='regional', \
 
     if area == 'global':
         #add rows in the north and the south, east and west
-        lon_t = lon_t[:,np.r_[0,:np.size(lon_t,1),-1]]
-        lon_t[:,0] = lon_t[:,1] - (lon_t[:,2]-lon_t[:,1])
-        lon_t[:,-1] = lon_t[:,-2] + (lon_t[:,-2]-lon_t[:,-3])
-        lon_t = lon_t[np.r_[0,0,:np.size(lon_t,0),-1,-1]]
+        lon_t = lon_t[np.r_[0,:np.size(lon_t,1),-1]]
+        lon_t[0] = lon_t[1] - (lon_t[2]-lon_t[1])
+        lon_t[-1] = lon_t[-2] + (lon_t[-2]-lon_t[-3])
 
-        lat_t = lat_t[np.r_[0,0,:np.size(lat_t,0),-1,-1]]
-        lat_t[-1,:] = -80
-        lat_t[0,:] = -85
-        lat_t[-2,:] = lat_t[-3,:]
-        lat_t[-1,:] = lat_t[-4,:]
-        lat_t = lat_t[:,np.r_[0,:np.size(lat_t,1),-1]]
+        lat_t = lat_t[np.r_[0,:np.size(lat_t,0),-1]]
+        lat_t[0] = lat_t[1] - (lat_t[2]-lat_t[1])
+        lat_t[-1] = lat_t[-2] + (lat_t[-2]-lat_t[-3])
 
         mask_t = mask_t[:,np.r_[0,0,:np.size(mask_t,1),-1,-1],:]
         mask_t = mask_t[:,:,np.r_[0,:np.size(mask_t,2),-1]]
@@ -66,17 +61,16 @@ def get_nc_Grid_GLORYS(grdfile, name='GLORYS_NWGOA', area='regional', \
 
     if area == 'npolar':
         #add rows in the north and the south, east and west
-        lon_t = lon_t[:,np.r_[0,:np.size(lon_t,1),-1]]
-        lon_t[:,0] = lon_t[:,1] - (lon_t[:,2]-lon_t[:,1])
-        lon_t[:,-1] = lon_t[:,-2] + (lon_t[:,-2]-lon_t[:,-3])
-        lon_t = lon_t[np.r_[0,0,:np.size(lon_t,0),-1,-1]]
+#       print("h.shape before", h.shape, lon_t.shape, lat_t.shape)
+        lon_t = lon_t[np.r_[0,:np.size(lon_t,0),-1]]
+        lon_t[0] = lon_t[1] - (lon_t[2]-lon_t[1])
+        lon_t[-1] = lon_t[-2] + (lon_t[-2]-lon_t[-3])
 
         lat_t = lat_t[np.r_[0,0,:np.size(lat_t,0),-1,-1]]
-        lat_t[-1,:] = -80
-        lat_t[0,:] = -85
-        lat_t[-2,:] = lat_t[-3,:]
-        lat_t[-1,:] = lat_t[-4,:]
-        lat_t = lat_t[:,np.r_[0,:np.size(lat_t,1),-1]]
+        lat_t[1] = lat_t[2] - (lat_t[3]-lat_t[2])
+        lat_t[0] = lat_t[1] - (lat_t[2]-lat_t[1])
+        lat_t[-2] = lat_t[-3] + (lat_t[-3]-lat_t[-4])
+        lat_t[-1] = lat_t[-2] + (lat_t[-2]-lat_t[-3])
 
         mask_t = mask_t[:,np.r_[0,0,:np.size(mask_t,1),-1,-1],:]
         mask_t = mask_t[:,:,np.r_[0,:np.size(mask_t,2),-1]]
@@ -87,8 +81,10 @@ def get_nc_Grid_GLORYS(grdfile, name='GLORYS_NWGOA', area='regional', \
         h[:,0] = h[:,-2]
         h[:,-1] = h[:,1]
         m,l = h.shape
+#       print("h.shape", h.shape, lon_t.shape, lat_t.shape)
         irange=(1,l-2)
-        jrange=(ystart+2,m-2)
+        jrange=(1,m-2)
+#       print("ranges", irange, jrange)
 
     return Grid_GLORYS(lon_t, lat_t, mask_t, depth, depth_bnds, h, \
                         name, irange, jrange)

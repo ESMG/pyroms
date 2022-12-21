@@ -65,7 +65,7 @@ def flood(varz, Cgrd, irange=None, jrange=None, \
         msk[idx] = 1
     else:
         msk = mask.copy()
-    for k in range(nlev-1,0,-1):
+    for k in range(nlev-1,-1,-1):
         c1 = np.array(msk, dtype=bool)
         c2 = np.isnan(varz[k,:,:]) == 1
         if kk == 0:

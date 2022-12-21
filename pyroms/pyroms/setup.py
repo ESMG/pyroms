@@ -82,7 +82,7 @@ iso = Extension(name = '_iso',
                 sources = ['pyroms/src/iso.f'])
 
 interp = Extension(name = '_interp',
-                sources = ['pyroms/src/interp.f'])
+                sources = ['pyroms/src/interp.f90'])
 
 remapping = Extension(name = '_remapping',
                 sources = ['pyroms/src/remapping.f'])

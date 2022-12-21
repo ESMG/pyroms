@@ -1,11 +1,6 @@
 import numpy as np
 from mpl_toolkits.basemap import pyproj
 from datetime import datetime
-try:
-  import netCDF4 as netCDF
-except:
-  import netCDF3 as netCDF
-  import pyroms
 
 class Grid_GLORYS(object):
     """
