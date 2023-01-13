@@ -1,4 +1,4 @@
-      subroutine move_runoff(runoff, pt, litpt, maskl, x, y, dx, dy,
+      subroutine move_runoff(runoff, pt, litpt, maskl, x, y, dx, dy,    &
      &                 adj_runoff, im, jm, nbpt, nblitpt)
 
 !-----------------------------------------------------------------------
@@ -54,16 +54,16 @@
           do m=1,nblitpt
             ilitpt = litpt(m,1)
             jlitpt = litpt(m,2)
-            d(m) = sqrt( (x(ipt,jpt) - x(ilitpt,jlitpt)) * 
-     &                   (x(ipt,jpt) - x(ilitpt,jlitpt))
-     &                 + (y(ipt,jpt) - y(ilitpt,jlitpt)) * 
+            d(m) = sqrt( (x(ipt,jpt) - x(ilitpt,jlitpt)) *              &
+     &                   (x(ipt,jpt) - x(ilitpt,jlitpt))                &
+     &                 + (y(ipt,jpt) - y(ilitpt,jlitpt)) *              &
      &                   (y(ipt,jpt) - y(ilitpt,jlitpt)) )
           enddo
           dmin_idx = minloc(d,1)
           iclose = litpt(dmin_idx,1)
           jclose = litpt(dmin_idx,2)
           ! we are conservative
-          adj = (runoff(ipt,jpt) * dx(ipt,jpt) * dy(ipt,jpt)) /
+          adj = (runoff(ipt,jpt) * dx(ipt,jpt) * dy(ipt,jpt)) /         &
      &            (dx(iclose,jclose) * dy(iclose,jclose))
           adj_runoff(iclose,jclose) = adj_runoff(iclose,jclose) + adj
           adj_runoff(ipt, jpt) = 0

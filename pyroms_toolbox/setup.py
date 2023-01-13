@@ -25,6 +25,9 @@ move_river = Extension(name = '_move_river_t',
 move_runoff = Extension(name = '_move_runoff',
                         sources = ['pyroms_toolbox/src/move_runoff.f90'])
 
+remap_river = Extension(name = '_remap_river',
+                       sources = ['pyroms_toolbox/src/remap_river.f90'])
+
 
 doclines = __doc__.split("\n")
 
@@ -48,6 +51,6 @@ if __name__ == '__main__':
           url = 'https://github.com/ESMG/pyroms',
           license = 'BSD',
           platforms = ["any"],
-          ext_modules=[average, creep, move_river, move_runoff],
+          ext_modules=[average, creep, move_river, move_runoff, remap_river],
           configuration=configuration,
           )

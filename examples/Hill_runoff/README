@@ -1,0 +1,27 @@
+This is for remapping the old and new Hill runoff files to ROMS and MOM6.
+
+The old files are on a two-dimensional grid for which xesmf remapping works. The new files only have the
+runoff points making the source grid unstructured and beyond the means of xesmf. However, the operation we need
+is much like that in move_river_t.
+
+For ROMS, you need to first run:
+
+    python maskedge.py > maskedge.out
+
+The runoff years are now being done using the runmpi.chinook script.
+Beware: the ROMS add_rivers.py has grid dimensions hard-coded - these need to be correct or else.
+
+In ROMS, I'm making a separate river_tracers.nc file for T and S and whatever BGC tracers are being used:
+
+    python add_temp.py Hill_rivers_2016.nc river_tracers.nc
+
+
+TODO:
+
+1. Fix add_rivers.py to figure out grid dimensions some other way.
+
+2. The move_river_t/remap_rivers routines should figure out the remapping indices once and save them for later.
+
+3. The xesmf remapping plus move_river_t can be combined into one remap_rivers operation for the "old" Hill files.
+
+4. The remap_rivers is a Fortran routine and these will need a new way to be called at some point when the old way disappears.

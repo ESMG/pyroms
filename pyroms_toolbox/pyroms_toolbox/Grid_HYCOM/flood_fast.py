@@ -96,8 +96,8 @@ def flood_fast(varz, grd, pos='t', irange=None, jrange=None, \
             print(k, varz[k,:].min() , varz[k,:].max())
 
     # Debugging output
-    flooded = xr.DataArray(varz)
-    flooded.to_netcdf("flooded_before_bot.nc")
+#   flooded = xr.DataArray(varz)
+#   flooded.to_netcdf("flooded_before_bot.nc")
 
     # drop the deepest values down
     idx = np.where(np.isnan(varz) == 1)

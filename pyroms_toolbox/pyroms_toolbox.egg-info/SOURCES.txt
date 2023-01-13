@@ -87,6 +87,7 @@ pyroms_toolbox/CGrid_GLORYS/make_remap_grid_file.py
 pyroms_toolbox/Grid_HYCOM/Grid_HYCOM.py
 pyroms_toolbox/Grid_HYCOM/__init__.py
 pyroms_toolbox/Grid_HYCOM/flood.py
+pyroms_toolbox/Grid_HYCOM/flood2d.py
 pyroms_toolbox/Grid_HYCOM/flood_fast.py
 pyroms_toolbox/Grid_HYCOM/flood_fast_weighted.py
 pyroms_toolbox/Grid_HYCOM/get_nc_Grid_HYCOM.py
@@ -102,3 +103,4 @@ pyroms_toolbox/src/average.f90
 pyroms_toolbox/src/creeping_sea.f90
 pyroms_toolbox/src/move_river_t.f90
 pyroms_toolbox/src/move_runoff.f90
+pyroms_toolbox/src/remap_river.f90

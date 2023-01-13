@@ -1,0 +1,3 @@
+This is code to convert the old-style Dave Hill runoff files to MOM6 runoff files. It uses a nearest d2s remapping.
+
+This uses pyroms_toolbox.get_littoral to find the coastal cells. If you don't want the diagonals, use get_littoral2.

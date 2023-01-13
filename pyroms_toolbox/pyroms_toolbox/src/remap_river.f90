@@ -1,4 +1,4 @@
-      subroutine move_river_t(runoff, pt, litpt, maskl, x, y, dx, dy,   &
+      subroutine remap_river(runoff, x, y, litpt, litx, lity,           &
      &                 adj_runoff, im, jm, nbpt, nblitpt)
 
 !-----------------------------------------------------------------------
@@ -11,12 +11,11 @@
 !
 !-----------------------------------------------------------------------
 
-      integer, dimension(nbpt, 2), intent(in) :: pt
+      real*8, dimension(nbpt), intent(in) :: runoff
+      real*8, dimension(nbpt), intent(in) :: x, y
 
       integer, dimension(nblitpt, 2), intent(in) :: litpt
-
-      real*8, dimension(im, jm), intent(in) :: runoff, maskl
-      real*8, dimension(im, jm), intent(in) :: x, y, dx, dy
+      real*8, dimension(im, jm), intent(in) :: litx, lity
 
 !-----------------------------------------------------------------------
 !
@@ -42,50 +41,39 @@
 !-----------------------------------------------------------------------
 !-----------------------------------------------------------------------
 
-      adj_runoff = runoff
+      adj_runoff = 0.0
 
       ! loop over the runoff point
       do n=1,nbpt
-        ipt = pt(n,1)
-        jpt = pt(n,2)
         ! point is not in the littoral band
-        if (maskl(ipt, jpt).eq.0) then
-          ! compute littoral point distance
-          do m=1,nblitpt
-            ilitpt = litpt(m,1)
-            jlitpt = litpt(m,2)
-!           d(m) = sqrt( (x(ipt,jpt) - x(ilitpt,jlitpt)) *              &
-!    &                   (x(ipt,jpt) - x(ilitpt,jlitpt)) *              &
-!    &                 + (y(ipt,jpt) - y(ilitpt,jlitpt)) *              &
-!    &                   (y(ipt,jpt) - y(ilitpt,jlitpt)) )
-            call geodesic_dist(x(ipt,jpt), y(ipt,jpt),                  &
-     &               x(ilitpt,jlitpt), y(ilitpt,jlitpt),                &
-     &               flag, d(m), alph)
-          enddo
-          dmin_idx = minloc(d,1)
-          iclose = litpt(dmin_idx,1)
-          jclose = litpt(dmin_idx,2)
-!          ! we are conservative
-!          adj = (runoff(ipt,jpt) * dx(ipt,jpt) * dy(ipt,jpt)) /
-!     &            (dx(iclose,jclose) * dy(iclose,jclose))
-!          adj_runoff(iclose,jclose) = adj_runoff(iclose,jclose) + adj
+        ! compute littoral point distance
+        do m=1,nblitpt
+          ilitpt = litpt(m,1)
+          jlitpt = litpt(m,2)
+!         d(m) = sqrt( (x(n) - litx(ilitpt,jlitpt)) *                   &
+!    &                 (x(n) - litx(ilitpt,jlitpt)) *                   &
+!    &               + (y(n) - lity(ilitpt,jlitpt)) *                   &
+!    &                 (y(n) - lity(ilitpt,jlitpt)) )
+          call geodesic_dist(x(n), y(n),                                &
+     &             litx(ilitpt,jlitpt), lity(ilitpt,jlitpt),            &
+     &             flag, d(m), alph)
+        enddo
+        dmin_idx = minloc(d,1)
+        iclose = litpt(dmin_idx,1)
+        jclose = litpt(dmin_idx,2)
 
-          ! we are not conservative
-          adj_runoff(iclose,jclose) = adj_runoff(iclose,jclose) +       &
-     &            runoff(ipt,jpt)
-          adj_runoff(ipt, jpt) = 0
-!         if (runoff(ipt,jpt) > 5000.0) then
-!           print *, "found something to move", ipt, jpt, iclose, jclose
-!           print *, dmin_idx, d(dmin_idx)
-!           print *, "after in move_river_t", runoff(iclose, jclose),   &
-!    &           runoff(ipt, jpt), adj_runoff(iclose, jclose)
-!         endif
-        endif
+        adj_runoff(iclose,jclose) = adj_runoff(iclose,jclose) +       &
+     &            runoff(n)
+!       if (runoff(n) > 5000.0) then
+!         print *, "found something to move", iclose, jclose
+!         print *, "after in move_river_t", runoff(n),                &
+!    &         adj_runoff(iclose, jclose)
+!       endif
       enddo
 
 !-----------------------------------------------------------------------
 
-      end subroutine move_river_t
+      end subroutine remap_river
 
 !-----------------------------------------------------------------------
       subroutine geodesic_dist (lon1,lat1,lon2,lat2,flag,dist,alpha)
