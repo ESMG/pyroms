@@ -33,14 +33,15 @@ TBEGIN=`echo "print time();" | perl`
 which python
 for year in {2015..2017}
 do
-# python make_river_file.py ${year}
-# python add_rivers.py Hill_rivers_${year}.nc
-# python make_river_clim.py goa_dischargex_*${year}_q_Hill_NWGOA.nc Hill_rivers_${year}.nc
+  python make_river_file.py ${year}
+  python add_rivers.py Hill_rivers_${year}.nc
+  python make_river_clim.py goa_dischargex_*${year}_q_Hill_NWGOA.nc Hill_rivers_${year}.nc
   python set_vshape.py Hill_rivers_${year}.nc
 done
 #python make_river_file.py 2014
 #python add_rivers.py Hill_rivers_2014.nc
 #python make_river_clim.py goa_dischargex_09012014_08312015_q_Hill_NWGOA.nc Hill_rivers_2014.nc
+#python set_vshape.py Hill_rivers_2014.nc
 #
 #
 #  Epilog

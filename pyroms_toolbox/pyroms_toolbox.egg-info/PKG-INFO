@@ -1,17 +1,15 @@
-Metadata-Version: 1.0
+Metadata-Version: 2.1
 Name: pyroms-toolbox
 Version: 0.2.0
-Summary: UNKNOWN
 Home-page: https://github.com/ESMG/pyroms
 Author: ESMG
-Author-email: UNKNOWN
 License: BSD
-Description: 
-        Requires:
-            pyroms (https://github.com/ESMG/pyroms)
-        
-        Contains:
-            many things...
-        
-        
 Platform: any
+
+
+Requires:
+    pyroms (https://github.com/ESMG/pyroms)
+
+Contains:
+    many things...
+
