@@ -767,7 +767,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
 
         # compute the nearest j point on the line crossing at i
         n=0
-        near = np.zeros(((i1-i0+1),4), dtype=int)
+        near = np.zeros(((i1-i0+1),4), dtype=np.float64)
         for i in range(i0,i1+1):
             jj = aj*i + bj
             near[n,0] = i
@@ -777,12 +777,12 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
             n = n + 1
 
         if vert == False:
-            nearp = np.zeros(((i1-i0+1),4), dtype=int)
+            nearp = np.zeros(((i1-i0+1),4), dtype=np.float64)
             nearp = near
         else:
             # compute the nearest j vert point on the line crossing at i
             n=0
-            nearp = np.zeros(((i1-i0+2),4), dtype=int)
+            nearp = np.zeros(((i1-i0+2),4), dtype=np.float64)
             for i in range(i0,i1+2):
                 jj = aj*(i-0.5) + bj
                 nearp[n,0] = i
@@ -802,7 +802,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
 
         # compute the nearest i point on the line crossing at j
         n=0
-        near = np.zeros(((j1-j0+1),4), dtype=int)
+        near = np.zeros(((j1-j0+1),4), dtype=np.float64)
         for j in range(j0,j1+1):
             ii = ai*j + bi
             near[n,0] = j
@@ -812,12 +812,12 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
             n = n + 1
 
         if vert == False:
-            nearp = np.zeros(((j1-j0+1),4), dtype=int)
+            nearp = np.zeros(((j1-j0+1),4), dtype=np.float64)
             nearp = near
         else:
             # compute the nearest i vert point on the line crossing at j
             n=0
-            nearp = np.zeros(((j1-j0+2),4), dtype=int)
+            nearp = np.zeros(((j1-j0+2),4), dtype=np.float64)
             for j in range(j0,j1+2):
                 ii = ai*(j-0.5) + bi
                 nearp[n,0] = j
@@ -843,61 +843,74 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
 
     for n in range(near.shape[0]):
         if (abs(aj) <=  1 ):
+            i = int(near[n,0])
+            floor_j = int(near[n,2])
+            ceil_j = int(near[n,3])
+            
             # check if our position matches a grid cell
-            if (near[n,2] == near[n,3]):
-                transect[:,n] = var[:, near[n,2], near[n,0]]
+            if (floor_j == ceil_j):
+                transect[:,n] = var[:, floor_j, i]
             else:
-                if mask[near[n,3], near[n,0]] == 0 or mask[near[n,2], near[n,0]] == 0:
+                if mask[ceil_j, i] == 0 or mask[floor_j, i] == 0:
                     transect[:,n] = spval
                 else:
-                    transect[:,n] = (near[n,1] - near[n,2]) * var[:, near[n,3], near[n,0]] + \
-                                   (near[n,3] - near[n,1]) * var[:, near[n,2], near[n,0]]
+                    transect[:,n] = (near[n,1] - near[n,2]) * var[:, ceil_j, i] + \
+                                   (near[n,3] - near[n,1]) * var[:, floor_j, i]
         else:
+            j = int(near[n,0])
+            floor_i = int(near[n,2])
+            ceil_i = int(near[n,3])
+
             # check if our position matches a grid cell
-            if (near[n,2] == near[n,3]):
-                transect[:,n] = var[:, near[n,0], near[n,2]]
+            if (floor_i == ceil_i):
+                transect[:,n] = var[:, j, floor_i]
             else:
-                if mask[near[n,0], near[n,3]] == 0 or mask[near[n,0], near[n,2]] == 0:
+                if mask[j, ceil_i] == 0 or mask[j, floor_i] == 0:
                     transect[:,n] = spval
                 else:
-                    transect[:,n] = (near[n,1] - near[n,2]) * var[:, near[n,0], near[n,3]] + \
-                                   (near[n,3] - near[n,1]) * var[:, near[n,0], near[n,2]]
+                    transect[:,n] = (near[n,1] - near[n,2]) * var[:, j, ceil_i] + \
+                                   (near[n,3] - near[n,1]) * var[:, j, floor_i]
 
     for n in range(nearp.shape[0]):
         if (abs(aj) <=  1 ):
+            i = int(nearp[n,0])
+            floor_j = int(nearp[n,2])
+            ceil_j = int(nearp[n,3])
+            
             # check if our position matches a grid cell
-            if (nearp[n,2] == nearp[n,3]):
-                zs[:,n] = z[:, nearp[n,2], nearp[n,0]]
-                xs[:,n] = x[nearp[n,2], nearp[n,0]]
-                ys[:,n] = y[nearp[n,2], nearp[n,0]]
+            if (floor_j == ceil_j):
+                zs[:,n] = z[:, floor_j, i]
+                xs[:,n] = x[floor_j, i]
+                ys[:,n] = y[floor_j, i]
             else:
-                zs[:,n] = (nearp[n,1] - nearp[n,2]) * z[:, nearp[n,3], nearp[n,0]] + \
-                          (nearp[n,3] - nearp[n,1]) * z[:, nearp[n,2], nearp[n,0]]
-                xs[:,n] = (nearp[n,1] - nearp[n,2]) * x[nearp[n,3], nearp[n,0]] + \
-                            (nearp[n,3] - nearp[n,1]) * x[nearp[n,2], nearp[n,0]]
-                ys[:,n] = (nearp[n,1] - nearp[n,2]) * y[nearp[n,3], nearp[n,0]] + \
-                            (nearp[n,3] - nearp[n,1]) * y[nearp[n,2], nearp[n,0]]
+                zs[:,n] = (nearp[n,1] - nearp[n,2]) * z[:, ceil_j, i] + \
+                          (nearp[n,3] - nearp[n,1]) * z[:, floor_j, i]
+                xs[:,n] = (nearp[n,1] - nearp[n,2]) * x[ceil_j, i] + \
+                            (nearp[n,3] - nearp[n,1]) * x[floor_j, i]
+                ys[:,n] = (nearp[n,1] - nearp[n,2]) * y[ceil_j, i] + \
+                            (nearp[n,3] - nearp[n,1]) * y[floor_j, i]
         else:
+            j = int(nearp[n,0])
+            floor_i = int(nearp[n,2])
+            ceil_i = int(nearp[n,3])
+
             # check if our position matches a grid cell
-            if (nearp[n,2] == nearp[n,3]):
-                zs[:,n] = z[:, nearp[n,0], nearp[n,2]]
-                xs[:,n] = x[nearp[n,0], nearp[n,2]]
-                ys[:,n] = y[nearp[n,0], nearp[n,2]]
+            if (floor_i == ceil_i):
+                zs[:,n] = z[:, j, floor_i]
+                xs[:,n] = x[j, floor_i]
+                ys[:,n] = y[j, floor_i]
             else:
-                zs[:,n] = (nearp[n,1] - nearp[n,2]) * z[:, nearp[n,0], nearp[n,3]] + \
-                          (nearp[n,3] - nearp[n,1]) * z[:, nearp[n,0], nearp[n,2]]
-                xs[:,n] = (nearp[n,1] - nearp[n,2]) * x[nearp[n,0], nearp[n,3]] + \
-                            (nearp[n,3] - nearp[n,1]) * x[nearp[n,0], nearp[n,2]]
-                ys[:,n] = (nearp[n,1] - nearp[n,2]) * y[nearp[n,0], nearp[n,3]] + \
-                            (nearp[n,3] - nearp[n,1]) * y[nearp[n,0], nearp[n,2]]
+                zs[:,n] = (nearp[n,1] - nearp[n,2]) * z[:, j, ceil_i] + \
+                          (nearp[n,3] - nearp[n,1]) * z[:, j, floor_i]
+                xs[:,n] = (nearp[n,1] - nearp[n,2]) * x[j, ceil_i] + \
+                            (nearp[n,3] - nearp[n,1]) * x[j, floor_i]
+                ys[:,n] = (nearp[n,1] - nearp[n,2]) * y[j, ceil_i] + \
+                            (nearp[n,3] - nearp[n,1]) * y[j, floor_i]
 
     # mask transect
     transect = np.ma.masked_values(transect, spval)
-
-
+    
     return transect, zs, xs, ys
-
-
 
 
 def lonslice(var, longitude, grd, Cpos='rho', vert=False, spval=1e37):
