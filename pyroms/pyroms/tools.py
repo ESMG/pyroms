@@ -846,7 +846,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
             i = int(near[n,0])
             floor_j = int(near[n,2])
             ceil_j = int(near[n,3])
-            
+
             # check if our position matches a grid cell
             if (floor_j == ceil_j):
                 transect[:,n] = var[:, floor_j, i]
@@ -876,7 +876,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
             i = int(nearp[n,0])
             floor_j = int(nearp[n,2])
             ceil_j = int(nearp[n,3])
-            
+
             # check if our position matches a grid cell
             if (floor_j == ceil_j):
                 zs[:,n] = z[:, floor_j, i]
@@ -909,7 +909,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
 
     # mask transect
     transect = np.ma.masked_values(transect, spval)
-    
+
     return transect, zs, xs, ys
 
 
