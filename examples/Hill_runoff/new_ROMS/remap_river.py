@@ -83,7 +83,7 @@ def remap_river(src_file, src_varname, dst_grd, cdepth=0, kk=0, dst_dir='./'):
 
     ntimes = len(years)
     for it in range(ntimes):
-        src_var = src_var_all[it,:]/86400.0
+        src_var = src_var_all[it,:]
         net_flow = np.sum(src_var)
         src_var = xr.DataArray(src_var)
         src_var = src_var.fillna(0)
